@@ -1,2 +1,3 @@
 server/lib
-public/ 
+public/
+node_modules/

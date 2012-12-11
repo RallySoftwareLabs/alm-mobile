@@ -4,6 +4,6 @@ module.exports = Backbone.Router.extend
   routes:
     '': 'login'
   home: ->
-    $('body').html(application.homeView.render().el)
+    $('#content').html(application.homeView.render().el)
   login: ->
-    $('body').html(application.loginView.render().el)
+    $('#content').html(application.loginView.render().el)
