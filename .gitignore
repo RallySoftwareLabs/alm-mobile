@@ -1,3 +1,4 @@
 server/lib
 public/
 node_modules/
+Gemfile.lock
