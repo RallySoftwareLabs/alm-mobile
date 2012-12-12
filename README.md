@@ -1,7 +1,16 @@
 # Getting Started
 
+Clone the repo:
+
+        git clone ssh://git/export/git/alm-mobile.git
+
 To install required node modules, run:
+
         npm install
+
+If you need to add the npm bin directory to your PATH for cake and brunch, run:
+
+        export PATH=$PATH:`npm bin`
 
 To compile CoffeeScript, build and run the application, run:
 
@@ -21,16 +30,16 @@ Make sure to have [Brunch.io](http://brunch.io) installed.
 
 Create your project using Eggs and Bacon with:
 
-		brunch new <your-project-name> -s github://nezoomie/brunch-eggs-and-bacon
-		
+    brunch new <your-project-name> -s github://nezoomie/brunch-eggs-and-bacon
+    
 Or simply copy the repository on your hard drive and rename it.
 
 ## Customize Bootstrap Stylesheets
 
 All Bootstrap stylesheet files can be found separated into:
 
-		vendor/styles/bootstrap
-		
+    vendor/styles/bootstrap
+    
 They're in original [LESS](http://lesscss.org/) format in order to be easily customized, and compiled together with the app build.
 
 ## Exclude Bootstrap jQuery plugins
