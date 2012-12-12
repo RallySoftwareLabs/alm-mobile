@@ -1,6 +1,6 @@
 request = require("request")
 
-class ZuulClient
+module.exports = class ZuulClient
     constructor: ->
 
     login: (username, password, callback) ->
@@ -12,8 +12,7 @@ class ZuulClient
                 password: password
             )
         , (error, response, body) ->
-            console.log response.statusCode, body
-            authenticateResult = response.statusCode is 200 and JSON.parse(body)
+            # console.log error, response?.statusCode, body
+            authenticateResult = response?.statusCode is 200 and JSON.parse(body)
             callback?(authenticateResult)
         )
-exports.Client = ZuulClient
