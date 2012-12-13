@@ -18,9 +18,9 @@ module.exports = View.extend
         username: username.value
         password: password.value
       success: (data, status, xhr) ->
-        debugger
+        Backbone.history.navigate('home', true)
       error: (xhr, errorType, error) ->
-        debugger
+        this.$('.control-group').addClass('error')
     )
 
     event.preventDefault()

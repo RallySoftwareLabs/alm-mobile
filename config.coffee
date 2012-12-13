@@ -6,7 +6,7 @@ exports.config =
   files:
     javascripts:
       # Defines what file will be generated with `brunch generate`.
-      defaultExtension: 'js'
+      defaultExtension: 'coffee'
       # Describes how files will be compiled & joined together.
       # Available formats:
       # * 'outputFilePath'
@@ -15,6 +15,8 @@ exports.config =
       joinTo:
         'javascripts/app.js': /^app/
         'javascripts/vendor.js': /^vendor/
+        'test/javascripts/test.js': /^test(\/|\\)(?!vendor)/
+        'test/javascripts/test-vendor.js': /^test(\/|\\)(?=vendor)/
       # Defines compilation order.
       # `vendor` files will be compiled before other ones
       # even if they are not present here.
@@ -61,10 +63,11 @@ exports.config =
   # framework: 'backbone'
 
   # Settings of web server that will run with `brunch watch [--server]`.
-  # server:
-  #   # Path to your server node.js module.
-  #   # If it's commented-out, brunch will use built-in express.js server.
-  #   path: 'server.coffee'
-  #   port: 3333
-  #   # Run even without `--server` option?
-  #   run: yes
+  server:
+    # Path to your server node.js module.
+    # If it's commented-out, brunch will use built-in express.js server.
+    path: 'server.coffee'
+    port: 3333
+    base: '/server'
+    # Run even without `--server` option?
+    run: yes
