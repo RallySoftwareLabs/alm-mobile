@@ -14,7 +14,7 @@ If you need to add the npm bin directory to your PATH for cake and brunch, run:
 
 To compile CoffeeScript, build and run the application, run:
 
-        cake build && brunch b && npm start
+        cake build && brunch build && brunch watch
 
 # Brunch with Eggs and Bacon
 
