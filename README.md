@@ -18,6 +18,11 @@ To compile CoffeeScript, build and run the application, run:
 
 ## Setting up Apache virtual hosts
 
+Edit /etc/hosts to make your machine think it's also m.rallydev.com and rally2.rallydev.com.
+It should have a line like this:
+
+        127.0.0.1       localhost m.rallydev.com rally2.rallydev.com
+
 Edit /etc/apache2/extra/httpd-vhosts.conf with the following:
 
 		<VirtualHost *:80>
