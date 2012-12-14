@@ -1,8 +1,17 @@
 <div>
-    <ul>
-    	{{#each stories}}
-    	<li>FormattedID: {{this.formattedID}}</li>
-    	<li>Name: {{this.name}}</li>
-    	{{/each}}
+    <h2>My Work</h2>
+    <table class="table table-striped">
+        <thead>
+            <th>Formatted ID</th>
+            <th>Name</th>
+        </thead>
+        <tbody>
+        	{{#each stories}}
+            <tr>
+            	<td>{{this.formattedID}}</td>
+            	<td>{{this.name}}</td>
+            </tr>
+        	{{/each}}
+        </tbody>
     </ul>
 </div>

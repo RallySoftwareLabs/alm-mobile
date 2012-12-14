@@ -3,7 +3,7 @@ app = require('application')
 $(->
   app.initialize()
   Backbone.history.start(
-    pushState: true
+    # pushState: true
   )
   $(document).on 'click', 'a:not([data-bypass])', (evt) ->
 
