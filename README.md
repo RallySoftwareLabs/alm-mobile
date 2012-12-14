@@ -23,6 +23,11 @@ It should have a line like this:
 
         127.0.0.1       localhost m.rallydev.com rally2.rallydev.com
 
+Edit /etc/apache2/httpd.conf to enable the virtual hosts file. Uncomment out the second line:
+
+        # Virtual hosts
+        Include /private/etc/apache2/extra/httpd-vhosts.conf
+
 Edit /etc/apache2/extra/httpd-vhosts.conf with the following:
 
 		<VirtualHost *:80>
