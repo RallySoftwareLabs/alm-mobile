@@ -1,4 +1,5 @@
 ZuulClient = require '../zuulclient/client'
+config = require '../config'
 
 exports.login = (req, res) ->
 	username = req.body.username
@@ -6,7 +7,7 @@ exports.login = (req, res) ->
 	client = new ZuulClient()
 	client.authenticate username, password, (authenticateResult) ->
 		if authenticateResult.isAuthenticated()
-			res.cookie('ZSESSIONID', authenticateResult.getAuthKey().getId(), { httpOnly: false})
+			res.cookie('ZSESSIONID', authenticateResult.getAuthKey().getId(), { domain: config.cookieDomain, httpOnly: false})
 			res.end('{"result": "SUCCESS"}')
 		else
 			res.status 401

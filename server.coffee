@@ -5,6 +5,7 @@ express = require('express')
 path = require('path')
 http = require('http')
 auth = require('./server/src/routes/login')
+config = require('./server/src/config')
 
 module.exports = app = express()
 

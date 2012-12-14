@@ -1,3 +1,8 @@
 <div>
-    HOME PAGE!
+    <ul>
+    	{{#each stories}}
+    	<li>FormattedID: {{this.formattedID}}</li>
+    	<li>Name: {{this.name}}</li>
+    	{{/each}}
+    </ul>
 </div>

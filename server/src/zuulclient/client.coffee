@@ -1,12 +1,13 @@
 request = require "request"
 ZuulAuthentication = require "./zuul_authentication"
+config = require "../config"
 
 module.exports = class ZuulClient
   constructor: ->
 
   authenticate: (username, password, callback) ->
     request(
-      uri: "http://mparrish_15mbp.zuul1.f4tech.com:3000/key.js"
+      uri: "http://#{config.serverName}.zuul1.f4tech.com:3000/key.js"
       method: "PUT"
       body: JSON.stringify(
         username: username
