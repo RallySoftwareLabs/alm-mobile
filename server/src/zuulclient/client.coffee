@@ -6,6 +6,7 @@ module.exports = class ZuulClient
   constructor: ->
 
   authenticate: (username, password, callback) ->
+    console.log 'authenticating zuul'
     request(
       uri: "http://#{config.serverName}.zuul1.f4tech.com:3000/key.js"
       method: "PUT"

@@ -1,6 +1,7 @@
 serverConfig =
-	serverName: 'snappa'
-	alm: 'http://rally2.rallydev.com/slm'
-	cookieDomain: '.rallydev.com'
+  serverName: 'mparrish'
+  alm: '/slm'
+  cookieDomain: '.f4tech.com'
+  appRoot: '/m'
 
 module.exports = serverConfig

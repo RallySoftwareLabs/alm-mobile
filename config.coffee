@@ -24,9 +24,9 @@ exports.config =
         before: [
           'vendor/scripts/console-helper.js',
           'vendor/scripts/zepto-1.0-custom.js',
-          'vendor/scripts/underscore-1.3.1.js',
-          'vendor/scripts/backbone-0.9.2.js',
-          'vendor/scripts/backbone-mediator.js',
+          'vendor/scripts/underscore-1.4.3.js',
+          'vendor/scripts/backbone-0.9.9.js',
+          # 'vendor/scripts/backbone-mediator.js',
 
           # Twitter Bootstrap jquery plugins
           'vendor/scripts/bootstrap/bootstrap-zepto.js',
@@ -49,7 +49,10 @@ exports.config =
       defaultExtension: 'less'
       joinTo: 'stylesheets/app.css'
       order:
-       before: ['vendor/styles/style.less']
+        before: [
+          'vendor/styles/style.less',
+          'app/styles/main.less'
+        ]
 
     templates:
       defaultExtension: 'hbs'

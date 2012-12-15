@@ -18,38 +18,24 @@ To compile CoffeeScript, build and run the application, run:
 
 ## Setting up Apache virtual hosts
 
-Edit /etc/hosts to make your machine think it's also m.rallydev.com and rally2.rallydev.com.
-It should have a line like this:
-
-        127.0.0.1       localhost m.rallydev.com rally2.rallydev.com
-
 Edit /etc/apache2/httpd.conf to enable the virtual hosts file. Uncomment out the second line:
 
         # Virtual hosts
         Include /private/etc/apache2/extra/httpd-vhosts.conf
 
-Edit /etc/apache2/extra/httpd-vhosts.conf with the following:
+Edit /etc/apache2/extra/httpd-vhosts.conf with the following, swapping out _[hostname]_ for your machine's actual hostname:
 
 		<VirtualHost *:80>
 		    ServerAdmin mparrish@rallydev.com
-		    ServerName m.rallydev.com
-		    ServerAlias m.rallydev.com
-		    ProxyPass / http://localhost:3000/
-		    ProxyPassReverse / http://localhost:3000/
-		    ErrorLog "/private/var/log/apache2/m.rallydev.com-error_log"
-		    CustomLog "/private/var/log/apache2/rally2.rallydev.com-access_log" common
-		</VirtualHost>
-
-		<VirtualHost *:80>
-		    ServerAdmin mparrish@rallydev.com
-		    ServerName rally2.rallydev.com
-		    ServerAlias rally2.rallydev.com
-		    ProxyPass / http://localhost:7001/
+		    ServerName [hostname]
+		    ServerAlias [hostname]
+            ProxyPass /m http://localhost:3000/
+		    ProxyPass /m http://localhost:3000/
+            ProxyPassReverse / http://localhost:7001/
 		    ProxyPassReverse / http://localhost:7001/
-		    ErrorLog "/private/var/log/apache2/rally2.rallydev.com-error_log"
-		    CustomLog "/private/var/log/apache2/rally2.rallydev.com-access_log" common
+		    ErrorLog "/private/var/log/apache2/[hostname]-error_log"
+		    CustomLog "/private/var/log/apache2/[hostname]-access_log" common
 		</VirtualHost>
-
 
 # Brunch with Eggs and Bacon
 

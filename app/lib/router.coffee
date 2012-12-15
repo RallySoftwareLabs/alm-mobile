@@ -14,36 +14,39 @@ module.exports = Backbone.Router.extend
   	homeView = new HomeView
   		model: userStoryCollection
 
-  	userStoryCollection.on 'change', ->
-  		homeView.render()
+  	# userStoryCollection.on 'change', ->
+  		# homeView.render()
 
 
-  	userStoryCollection.add([
-	  	new UserStory(
-	  		formattedID: 'US1'
-	  		name: 'User Story 1'
-	  		owner: 'matt'
-	  	),
-	  	new UserStory(
-	  		formattedID: 'US2'
-	  		name: 'User Story 2'
-	  		owner: 'matt'
-	  	),
-	  	new UserStory(
-	  		formattedID: 'US3'
-	  		name: 'User Story 3'
-	  		owner: 'matt'
-	  	),
-	  	new UserStory(
-	  		formattedID: 'US4'
-	  		name: 'User Story 4'
-	  		owner: 'matt'
-	  	)
-	  ])
-	  $('#content').html(homeView.render().el)
-  	# userStoryCollection.fetch(
-  	# 	success: ->
-    #  		$('#content').html(homeView.render().el)
-    # )
+  	# userStoryCollection.add([
+	  # 	new UserStory(
+	  # 		formattedID: 'US1'
+	  # 		name: 'User Story 1'
+	  # 		owner: 'matt'
+	  # 	),
+	  # 	new UserStory(
+	  # 		formattedID: 'US2'
+	  # 		name: 'User Story 2'
+	  # 		owner: 'matt'
+	  # 	),
+	  # 	new UserStory(
+	  # 		formattedID: 'US3'
+	  # 		name: 'User Story 3'
+	  # 		owner: 'matt'
+	  # 	),
+	  # 	new UserStory(
+	  # 		formattedID: 'US4'
+	  # 		name: 'User Story 4'
+	  # 		owner: 'matt'
+	  # 	)
+	  # ])
+	  # $('#content').html(homeView.render().el)
+  	userStoryCollection.fetch({
+      data:
+        fetch: ['FormattedID', 'Name', 'ScheduleState'].join ','
+  		success: (collection, response, options) ->
+     		$('#content').html(homeView.render().el)
+      failure: (collection, xhr, options) -> debugger
+    })
   login: ->
     $('#content').html(app.loginView.render().el)

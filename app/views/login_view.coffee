@@ -11,7 +11,7 @@ module.exports = View.extend
     username = this.$('#username')[0]
     password = this.$('#password')[0]
     $.ajax(
-      url: '/login'
+      url: Backbone.history.root + 'login'
       type: 'POST'
       dataType: 'json'
       data:

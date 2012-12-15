@@ -21,12 +21,6 @@ app.configure 'development', ->
 app.configure 'production', ->
   app.use express.errorHandler()
 
-# app.get('/wines', wine.findAll)
-# app.get('/wines/:id', wine.findById)
-# app.post('/wines', wine.addWine)
-# app.put('/wines/:id', wine.updateWine)
-# app.delete('/wines/:id', wine.deleteWine)
-
 app.post('/login', auth.login)
 
 
