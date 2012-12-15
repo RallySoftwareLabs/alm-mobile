@@ -1,5 +1,5 @@
 <div>
-    <h2>My Work</h2>
+    <h2>{{FormattedID}}: {{Name}}</h2>
     <table class="table table-striped">
         <thead>
             <th>Formatted ID</th>
@@ -7,13 +7,11 @@
             <th>State</th>
         </thead>
         <tbody>
-        	{{#each stories}}
             <tr>
-            	<td><a href="userstory/{{this.ObjectID}}">{{this.FormattedID}}</a></td>
-                <td>{{this.Name}}</td>
-            	<td>{{this.ScheduleState}}</td>
+                <td>{{FormattedID}}</td>
+                <td>{{Name}}</td>
+                <td>{{ScheduleState}}</td>
             </tr>
-        	{{/each}}
         </tbody>
     </ul>
 </div>
