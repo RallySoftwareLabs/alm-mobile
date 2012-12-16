@@ -24,6 +24,7 @@ exports.config =
         before: [
           'vendor/scripts/console-helper.js',
           'vendor/scripts/zepto-1.0-custom.js',
+          'vendor/scripts/zepto-cookie.js',
           'vendor/scripts/underscore-1.4.3.js',
           'vendor/scripts/backbone-0.9.9.js',
           # 'vendor/scripts/backbone-mediator.js',

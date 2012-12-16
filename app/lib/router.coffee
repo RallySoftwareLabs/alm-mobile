@@ -6,11 +6,16 @@ UserStoryDetailView = require '../views/user_story_detail_view'
 
 module.exports = Backbone.Router.extend
   routes:
-    '': 'login'
+    'login': 'login'
+    '': 'home'
     'home': 'home'
     'userstory/:id': 'userStoryDetail'
 
   home: ->
+    if !app.session.authenticated()
+      @.navigate('login', {trigger: true, replace: true})
+      return
+
   	userStoryCollection = new UserStoryCollection
   	homeView = new HomeView
   		model: userStoryCollection
@@ -24,6 +29,10 @@ module.exports = Backbone.Router.extend
     })
 
   userStoryDetail: (oid) ->
+    if !app.session.authenticated()
+      @.navigate('login', {trigger: true, replace: true})
+      return
+
     userStoryCollection = new UserStoryCollection()
     userStoryCollection.fetch({
       data:
