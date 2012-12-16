@@ -10,6 +10,7 @@ module.exports = View.extend
   signIn: (event) ->
     username = this.$('#username')[0]
     password = this.$('#password')[0]
+    checkbox = this.$('#remember-me')[0]
     $.ajax(
       url: Backbone.history.root + 'login'
       type: 'POST'
@@ -17,6 +18,7 @@ module.exports = View.extend
       data:
         username: username.value
         password: password.value
+        rememberme: checkbox.checked
       success: (data, status, xhr) ->
         Backbone.history.navigate('home', true)
       error: (xhr, errorType, error) ->
