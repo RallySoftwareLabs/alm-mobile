@@ -21,7 +21,6 @@ module.exports = View.extend
         password: password.value
         rememberme: checkbox.checked
       success: (data, status, xhr) ->
-        app.session.load()
         Backbone.history.navigate('', {trigger: true})
       error: (xhr, errorType, error) ->
         this.$('.control-group').addClass('error')
