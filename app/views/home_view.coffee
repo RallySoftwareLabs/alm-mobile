@@ -6,5 +6,6 @@ module.exports = View.extend
   id: 'home-view'
   template: template
   getRenderData: ->
-  	stories: @model.toJSON()
+    loading: @loading
+    stories: @model.toJSON()
 

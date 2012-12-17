@@ -18,13 +18,18 @@ module.exports = Backbone.Router.extend({
     userStoryCollection = new UserStoryCollection
     homeView = new HomeView
       model: userStoryCollection
+      loading: true
+    $('#content').html(homeView.render().el)
 
     userStoryCollection.fetch({
       data:
         fetch: ['ObjectID', 'FormattedID', 'Name', 'ScheduleState'].join ','
       success: (collection, response, options) ->
+        homeView.loading = false
         $('#content').html(homeView.render().el)
-      failure: (collection, xhr, options) -> debugger
+      failure: (collection, xhr, options) ->
+        homeView.loading = false
+        $('#content').html(homeView.render().el)
     })
 
   userStoryDetail: (oid) ->
