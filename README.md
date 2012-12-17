@@ -25,17 +25,25 @@ Edit /etc/apache2/httpd.conf to enable the virtual hosts file. Uncomment out the
 
 Edit /etc/apache2/extra/httpd-vhosts.conf with the following, swapping out _[hostname]_ for your machine's actual hostname:
 
-		<VirtualHost *:80>
-		    ServerAdmin mparrish@rallydev.com
-		    ServerName [hostname]
-		    ServerAlias [hostname]
-            ProxyPass /m http://localhost:3000/
-		    ProxyPass /m http://localhost:3000/
+        <VirtualHost *:80>
+            ServerAdmin mparrish@rallydev.com
+            ServerName m.f4tech.com
+            ServerAlias m.f4tech.com
+            ProxyPass / http://localhost:3000/
+            ProxyPassReverse / http://localhost:3000/
+            ErrorLog "/private/var/log/apache2/m.f4tech.com-error_log"
+            CustomLog "/private/var/log/apache2/m.f4tech.com-access_log" common
+        </VirtualHost>
+
+        <VirtualHost *:80>
+            ServerAdmin mparrish@rallydev.com
+            ServerName [hostname]
+            ServerAlias [hostname]
             ProxyPassReverse / http://localhost:7001/
-		    ProxyPassReverse / http://localhost:7001/
-		    ErrorLog "/private/var/log/apache2/[hostname]-error_log"
-		    CustomLog "/private/var/log/apache2/[hostname]-access_log" common
-		</VirtualHost>
+            ProxyPassReverse / http://localhost:7001/
+            ErrorLog "/private/var/log/apache2/[hostname]-error_log"
+            CustomLog "/private/var/log/apache2/[hostname]-access_log" common
+        </VirtualHost>
 
 # Brunch with Eggs and Bacon
 
