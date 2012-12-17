@@ -11,6 +11,10 @@ module.exports = Backbone.Router.extend({
     'userstory/:id': 'userStoryDetail'
 
   home: ->
+    if !app.session.authenticated()
+      @.navigate('login', {trigger: true, replace: true})
+      return
+
     userStoryCollection = new UserStoryCollection
     homeView = new HomeView
       model: userStoryCollection
@@ -29,12 +33,16 @@ module.exports = Backbone.Router.extend({
     })
 
   userStoryDetail: (oid) ->
+    if !app.session.authenticated()
+      @.navigate('login', {trigger: true, replace: true})
+      return
+
     userStoryCollection = new UserStoryCollection()
     userStoryCollection.fetch({
       data:
         fetch: ['ObjectID', 'FormattedID', 'Name', 'ScheduleState'].join ','
         query: "( OID = \"#{oid}\" )"
-      success: (collection, response, options) ->
+      success: (collection, response, options) -> 
         view = new UserStoryDetailView(model: collection.at(0))
         $('#content').html(view.render().el)
     })

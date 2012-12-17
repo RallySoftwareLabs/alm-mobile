@@ -1,5 +1,5 @@
 serverConfig =
-  serverName: 'snappa'
+  serverName: 'mparrish'
   alm: '/slm'
   appRoot: ''
 
