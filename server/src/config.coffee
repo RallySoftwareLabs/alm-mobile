@@ -2,6 +2,6 @@ serverConfig =
   serverName: 'mparrish'
   alm: '/slm'
   cookieDomain: '.f4tech.com'
-  appRoot: '/m'
+  appRoot: ''
 
 module.exports = serverConfig

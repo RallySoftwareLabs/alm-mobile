@@ -3,7 +3,7 @@ app = require 'application'
 $(->
   app.initialize()
   Backbone.history.start(
-    root: '/m'
+    # root: '/m'
     # pushState: true
   )
   $(document).on 'click', 'a:not([data-bypass])', (evt) ->
@@ -22,9 +22,13 @@ $(->
     'delete': 'DELETE',
     'read':   'GET'
   
-  # origSync = Backbone.sync
-  # # Copied from backbone-0.9.9.js
-  # Backbone.sync = (method, model, options={}) ->
+  origSync = Backbone.sync
+  # Copied from backbone-0.9.9.js
+  Backbone.sync = (method, model, options={}) ->
+    headers = options.headers || {}
+    headers.ZSESSIONID = $.fn.cookie('ZSESSIONID')
+    options.headers = headers
+    origSync.call(Backbone, method, model, options)
   #   type = methodMap[method]
 
   #   # Default options, unless specified.
