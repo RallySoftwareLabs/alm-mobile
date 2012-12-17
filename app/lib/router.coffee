@@ -4,11 +4,10 @@ UserStory = require '../models/user_story'
 HomeView = require '../views/home_view'
 UserStoryDetailView = require '../views/user_story_detail_view'
 
-module.exports = Backbone.Router.extend
+module.exports = Backbone.Router.extend({
   routes:
     'login': 'login'
     '': 'home'
-    'home': 'home'
     'userstory/:id': 'userStoryDetail'
 
   home: ->
@@ -16,15 +15,15 @@ module.exports = Backbone.Router.extend
       @.navigate('login', {trigger: true, replace: true})
       return
 
-  	userStoryCollection = new UserStoryCollection
-  	homeView = new HomeView
-  		model: userStoryCollection
+    userStoryCollection = new UserStoryCollection
+    homeView = new HomeView
+      model: userStoryCollection
 
-  	userStoryCollection.fetch({
+    userStoryCollection.fetch({
       data:
         fetch: ['ObjectID', 'FormattedID', 'Name', 'ScheduleState'].join ','
-  		success: (collection, response, options) ->
-     		$('#content').html(homeView.render().el)
+      success: (collection, response, options) ->
+        $('#content').html(homeView.render().el)
       failure: (collection, xhr, options) -> debugger
     })
 
@@ -45,3 +44,4 @@ module.exports = Backbone.Router.extend
 
   login: ->
     $('#content').html(app.loginView.render().el)
+})
