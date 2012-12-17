@@ -1,5 +1,6 @@
-View = require('./view')
-template = require('./templates/login')
+View = require './view'
+template = require './templates/login'
+app = require '../application'
 
 module.exports = View.extend
   id: 'login-view'
@@ -20,6 +21,7 @@ module.exports = View.extend
         password: password.value
         rememberme: checkbox.checked
       success: (data, status, xhr) ->
+        app.session.load()
         Backbone.history.navigate('', {trigger: true})
       error: (xhr, errorType, error) ->
         this.$('.control-group').addClass('error')

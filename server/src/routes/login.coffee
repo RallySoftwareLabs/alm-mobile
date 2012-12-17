@@ -14,7 +14,7 @@ exports.login = (req, res) ->
 				expiration = new Date(Date.now())
 				expiration.setDate(expiration.getDate() + 14)
 
-			res.cookie('ZSESSIONID', authenticateResult.getAuthKey().getId(), { domain: config.cookieDomain, httpOnly: false, expires: expiration})
+			res.cookie('ZSESSIONID', authenticateResult.getAuthKey().getId(), { httpOnly: false, expires: expiration})
 			res.end('{"result": "SUCCESS"}')
 		else
 			res.status 401
