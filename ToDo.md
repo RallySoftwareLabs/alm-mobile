@@ -1,7 +1,7 @@
 ### To Do
 
-- Get WS working
-
 - Modularize routes and have routes.coffee build itself from said modules
-
-- How to configure server per machine?
+- Configure server per machine outside of GIT repo (ENV variables?) - Build dynamic index.html pushing config to client
+- Search for artifacts
+- Inline editing
+- Allow logout
