@@ -39,7 +39,7 @@ Edit /etc/apache2/extra/httpd-vhosts.conf with the following, swapping out _[hos
             ServerAdmin mparrish@rallydev.com
             ServerName [hostname]
             ServerAlias [hostname]
-            ProxyPassReverse / http://localhost:7001/
+            ProxyPass / http://localhost:7001/
             ProxyPassReverse / http://localhost:7001/
             ErrorLog "/private/var/log/apache2/[hostname]-error_log"
             CustomLog "/private/var/log/apache2/[hostname]-access_log" common

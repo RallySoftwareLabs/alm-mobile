@@ -1,6 +1,15 @@
 # Put your handlebars.js helpers here.
 Handlebars.registerHelper 'isEditing', (field, options) ->
-  if @edit is field
+  unless options?
+    options = field
+    field = null
+  editing = false
+  if field?
+    editing = @edit is field
+  else
+    editing = @edit?
+
+  if editing
     options.fn?(@)
   else
     options.inverse?(@)

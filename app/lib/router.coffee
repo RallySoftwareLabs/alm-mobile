@@ -38,7 +38,7 @@ module.exports = Backbone.Router.extend({
     userStoryCollection = new UserStoryCollection()
     userStoryCollection.fetch({
       data:
-        fetch: ['ObjectID', 'FormattedID', 'Name', 'ScheduleState'].join ','
+        fetch: ['ObjectID', 'FormattedID', 'Name', 'Owner', 'Tags', 'Project', 'Description', 'Iteration', 'Release', 'ScheduleState'].join ','
         query: "( OID = \"#{oid}\" )"
       success: (collection, response, options) -> 
         view = new UserStoryDetailView(model: collection.at(0))
