@@ -1,11 +1,11 @@
-View = require('./view')
-template = require('./templates/home')
-UserStory = require '../models/user_story'
+View = require('views/view')
+template = require('views/templates/home')
+UserStory = require 'models/user_story'
 
 module.exports = View.extend
   id: 'home-view'
   template: template
   getRenderData: ->
-    loading: @loading
+    error: @options.error
     stories: @model.toJSON()
 

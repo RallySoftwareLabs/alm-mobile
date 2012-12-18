@@ -27,6 +27,8 @@ exports.config =
           'vendor/scripts/zepto-cookie.js',
           'vendor/scripts/underscore-1.4.3.js',
           'vendor/scripts/backbone-0.9.9.js',
+          'vendor/scripts/spin-1.2.7.js',
+          'vendor/scripts/zepto-spin.js',
           # 'vendor/scripts/backbone-mediator.js',
 
           # Twitter Bootstrap jquery plugins

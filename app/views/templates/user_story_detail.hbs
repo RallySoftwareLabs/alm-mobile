@@ -1,19 +1,38 @@
-<div>
-    <div class="page-header">
-        <h2>{{FormattedID}}: {{Name}}</h2>
-    </div>
-    <table class="table table-striped">
-        <thead>
-            <th>Formatted ID</th>
-            <th>Name</th>
-            <th>State</th>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{FormattedID}}</td>
-                <td>{{Name}}</td>
-                <td>{{ScheduleState}}</td>
-            </tr>
-        </tbody>
-    </ul>
+<div class="form-horizontal">
+  <legend>{{model.FormattedID}}: {{model.Name}}</legend>
+  <div class="control-group">
+    <div class="control-label">Formatted ID:</div>
+    {{#isEditing "FormattedID"}}
+        <div class="controls">
+            <input type="text" id="FormattedID" placeholder="Formatted ID" value="{{model.FormattedID}}"/>
+        </div>
+    {{else}}
+        <div class="controls display FormattedID">{{model.FormattedID}}</div>
+    {{/isEditing}}
+  </div>
+  <div class="control-group">
+    <div class="control-label">Name:</div>
+    {{#isEditing "Name"}}
+        <div class="controls">
+            <input type="text" id="Name" placeholder="Name" value="{{model.Name}}"/>
+        </div>
+    {{else}}
+        <div class="controls display Name">{{model.Name}}</div>
+    {{/isEditing}}
+  </div>
+  <div class="control-group">
+    <div class="control-label">State:</div>
+    {{#isEditing "ScheduleState"}}
+        <div class="controls">
+            <select>
+                <option value="Defined"{{#isFieldValue 'ScheduleState' 'Defined'}} selected="true"{{/isFieldValue}}>Defined</option>
+                <option value="In-Progress"{{#isFieldValue 'ScheduleState' 'In-Progress'}} selected="true"{{/isFieldValue}}>In-Progress</option>
+                <option value="Completed"{{#isFieldValue 'ScheduleState' 'Completed'}} selected="true"{{/isFieldValue}}>Completed</option>
+                <option value="Accepted"{{#isFieldValue 'ScheduleState' 'Accepted'}} selected="true"{{/isFieldValue}}>Accepted</option>
+            </select>
+        </div>
+    {{else}}
+        <div class="controls display State">{{model.ScheduleState}}</div>
+    {{/isEditing}}
+  </div>
 </div>
