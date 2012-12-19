@@ -12,12 +12,6 @@
     headers.ZSESSIONID = $.fn.cookie('ZSESSIONID')
     options.headers = headers
 
-    error = options.error
-    options.error = (model, xhr, options) ->
-      error?(model, xhr, options)
-      if xhr.status is 401
-        Backbone.history.navigate('/login', {trigger: true, replace: true})
-
     # origSync.call(Backbone, method, model, options)
     type = methodMap[method]
 
@@ -71,6 +65,8 @@
     options.error = (xhr, status, thrown) ->
       error?(model, xhr, options)
       model.trigger('error', model, xhr, options)
+      if xhr.status is 401 or xhr.status is 0
+        Backbone.history.navigate('/login', {trigger: true, replace: true})
 
     # Make the request, allowing the user to override any Ajax options.
     xhr = Backbone.ajax(_.extend(params, options))

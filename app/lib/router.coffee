@@ -3,9 +3,9 @@ app = require 'application'
 UserStory = require 'models/user_story'
 
 # required views
-LoginView = require '../views/login/login_view'
+LoginView = require 'views/login/login_view'
 HomeView = require 'views/home/home_view'
-UserStoryDetailView = require 'views/user_story_detail_view'
+UserStoryDetailView = require 'views/detail/user_story_detail_view'
 
 module.exports = Backbone.Router.extend({
   routes:
@@ -25,15 +25,7 @@ module.exports = Backbone.Router.extend({
       @.navigate('login', {trigger: true, replace: true})
       return
 
-    userStoryCollection = new UserStoryCollection()
-    userStoryCollection.fetch({
-      data:
-        fetch: ['ObjectID', 'FormattedID', 'Name', 'Owner', 'Tags', 'Project', 'Description', 'Iteration', 'Release', 'ScheduleState'].join ','
-        query: "( OID = \"#{oid}\" )"
-      success: (collection, response, options) ->
-        view = new UserStoryDetailView(model: collection.at(0))
-        $('#content').html(view.render().el)
-    })
+    view = new UserStoryDetailView(oid: oid, autoRender: true, el: $('#content'))
 
   login: ->
     loginView = new LoginView()

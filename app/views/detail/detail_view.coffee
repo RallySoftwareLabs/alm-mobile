@@ -1,10 +1,19 @@
 View = require 'views/view'
-FieldDisplayView = require 'views/field_display_view'
-FieldEditView = require 'views/field_edit_view'
+FieldDisplayView = require 'views/field/field_display_view'
+FieldEditView = require 'views/field/field_edit_view'
 
 module.exports = View.extend
-  initialize: ->
+  initialize: (options) ->
+    View.prototype.initialize.call(this, [options])
     @_defineFieldEditFns field for field in @fields
+    @model = new @modelType(ObjectID: options.oid)
+    @model.fetch({
+      data:
+        fetch: ['ObjectID'].concat(@fields).join ','
+      success: (model, response, opts) =>
+        @delegateEvents()
+        @render() if options.autoRender
+    })
 
   events: ->
     listeners = 

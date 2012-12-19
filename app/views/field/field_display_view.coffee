@@ -11,4 +11,4 @@ module.exports = View.extend
     fieldValue: @model.get(@options.field)
 
   _getDisplayTemplate: (field) ->
-    return require 'views/templates/fields/display/string_view'
+    return require 'views/field/templates/display/string_view'

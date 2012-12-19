@@ -1,8 +1,9 @@
-DetailView = require('views/detail_view')
+DetailView = require('views/detail/detail_view')
 template = require('./templates/user_story_detail')
-UserStory = require '../models/user_story'
+UserStory = require 'models/user_story'
+UserStoryCollection = require 'models/user_story_collection'
 
-module.exports = DetailView.extend
+module.exports = DetailView.extend({
   modelType: UserStory
   id: 'user-story-detail-view'
   template: template
@@ -15,5 +16,7 @@ module.exports = DetailView.extend
     'Description',
     'Iteration',
     'Release',
-    'ScheduleState'
+    'ScheduleState',
+    'PlanEstimate'
   ]
+})

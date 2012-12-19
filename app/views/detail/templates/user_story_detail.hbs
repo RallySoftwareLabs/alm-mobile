@@ -1,14 +1,28 @@
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span12">
+      <h3>{{model.Name}}</h3>
+    </div>
+  </div>
+  <div class="row-fluid">
+    <div class="span8" id="ScheduleStateView"></div>
+    <div class="span2"></div>
+    <div class="span2" id="OwnerView"></div>
+  </div>
+  <div class="row-fluid">
+    <div class="span5" id="PlanEstimateView"></div>
+  </div>
+  <div class="row-fluid">
+    <div class="span12" id="DescriptionView"></div>
+  </div>
 <div class="form-horizontal">
-  <legend>{{model.FormattedID}}: {{model.Name}}</legend>
+{{!  <legend>{{model.FormattedID}|}: {{model.Name}|}</legend>
   <div class="control-group" id="FormattedIDView"/>
-  <div class="control-group" id="DescriptionView"/>
-  <div class="control-group" id="OwnerView"/>
   <div class="control-group" id="ProjectView"/>
-  <div class="control-group" id="ScheduleStateView"/>
   <div class="control-group" id="TagsView"/>
   <div class="control-group" id="IterationView"/>
   <div class="control-group" id="ReleaseView"/>
-
+ }}
 {{!
     <div class="control-label">State:</div>
     {{#isEditing "ScheduleState"}|}
