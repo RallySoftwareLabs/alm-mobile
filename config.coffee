@@ -54,6 +54,7 @@ exports.config =
       order:
         before: [
           'vendor/styles/style.less',
+          'app/styles/variables.less',
           'app/styles/main.less'
         ]
 

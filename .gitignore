@@ -1,6 +1,5 @@
 server/lib
-public/*
-!public/index.html
+public/
 node_modules/
 Gemfile.lock
 .tmtags

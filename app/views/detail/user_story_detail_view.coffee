@@ -9,14 +9,15 @@ module.exports = DetailView.extend({
   template: template
   fields: [
     'FormattedID',
-    'Name': 'header',
-    'Owner',
+    {'Name': 'header'},
+    {'Owner': 'owner'},
     'Tags',
     'Project',
-    'Description': 'html',
+    {'Description': 'html'},
     'Iteration',
     'Release',
     'ScheduleState',
-    'PlanEstimate'
+    'PlanEstimate',
+    'DisplayName'
   ]
 })
