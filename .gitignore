@@ -1,5 +1,9 @@
 server/lib
-public/
+public/*
+!public/index.html
 node_modules/
 Gemfile.lock
+.tmtags
+.tmtagsHistory
+.tm_properties
 *.log
