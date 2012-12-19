@@ -36,7 +36,7 @@ module.exports = View.extend
     @
 
   load: ->
-    @userStoriesView.$el.html("").spin()
+    #@userStoriesView.$el.html(new Spinner().spin())
     @fetchUserStories()
 
   fetchUserStories: ->
