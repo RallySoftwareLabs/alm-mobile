@@ -17,7 +17,8 @@ module.exports = View.extend
 
   events: ->
     listeners = 
-      'blur input': 'saveModel'
+      'blur input': 'endEdit'
+      'blur textarea': 'endEdit'
     listeners["click ##{key}View.display"] = "startEdit#{key}" for key of @model.attributes when @fieldIsEditable(key)
     listeners
 
@@ -28,12 +29,38 @@ module.exports = View.extend
   afterRender: ->
     @renderField field for field in @fields
 
-  saveModel: (event) ->
+  endEdit: (event) ->
     value = event.target.value
     field = event.target.id
     modelUpdates = {}
     modelUpdates[field] = value
-    @model.save modelUpdates,
+    @_saveModel modelUpdates
+
+  fieldIsEditable: (field) ->
+    return false unless field in @_getFieldNames()
+    if field in ['FormattedID'] then false else true
+
+  _defineFieldEditFns: (field) ->
+    unless @["startEdit#{field}"]?
+      @["startEdit#{field}"] = ->
+        @_startEdit(field)
+
+  renderField: (field) ->
+    [fieldName, viewType] = @_getFieldNameAndViewType(field)
+    FieldViewClass = if @options.edit is fieldName then FieldEditView else FieldDisplayView
+    new FieldViewClass(model: @model, field: fieldName, viewType: viewType, el: this.$("##{fieldName}View")).render()
+
+  startEditOwner: ->
+    @_saveModel(Owner: 'currentuser')
+
+  _startEdit: (field) ->
+    fieldName = @_getFieldNameAndViewType(field)[0]
+    @options.edit = fieldName
+    @render()
+    this.$(".edit ##{fieldName}").focus()
+
+  _saveModel: (updates) ->
+    @model.save updates,
       wait: true
       patch: true
       success: =>
@@ -41,25 +68,6 @@ module.exports = View.extend
         @render()
       error: =>
         debugger
-
-  fieldIsEditable: (field) ->
-    return false unless field in @_getFieldNames()
-    if field in ['FormattedID'] then false else true
-
-  _defineFieldEditFns: (field) ->
-    @["startEdit#{field}"] = ->
-      @_startEdit(field)
-
-  renderField: (field) ->
-    [fieldName, viewType] = @_getFieldNameAndViewType(field)
-    FieldViewClass = if @options.edit is fieldName then FieldEditView else FieldDisplayView
-    new FieldViewClass(model: @model, field: fieldName, viewType: viewType, el: this.$("##{fieldName}View")).render()
-
-  _startEdit: (field) ->
-    fieldName = @_getFieldNameAndViewType(field)[0]
-    @options.edit = fieldName
-    @render()
-    this.$(".edit ##{fieldName}").focus()
 
   _getFieldNameAndViewType: (field) ->
     if typeof field is 'object'

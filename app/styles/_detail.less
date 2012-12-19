@@ -1,21 +1,38 @@
 
-.detail-view .row-fluid{
-    height: 50px;
-}
+.detail-view {
+   .row-fluid{
+        height: 50px;
+    }
 
-.owner-field {
-    width: 60px;
-    .profile-image {
-        width: 100%;
-        height: 60px;
+    .html-field {
+        height: 200px;
+    }
 
-        &.no-owner {
-            background-image: url(/images/noOwner_2x.png);
-            background-size: contain;
-            background-repeat: none;
+    .owner-field {
+        width: 60px;
+        .profile-image {
+            width: 100%;
+            height: 60px;
+
+            &.no-owner {
+                background-image: url(/images/noOwner_2x.png);
+                background-size: contain;
+                background-repeat: none;
+            }
+        }
+        .name {
+            text-align: center;
         }
     }
-    .name {
-        text-align: center;
+
+
+    .status-value {
+        .separator {
+            width: 5px;
+        }
+
+        > div {
+            float: left;
+        }
     }
 }
