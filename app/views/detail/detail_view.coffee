@@ -5,11 +5,11 @@ FieldEditView = require 'views/field/field_edit_view'
 module.exports = View.extend
   initialize: (options) ->
     View.prototype.initialize.call(this, [options])
-    @_defineFieldEditFns field for field in @fields
+    @_defineFieldEditFns field for field in @_getFieldNames()
     @model = new @modelType(ObjectID: options.oid)
     @model.fetch({
       data:
-        fetch: ['ObjectID'].concat(@fields).join ','
+        fetch: ['ObjectID'].concat(@_getFieldNames()).join ','
       success: (model, response, opts) =>
         @delegateEvents()
         @render() if options.autoRender
@@ -17,8 +17,8 @@ module.exports = View.extend
 
   events: ->
     listeners = 
-      'blur .controls input': 'saveModel'
-    listeners["click .controls.display.#{key}"] = "startEdit#{key}" for key of @model.attributes when @fieldIsEditable(key)
+      'blur input': 'saveModel'
+    listeners["click ##{key}View.display"] = "startEdit#{key}" for key of @model.attributes when @fieldIsEditable(key)
     listeners
 
   getRenderData: ->
@@ -43,7 +43,7 @@ module.exports = View.extend
         debugger
 
   fieldIsEditable: (field) ->
-    return false unless field in @fields
+    return false unless field in @_getFieldNames()
     if field in ['FormattedID'] then false else true
 
   _defineFieldEditFns: (field) ->
@@ -51,10 +51,24 @@ module.exports = View.extend
       @_startEdit(field)
 
   renderField: (field) ->
-    FieldViewClass = if @options.edit is field then FieldEditView else FieldDisplayView
-    new FieldViewClass(model: @model, field: field, el: this.$("##{field}View")).render()
+    [fieldName, viewType] = @_getFieldNameAndViewType(field)
+    FieldViewClass = if @options.edit is fieldName then FieldEditView else FieldDisplayView
+    new FieldViewClass(model: @model, field: fieldName, viewType: viewType, el: this.$("##{fieldName}View")).render()
 
   _startEdit: (field) ->
-    @options.edit = field
+    fieldName = @_getFieldNameAndViewType(field)[0]
+    @options.edit = fieldName
     @render()
-    this.$(".controls ##{field}").focus()
+    this.$(".controls ##{fieldName}").focus()
+
+  _getFieldNameAndViewType: (field) ->
+    if typeof field is 'object'
+      [fieldName, viewType] = ([key, value] for key, value of field)[0]
+    else
+      fieldName = field
+      viewType = null
+    [fieldName, viewType]
+
+  _getFieldNames: ->
+    (@_getFieldNameAndViewType(field)[0] for field in @fields)
+    

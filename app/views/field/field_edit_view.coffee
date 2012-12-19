@@ -1,14 +1,11 @@
-View = require 'views/view'
+FieldView = require './field_view'
 
-module.exports = View.extend
-  initialize: (options) ->
-    @template = @_getDisplayTemplate(options.field)
+module.exports = FieldView.extend
+  viewMode: 'edit'
+  
+  afterRender: ->
+    @.$el.removeClass('display')
+    @.$el.addClass('edit')
 
-  getRenderData: ->
-    model: @model.toJSON()
-    field: @options.field
-    fieldLabel: @options.field
-    fieldValue: @model.get(@options.field)
-
-  _getDisplayTemplate: (field) ->
-    return require 'views/field/templates/edit/string_view'
+  _getViewName: ->
+    @viewType
