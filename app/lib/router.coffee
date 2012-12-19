@@ -18,12 +18,7 @@ module.exports = Backbone.Router.extend({
       @.navigate('login', {trigger: true, replace: true})
       return
 
-    homeView = new HomeView()
-    $('#content').html(homeView.render().el).spin()
-
-    homeView.fetchAll()
-    homeView.hideAll()
-    homeView.showStories()
+    homeView = new HomeView().load()
 
   userStoryDetail: (oid) ->
     if !app.session.authenticated()
