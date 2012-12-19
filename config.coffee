@@ -22,17 +22,19 @@ exports.config =
       # even if they are not present here.
       order:
         before: [
+          'vendor/scripts/jquery-1.8.3.js',
+          'vendor/scripts/jquery-cookie.js',
           'vendor/scripts/console-helper.js',
-          'vendor/scripts/zepto-1.0-custom.js',
-          'vendor/scripts/zepto-cookie.js',
+          # 'vendor/scripts/zepto-1.0-custom.js',
+          # 'vendor/scripts/zepto-cookie.js',
           'vendor/scripts/underscore-1.4.3.js',
           'vendor/scripts/backbone-0.9.9.js',
           'vendor/scripts/spin-1.2.7.js',
-          'vendor/scripts/zepto-spin.js',
+          # 'vendor/scripts/zepto-spin.js',
           # 'vendor/scripts/backbone-mediator.js',
 
           # Twitter Bootstrap jquery plugins
-          'vendor/scripts/bootstrap/bootstrap-zepto.js',
+          # 'vendor/scripts/bootstrap/bootstrap-zepto.js',
           'vendor/scripts/bootstrap/bootstrap-transition.js',
           'vendor/scripts/bootstrap/bootstrap-alert.js',
           'vendor/scripts/bootstrap/bootstrap-button.js',

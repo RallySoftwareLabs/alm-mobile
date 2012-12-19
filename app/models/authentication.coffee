@@ -12,9 +12,9 @@ module.exports = Model.extend
 
   load: ->
     @set
-      zsessionid: $.fn.cookie('ZSESSIONID')
+      zsessionid: $.cookie('ZSESSIONID')
 
   logout: ->
-    $.fn.cookie('ZSESSIONID', "")
+    $.cookie('ZSESSIONID', "")
     @set
       zsessionid: null

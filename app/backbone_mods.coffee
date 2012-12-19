@@ -4,12 +4,12 @@
     'patch':  'POST', #'PATCH',
     'delete': 'DELETE',
     'read':   'GET'
-  
+
   origSync = Backbone.sync
   # Copied from backbone-0.9.9.js
   Backbone.sync = (method, model, options={}) ->
     headers = options.headers || {}
-    headers.ZSESSIONID = $.fn.cookie('ZSESSIONID')
+    headers.ZSESSIONID = $.cookie('ZSESSIONID')
     options.headers = headers
 
     # origSync.call(Backbone, method, model, options)
