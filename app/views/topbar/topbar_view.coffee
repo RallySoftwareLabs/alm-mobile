@@ -10,7 +10,7 @@ module.exports = Backbone.View.extend
     'click a[data-target="settings"]': 'openSettings'
 
   initialize: (options) ->
-    console.log 'initing topbar view'
+    # console.log 'initing topbar view'
     @render()
 
   navigateBack: ->
@@ -24,7 +24,6 @@ module.exports = Backbone.View.extend
     @
 
   getRenderData: ->
-    console.log 'getting rnder data'
     title: 'Home'
     left_button: """<a href="#" data-target="back">Back</a>"""
     right_button: """<a href="#" data-target="settings">Settings</a>"""

@@ -2,7 +2,7 @@ server/lib
 public/
 node_modules/
 Gemfile.lock
-.tmtags
-.tmtagsHistory
+tmtags
+tmtagsHistory
 .tm_properties
 *.log
