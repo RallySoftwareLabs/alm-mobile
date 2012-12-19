@@ -59,7 +59,7 @@ module.exports = View.extend
     fieldName = @_getFieldNameAndViewType(field)[0]
     @options.edit = fieldName
     @render()
-    this.$(".controls ##{fieldName}").focus()
+    this.$(".edit ##{fieldName}").focus()
 
   _getFieldNameAndViewType: (field) ->
     if typeof field is 'object'
