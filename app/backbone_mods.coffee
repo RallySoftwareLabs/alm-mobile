@@ -56,17 +56,20 @@
     if (params.type isnt 'GET' and !options.emulateJSON)
       params.processData = false
 
-    success = options.success
-    options.success = (resp, status, xhr) ->
-      success?(resp, status, xhr)
-      model.trigger('sync', model, resp, options)
-
     error = options.error
     options.error = (xhr, status, thrown) ->
       error?(model, xhr, options)
       model.trigger('error', model, xhr, options)
       if xhr.status is 401 or xhr.status is 0
         Backbone.history.navigate('/login', {trigger: true, replace: true})
+
+    success = options.success
+    options.success = (resp, status, xhr) ->
+      if resp.OperationResult?.Errors?.length > 0
+        options.error(xhr, "ws", null)
+      else
+        success?(resp, status, xhr)
+        model.trigger('sync', model, resp, options)
 
     # Make the request, allowing the user to override any Ajax options.
     xhr = Backbone.ajax(_.extend(params, options))
