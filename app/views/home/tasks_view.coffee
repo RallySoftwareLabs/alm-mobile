@@ -3,7 +3,7 @@ template = require './templates/tasks'
 
 module.exports = View.extend
 
-  id: 'tasks-view'
+  el: '#tasks-view'
   template: template
   getRenderData: ->
     # error: @options.error

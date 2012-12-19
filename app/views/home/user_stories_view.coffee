@@ -3,7 +3,7 @@ template = require './templates/user_stories'
 
 module.exports = View.extend
 
-  id: 'user-stories-view'
+  el: '#user-stories-view'
   template: template
   getRenderData: ->
     # error: @options.error

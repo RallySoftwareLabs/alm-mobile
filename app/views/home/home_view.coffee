@@ -11,13 +11,13 @@ TaskCollection = require 'models/task_collection'
 
 module.exports = View.extend
 
-  id: 'home-view'
+  el: '#content'
   template: template
-  events:
-    'click #user-stories-nav-button #defects-nav-button #tasks-nav-button': 'showWorkItems'
 
-  initialize: ->
-    # @constructor.__super__.initialize.apply @, [options]
+  initialize: (options) ->
+    @constructor.__super__.initialize.apply @, [options]
+    @render()
+
     @error = false
 
     @userStories = new UserStoryCollection()
@@ -27,41 +27,26 @@ module.exports = View.extend
     @userStoriesView = new UserStoriesView
       model: @userStories
 
-    @defectView = new DefectsView
+    @defectsView = new DefectsView
       model: @defects
 
-    @taskView = new TasksView
+    @tasksView = new TasksView
       model: @tasks
 
     @
 
   load: ->
-    $('#content').html("<h1>Loading Data</h1>").spin()
-
+    @userStoriesView.$el.html("").spin()
     @fetchUserStories()
-    @fetchDefects()
-    @fetchTasks()
-
-    @render()
-    # $('#content').html(@el)
-    # @hideAll()
-    $('#user_stories_view').show()
-
-  render: ->
-    @$el.html @template()
-    @
-
-  appendChildView: (view) ->
-    @$el.append(view.render().el)
-    $('#content').html(@el)
-    # Hide the appended item unless its user stories?
 
   fetchUserStories: ->
     @userStories.fetch({
       data:
         fetch: ['ObjectID', 'FormattedID', 'Name', 'ScheduleState'].join ','
       success: (collection, response, options) =>
-        @appendChildView(@userStoriesView)
+        @userStoriesView.render()
+        @fetchDefects()
+        @fetchTasks()
       failure: (collection, xhr, options) =>
         @error = true
     })
@@ -71,7 +56,7 @@ module.exports = View.extend
       data:
         fetch: ['ObjectID', 'FormattedID', 'Name', 'ScheduleState'].join ','
       success: (collection, response, options) =>
-        @appendChildView(@defectView)
+        @defectsView.render()
       failure: (collection, xhr, options) =>
         @error = true
     })
@@ -81,20 +66,7 @@ module.exports = View.extend
       data:
         fetch: ['ObjectID', 'FormattedID', 'Name', 'ScheduleState'].join ','
       success: (collection, response, options) =>
-        @appendChildView(@taskView)    
+        @tasksView.render()
       failure: (collection, xhr, options) =>
         @error = true
     })
-
-  showWorkItems: (event) -> 
-    @hideAll
-    $(event.source_element).show()
-
-  hideAll: ->
-    $('#user-stories-view').hide()
-    $('#defects-view').hide()
-    $('#tasks-view').hide()
-
-  # hideAll: (event) ->
-  #   _.each($('#nav li'), (elment, index, list) -> element.hide())
-

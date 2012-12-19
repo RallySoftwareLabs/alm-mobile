@@ -3,7 +3,7 @@ template = require './templates/defects'
 
 module.exports = View.extend
 
-  id: 'defects-view'
+  el: '#defects-view'
   template: template
   getRenderData: ->
     # error: @options.error
