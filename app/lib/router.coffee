@@ -1,7 +1,10 @@
 app = require 'application'
-UserStoryCollection = require 'models/user_story_collection'
+# required models
 UserStory = require 'models/user_story'
-HomeView = require 'views/home_view'
+
+# required views
+LoginView = require '../views/login/login_view'
+HomeView = require 'views/home/home_view'
 UserStoryDetailView = require 'views/user_story_detail_view'
 
 module.exports = Backbone.Router.extend({
@@ -15,20 +18,12 @@ module.exports = Backbone.Router.extend({
       @.navigate('login', {trigger: true, replace: true})
       return
 
-    userStoryCollection = new UserStoryCollection()
-    homeView = new HomeView
-      model: userStoryCollection
+    homeView = new HomeView()
     $('#content').html(homeView.render().el).spin()
 
-    userStoryCollection.fetch({
-      data:
-        fetch: ['ObjectID', 'FormattedID', 'Name', 'ScheduleState'].join ','
-      success: (collection, response, options) ->
-        $('#content').html(homeView.render().el)
-      failure: (collection, xhr, options) ->
-        homeView.error = true
-        $('#content').html(homeView.render().el)
-    })
+    homeView.fetchAll()
+    homeView.hideAll()
+    homeView.showStories()
 
   userStoryDetail: (oid) ->
     if !app.session.authenticated()
@@ -40,11 +35,12 @@ module.exports = Backbone.Router.extend({
       data:
         fetch: ['ObjectID', 'FormattedID', 'Name', 'Owner', 'Tags', 'Project', 'Description', 'Iteration', 'Release', 'ScheduleState'].join ','
         query: "( OID = \"#{oid}\" )"
-      success: (collection, response, options) -> 
+      success: (collection, response, options) ->
         view = new UserStoryDetailView(model: collection.at(0))
         $('#content').html(view.render().el)
     })
 
   login: ->
-    $('#content').html(app.loginView.render().el)
+    loginView = new LoginView()
+    $('#content').html(loginView.render().el)
 })

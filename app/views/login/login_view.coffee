@@ -1,6 +1,6 @@
-View = require './view'
+View = require '../view'
 template = require './templates/login'
-app = require '../application'
+app = require '../../application'
 
 module.exports = View.extend
   id: 'login-view'

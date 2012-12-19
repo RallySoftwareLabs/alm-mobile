@@ -1,0 +1,18 @@
+<div>
+    <table class="table table-striped">
+        <thead>
+            <th>Formatted ID</th>
+            <th>Name</th>
+            <th>State</th>
+        </thead>
+        <tbody>
+        	{{#each stories}}
+            <tr>
+            	<td><a href="userstory/{{this.ObjectID}}">{{this.FormattedID}}</a></td>
+                <td>{{this.Name}}</td>
+            	<td>{{this.ScheduleState}}</td>
+            </tr>
+        	{{/each}}
+        </tbody>
+    </table>
+</div>

@@ -1,9 +1,8 @@
 Model = require 'models/model'
 
-module.exports = Model.extend(
+module.exports = Model.extend
   defaults:
-    zsessionid: null,
-    jsessionid: null
+    zsessionid: null
 
   initialize: ->
     @load()
@@ -14,5 +13,8 @@ module.exports = Model.extend(
   load: ->
     @set
       zsessionid: $.fn.cookie('ZSESSIONID')
-      jsessionid: $.fn.cookie('JSESSIONID')
-)
+
+  logout: ->
+    $.fn.cookie('ZSESSIONID', "")
+    @set
+      zsessionid: null

@@ -3,7 +3,7 @@ require('lib/view_helper')
 # Base class for all views.
 module.exports = Backbone.View.extend
   initialize: ->
-    @render = _.bind(@render, this)
+    @render = _.bind(@render, @)
 
   template: ->
   getRenderData: ->
@@ -11,6 +11,6 @@ module.exports = Backbone.View.extend
   render: ->
     @$el.html(@template(@getRenderData()))
     @afterRender()
-    this
+    @
 
   afterRender: ->
