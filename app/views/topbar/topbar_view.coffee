@@ -1,31 +1,55 @@
 template  = require './templates/topbar'
-app = require '../../application'
 
 module.exports = Backbone.View.extend
 
   el: '#topbar'
 
   events:
-    'click a[data-target="back"]': 'navigateBack'
+    'click a[data-target="back"]'    : 'navigateBack'
+    'click a[data-target="navigate"]': 'openNavigation'
     'click a[data-target="settings"]': 'openSettings'
 
   initialize: (options) ->
-    # console.log 'initing topbar view'
+    @router = options.router
     @render()
 
   navigateBack: ->
-    console.log 'navigateBack'
+    console.log 'navigate back'
+
+  openNavigation: ->
+    console.log 'open navigation view'
 
   openSettings: ->
-    console.log 'openSettings'
+    @router.navigate 'settings', trigger: true
+    console.log 'open settings view'
 
   render: ->
     @$el.html @template @getRenderData()
     @
 
+  getProjectTitle: -> 'Real Project'
+
+  getDetailTitle:  -> 'S1324: Details'
+
+  makeButton: (target, display_text) -> """<a href="#" data-target="#{target}">#{display_text}</a>"""
+
   getRenderData: ->
-    title: 'Home'
-    left_button: """<a href="#" data-target="back">Back</a>"""
-    right_button: """<a href="#" data-target="settings">Settings</a>"""
+    current_page = Backbone.history.location.hash[1...]
+
+    if current_page in ['home', 'board']
+      title: @getProjectTitle()
+      left_button:  @makeButton 'navigate', 'Navigate'
+      right_button: @makeButton 'settings', 'Settings'
+    else if current_page is 'navigation'
+      onNavigateScreen: true
+    else if current_page is 'settings'
+      left_button: @mateButton 'back', 'Back'
+      title: 'Settings'
+    else if current_page is 'login'
+      onLoginScreen: true
+    else # if current_page in ['detail', 'column']
+      title: @getDetailTitle()
+      left_button:  @makeButton 'back', 'Back'
+      right_button: @makeButton 'settings', 'Settings'
 
   template: template

@@ -6,27 +6,31 @@ UserStory = require 'models/user_story'
 TopbarView = require 'views/topbar/topbar_view'
 LoginView = require 'views/login/login_view'
 HomeView = require 'views/home/home_view'
+NavigationView = require 'views/navigation/navigation_view'
+SettingsView = require 'views/settings/settings_view'
 UserStoryDetailView = require 'views/detail/user_story_detail_view'
 
 module.exports = Backbone.Router.extend
 
   initialize: ->
     @topbarView = new TopbarView
+      router: @
 
   routes:
-    'login': 'login'
     '': 'home'
+    login: 'login'
+    settings: 'settings'
     'userstory/:id': 'userStoryDetail'
 
   home: ->
-    if !app.session.authenticated()
+    unless app.session.authenticated()
       @navigate 'login', trigger: true, replace: true
       return
 
     homeView = new HomeView().load()
 
   userStoryDetail: (oid) ->
-    if !app.session.authenticated()
+    unless app.session.authenticated()
       @navigate 'login', trigger: true, replace: true
       return
 
@@ -34,4 +38,13 @@ module.exports = Backbone.Router.extend
 
   login: ->
     loginView = new LoginView()
-    $('#content').html loginView.render().el
+    # $('#content').html loginView.render()
+    loginView.render()
+
+  navigation: ->
+    navigationView = new NavigationView
+    navigationView.render()
+
+  settings: ->
+    settingsView = new SettingsView
+    settingsView.render()
