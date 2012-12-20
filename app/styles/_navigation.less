@@ -1,9 +1,30 @@
+@import "./_variables";
+
 .navigation
 {
+  background-color: @darkGrey;
+
   .summary 
   {
     text-align: center;
+    border-radius: 2px;
+
+    .lead
+    {
+      font-weight: bold;
+    }
   }
+
+  .timeRemainingSummary, .activeDefectsSummary
+  {
+    background-color: @nearWhite;
+  }
+
+  .percentAcceptedSummary
+  {
+    background-color: @red;
+  }
+
   .buttons
   {
     margin-top: 20px;

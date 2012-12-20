@@ -24,7 +24,7 @@ module.exports = class NavigationView extends BaseView
 
   getRenderData: ->
     timeRemaining: 4
-    timeRemainingUnits: 'days'
+    timeRemainingUnits: 'Days'
     percentAccepted: 50
     pointsAccepted: 6
     totalPoints: 12
@@ -47,7 +47,3 @@ module.exports = class NavigationView extends BaseView
         viewHash: 'recentActivity'
       }
     ]
-
-  render: ->
-    super
-
