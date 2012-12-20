@@ -25,7 +25,6 @@ module.exports = View.extend
       'blur input': 'onBlur'
       'blur textarea': 'onBlur'
       'keydown input': 'onKeyDown'
-      'keydown textarea': 'onKeyDown'
       'click .clear-pill': 'onClearClick'
     listeners["click ##{key}View.display"] = "startEdit#{key}" for key of @model.attributes when @fieldIsEditable(key)
     listeners
