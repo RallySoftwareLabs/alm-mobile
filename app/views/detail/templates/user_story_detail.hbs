@@ -16,27 +16,9 @@
   <div class="row-fluid">
     <div class="span12" id="DescriptionView"></div>
   </div>
-<div class="form-horizontal">
-{{!  <legend>{{model.FormattedID}|}: {{model.Name}|}</legend>
-  <div class="control-group" id="FormattedIDView"/>
-  <div class="control-group" id="ProjectView"/>
-  <div class="control-group" id="TagsView"/>
-  <div class="control-group" id="IterationView"/>
-  <div class="control-group" id="ReleaseView"/>
-    <div class="control-label">State:</div>
-    {{#isEditing "ScheduleState"}|}
-        <div class="controls">
-            <select id="State">
-                <option value="Defined"{{#isFieldValue 'ScheduleState' 'Defined'}|} selected="true"{{/isFieldValue}|}>Defined</option>
-                <option value="In-Progress"{{#isFieldValue 'ScheduleState' 'In-Progress'}|} selected="true"{{/isFieldValue}|}>In-Progress</option>
-                <option value="Completed"{{#isFieldValue 'ScheduleState' 'Completed'}|} selected="true"{{/isFieldValue}|}>Completed</option>
-                <option value="Accepted"{{#isFieldValue 'ScheduleState' 'Accepted'}|} selected="true"{{/isFieldValue}|}>Accepted</option>
-            </select>
-        </div>
-    {{else}|}
-        <div class="controls display State">{{model.ScheduleState}|}</div>
-    {{/isEditing}|}
+  <div class="row-fluid">
+    <ul class="nav nav-pills toggle">
+      <li id="BlockedView" class="active"></li>
+      <li id="ReadyView" class="active"></li>
   </div>
-}}
-
 </div>

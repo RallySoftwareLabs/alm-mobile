@@ -1,11 +1,11 @@
 DetailView = require('views/detail/detail_view')
-template = require('./templates/user_story_detail')
-UserStory = require 'models/user_story'
-UserStoryCollection = require 'models/user_story_collection'
+template = require('./templates/task_detail')
+Task = require 'models/task'
+TaskCollection = require 'models/task_collection'
 
 module.exports = DetailView.extend({
-  modelType: UserStory
-  id: 'user-story-detail-view'
+  modelType: Task
+  id: 'task-detail-view'
   template: template
   fields: [
     'FormattedID',
@@ -16,8 +16,6 @@ module.exports = DetailView.extend({
     {'Defects': 'defects'},
     {'Description': 'html'},
     'ScheduleState',
-    'DisplayName',
-    {'Blocked': 'toggle'},
-    {'Ready': 'toggle'}
+    'DisplayName'
   ]
 })

@@ -10,6 +10,7 @@ module.exports = View.extend
     field: @options.field
     fieldLabel: @options.field
     fieldValue: @model.get(@options.field)
+    currentHash: Backbone.history.getHash()
 
   _getDisplayTemplate: (field) ->
     return require "views/field/templates/#{@viewMode}/#{@_getViewName()}_view"

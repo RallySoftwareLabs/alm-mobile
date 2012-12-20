@@ -1,14 +1,28 @@
 
 .detail-view {
-   .row-fluid{
+    h3 {
+        margin-top: 0;
+    }
+    .row-fluid{
         height: 50px;
     }
 
+    input, textarea {
+        width: auto;
+        margin-bottom: 0;
+    }
+
+    textarea {
+        height: 120px;
+        width: 250px;
+    }
+
     .html-field {
-        height: 200px;
+        height: 150px;
     }
 
     .owner-field {
+        cursor: pointer;
         width: 60px;
         .profile-image {
             width: 100%;
@@ -22,17 +36,6 @@
         }
         .name {
             text-align: center;
-        }
-    }
-
-
-    .status-value {
-        .separator {
-            width: 5px;
-        }
-
-        > div {
-            float: left;
         }
     }
 }

@@ -1,0 +1,35 @@
+@import "../../vendor/styles/bootstrap/variables";
+
+.well-title {
+	font-weight: bold;
+	color: @gray;
+}
+
+.status-value {
+    .separator {
+        width: 5px;
+    }
+
+    > div {
+        float: left;
+    }
+}
+
+.nav-pills.toggle > .active {
+	
+	& > a {
+		background-color: @white;
+		color: @black;
+	}
+
+	&#BlockedView.on > a {
+		background-color: @red;
+		color: @white;
+	}
+
+	&#ReadyView.on > a {
+		background-color: @green;
+		color: @white;
+	}
+
+}

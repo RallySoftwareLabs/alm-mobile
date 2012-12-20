@@ -1,65 +1,69 @@
-    .status-value {
-      line-height: 17px;
+.status-value {
+  line-height: 17px;
 
-      .status-icon{
-        background-repeat: no-repeat;
-        background-position: left center;
-        height: 17px;
-        overflow: hidden;
-        width: 17px;
-      }
+  .status-icon{
+    background-repeat: no-repeat;
+    background-position: left center;
+    height: 17px;
+    overflow: hidden;
+    width: 17px;
+  }
 
-      &.tasks {
-        .NONE {
-          background-image: url('/images/status/status-dotted-12.png');
-        }
-
-        .DEFINED {
-          background-image: url('/images/status/status-notstarted.png');
-        }
-
-        .IN_PROGRESS {
-          background-image: url('/images/status/status-inprogress.png');
-        }
-
-        .IN_PROGRESS_BLOCKED {
-          background-image: url('/images/status/status-blocked.png');
-        }
-
-        .COMPLETED {
-          background-image: url('/images/status/status-completed.png');
-        }
-
-        .COMPLETED_BLOCKED {
-          background-image: url('/images/status/status-blocked.png');
-        }
-
-        .to-do {
-          background-image: url('/images/status/status-to-do.png');
-          width: 13px;
-        }
-      }
-
-      &.defects {
-        .NONE {
-          background-image: url('/images/status/status-dotted-12.png');
-        }
-
-        .NONE_CLOSED {
-          background-image: url('/images/status/status-defect-active.png');
-        }
-
-        .SOME_CLOSED {
-          background-image: url('/images/status/status-defect-active.png');
-        }
-
-        .ALL_CLOSED {
-          background-image: url('/images/status/status-defect-closed.png');
-        }
-
-        .count {
-          font-weight: bold;
-        }
-      }
+  &.tasks {
+    .NONE {
+      background-image: url('/images/status/status-dotted-12.png');
     }
+
+    .DEFINED {
+      background-image: url('/images/status/status-notstarted.png');
+    }
+
+    .IN_PROGRESS {
+      background-image: url('/images/status/status-inprogress.png');
+    }
+
+    .IN_PROGRESS_BLOCKED {
+      background-image: url('/images/status/status-blocked.png');
+    }
+
+    .COMPLETED {
+      background-image: url('/images/status/status-completed.png');
+    }
+
+    .COMPLETED_BLOCKED {
+      background-image: url('/images/status/status-blocked.png');
+    }
+
+    .to-do {
+      background-image: url('/images/status/status-to-do.png');
+      width: 13px;
+    }
+
+    .count {
+      font-weight: bold;
+    }
+  }
+
+  &.defects {
+    .NONE {
+      background-image: url('/images/status/status-dotted-12.png');
+    }
+
+    .NONE_CLOSED {
+      background-image: url('/images/status/status-defect-active.png');
+    }
+
+    .SOME_CLOSED {
+      background-image: url('/images/status/status-defect-active.png');
+    }
+
+    .ALL_CLOSED {
+      background-image: url('/images/status/status-defect-closed.png');
+    }
+
+    .count {
+      font-weight: bold;
+    }
+  }
+}
 
