@@ -3,7 +3,7 @@ template = require './templates/login'
 app = require '../../application'
 
 module.exports = View.extend
-  id: 'login-view'
+  el: '#content'
   template: template
   events:
     'click .sign-in': 'signIn'

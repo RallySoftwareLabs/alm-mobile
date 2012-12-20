@@ -18,8 +18,8 @@ module.exports = Backbone.Router.extend
 
   routes:
     '': 'home'
-    login: 'login'
-    settings: 'settings'
+    'login': 'login'
+    'settings': 'settings'
     'userstory/:id': 'userStoryDetail'
 
   home: ->
@@ -38,7 +38,6 @@ module.exports = Backbone.Router.extend
 
   login: ->
     loginView = new LoginView()
-    # $('#content').html loginView.render()
     loginView.render()
 
   navigation: ->
