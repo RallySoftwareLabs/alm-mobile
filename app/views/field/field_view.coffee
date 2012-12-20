@@ -9,7 +9,7 @@ module.exports = View.extend
     model: @model.toJSON()
     field: @options.field
     fieldLabel: @options.label
-    fieldValue: @model.get(@options.field)
+    fieldValue: @options.value || @model.get(@options.field)
     currentHash: Backbone.history.getHash()
 
   _getDisplayTemplate: (field) ->

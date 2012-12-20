@@ -20,7 +20,15 @@ module.exports = DetailView.extend({
     {'Description': 'html'},
     'ScheduleState',
     'DisplayName',
-    {'Blocked': 'toggle'},
-    {'Ready': 'toggle'}
+    {
+      'Blocked':
+        view: 'toggle'
+        value: 'Blocked'
+    },
+    {
+      'Ready':
+        view: 'toggle'
+        value: 'Ready'
+    }
   ]
 })
