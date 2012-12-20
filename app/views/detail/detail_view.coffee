@@ -122,7 +122,7 @@ module.exports = View.extend
       [fieldName, viewType] = ([key, value] for key, value of field)[0]
       if typeof viewType is 'object'
         label = viewType.label
-        value = viewType.value
+        fieldValue = viewType.value
         viewType = viewType.view
       else
         label = fieldName
@@ -130,7 +130,7 @@ module.exports = View.extend
       fieldName = field
       viewType = null
       label = field
-    [fieldName, viewType, label, value]
+    [fieldName, viewType, label, fieldValue]
 
   _getFieldNames: ->
     (@_getFieldInfo(field)[0] for field in @fields)
