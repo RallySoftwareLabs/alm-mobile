@@ -8,6 +8,7 @@ module.exports = Backbone.View.extend
     'click a[data-target="back"]'    : 'navigateBack'
     'click a[data-target="navigate"]': 'openNavigation'
     'click a[data-target="settings"]': 'openSettings'
+    'swipe': 'gotSwiped'
 
   initialize: (options) ->
     @router = options.router
@@ -22,6 +23,13 @@ module.exports = Backbone.View.extend
   openSettings: ->
     @router.navigate 'settings', trigger: true
     console.log 'open settings view'
+
+  gotSwiped: (e) ->
+    console.log 'got swiped', e
+
+  show: -> @$el.show() if @$el.is ':hidden'
+
+  hide: -> @$el.hide() if @$el.is ':visible'
 
   render: ->
     @$el.html @template @getRenderData()

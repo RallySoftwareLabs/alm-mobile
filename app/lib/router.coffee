@@ -3,11 +3,11 @@ app = require 'application'
 UserStory = require 'models/user_story'
 
 # required views
-TopbarView = require 'views/topbar/topbar_view'
-LoginView = require 'views/login/login_view'
-HomeView = require 'views/home/home_view'
-NavigationView = require 'views/navigation/navigation_view'
-SettingsView = require 'views/settings/settings_view'
+TopbarView          = require 'views/topbar/topbar_view'
+LoginView           = require 'views/login/login_view'
+HomeView            = require 'views/home/home_view'
+NavigationView      = require 'views/navigation/navigation_view'
+SettingsView        = require 'views/settings/settings_view'
 UserStoryDetailView = require 'views/detail/user_story_detail_view'
 
 module.exports = Backbone.Router.extend
@@ -19,6 +19,7 @@ module.exports = Backbone.Router.extend
   routes:
     '': 'home'
     'login': 'login'
+    'navigation': 'navigation'
     'settings': 'settings'
     'userstory/:id': 'userStoryDetail'
 
@@ -37,13 +38,12 @@ module.exports = Backbone.Router.extend
     view = new UserStoryDetailView oid: oid, autoRender: true, el: $('#content')
 
   login: ->
+    @topbarView.hide()
     loginView = new LoginView()
     loginView.render()
 
   navigation: ->
-    navigationView = new NavigationView
-    navigationView.render()
+    navigationView = new NavigationView router: @
 
   settings: ->
     settingsView = new SettingsView
-    settingsView.render()

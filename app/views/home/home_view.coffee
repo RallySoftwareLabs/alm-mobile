@@ -1,13 +1,14 @@
 # Required views/templates
-View = require '../view'
-template = require './templates/home'
+View            = require '../view'
+template        = require './templates/home'
 UserStoriesView = require './user_stories_view'
-DefectsView = require './defects_view'
-TasksView = require './tasks_view'
+DefectsView     = require './defects_view'
+TasksView       = require './tasks_view'
+
 # Required Models
 UserStoryCollection = require 'models/user_story_collection'
-DefectCollection = require 'models/defect_collection'
-TaskCollection = require 'models/task_collection'
+DefectCollection    = require 'models/defect_collection'
+TaskCollection      = require 'models/task_collection'
 
 module.exports = View.extend
 
