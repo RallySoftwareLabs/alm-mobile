@@ -17,7 +17,6 @@ module.exports = class NavigationView extends BaseView
     workType: 'myWork'
 
   doNavigate: (e) ->
-    console.log 'nav to', e.currentTarget.getAttribute 'data-target'
     @router.navigate e.currentTarget.getAttribute('data-target'), trigger: true
 
   getSetting: (setting) -> @settings[setting]

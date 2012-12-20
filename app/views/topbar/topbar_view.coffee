@@ -20,10 +20,8 @@ module.exports = class TopbarView extends BaseView
 
     if page is 'back'
       window.history.back()
-      console.log 'navigate back', e
     else
       @router.navigate page, trigger: true
-      console.log 'topbar nav to', page
 
   gotSwiped: (e) ->
     console.log 'got swiped', e
