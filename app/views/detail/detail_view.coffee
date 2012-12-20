@@ -74,14 +74,14 @@ module.exports = View.extend
         @_startEdit(field)
 
   renderField: (field) ->
-    [fieldName, viewType] = @_getFieldNameAndViewType(field)
+    [fieldName, viewType, label] = @_getFieldInfo(field)
     if @options.edit is fieldName
       dynamicView = DynamicFieldViews["field_edit_#{viewType}_view"]
       FieldViewClass = dynamicView || FieldEditView
     else
       dynamicView = DynamicFieldViews["field_display_#{viewType}_view"]
       FieldViewClass = dynamicView || FieldDisplayView
-    new FieldViewClass(model: @model, field: fieldName, viewType: viewType, el: this.$("##{fieldName}View")).render()
+    new FieldViewClass(model: @model, field: fieldName, viewType: viewType, label: label, el: this.$("##{fieldName}View")).render()
 
   startEditOwner: (event) ->
     @_saveModel(Owner: 'currentuser')
@@ -100,7 +100,7 @@ module.exports = View.extend
     @_saveModel updates
 
   _startEdit: (field) ->
-    fieldName = @_getFieldNameAndViewType(field)[0]
+    fieldName = @_getFieldInfo(field)[0]
     @options.edit = fieldName
     @render()
     this.$(".edit ##{fieldName}").focus()
@@ -118,14 +118,20 @@ module.exports = View.extend
     @options.edit = null
     @render()
 
-  _getFieldNameAndViewType: (field) ->
+  _getFieldInfo: (field) ->
     if typeof field is 'object'
       [fieldName, viewType] = ([key, value] for key, value of field)[0]
+      if typeof viewType is 'object'
+        label = viewType.label
+        viewType = viewType.view
+      else
+        label = fieldName
     else
       fieldName = field
       viewType = null
-    [fieldName, viewType]
+      label = field
+    [fieldName, viewType, label]
 
   _getFieldNames: ->
-    (@_getFieldNameAndViewType(field)[0] for field in @fields)
+    (@_getFieldInfo(field)[0] for field in @fields)
     

@@ -11,7 +11,10 @@ module.exports = DetailView.extend({
     'FormattedID',
     {'Name': 'header'},
     {'Owner': 'owner'},
-    {'PlanEstimate': 'titled_well'},
+    {'PlanEstimate':
+      view: 'titled_well'
+      label: 'Plan Est'
+    },
     {'Tasks': 'tasks'},
     {'Defects': 'defects'},
     {'Description': 'html'},

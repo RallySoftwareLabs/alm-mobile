@@ -8,7 +8,7 @@ module.exports = View.extend
   getRenderData: ->
     model: @model.toJSON()
     field: @options.field
-    fieldLabel: @options.field
+    fieldLabel: @options.label
     fieldValue: @model.get(@options.field)
     currentHash: Backbone.history.getHash()
 
