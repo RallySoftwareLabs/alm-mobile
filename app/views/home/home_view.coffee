@@ -22,13 +22,19 @@ module.exports = View.extend
 
   initialize: (options) ->
     @constructor.__super__.initialize.apply @, [options]
-    @render()
 
     @error = false
 
     @userStories = new UserStoryCollection()
     @defects = new DefectCollection()
     @tasks = new TaskCollection()
+
+    @
+
+  load: ->
+    # ToDo: Fix spinner
+    # @userStoriesView.$el.html(new Spinner().spin())
+    @render()
 
     @userStoriesView = new UserStoriesView
       model: @userStories
@@ -39,11 +45,6 @@ module.exports = View.extend
     @defectsView = new DefectsView
       model: @defects
 
-    @
-
-  load: ->
-    # ToDo: Fix spinner
-    # @userStoriesView.$el.html(new Spinner().spin())
     @fetchUserStories()
 
   fetchUserStories: ->

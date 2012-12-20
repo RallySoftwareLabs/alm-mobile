@@ -16,8 +16,15 @@ TaskDetailView      = require 'views/detail/task_detail_view'
 module.exports = class ALMRouter extends Backbone.Router
 
   initialize: ->
-    @topbarView = new TopbarView router: @
-    $(window).on 'hashchange', => @topbarView.render()
+
+    # Default page
+    @currentPage = 'home'
+
+    @views =
+      topbar:
+        new TopbarView router: @
+
+    $(window).on 'hashchange', => @views['topbar'].render()
 
   routes:
     '': 'home'
@@ -34,41 +41,56 @@ module.exports = class ALMRouter extends Backbone.Router
       @navigate 'login', trigger: true, replace: true
       return
 
-    homeView = new HomeView().load()
+    @currentPage = 'home'
+    @views['home'] ?= new HomeView()
+    @views['home'].load()
 
   userStoryDetail: (oid) ->
     unless app.session.authenticated()
       @navigate 'login', trigger: true, replace: true
       return
 
-    view = new UserStoryDetailView oid: oid, autoRender: true, el: $('#content')
+    @currentPage = 'userStoryDetail'
+    @views['userStoryDetail'] ?= {}
+    @views['userStoryDetail'][oid] ?= new UserStoryDetailView oid: oid, autoRender: true, el: $('#content')
+    @views['userStoryDetail'][oid].render()
 
   defectDetail: (oid) ->
     unless app.session.authenticated()
       @navigate 'login', trigger: true, replace: true
       return
 
-    view = new DefectDetailView oid: oid, autoRender: true, el: $('#content')
+    @currentPage = 'defectDetail'
+    @views['defectDetail'] ?= {}
+    @views['defectDetail'][oid] ?= new DefectDetailView oid: oid, autoRender: true, el: $('#content')
+    @views['defectDetail'][oid].render()
 
   taskDetail: (oid) ->
     unless app.session.authenticated()
       @navigate 'login', trigger: true, replace: true
       return
 
-    view = new TaskDetailView oid: oid, autoRender: true, el: $('#content')
+    @currentPage = 'taskDetail'
+    @views['taskDetail'] ?= {}
+    @views['taskDetail'][oid] ?= new TaskDetailView oid: oid, autoRender: true, el: $('#content')
+    @views['taskDetail'][oid].render()
 
   login: ->
     @topbarView.hide()
-    loginView = new LoginView()
-    loginView.render()
+
+    @currentPage = 'login'
+    @views['login'] ?= new LoginView()
+    @views['login'].render()
 
   navigation: ->
-    navigationView = new NavigationView router: @
-    navigationView.render()
+    @currentPage = 'navigation'
+    @views['navigation'] ?= new NavigationView router: @
+    @views['navigation'].render()
 
   settings: ->
-    settingsView = new SettingsView
-    settingsView.render()
+    @currentPage = 'settings'
+    @views['settings'] ?= new SettingsView
+    @views['settings'].render()
 
   # Overriding Navigate method to work on sliding around views
   # 'super' works because we are using CoffeeScript's 'extends' keyword

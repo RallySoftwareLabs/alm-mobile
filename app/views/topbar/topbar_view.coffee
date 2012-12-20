@@ -38,10 +38,10 @@ module.exports = class TopbarView extends BaseView
     """<button class="btn" data-target="#{target}">#{display_text}</button>"""
 
   getRenderData: ->
-    current_page = Backbone.history.location.hash[1...]
+    current_page = @router.currentPage
 
     # Default hack.  Need to actually keep track somewhere for more reliability
-    current_page = 'home' if current_page.length is 0
+    # current_page = 'home' if current_page.length is 0
 
     if current_page in ['home', 'board']
       title: @getProjectTitle()
