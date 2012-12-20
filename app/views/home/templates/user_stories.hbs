@@ -1,18 +1,13 @@
-<div>
-    <table class="table table-striped">
-        <thead>
-            <th>Formatted ID</th>
-            <th>Name</th>
-            <th>State</th>
-        </thead>
-        <tbody>
-        	{{#each stories}}
-            <tr>
-            	<td><a href="userstory/{{this.ObjectID}}">{{this.FormattedID}}</a></td>
-                <td>{{this.Name}}</td>
-            	<td>{{this.ScheduleState}}</td>
-            </tr>
-        	{{/each}}
-        </tbody>
-    </table>
+<div class="row-fluid home-view-wrap">
+    <div class="btn-group">
+        {{#each stories}}
+            <button class="btn btn-block" id="userstory/{{this.ObjectID}}">
+                <div class="span2 formatted-id">
+                    <div>{{this.FormattedID}}</div>
+                </div>
+                <div class="span9 workitem-name">{{this.Name}}</div>
+                <div class="span1 chevron"></div>
+            </button>
+        {{/each}}
+    </div>
 </div>

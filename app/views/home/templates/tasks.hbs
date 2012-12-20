@@ -1,18 +1,15 @@
-<div>
-    <table class="table table-striped">
-        <thead>
-            <th>Formatted ID</th>
-            <th>Name</th>
-            <th>State</th>
-        </thead>
-        <tbody>
-        	{{#each tasks}}
-            <tr>
-            	<td><a href="task/{{this.ObjectID}}">{{this.FormattedID}}</a></td>
-                <td>{{this.Name}}</td>
-            	<td>{{this.ScheduleState}}</td>
-            </tr>
-        	{{/each}}
-        </tbody>
-    </table>
+<div class="row-fluid home-view-wrap">
+    <div class="btn-group">
+        {{#each tasks}}
+            <button class="btn btn-block" id="userstory/{{this.ObjectID}}">
+                <div class="span2 formatted-id">
+                    <div>{{this.FormattedID}}</div>
+                </div>
+                <div class="span7 workitem-name">{{this.Name}}</div>
+                <div class="span1 task-clock"></div>
+                <div class="span1 task-to-do"></div>
+                <div class="span1 chevron"></div>
+            </button>
+        {{/each}}
+    </div>
 </div>

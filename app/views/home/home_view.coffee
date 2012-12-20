@@ -1,3 +1,5 @@
+app = require '../../application'
+
 # Required views/templates
 View            = require '../view'
 template        = require './templates/home'
@@ -14,6 +16,9 @@ module.exports = View.extend
 
   el: '#content'
   template: template
+  events:
+    'click .btn-block': 'onButton'
+    'touch .btn-block': 'onButton'
 
   initialize: (options) ->
     @constructor.__super__.initialize.apply @, [options]
@@ -28,16 +33,17 @@ module.exports = View.extend
     @userStoriesView = new UserStoriesView
       model: @userStories
 
-    @defectsView = new DefectsView
-      model: @defects
-
     @tasksView = new TasksView
       model: @tasks
+
+    @defectsView = new DefectsView
+      model: @defects
 
     @
 
   load: ->
-    #@userStoriesView.$el.html(new Spinner().spin())
+    # ToDo: Fix spinner
+    # @userStoriesView.$el.html(new Spinner().spin())
     @fetchUserStories()
 
   fetchUserStories: ->
@@ -52,6 +58,16 @@ module.exports = View.extend
         @error = true
     })
 
+  fetchTasks: ->
+    @tasks.fetch({
+      data:
+        fetch: ['ObjectID', 'FormattedID', 'Name', 'ScheduleState'].join ','
+      success: (collection, response, options) =>
+        @tasksView.render()
+      failure: (collection, xhr, options) =>
+        @error = true
+    })
+
   fetchDefects: ->
     @defects.fetch({
       data:
@@ -62,12 +78,6 @@ module.exports = View.extend
         @error = true
     })
 
-  fetchTasks: ->
-    @tasks.fetch({
-      data:
-        fetch: ['ObjectID', 'FormattedID', 'Name', 'ScheduleState'].join ','
-      success: (collection, response, options) =>
-        @tasksView.render()
-      failure: (collection, xhr, options) =>
-        @error = true
-    })
+  onButton: (event) ->
+    url = event.currentTarget.id
+    app.router.navigate url, {trigger: true, replace: true}
