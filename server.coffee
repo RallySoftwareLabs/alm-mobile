@@ -4,7 +4,9 @@
 express = require('express')
 path = require('path')
 http = require('http')
+hbs = require('hbs')
 auth = require('./server/src/routes/login')
+index = require('./server/src/routes/index')
 config = require('./server/src/config')
 
 module.exports = app = express()
@@ -13,7 +15,13 @@ app.configure ->
   app.set('port', process.env.PORT || 3000)
   app.use(express.logger('dev'))  #'default', 'short', 'tiny', 'dev'
   app.use(express.bodyParser())
+  app.use(app.router)
   app.use(express.static(path.join(__dirname, 'public')))
+
+  # app.set('view options', layout: false)
+  app.set('views', __dirname + '/server/src/views')
+  app.set('view engine', 'hbs')
+  # app.engine('hbs', hbs.__express)
 
 app.configure 'development', ->
   app.use express.errorHandler { dumpExceptions: true, showStack: true }
@@ -21,6 +29,7 @@ app.configure 'development', ->
 app.configure 'production', ->
   app.use express.errorHandler()
 
+app.get('/', index)
 app.post('/login', auth.login)
 
 

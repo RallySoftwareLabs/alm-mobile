@@ -27,23 +27,30 @@ Edit /etc/apache2/extra/httpd-vhosts.conf with the following, swapping out _[hos
 
         <VirtualHost *:80>
             ServerAdmin mparrish@rallydev.com
-            ServerName m.f4tech.com
-            ServerAlias m.f4tech.com
-            ProxyPass / http://localhost:3000/
-            ProxyPassReverse / http://localhost:3000/
-            ErrorLog "/private/var/log/apache2/m.f4tech.com-error_log"
-            CustomLog "/private/var/log/apache2/m.f4tech.com-access_log" common
-        </VirtualHost>
-
-        <VirtualHost *:80>
-            ServerAdmin mparrish@rallydev.com
             ServerName [hostname]
             ServerAlias [hostname]
-            ProxyPass / http://localhost:7001/
-            ProxyPassReverse / http://localhost:7001/
+            ProxyPass / http://localhost:3000/
+            ProxyPassReverse / http://localhost:3000/
             ErrorLog "/private/var/log/apache2/[hostname]-error_log"
             CustomLog "/private/var/log/apache2/[hostname]-access_log" common
         </VirtualHost>
+
+## Server ENV Variables
+
+You will need to set the following environment variables where you run the server
+
+* `ALM_MOBILE_ALM_WS_BASE_URL`=http://[hostname].f4tech.com:7001/slm
+* `ALM_MOBILE_ZUUL_BASE_URL`=http://[dbname from ~/.m2/settings.xml].zuul1.f4tech.com:3000
+
+## Rally ALM Feature Toggles
+
+Rally ALM will need the following features toggled on:
+
+* Enable WSAPI 2.0 - DO NOT toggle on globally - remove toggle instead
+
+## Run the server
+
+        brunch w
 
 ## Conventions
 

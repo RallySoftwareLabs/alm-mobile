@@ -8,7 +8,7 @@ module.exports = class ZuulClient
   authenticate: (username, password, callback) ->
     console.log 'authenticating zuul'
     request(
-      uri: "http://#{config.serverName}.zuul1.f4tech.com:3000/key.js"
+      uri: "#{config.zuulBaseUrl}/key.js"
       method: "PUT"
       body: JSON.stringify(
         username: username
