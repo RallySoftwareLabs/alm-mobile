@@ -1,22 +1,22 @@
-template  = require './templates/navigation'
+BaseView = require '../view'
+template = require './templates/navigation'
 
-module.exports = Backbone.View.extend
+module.exports = class NavigationView extends BaseView
 
   initialize: (options) ->
     @router = options.router
-    @render()
 
   el: '#content'
 
   events:
-    'click button[data-target]': 'clickedButton'
+    'click button[data-target]': 'doNavigate'
 
   template: template
 
   settings:
     workType: 'myWork'
 
-  clickedButton: (e) ->
+  doNavigate: (e) ->
     console.log 'nav to', e.currentTarget.getAttribute 'data-target'
     @router.navigate e.currentTarget.getAttribute('data-target'), trigger: true
 
@@ -47,6 +47,7 @@ module.exports = Backbone.View.extend
         viewHash: 'recentActivity'
       }
     ]
+
   render: ->
-    @$el.html @template @getRenderData()
-    @
+    super
+

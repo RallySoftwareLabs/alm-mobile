@@ -1,9 +1,16 @@
 <div class="row-fluid">
   <div class="span12">
-    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+    <select>
       {{#each projects}}
-      <li><a tabindex="-1" href="#">{{name}}</a></li>
+        <option value="{{ name }}">{{ name }}</option>
       {{/each}}
-    </ul>
+    </select>
+  </div>
+  <div class="span12">
+      <label style="display:inline">Show:</label>
+    <div class="btn-group">
+        <button class="btn">My Work</button>
+        <button class="btn">My Team</button>
+    </div>
   </div>
 </div>

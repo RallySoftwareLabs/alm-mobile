@@ -1,13 +1,11 @@
+BaseView = require '../view'
 template  = require './templates/settings'
 
-module.exports = Backbone.View.extend
+module.exports = class SettingsView extends BaseView
 
   el: '#content'
 
   template: template
-
-  initialize: ->
-    @render()
 
   getRenderData: ->
     projects: [
@@ -15,7 +13,3 @@ module.exports = Backbone.View.extend
       { name: 'Project 2' }
       { name: 'Project 3' }
     ]
-
-  render: ->
-    @$el.html @template @getRenderData()
-    @

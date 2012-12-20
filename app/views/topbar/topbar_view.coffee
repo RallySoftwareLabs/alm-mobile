@@ -1,28 +1,29 @@
+BaseView = require '../view'
 template  = require './templates/topbar'
 
-module.exports = Backbone.View.extend
+module.exports = class TopbarView extends BaseView
 
   el: '#topbar'
 
+  template: template
+
   events:
-    'click a[data-target="back"]'    : 'navigateBack'
-    'click a[data-target="navigate"]': 'openNavigation'
-    'click a[data-target="settings"]': 'openSettings'
+    'click button[data-target]': 'doNavigate'
     'swipe': 'gotSwiped'
 
   initialize: (options) ->
     @router = options.router
     @render()
 
-  navigateBack: ->
-    console.log 'navigate back'
+  doNavigate: (e) ->
+    page = e.currentTarget.getAttribute 'data-target'
 
-  openNavigation: ->
-    console.log 'open navigation view'
-
-  openSettings: ->
-    @router.navigate 'settings', trigger: true
-    console.log 'open settings view'
+    if page is 'back'
+      window.history.back()
+      console.log 'navigate back', e
+    else
+      @router.navigate page, trigger: true
+      console.log 'topbar nav to', page
 
   gotSwiped: (e) ->
     console.log 'got swiped', e
@@ -31,27 +32,27 @@ module.exports = Backbone.View.extend
 
   hide: -> @$el.hide() if @$el.is ':visible'
 
-  render: ->
-    @$el.html @template @getRenderData()
-    @
-
-  getProjectTitle: -> 'Real Project'
+  getProjectTitle: -> 'Real Project (I Swear)'
 
   getDetailTitle:  -> 'S1324: Details'
 
-  makeButton: (target, display_text) -> """<a href="#" data-target="#{target}">#{display_text}</a>"""
+  makeButton: (target, display_text) ->
+    """<button class="btn" data-target="#{target}">#{display_text}</button>"""
 
   getRenderData: ->
     current_page = Backbone.history.location.hash[1...]
 
+    # Default hack.  Need to actually keep track somewhere for more reliability
+    current_page = 'home' if current_page.length is 0
+
     if current_page in ['home', 'board']
       title: @getProjectTitle()
-      left_button:  @makeButton 'navigate', 'Navigate'
+      left_button:  @makeButton 'navigation', 'Navigation'
       right_button: @makeButton 'settings', 'Settings'
     else if current_page is 'navigation'
       onNavigateScreen: true
     else if current_page is 'settings'
-      left_button: @mateButton 'back', 'Back'
+      left_button: @makeButton 'back', 'Back'
       title: 'Settings'
     else if current_page is 'login'
       onLoginScreen: true
@@ -60,4 +61,4 @@ module.exports = Backbone.View.extend
       left_button:  @makeButton 'back', 'Back'
       right_button: @makeButton 'settings', 'Settings'
 
-  template: template
+

@@ -1,4 +1,5 @@
 app = require 'application'
+
 # required models
 UserStory = require 'models/user_story'
 
@@ -9,17 +10,18 @@ HomeView            = require 'views/home/home_view'
 NavigationView      = require 'views/navigation/navigation_view'
 SettingsView        = require 'views/settings/settings_view'
 UserStoryDetailView = require 'views/detail/user_story_detail_view'
-DefectDetailView = require 'views/detail/defect_detail_view'
-TaskDetailView = require 'views/detail/task_detail_view'
+DefectDetailView    = require 'views/detail/defect_detail_view'
+TaskDetailView      = require 'views/detail/task_detail_view'
 
-module.exports = Backbone.Router.extend
+module.exports = class ALMRouter extends Backbone.Router
 
   initialize: ->
-    @topbarView = new TopbarView
-      router: @
+    @topbarView = new TopbarView router: @
+    $(window).on 'hashchange', => @topbarView.render()
 
   routes:
     '': 'home'
+    'home': 'home'
     'login': 'login'
     'navigation': 'navigation'
     'settings': 'settings'
@@ -62,6 +64,13 @@ module.exports = Backbone.Router.extend
 
   navigation: ->
     navigationView = new NavigationView router: @
+    navigationView.render()
 
   settings: ->
     settingsView = new SettingsView
+    settingsView.render()
+
+  # Overriding Navigate method to work on sliding around views
+  # 'super' works because we are using CoffeeScript's 'extends' keyword
+  navigate: (page, options) ->
+    super
