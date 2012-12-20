@@ -24,7 +24,7 @@ module.exports = DetailView.extend({
     {'Tasks': 'tasks'},
     {'Defects': 'defects'},
     {'Description': 'html'},
-    'State',
+    {'State': 'string_with_arrows'},
     'DisplayName'
   ]
 })

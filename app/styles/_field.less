@@ -1,8 +1,9 @@
 @import "../../vendor/styles/bootstrap/variables";
+@import "../../vendor/styles/bootstrap/mixins";
+@import "./_variables";
 
 .well-title {
 	font-weight: bold;
-	color: @gray;
 }
 
 .status-value {
@@ -18,8 +19,9 @@
 .toggle {
 	.well {
 		background-color: @white;
-		color: @black;
 		text-align: center;
+		font-weight: bold;
+		cursor: pointer;
 	}
 
 	&#BlockedView.on .well {
@@ -31,5 +33,63 @@
 		background-color: @green;
 		color: @white;
 	}
+}
 
+.display {
+
+    .owner-field {
+        cursor: pointer;
+        width: 41px;
+        .profile-image {
+            width: 100%;
+            height: 40px;
+
+            &.no-owner {
+                background-image: url(/images/noOwner_2x.png);
+                background-size: contain;
+                background-repeat: none;
+            }
+        }
+        .name {
+            text-align: center;
+            color: @darkGrey;
+            font-weight: bold;
+        }
+    }
+
+    .html-field {
+        height: 150px;
+    }
+
+	.arrows-left, .arrows-right {
+
+		.well {
+			cursor: pointer;
+		    .border-radius(0);
+		    text-align: center;
+		    color: @cyan;
+		    font-size: 20px;
+		    font-weight: bold;
+		}
+	}
+
+	.arrows-left .well {
+		.border-left-radius(@baseBorderRadius);
+	}
+
+	.arrows-right .well {
+		.border-right-radius(@baseBorderRadius);
+	}
+
+	.arrows-center, .arrows-right {
+	    margin-left: 0;
+	}
+
+	.arrows-center .well {
+		border-left: 0;
+		border-right: 0;
+	    text-align: center;
+	    font-weight: bold;
+	    .border-radius(0);
+	}
 }

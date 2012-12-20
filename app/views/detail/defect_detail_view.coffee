@@ -17,7 +17,7 @@ module.exports = DetailView.extend({
     },
     {'Tasks': 'tasks'},
     {'Description': 'html'},
-    'ScheduleState',
+    {'ScheduleState': 'string_with_arrows'},
     'DisplayName',
     {
       'Blocked':

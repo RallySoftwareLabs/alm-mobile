@@ -1,3 +1,4 @@
+@import "./_variables";
 
 .detail-view {
     h3 {
@@ -17,25 +18,8 @@
         width: 250px;
     }
 
-    .html-field {
-        height: 150px;
-    }
-
-    .owner-field {
-        cursor: pointer;
-        width: 60px;
-        .profile-image {
-            width: 100%;
-            height: 60px;
-
-            &.no-owner {
-                background-image: url(/images/noOwner_2x.png);
-                background-size: contain;
-                background-repeat: none;
-            }
-        }
-        .name {
-            text-align: center;
-        }
+    .well {
+        border-color: @medGrey;
+        color: @darkGrey;
     }
 }
