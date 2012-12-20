@@ -1,4 +1,4 @@
-@import "./variables";
+@import "./_variables";
 
 body {
 	background-color: @lightGrey;
@@ -6,6 +6,11 @@ body {
 
 #content {
   margin: 0 auto;
+  
+  &.container-fluid {
+  	padding-left: 10px;
+  	padding-right: 10px;
+  }
 }
 
 .ellipsis {

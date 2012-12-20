@@ -15,19 +15,19 @@
     }
 }
 
-.nav-pills.toggle > .active {
-	
-	& > a {
+.toggle {
+	.well {
 		background-color: @white;
 		color: @black;
+		text-align: center;
 	}
 
-	&#BlockedView.on > a {
+	&#BlockedView.on .well {
 		background-color: @red;
 		color: @white;
 	}
 
-	&#ReadyView.on > a {
+	&#ReadyView.on .well {
 		background-color: @green;
 		color: @white;
 	}
