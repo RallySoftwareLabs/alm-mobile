@@ -4,8 +4,6 @@ FieldView = require 'views/field/field_view'
 DynamicFieldViews =
   'field_toggle_view': require 'views/field/field_toggle_view'
 
-ENTER_KEY = 13
-
 module.exports = class DetailView extends View
   initialize: (options) ->
     super options
@@ -21,11 +19,7 @@ module.exports = class DetailView extends View
     })
 
   events: ->
-    listeners = 
-      'blur input': 'onBlur'
-      'blur textarea': 'onBlur'
-      'keydown input': 'onKeyDown'
-      'click .clear-pill': 'onClearClick'
+    listeners = {}
     listeners["click ##{key}View.display"] = "startEdit#{key}" for key of @model.attributes when @fieldIsEditable(key)
     listeners
 
@@ -38,33 +32,6 @@ module.exports = class DetailView extends View
   remove: ->
     super
     fieldView.remove() for key, fieldView of @fieldViews
-
-  onBlur: (event) ->
-    @endEdit event
-
-  onKeyDown: (event) ->
-    @endEdit(event) if event.which is ENTER_KEY
-
-  onClearClick: (event) ->
-    modelUpdates = null
-    if @model.get('Blocked')
-      modelUpdates =
-        Blocked: false
-    if @model.get('Ready')
-      modelUpdates ?=
-        Ready: false
-    @_saveModel modelUpdates if modelUpdates?
-
-  endEdit: (event) ->
-    value = event.target.value
-    field = event.target.id
-    event.preventDefault()
-    if @model.get(field) isnt value
-      modelUpdates = {}
-      modelUpdates[field] = value
-      @_saveModel modelUpdates
-    else
-      @_switchToViewMode()
 
   fieldIsEditable: (field) ->
     return false unless field in @_getFieldNames()
