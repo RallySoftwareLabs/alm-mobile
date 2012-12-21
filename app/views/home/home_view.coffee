@@ -12,7 +12,7 @@ UserStoryCollection = require 'models/user_story_collection'
 DefectCollection    = require 'models/defect_collection'
 TaskCollection      = require 'models/task_collection'
 
-module.exports = View.extend
+module.exports = class HomeView extends View
 
   el: '#content'
   template: template
@@ -21,7 +21,7 @@ module.exports = View.extend
     'touch .btn-block': 'onButton'
 
   initialize: (options) ->
-    @constructor.__super__.initialize.apply @, [options]
+    super
 
     @error = false
 

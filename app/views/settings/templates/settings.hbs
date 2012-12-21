@@ -2,7 +2,7 @@
   <div class="span12">
     <select>
       {{#each projects}}
-        <option value="{{ name }}">{{ name }}</option>
+        <option value="{{ attributes._ref }}">{{ attributes._refObjectName }}</option>
       {{/each}}
     </select>
   </div>
