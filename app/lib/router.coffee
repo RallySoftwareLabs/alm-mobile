@@ -24,6 +24,18 @@ module.exports = class ALMRouter extends Backbone.Router
       @views.topbar = new TopbarView(router: @)
     , 1
 
+    origRoute = Backbone.history.route
+
+    Backbone.history.route = (route, callback) =>
+      stop = false
+      for filter in @beforeFilters
+        unless filter.call(@, route, callback)
+          stop = true
+          break
+
+      unless stop
+        origRoute.call(@, route, callback)
+
   routes:
     '': 'home'
     'home': 'home'
@@ -34,11 +46,19 @@ module.exports = class ALMRouter extends Backbone.Router
     'defect/:id': 'defectDetail'
     'task/:id': 'taskDetail'
 
+  beforeFilters: ->
+    [@authenticationFilter]
+
+  authenticationFilter: (route, callback) ->
+    if app.session.authenticated()
+      true
+    else
+      @navigate 'login', {trigger: false, replace: true}
+      @login()
+      false
+
   home: ->
     @_getCurrentView()?.remove()
-    unless app.session.authenticated()
-      @navigate 'login', trigger: true, replace: true
-      return
 
     view = @views['home'] ?= new HomeView()
     @currentPage = 'home': view
@@ -47,9 +67,6 @@ module.exports = class ALMRouter extends Backbone.Router
 
   userStoryDetail: (oid) ->
     @_getCurrentView()?.remove()
-    unless app.session.authenticated()
-      @navigate 'login', trigger: true, replace: true
-      return
 
     @views['userStoryDetail'] ?= {}
     view = @views['userStoryDetail'][oid] ?= new UserStoryDetailView oid: oid, autoRender: true, el: $('#content')
@@ -59,9 +76,6 @@ module.exports = class ALMRouter extends Backbone.Router
 
   defectDetail: (oid) ->
     @_getCurrentView()?.remove()
-    unless app.session.authenticated()
-      @navigate 'login', trigger: true, replace: true
-      return
 
     @views['defectDetail'] ?= {}
     view = @views['defectDetail'][oid] ?= new DefectDetailView oid: oid, autoRender: true, el: $('#content')
@@ -71,9 +85,6 @@ module.exports = class ALMRouter extends Backbone.Router
 
   taskDetail: (oid) ->
     @_getCurrentView()?.remove()
-    unless app.session.authenticated()
-      @navigate 'login', trigger: true, replace: true
-      return
 
     @views['taskDetail'] ?= {}
     view = @views['taskDetail'][oid] ?= new TaskDetailView oid: oid, autoRender: true, el: $('#content')
