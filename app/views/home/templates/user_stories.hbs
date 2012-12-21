@@ -3,10 +3,15 @@
         {{#each stories}}
             <button class="btn btn-block" id="userstory/{{this.ObjectID}}">
                 <div class="span2 formatted-id">
-                    <div>{{this.FormattedID}}</div>
+                    <div class="row-fluid">
+                        <div class="span3">
+                            <div class={{state this.Blocked this.Ready}}></div>
+                        </div>
+                        <div class="span9">{{this.FormattedID}}</div>
+                    </div>
                 </div>
                 <div class="span9 workitem-name">{{this.Name}}</div>
-                <div class="span1 chevron"></div>
+                <div class="span1 chevron"> > </div>
             </button>
         {{/each}}
     </div>

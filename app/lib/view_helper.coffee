@@ -19,3 +19,12 @@ Handlebars.registerHelper 'isFieldValue', (field, value, options) ->
     options.fn?(@)
   else
     options.inverse?(@)
+
+Handlebars.registerHelper 'state', (blocked, ready) ->
+  if blocked
+    'blocked'
+  else if ready
+    'ready'
+  else
+    ''
+

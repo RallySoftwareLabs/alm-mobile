@@ -1,5 +1,14 @@
 @import "./_variables";
 
+.btn {
+  background-color: #FFFFFF;
+  background-image: none;
+}
+
+.btn:hover {
+    display: none;
+}
+
 #home-view-navigation {
   margin: 0 auto 20px auto;
   width: 290px;
@@ -19,20 +28,29 @@
     font-weight:bold;
   }
 
-  .btn {
-    background-color: #FFFFFF;
-    background-image: none;
-  }
-
-  .btn:hover {
-      display: none;
-  }
-
 }
 
 .home-view-wrap {
   margin: 0 auto;
   width: 90%;
+
+  .ready {
+    width: 16px;
+    height:16px;
+    background-image: url('/images/status/ready.png');
+    background-repeat: no-repeat;
+    position: relative;
+    right: 8px;
+  }
+
+  .blocked {
+    width: 16px;
+    height:16px;
+    background-image: url('/images/status/blocked.png');
+    background-repeat: no-repeat;
+    position: relative;
+    right: 8px;
+  }
 
   .btn-group {
     width: 100%;
@@ -42,12 +60,12 @@
   .btn.btn-block {
     margin-top: 0px;
     padding-top: 15px;
-    color: @darkGrey;
   }
 
   .formatted-id {
     color: @cyan;
     font-weight:bold;
+    display: inline;
   }
 
   .workitem-name {
@@ -65,7 +83,10 @@
   }
 
   .chevron {
-    background-image: url('/images/chevron-right.png');
-    background-repeat: no-repeat;
+    color: @cyan;
+    font-size: 20px;
+    font-weight: bold;
+    // background-image: url('/images/chevron-right.png');
+    // background-repeat: no-repeat;
   }
 }

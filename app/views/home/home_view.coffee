@@ -50,7 +50,7 @@ module.exports = View.extend
   fetchUserStories: ->
     @userStories.fetch({
       data:
-        fetch: ['ObjectID', 'FormattedID', 'Name', 'ScheduleState'].join ','
+        fetch: ['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked'].join ','
       success: (collection, response, options) =>
         @userStoriesView.render()
         @fetchDefects()
@@ -62,7 +62,7 @@ module.exports = View.extend
   fetchTasks: ->
     @tasks.fetch({
       data:
-        fetch: ['ObjectID', 'FormattedID', 'Name', 'ScheduleState'].join ','
+        fetch: ['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked', 'ToDo'].join ','
       success: (collection, response, options) =>
         @tasksView.render()
       failure: (collection, xhr, options) =>
