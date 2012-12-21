@@ -15,7 +15,6 @@ module.exports = class SettingsView extends BaseView
         fetch: ['_refObjectName', '_ref'].join ','
       success: (collection, response, options) =>
         @render()
-        debugger
       failure: (collection, xhr, options) =>
         @error = true
 

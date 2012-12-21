@@ -16,14 +16,13 @@ module.exports = class TopbarView extends BaseView
     @render()
 
     $(window).on 'hashchange', =>
-      setTimeout(=>
+      setTimeout =>
         @render()
         if @_getCurrentPage in ['login']
           @hide()
         else
           @show()
       , 1
-    )
 
   doNavigate: (e) ->
     page = e.currentTarget.getAttribute 'data-target'

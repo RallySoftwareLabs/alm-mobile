@@ -16,7 +16,10 @@ TaskDetailView      = require 'views/detail/task_detail_view'
 module.exports = class ALMRouter extends Backbone.Router
 
   initialize: ->
+    @currentPage = {}
     @views = {}
+
+    # wait until currentPage has been set
     setTimeout =>
       @views.topbar = new TopbarView(router: @)
     , 1
@@ -32,6 +35,7 @@ module.exports = class ALMRouter extends Backbone.Router
     'task/:id': 'taskDetail'
 
   home: ->
+    @_getCurrentView()?.remove()
     unless app.session.authenticated()
       @navigate 'login', trigger: true, replace: true
       return
@@ -42,6 +46,7 @@ module.exports = class ALMRouter extends Backbone.Router
     view.delegateEvents()
 
   userStoryDetail: (oid) ->
+    @_getCurrentView()?.remove()
     unless app.session.authenticated()
       @navigate 'login', trigger: true, replace: true
       return
@@ -53,6 +58,7 @@ module.exports = class ALMRouter extends Backbone.Router
     view.delegateEvents()
 
   defectDetail: (oid) ->
+    @_getCurrentView()?.remove()
     unless app.session.authenticated()
       @navigate 'login', trigger: true, replace: true
       return
@@ -64,6 +70,7 @@ module.exports = class ALMRouter extends Backbone.Router
     view.delegateEvents()
 
   taskDetail: (oid) ->
+    @_getCurrentView()?.remove()
     unless app.session.authenticated()
       @navigate 'login', trigger: true, replace: true
       return
@@ -75,18 +82,21 @@ module.exports = class ALMRouter extends Backbone.Router
     view.delegateEvents()
 
   login: ->
+    @_getCurrentView()?.remove()
     view = @views['login'] ?= new LoginView()
     @currentPage = 'login': view
     view.render()
     view.delegateEvents()
 
   navigation: ->
+    @_getCurrentView()?.remove()
     view = @views['navigation'] ?= new NavigationView router: @
     @currentPage = 'navigation': view
     view.render()
     view.delegateEvents()
 
   settings: ->
+    @_getCurrentView()?.remove()
     view = @views['settings'] ?= new SettingsView
     @currentPage = 'settings': view
     view.render()
@@ -96,3 +106,6 @@ module.exports = class ALMRouter extends Backbone.Router
   # 'super' works because we are using CoffeeScript's 'extends' keyword
   navigate: (page, options) ->
     super
+
+  _getCurrentView: ->
+    (view for key, view in @currentPage)[0]
