@@ -15,6 +15,16 @@ module.exports = class TopbarView extends BaseView
     @router = options.router
     @render()
 
+    $(window).on 'hashchange', =>
+      setTimeout(=>
+        @render()
+        if @_getCurrentPage in ['login']
+          @hide()
+        else
+          @show()
+      , 1
+    )
+
   doNavigate: (e) ->
     page = e.currentTarget.getAttribute 'data-target'
 
@@ -38,7 +48,7 @@ module.exports = class TopbarView extends BaseView
     """<button class="btn" data-target="#{target}">#{display_text}</button>"""
 
   getRenderData: ->
-    current_page = @router.currentPage
+    current_page = @_getCurrentPage()
 
     # Default hack.  Need to actually keep track somewhere for more reliability
     # current_page = 'home' if current_page.length is 0
@@ -59,4 +69,5 @@ module.exports = class TopbarView extends BaseView
       left_button:  @makeButton 'back', 'Back'
       right_button: @makeButton 'settings', 'Settings'
 
-
+  _getCurrentPage: ->
+    (key for key, value of @router.currentPage)[0]

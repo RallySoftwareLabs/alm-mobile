@@ -16,15 +16,10 @@ TaskDetailView      = require 'views/detail/task_detail_view'
 module.exports = class ALMRouter extends Backbone.Router
 
   initialize: ->
-
-    # Default page
-    @currentPage = 'home'
-
-    @views =
-      topbar:
-        new TopbarView router: @
-
-    $(window).on 'hashchange', => @views['topbar'].render()
+    @views = {}
+    setTimeout =>
+      @views.topbar = new TopbarView(router: @)
+    , 1
 
   routes:
     '': 'home'
@@ -41,56 +36,61 @@ module.exports = class ALMRouter extends Backbone.Router
       @navigate 'login', trigger: true, replace: true
       return
 
-    @currentPage = 'home'
-    @views['home'] ?= new HomeView()
-    @views['home'].load()
+    view = @views['home'] ?= new HomeView()
+    @currentPage = 'home': view
+    view.load()
+    view.delegateEvents()
 
   userStoryDetail: (oid) ->
     unless app.session.authenticated()
       @navigate 'login', trigger: true, replace: true
       return
 
-    @currentPage = 'userStoryDetail'
     @views['userStoryDetail'] ?= {}
-    @views['userStoryDetail'][oid] ?= new UserStoryDetailView oid: oid, autoRender: true, el: $('#content')
-    @views['userStoryDetail'][oid].render()
+    view = @views['userStoryDetail'][oid] ?= new UserStoryDetailView oid: oid, autoRender: true, el: $('#content')
+    @currentPage = 'userStoryDetail': view
+    view.render()
+    view.delegateEvents()
 
   defectDetail: (oid) ->
     unless app.session.authenticated()
       @navigate 'login', trigger: true, replace: true
       return
 
-    @currentPage = 'defectDetail'
     @views['defectDetail'] ?= {}
-    @views['defectDetail'][oid] ?= new DefectDetailView oid: oid, autoRender: true, el: $('#content')
-    @views['defectDetail'][oid].render()
+    view = @views['defectDetail'][oid] ?= new DefectDetailView oid: oid, autoRender: true, el: $('#content')
+    @currentPage = 'defectDetail': view
+    view.render()
+    view.delegateEvents()
 
   taskDetail: (oid) ->
     unless app.session.authenticated()
       @navigate 'login', trigger: true, replace: true
       return
 
-    @currentPage = 'taskDetail'
     @views['taskDetail'] ?= {}
-    @views['taskDetail'][oid] ?= new TaskDetailView oid: oid, autoRender: true, el: $('#content')
-    @views['taskDetail'][oid].render()
+    view = @views['taskDetail'][oid] ?= new TaskDetailView oid: oid, autoRender: true, el: $('#content')
+    @currentPage = 'taskDetail': view
+    view.render()
+    view.delegateEvents()
 
   login: ->
-    @topbarView.hide()
-
-    @currentPage = 'login'
-    @views['login'] ?= new LoginView()
-    @views['login'].render()
+    view = @views['login'] ?= new LoginView()
+    @currentPage = 'login': view
+    view.render()
+    view.delegateEvents()
 
   navigation: ->
-    @currentPage = 'navigation'
-    @views['navigation'] ?= new NavigationView router: @
-    @views['navigation'].render()
+    view = @views['navigation'] ?= new NavigationView router: @
+    @currentPage = 'navigation': view
+    view.render()
+    view.delegateEvents()
 
   settings: ->
-    @currentPage = 'settings'
-    @views['settings'] ?= new SettingsView
-    @views['settings'].render()
+    view = @views['settings'] ?= new SettingsView
+    @currentPage = 'settings': view
+    view.render()
+    view.delegateEvents()
 
   # Overriding Navigate method to work on sliding around views
   # 'super' works because we are using CoffeeScript's 'extends' keyword
