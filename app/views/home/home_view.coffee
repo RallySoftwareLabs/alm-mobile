@@ -32,9 +32,10 @@ module.exports = View.extend
     @
 
   load: ->
+    @render()
+
     # ToDo: Fix spinner
     # @userStoriesView.$el.html(new Spinner().spin())
-    @render()
 
     @userStoriesView = new UserStoriesView
       model: @userStories
@@ -72,7 +73,7 @@ module.exports = View.extend
   fetchDefects: ->
     @defects.fetch({
       data:
-        fetch: ['ObjectID', 'FormattedID', 'Name', 'ScheduleState'].join ','
+        fetch: ['ObjectID', 'FormattedID', 'Name'].join ','
       success: (collection, response, options) =>
         @defectsView.render()
       failure: (collection, xhr, options) =>
