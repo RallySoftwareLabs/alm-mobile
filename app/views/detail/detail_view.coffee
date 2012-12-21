@@ -1,16 +1,16 @@
 View = require 'views/view'
-FieldDisplayView = require 'views/field/field_display_view'
-FieldEditView = require 'views/field/field_edit_view'
+FieldView = require 'views/field/field_view'
 
 DynamicFieldViews =
-  'field_display_toggle_view': require 'views/field/field_display_toggle_view'
+  'field_toggle_view': require 'views/field/field_toggle_view'
 
 ENTER_KEY = 13
 
-module.exports = View.extend
+module.exports = class DetailView extends View
   initialize: (options) ->
-    View.prototype.initialize.call(this, [options])
+    super options
     @_defineFieldEditFns field for field in @_getFieldNames()
+    @fieldViews = {}
     @model = new @modelType(ObjectID: options.oid)
     @model.fetch({
       data:
@@ -30,11 +30,14 @@ module.exports = View.extend
     listeners
 
   getRenderData: ->
-    edit: @options.edit
     model: @model.toJSON()
 
   afterRender: ->
     @renderField field for field in @fields
+
+  remove: ->
+    super
+    fieldView.remove() for key, fieldView of @fieldViews
 
   onBlur: (event) ->
     @endEdit event
@@ -67,55 +70,32 @@ module.exports = View.extend
     return false unless field in @_getFieldNames()
     if field in ['FormattedID'] then false else true
 
+  renderField: (field) ->
+    [fieldName, viewType, label, value] = @_getFieldInfo(field)
+    FieldViewClass = DynamicFieldViews["field_#{viewType}_view"] || FieldView
+    @fieldViews[fieldName] = fieldView = new FieldViewClass(
+      model: @model
+      field: fieldName
+      viewType: viewType
+      label: label
+      value: value
+      el: this.$("##{fieldName}View")
+      detailView: @
+    ).render()
+
+    fieldView.on('save', @_onFieldSave, @)
+
   _defineFieldEditFns: (field) ->
     unless @["startEdit#{field}"]?
       @["startEdit#{field}"] = ->
         @_startEdit(field)
 
-  renderField: (field) ->
-    [fieldName, viewType, label, value] = @_getFieldInfo(field)
-    if @options.edit is fieldName
-      dynamicView = DynamicFieldViews["field_edit_#{viewType}_view"]
-      FieldViewClass = dynamicView || FieldEditView
-    else
-      dynamicView = DynamicFieldViews["field_display_#{viewType}_view"]
-      FieldViewClass = dynamicView || FieldDisplayView
-    new FieldViewClass(model: @model, field: fieldName, viewType: viewType, label: label, value: value, el: this.$("##{fieldName}View")).render()
-
-  startEditOwner: (event) ->
-    @_saveModel(Owner: 'currentuser')
-    false
-
-  startEditReady: (event) ->
-    updates =
-      Ready: !@model.get('Ready')
-    updates.Blocked = false if updates.Ready
-    @_saveModel updates
-
-  startEditBlocked: ->
-    updates =
-      Blocked: !@model.get('Blocked')
-    updates.Ready = false if updates.Blocked
-    @_saveModel updates
-
   _startEdit: (field) ->
     fieldName = @_getFieldInfo(field)[0]
-    @options.edit = fieldName
-    @render()
-    this.$(".edit ##{fieldName}").focus()
+    @fieldViews[fieldName].startEdit()
 
-  _saveModel: (updates) ->
-    @model.save updates,
-      wait: true
-      patch: true
-      success: =>
-        @_switchToViewMode()
-      error: =>
-        debugger
-
-  _switchToViewMode: ->
-    @options.edit = null
-    @render()
+  _onFieldSave: (field, model) ->
+    @trigger 'fieldSave', field, model
 
   _getFieldInfo: (field) ->
     if typeof field is 'object'
