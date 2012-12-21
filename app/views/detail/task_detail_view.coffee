@@ -24,7 +24,16 @@ module.exports = DetailView.extend({
     {'Tasks': 'tasks'},
     {'Defects': 'defects'},
     {'Description': 'html'},
-    {'State': 'string_with_arrows'},
+    {
+      'State':
+        view: 'string_with_arrows',
+        allowedValues: [
+          'Defined',
+          'In-Progress',
+          'Completed',
+          'Accepted'
+        ]
+    },
     'DisplayName'
   ]
 })

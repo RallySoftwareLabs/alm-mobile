@@ -3,6 +3,7 @@ FieldView = require 'views/field/field_view'
 
 DynamicFieldViews =
   'field_toggle_view': require 'views/field/field_toggle_view'
+  'field_string_with_arrows_view': require 'views/field/field_string_with_arrows_view'
 
 module.exports = class DetailView extends View
   initialize: (options) ->
@@ -38,7 +39,7 @@ module.exports = class DetailView extends View
     if field in ['FormattedID'] then false else true
 
   renderField: (field) ->
-    [fieldName, viewType, label, value] = @_getFieldInfo(field)
+    [fieldName, viewType, label, value, allowedValues] = @_getFieldInfo(field)
     FieldViewClass = DynamicFieldViews["field_#{viewType}_view"] || FieldView
     @fieldViews[fieldName] = fieldView = new FieldViewClass(
       model: @model
@@ -46,6 +47,7 @@ module.exports = class DetailView extends View
       viewType: viewType
       label: label
       value: value
+      allowedValues: allowedValues
       el: this.$("##{fieldName}View")
       detailView: @
     ).render()
@@ -70,6 +72,7 @@ module.exports = class DetailView extends View
       if typeof viewType is 'object'
         label = viewType.label
         fieldValue = viewType.value
+        allowedValues = viewType.allowedValues
         viewType = viewType.view
       else
         label = fieldName
@@ -77,7 +80,7 @@ module.exports = class DetailView extends View
       fieldName = field
       viewType = null
       label = field
-    [fieldName, viewType, label, fieldValue]
+    [fieldName, viewType, label, fieldValue, allowedValues]
 
   _getFieldNames: ->
     (@_getFieldInfo(field)[0] for field in @fields)

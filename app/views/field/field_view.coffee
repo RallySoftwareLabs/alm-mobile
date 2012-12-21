@@ -64,14 +64,16 @@ module.exports = class FieldView extends View
   onKeyDown: (event) ->
     @endEdit(event) if event.which is ENTER_KEY
 
-  saveModel: (updates) ->
+  saveModel: (updates, opts) ->
     @model.save updates,
       wait: true
       patch: true
       success: (model, resp, options) =>
+        opts?.success?(model, resp, options)
         @_switchToViewMode()
         @trigger('save', @options.field, model)
       error: =>
+        opts?.error?(model, resp, options)
         debugger
 
   _switchToEditMode: ->
