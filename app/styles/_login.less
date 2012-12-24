@@ -1,20 +1,71 @@
-.login-form {
-	margin-left: auto;
-	margin-right: auto;
+@import "./_variables";
 
-    legend {
-        padding-left: 75px;
-        background: url('../images/logo.jpg') no-repeat;
-        background-size: contain;
-    }
+.login {
+    padding-top: 0;
+    padding-bottom: 0;
+    background-color: #595C62;
 
-    &.form-horizontal {
-    	.controls {
-	    	margin-left: 120px;
-	    }
+    #content {
+        margin: 0;
+      
+        &.container-fluid {
+            padding: 0;
+        }
 
-	    .control-label {
-	    	width: 100px;
-	    }
+        .login-header {
+            height: 120px;
+            background: @nearerWhite url('../images/logo.png') no-repeat 10px 10px;
+        }
+
+        .login-form {
+            color: @white;
+            margin-left: 15px;
+            margin-right: auto;
+            margin-bottom: 0;
+
+            h2 {
+                margin: 20px 0 0 0;
+                font-size: 28px;
+                color: @lightGrey;
+            }
+
+            .row-fluid {
+                margin-bottom: 5px;
+
+                &.copyright {
+                    margin-bottom: 0;
+                    line-height: 16px;
+
+                    p {
+                        margin-bottom: 0;
+                    }
+                }
+            }
+
+            label {
+                font-size: 20px;
+                width: 150px;
+                display: inline-block;
+            }
+
+            .alert {
+                display: none;
+                margin-right: 15px;
+            }
+
+            .sign-in {
+                font-weight: bold;
+                background-color: @cyan;
+                background-image: none;
+            }
+
+            .forgot-password {
+                font-size: 18px;
+                margin-top: 10px;
+            }
+            .forgot-password a, .forgot-password a:hover {
+                color: @cyan;
+            }
+        }
     }
 }
