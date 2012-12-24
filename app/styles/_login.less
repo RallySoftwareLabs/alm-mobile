@@ -1,9 +1,7 @@
-@import "./_variables";
-
 .login {
     padding-top: 0;
     padding-bottom: 0;
-    background-color: #595C62;
+    background-color: #5E6165;
 
     #content {
         margin: 0;
@@ -13,15 +11,28 @@
         }
 
         .login-header {
-            height: 120px;
-            background: @nearerWhite url('../images/logo.png') no-repeat 10px 10px;
+            height: 100px;
+            background-color: @nearerWhite;
+
+            .logo {
+                margin: 20px 0 0 20px;
+                width: 100px;
+                height: 60px;
+                background: @nearerWhite 0 0;
+                background-repeat: no-repeat;
+                .hidpi-background-image('../img/rallyLogo', 'png');
+            }
         }
 
         .login-form {
             color: @white;
-            margin-left: 15px;
+            margin-left: 20px;
             margin-right: auto;
             margin-bottom: 0;
+            height: 320px;
+            background: #5E6165 top right;
+            background-repeat: no-repeat;
+            .hidpi-background-image('../img/login', 'gif');
 
             h2 {
                 margin: 20px 0 0 0;
@@ -33,6 +44,7 @@
                 margin-bottom: 5px;
 
                 &.copyright {
+                    margin-top: 40px;
                     margin-bottom: 0;
                     line-height: 16px;
 
@@ -57,6 +69,7 @@
                 font-weight: bold;
                 background-color: @cyan;
                 background-image: none;
+                text-shadow: none;
             }
 
             .forgot-password {

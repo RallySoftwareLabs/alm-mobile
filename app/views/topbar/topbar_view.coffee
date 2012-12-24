@@ -43,8 +43,8 @@ module.exports = class TopbarView extends BaseView
 
   getDetailTitle:  -> 'S1324: Details'
 
-  makeButton: (target, display_text) ->
-    """<button class="btn" data-target="#{target}">#{display_text}</button>"""
+  makeButton: (target, icon, cls = "") ->
+    """<a class="btn #{cls}"><i class="#{icon}" data-target="#{target}"></i></a>"""
 
   getRenderData: ->
     current_page = @_getCurrentPage()
@@ -54,19 +54,19 @@ module.exports = class TopbarView extends BaseView
 
     if current_page in ['home', 'board']
       title: @getProjectTitle()
-      left_button:  @makeButton 'navigation', 'Navigation'
-      right_button: @makeButton 'settings', 'Settings'
+      left_button:  @makeButton 'navigation', 'icon-reorder', 'cyan'
+      right_button: @makeButton 'settings', 'icon-cog'
     else if current_page is 'navigation'
       onNavigateScreen: true
     else if current_page is 'settings'
-      left_button: @makeButton 'back', 'Back'
+      left_button: @makeButton 'back', 'icon-arrow-left'
       title: 'Settings'
     else if current_page is 'login'
       onLoginScreen: true
     else # if current_page in ['detail', 'column']
       title: @getDetailTitle()
-      left_button:  @makeButton 'back', 'Back'
-      right_button: @makeButton 'settings', 'Settings'
+      left_button:  @makeButton 'back', 'icon-arrow-left'
+      right_button: @makeButton 'settings', 'icon-cog'
 
   _getCurrentPage: ->
     (key for key, value of @router.currentPage)[0]

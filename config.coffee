@@ -52,17 +52,12 @@ exports.config =
       joinTo: 'stylesheets/app.css'
       order:
         before: [
-          'vendor/styles/style.less',
-          'app/styles/variables.less',
-          'app/styles/main.less'
+          'vendor/styles/bootstrap/bootstrap.less'
         ]
 
     templates:
       defaultExtension: 'hbs'
       joinTo: 'javascripts/app.js'
-
-  conventions:
-    ignored: /^vendor(\/|\\)styles(\/|\\)bootstrap/
 
   # Change this if you're using something other than backbone (e.g. 'ember').
   # Content of files, generated with `brunch generate` depends on the setting.

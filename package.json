@@ -18,7 +18,7 @@
     "test": "brunch test"
   },
   "dependencies": {
-    "brunch": "1.4.4",
+    "brunch": "1.4.5",
     "coffee-script": "1.4.0",
 
     "javascript-brunch": "> 1.0 < 1.5",

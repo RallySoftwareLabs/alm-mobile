@@ -1,0 +1,11 @@
+.hidpi-background-image(@img, @ext) {
+  background-image: url('@{img}.@{ext}');
+  background-image: -webkit-image-set(
+    url('@{img}.@{ext}') ~"1x",
+    url('@{img}_2x.@{ext}') ~"2x"
+  );
+  background-image: image-set(
+    url('@{img}.@{ext}') ~"1x",
+    url('@{img}_2x.@{ext}') ~"2x"
+  );
+}
