@@ -1,4 +1,5 @@
 Model = require 'models/model'
+User = require 'models/user'
 
 module.exports = Model.extend
   defaults:
@@ -6,6 +7,7 @@ module.exports = Model.extend
 
   initialize: ->
     @load()
+    @user = new User()
 
   authenticated: ->
     Boolean(@get("zsessionid"))
@@ -13,6 +15,8 @@ module.exports = Model.extend
   load: ->
     @set
       zsessionid: $.cookie('ZSESSIONID')
+
+  setUser: (@user) ->
 
   logout: ->
     $.cookie('ZSESSIONID', "")

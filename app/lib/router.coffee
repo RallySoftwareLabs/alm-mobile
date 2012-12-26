@@ -62,55 +62,64 @@ module.exports = class ALMRouter extends Backbone.Router
 
     view = @views['home'] ?= new HomeView()
     @currentPage = 'home': view
-    view.load()
+    $('#content').html(view.render().el)
     view.delegateEvents()
 
   userStoryDetail: (oid) ->
     @_getCurrentView()?.remove()
 
     @views['userStoryDetail'] ?= {}
-    view = @views['userStoryDetail'][oid] ?= new UserStoryDetailView oid: oid, autoRender: true, el: $('#content')
+    view = @views['userStoryDetail'][oid] ?= new UserStoryDetailView
+      session: app.session
+      oid: oid
+      autoRender: true
     @currentPage = 'userStoryDetail': view
-    view.render()
+    $('#content').html(view.render().el)
     view.delegateEvents()
 
   defectDetail: (oid) ->
     @_getCurrentView()?.remove()
 
     @views['defectDetail'] ?= {}
-    view = @views['defectDetail'][oid] ?= new DefectDetailView oid: oid, autoRender: true, el: $('#content')
+    view = @views['defectDetail'][oid] ?= new DefectDetailView
+      session: app.session
+      oid: oid
+      autoRender: true
     @currentPage = 'defectDetail': view
-    view.render()
+    $('#content').html(view.render().el)
     view.delegateEvents()
 
   taskDetail: (oid) ->
     @_getCurrentView()?.remove()
 
     @views['taskDetail'] ?= {}
-    view = @views['taskDetail'][oid] ?= new TaskDetailView oid: oid, autoRender: true, el: $('#content')
+    view = @views['taskDetail'][oid] ?= new TaskDetailView
+      session: app.session
+      oid: oid
+      autoRender: true
     @currentPage = 'taskDetail': view
-    view.render()
+    $('#content').html(view.render().el)
     view.delegateEvents()
 
   login: ->
     @_getCurrentView()?.remove()
-    view = @views['login'] ?= new LoginView()
+    view = @views['login'] ?= new LoginView(session: app.session)
     @currentPage = 'login': view
-    view.render()
+    $('#content').html(view.render().el)
     view.delegateEvents()
 
   navigation: ->
     @_getCurrentView()?.remove()
     view = @views['navigation'] ?= new NavigationView router: @
     @currentPage = 'navigation': view
-    view.render()
+    $('#content').html(view.render().el)
     view.delegateEvents()
 
   settings: ->
     @_getCurrentView()?.remove()
     view = @views['settings'] ?= new SettingsView
     @currentPage = 'settings': view
-    view.render()
+    $('#content').html(view.render().el)
     view.delegateEvents()
 
   # Overriding Navigate method to work on sliding around views
@@ -119,4 +128,4 @@ module.exports = class ALMRouter extends Backbone.Router
     super
 
   _getCurrentView: ->
-    (view for key, view in @currentPage)[0]
+    (view for key, view of @currentPage)[0]

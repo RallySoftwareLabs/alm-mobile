@@ -2,7 +2,6 @@ ZuulClient = require '../zuulclient/client'
 config = require '../config'
 
 exports.login = (req, res) ->
-	console.log typeof this
 	username = req.body.username
 	password = req.body.password
 	rememberMe = req.body.rememberme
@@ -15,7 +14,7 @@ exports.login = (req, res) ->
 				expiration.setDate(expiration.getDate() + 14)
 
 			res.cookie('ZSESSIONID', authenticateResult.getAuthKey().getId(), { httpOnly: false, expires: expiration})
-			res.end('{"result": "SUCCESS"}')
+			res.end("{\"result\": \"SUCCESS\", \"username\": \"#{authenticateResult.getName()}\"}")
 		else
 			res.status 401
 			res.end('{"result": "FAILURE"}')

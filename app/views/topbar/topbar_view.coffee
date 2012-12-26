@@ -31,6 +31,7 @@ module.exports = class TopbarView extends BaseView
       window.history.back()
     else
       @router.navigate page, trigger: true
+    e.preventDefault()
 
   gotSwiped: (e) ->
     console.log 'got swiped', e
@@ -44,7 +45,7 @@ module.exports = class TopbarView extends BaseView
   getDetailTitle:  -> 'S1324: Details'
 
   makeButton: (target, icon, cls = "") ->
-    """<a class="btn #{cls}"><i class="#{icon}" data-target="#{target}"></i></a>"""
+    """<a href="##{target}" class="btn #{cls}"><i class="#{icon}" data-target="#{target}"></i></a>"""
 
   getRenderData: ->
     current_page = @_getCurrentPage()

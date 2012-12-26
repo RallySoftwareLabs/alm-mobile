@@ -14,7 +14,6 @@ TaskCollection      = require 'models/task_collection'
 
 module.exports = class HomeView extends View
 
-  el: '#content'
   template: template
   events:
     'click .btn-block': 'onButton'
@@ -31,8 +30,18 @@ module.exports = class HomeView extends View
 
     @
 
+  afterRender: ->
+    unless @loaded
+      setTimeout =>
+        @load()
+      , 1
+
+  remove: ->
+    super
+    @loaded = false
+
   load: ->
-    @render()
+    @loaded = true
 
     # ToDo: Fix spinner
     # @userStoriesView.$el.html(new Spinner().spin())
@@ -47,6 +56,8 @@ module.exports = class HomeView extends View
       model: @defects
 
     @fetchUserStories()
+    @fetchDefects()
+    @fetchTasks()
 
   fetchUserStories: ->
     @userStories.fetch({
@@ -54,8 +65,6 @@ module.exports = class HomeView extends View
         fetch: ['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked'].join ','
       success: (collection, response, options) =>
         @userStoriesView.render()
-        @fetchDefects()
-        @fetchTasks()
       failure: (collection, xhr, options) =>
         @error = true
     })
@@ -82,4 +91,4 @@ module.exports = class HomeView extends View
 
   onButton: (event) ->
     url = event.currentTarget.id
-    app.router.navigate url, {trigger: true, replace: true}
+    app.router.navigate url, {trigger: true}

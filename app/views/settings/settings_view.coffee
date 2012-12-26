@@ -4,8 +4,6 @@ ProjectCollection = require 'models/project_collection'
 
 module.exports = class SettingsView extends BaseView
 
-  el: '#content'
-
   template: template
 
   initialize: ->

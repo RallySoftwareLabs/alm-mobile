@@ -1,12 +1,10 @@
-BaseView = require '../view'
+BaseView = require 'views/view'
 template = require './templates/navigation'
 
 module.exports = class NavigationView extends BaseView
 
   initialize: (options) ->
     @router = options.router
-
-  el: '#content'
 
   events:
     'click button[data-target]': 'doNavigate'

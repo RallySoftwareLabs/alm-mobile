@@ -38,10 +38,6 @@ module.exports = class FieldView extends View
   _setDisplayTemplate: () ->
     @template = require "views/field/templates/#{@viewMode}/#{@viewType}_view"
 
-  startEditOwner: (event) ->
-    @saveModel(Owner: 'currentuser')
-    false
-
   startEdit: ->
     @_switchToEditMode()
     @render()

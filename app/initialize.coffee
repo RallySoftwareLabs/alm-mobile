@@ -14,5 +14,8 @@ $(->
 
     if href.slice(protocol.length) isnt protocol
       evt.preventDefault()
-      app.router.navigate(href, true)
+      if href is '#back'
+        window.history.back()
+      else
+        app.router.navigate(href, trigger: true)
 )

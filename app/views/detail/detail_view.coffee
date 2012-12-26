@@ -4,6 +4,7 @@ FieldView = require 'views/field/field_view'
 DynamicFieldViews =
   'field_toggle_view': require 'views/field/field_toggle_view'
   'field_string_with_arrows_view': require 'views/field/field_string_with_arrows_view'
+  'field_owner_view': require 'views/field/field_owner_view'
 
 module.exports = class DetailView extends View
   initialize: (options) ->
@@ -50,6 +51,7 @@ module.exports = class DetailView extends View
       allowedValues: allowedValues
       el: this.$("##{fieldName}View")
       detailView: @
+      session: @options.session
     ).render()
 
     fieldView.on('save', @_onFieldSave, @)

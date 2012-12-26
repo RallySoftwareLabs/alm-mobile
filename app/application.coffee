@@ -1,3 +1,5 @@
+User = require 'models/user'
+
 # Application bootstrapper.
 Application =
   initialize: ->
@@ -11,11 +13,21 @@ Application =
     @session = new Session()
     @afterLogin = ''
 
-    unless @session.authenticated()
+    if @session.authenticated()
+      u = new User()
+      u.fetch
+        url: "#{u.urlRoot}:current"
+        params:
+          fetch: 'ObjectID,DisplayName'
+        success: (model, response, opts) =>
+          @session.setUser model
+    else
       @afterLogin = Backbone.history.getHash()
       Backbone.history._updateHash Backbone.history.location, 'login', true
 
-    @router = new Router()
-    Object.freeze?(@)
+    @router = new Router(@session)
+    Object.freeze? this
+
+  setUser: (@user) ->
 
 module.exports = Application
