@@ -24,18 +24,6 @@ module.exports = class ALMRouter extends Backbone.Router
       @views.topbar = new TopbarView(router: @)
     , 1
 
-    origRoute = Backbone.history.route
-
-    Backbone.history.route = (route, callback) =>
-      stop = false
-      for filter in @beforeFilters
-        unless filter.call(@, route, callback)
-          stop = true
-          break
-
-      unless stop
-        origRoute.call(@, route, callback)
-
   routes:
     '': 'home'
     'home': 'home'
@@ -46,8 +34,9 @@ module.exports = class ALMRouter extends Backbone.Router
     'defect/:id': 'defectDetail'
     'task/:id': 'taskDetail'
 
-  beforeFilters: ->
-    [@authenticationFilter]
+  beforeAllFilters: ->
+    [@authenticationFilter, 
+     @removeCurrentView]
 
   authenticationFilter: (route, callback) ->
     if app.session.authenticated()
@@ -57,17 +46,17 @@ module.exports = class ALMRouter extends Backbone.Router
       @login()
       false
 
-  home: ->
+  removeCurrentView: ->
     @_getCurrentView()?.remove()
+    true
 
+  home: ->
     view = @views['home'] ?= new HomeView()
     @currentPage = 'home': view
     $('#content').html(view.render().el)
     view.delegateEvents()
 
   userStoryDetail: (oid) ->
-    @_getCurrentView()?.remove()
-
     @views['userStoryDetail'] ?= {}
     view = @views['userStoryDetail'][oid] ?= new UserStoryDetailView
       session: app.session
@@ -78,8 +67,6 @@ module.exports = class ALMRouter extends Backbone.Router
     view.delegateEvents()
 
   defectDetail: (oid) ->
-    @_getCurrentView()?.remove()
-
     @views['defectDetail'] ?= {}
     view = @views['defectDetail'][oid] ?= new DefectDetailView
       session: app.session
@@ -90,8 +77,6 @@ module.exports = class ALMRouter extends Backbone.Router
     view.delegateEvents()
 
   taskDetail: (oid) ->
-    @_getCurrentView()?.remove()
-
     @views['taskDetail'] ?= {}
     view = @views['taskDetail'][oid] ?= new TaskDetailView
       session: app.session
@@ -102,21 +87,18 @@ module.exports = class ALMRouter extends Backbone.Router
     view.delegateEvents()
 
   login: ->
-    @_getCurrentView()?.remove()
     view = @views['login'] ?= new LoginView(session: app.session)
     @currentPage = 'login': view
     $('#content').html(view.render().el)
     view.delegateEvents()
 
   navigation: ->
-    @_getCurrentView()?.remove()
     view = @views['navigation'] ?= new NavigationView router: @
     @currentPage = 'navigation': view
     $('#content').html(view.render().el)
     view.delegateEvents()
 
   settings: ->
-    @_getCurrentView()?.remove()
     view = @views['settings'] ?= new SettingsView
     @currentPage = 'settings': view
     $('#content').html(view.render().el)

@@ -35,7 +35,7 @@ module.exports = class LoginView extends View
             query: "(UserName = \"#{data.username}\")"
           success: (collection, response, options) =>
             @options.session.setUser collection.at(0)
-            Backbone.history.navigate(app.afterLogin, {trigger: true})
+            app.router.navigate(app.afterLogin, {trigger: true})
           failure: ->
             debugger
       error: (xhr, errorType, error) ->

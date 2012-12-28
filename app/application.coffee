@@ -11,6 +11,7 @@ Application =
     # https://github.com/paulmillr/brunch-with-chaplin
 
     @session = new Session()
+    @router = new Router()
     @afterLogin = ''
 
     if @session.authenticated()
@@ -23,9 +24,7 @@ Application =
           @session.setUser model
     else
       @afterLogin = Backbone.history.getHash()
-      Backbone.history._updateHash Backbone.history.location, 'login', true
-
-    @router = new Router(@session)
+    
     Object.freeze? this
 
   setUser: (@user) ->
