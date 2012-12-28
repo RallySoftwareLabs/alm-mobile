@@ -17,7 +17,6 @@ module.exports = class HomeView extends View
   template: template
   events:
     'click .btn-block': 'onButton'
-    'touch .btn-block': 'onButton'
 
   initialize: (options) ->
     super
@@ -43,9 +42,6 @@ module.exports = class HomeView extends View
   load: ->
     @loaded = true
 
-    # ToDo: Fix spinner
-    # @userStoriesView.$el.html(new Spinner().spin())
-
     @userStoriesView = new UserStoriesView
       model: @userStories
 
@@ -56,8 +52,6 @@ module.exports = class HomeView extends View
       model: @defects
 
     @fetchUserStories()
-    @fetchDefects()
-    @fetchTasks()
 
   fetchUserStories: ->
     @userStories.fetch({
@@ -65,6 +59,8 @@ module.exports = class HomeView extends View
         fetch: ['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked'].join ','
       success: (collection, response, options) =>
         @userStoriesView.render()
+        @fetchTasks()
+        @fetchDefects()
       failure: (collection, xhr, options) =>
         @error = true
     })
