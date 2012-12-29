@@ -1,11 +1,6 @@
 View = require 'views/view'
 FieldView = require 'views/field/field_view'
 
-DynamicFieldViews =
-  'field_toggle_view': require 'views/field/field_toggle_view'
-  'field_string_with_arrows_view': require 'views/field/field_string_with_arrows_view'
-  'field_owner_view': require 'views/field/field_owner_view'
-
 module.exports = class DetailView extends View
   initialize: (options) ->
     super options
@@ -41,7 +36,7 @@ module.exports = class DetailView extends View
 
   renderField: (field) ->
     [fieldName, viewType, label, value, allowedValues] = @_getFieldInfo(field)
-    FieldViewClass = DynamicFieldViews["field_#{viewType}_view"] || FieldView
+    FieldViewClass = @_getFieldViewClass viewType
     @fieldViews[fieldName] = fieldView = new FieldViewClass(
       model: @model
       field: fieldName
@@ -55,6 +50,14 @@ module.exports = class DetailView extends View
     ).render()
 
     fieldView.on('save', @_onFieldSave, @)
+
+  _getFieldViewClass: (viewType) ->
+    try
+      dynamicFieldView = require "views/field/field_#{viewType}_view"
+    catch e
+      dynamicFieldView = FieldView
+    
+    dynamicFieldView
 
   _defineFieldEditFns: (field) ->
     unless @["startEdit#{field}"]?

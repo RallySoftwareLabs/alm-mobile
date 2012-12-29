@@ -1,8 +1,6 @@
 FieldView = require './field_view'
 
-ToggleFields = ['Blocked', 'Ready']
-
-module.exports = class FieldToggleView extends FieldView
+module.exports = class FieldStringWithArrowsView extends FieldView
 
   events: ->
     events = super

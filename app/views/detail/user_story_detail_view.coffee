@@ -32,12 +32,10 @@ module.exports = DetailView.extend({
     {
       'Blocked':
         view: 'toggle'
-        value: 'Blocked'
     },
     {
       'Ready':
         view: 'toggle'
-        value: 'Ready'
     }
   ]
 })

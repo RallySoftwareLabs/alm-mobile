@@ -4,8 +4,6 @@ ViewMode =
   DISPLAY: 'display'
   EDIT: 'edit'
 
-ENTER_KEY = 13
-
 module.exports = class FieldView extends View
   initialize: (options) ->
     @viewType = options.viewType || 'string'
@@ -14,11 +12,7 @@ module.exports = class FieldView extends View
     options.detailView.on('fieldSave', @_otherFieldSave, @)
 
   events: ->
-    return {
-      'blur input': 'onBlur'
-      'blur textarea': 'onBlur'
-      'keydown input': 'onKeyDown'
-    }
+    return {}
 
   getRenderData: ->
     model: @model.toJSON()
@@ -54,12 +48,6 @@ module.exports = class FieldView extends View
     else
       @_switchToViewMode()
 
-  onBlur: (event) ->
-    @endEdit event
-
-  onKeyDown: (event) ->
-    @endEdit(event) if event.which is ENTER_KEY
-
   saveModel: (updates, opts) ->
     @model.save updates,
       wait: true
@@ -76,12 +64,14 @@ module.exports = class FieldView extends View
     if @viewMode isnt ViewMode.EDIT
       @viewMode = ViewMode.EDIT
       @_setDisplayTemplate()
+    
     @render()
 
   _switchToViewMode: ->
     if @viewMode isnt ViewMode.DISPLAY
       @viewMode = ViewMode.DISPLAY
       @_setDisplayTemplate()
+    
     @render()
 
   _otherFieldSave: (field, model) ->

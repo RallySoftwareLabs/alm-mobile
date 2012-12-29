@@ -4,7 +4,6 @@ ToggleFields = ['Blocked', 'Ready']
 
 module.exports = class FieldToggleView extends FieldView
   initialize: (config) ->
-    config.viewType = 'string'
     super config
     
   afterRender: ->
