@@ -73,13 +73,15 @@ module.exports = class FieldView extends View
         debugger
 
   _switchToEditMode: ->
-    @viewMode = ViewMode.EDIT
-    @_setDisplayTemplate()
+    if @viewMode isnt ViewMode.EDIT
+      @viewMode = ViewMode.EDIT
+      @_setDisplayTemplate()
     @render()
 
   _switchToViewMode: ->
-    @viewMode = ViewMode.DISPLAY
-    @_setDisplayTemplate()
+    if @viewMode isnt ViewMode.DISPLAY
+      @viewMode = ViewMode.DISPLAY
+      @_setDisplayTemplate()
     @render()
 
   _otherFieldSave: (field, model) ->

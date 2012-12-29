@@ -10,18 +10,30 @@ module.exports = class FieldToggleView extends FieldView
     events['click .arrows-left'] = 'onLeftArrow'
     events
 
+  getRenderData: ->
+    data = super
+    data.cantGoLeft = @options.allowedValues.indexOf(@model.get(@options.field)) is 0
+    data.cantGoRight = @options.allowedValues.indexOf(@model.get(@options.field)) is (@options.allowedValues.length - 1)
+    data
+
   startEdit: ->
 
   onRightArrow: ->
-    currentIndex = @options.allowedValues.indexOf(@model.get(@options.field))
-    newValue = @options.allowedValues[currentIndex + 1]
-    modelUpdates = {}
-    modelUpdates[@options.field] = newValue
-    @saveModel modelUpdates
+    allowedValues = @options.allowedValues
+    currentIndex = allowedValues.indexOf(@model.get(@options.field))
+
+    if currentIndex < allowedValues.length - 1
+      newValue = allowedValues[currentIndex + 1]
+      modelUpdates = {}
+      modelUpdates[@options.field] = newValue
+      @saveModel modelUpdates
 
   onLeftArrow: ->
-    currentIndex = @options.allowedValues.indexOf(@model.get(@options.field))
-    newValue = @options.allowedValues[currentIndex - 1]
-    modelUpdates = {}
-    modelUpdates[@options.field] = newValue
-    @saveModel modelUpdates
+    allowedValues = @options.allowedValues
+    currentIndex = allowedValues.indexOf(@model.get(@options.field))
+
+    if currentIndex > 0
+      newValue = allowedValues[currentIndex - 1]
+      modelUpdates = {}
+      modelUpdates[@options.field] = newValue
+      @saveModel modelUpdates
