@@ -41,7 +41,7 @@ module.exports = class FieldView extends View
   startEdit: ->
     @_switchToEditMode()
     @render()
-    this.$("input").focus()
+    this.$(".editor").focus()
 
   endEdit: (event) ->
     value = event.target.value
