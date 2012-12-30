@@ -52,10 +52,6 @@ Rally ALM will need the following features toggled on:
 
         brunch w
 
-## Conventions
-
-All CoffeeScript should be indented with 2 spaces (soft tabs)
-
 # Brunch with Eggs and Bacon
 
 ![](https://a248.e.akamai.net/camo.github.com/1c7212d12d1b170a4247587d46fa1c8a234538d0/687474703a2f2f662e636c2e6c792f6974656d732f3150343031313356326a336830563375305433532f363837343734373033613266326636643635366336353739363136633265363636633738363432653639373432663638376136363633356633353331333232653661373036372e6a706567)
@@ -86,28 +82,44 @@ They're in original [LESS](http://lesscss.org/) format in order to be easily cus
 
 jQuery plugins used by Bootstrap are all listed (in the right order) inside the config.coffee file. Comment the ones you want to exclude from the build with a #. (Pay attention to dependencies!)
 
-# Emulating an Android Device
+# Testing
 
-Download and unzip the [Android SDK](http://developer.android.com/sdk/index.html) The instructions below with help you quickly set up your Android Virtual Device (AVD) with minimal configuration
+## Android Emulator
 
-## Quick Guide
+Full documentation can be found at the [Android Developer](http://developer.android.com/index.html) site.
 
-Go to the android sdk tools directory
+Download and unzip the [Android SDK](http://developer.android.com/sdk/index.html) in order to set up your Android Virtual Device (AVD)
 
-    cd /path/to/unzipped/android sdk/sdk/tools
+From the unzipped SDK directory get the config ID
 
-Get the target id of your AVD image, by default the SDK includes one image with the latest Android OS
+    sdk/tools/android list target
 
-    android list target
+Create an AVD with the target id from an image
 
-Create an AVD with the target id from an image. Note the -t 1 in the command below is the id from the output of an image when you ran the list target command above
-
-    android create avd -n my_avd -t 1
+    android create avd -n <avd_name> -t <config id>
 
 Run the AVD with the emulator tool with graphics acceleration for increased responsiveness
 
     emulator -avd my_avd --gpu on
 
-That's it, you should see an emulated android device on your screen!
+Download the [WebDriver for Android](http://code.google.com/p/selenium/downloads/list)
 
-Full documentation can be found at the [Android Developer](http://developer.android.com/index.html) site.
+Get the serial ID for your emulator
+
+    platform-tools/adb devices
+
+Install the Android WebDriver to your emulator
+
+    platform-tools/adb -s <serialId> -e install -r android-server.apk
+
+Start the Android WebDriver on your emulator
+
+    platform-tools/adb <serialId> shell am start -a android.intent.action.MAIN -n org.openqa.selenium.android.app/.MainActivity
+
+Set up port forwarding for TCP connections from your hostmachine to your emulator
+
+    platform-tools/adb -s <serialId> forward tcp:8080 tcp:8080
+
+## Conventions
+
+All CoffeeScript should be indented with 2 spaces (soft tabs)
