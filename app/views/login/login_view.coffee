@@ -7,6 +7,7 @@ module.exports = class LoginView extends View
   template: template
   events:
     'click .sign-in': 'signIn'
+    'touchstart .sign-in': 'signIn'
 
   afterRender: ->
     $('body').addClass('login')
@@ -35,7 +36,7 @@ module.exports = class LoginView extends View
             query: "(UserName = \"#{data.username}\")"
           success: (collection, response, options) =>
             @options.session.setUser collection.at(0)
-            app.router.navigate(app.afterLogin, {trigger: true})
+            app.router.navigate(app.afterLogin, {trigger: true, replace: true})
           failure: ->
             debugger
       error: (xhr, errorType, error) ->

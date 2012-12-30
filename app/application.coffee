@@ -12,7 +12,7 @@ Application =
 
     @session = new Session()
     @router = new Router()
-    @afterLogin = ''
+    @afterLogin = 'home'
 
     if @session.authenticated()
       u = new User()
