@@ -22,19 +22,16 @@
 }
 
 .status-value {
-    .separator {
-        width: 5px;
-    }
+	height: 20px;
 
     > div {
-        float: left;
+        display: inline-block;
     }
 }
 
 .toggle {
 	.well {
 		background-color: @white;
-		text-align: center;
 		font-weight: bold;
 		cursor: pointer;
 	}
@@ -51,6 +48,13 @@
 }
 
 .display {
+	.well {
+		text-align: center;
+
+		&.titled-well-small {
+			height: 20px;
+		}
+	}
 
     .owner-field {
         cursor: pointer;

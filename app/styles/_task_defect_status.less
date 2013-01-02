@@ -7,12 +7,13 @@
     background-size: contain;
     height: 20px;
     overflow: hidden;
-    width: 22px;
+    width: 20px;
   }
 
   &.tasks {
     .NONE {
       background-image: url('/img/status/status-dotted-12.png');
+      background-clip: 
     }
 
     .DEFINED {
@@ -40,9 +41,9 @@
       width: 13px;
     }
 
-    // .count {
-    //   font-weight: bold;
-    // }
+    .count {
+      margin-left: -6px;
+    }
   }
 
   &.defects {
@@ -62,9 +63,9 @@
       background-image: url('/img/status/status-defect-closed.png');
     }
 
-    // .count {
-    //   font-weight: bold;
-    // }
+    .count {
+      margin-left: -6px;
+    }
   }
 }
 
