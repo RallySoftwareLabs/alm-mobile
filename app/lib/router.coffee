@@ -17,7 +17,10 @@ module.exports = class ALMRouter extends Backbone.Router
 
   initialize: ->
     @currentPage = {}
-    @views = {}
+    @views =
+      settings: new SettingsView
+        session: app.session
+        router:  @
 
     # wait until currentPage has been set
     setTimeout =>
@@ -96,7 +99,8 @@ module.exports = class ALMRouter extends Backbone.Router
     view.delegateEvents()
 
   settings: ->
-    view = @views['settings'] ?= new SettingsView
+    view = @views['settings']
+    view.projects.fetch()
     @currentPage = 'settings': view
     $('#content').html(view.render().el)
     view.delegateEvents()

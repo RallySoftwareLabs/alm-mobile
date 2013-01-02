@@ -6,15 +6,16 @@ module.exports = class SettingsView extends BaseView
 
   template: template
 
-  initialize: ->
+  events:
+    'click button.logout': 'triggerLogout'
+
+  initialize: ({ @session, @router }) ->
     @projects = new ProjectCollection
-    @projects.fetch
-      data:
-        fetch: ['_refObjectName', '_ref'].join ','
-      success: (collection, response, options) =>
-        @render()
-      failure: (collection, xhr, options) =>
-        @error = true
+    @projects.on 'reset', @render, @
 
   getRenderData: ->
     projects: @projects.models
+
+  triggerLogout: ->
+    @session.logout()
+    @router.navigate 'login', trigger: true
