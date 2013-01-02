@@ -52,6 +52,8 @@ module.exports = class HomeView extends View
       model: @defects
 
     @fetchUserStories()
+    @fetchTasks()
+    @fetchDefects()
 
   fetchUserStories: ->
     @userStories.fetch({
@@ -59,8 +61,6 @@ module.exports = class HomeView extends View
         fetch: ['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked'].join ','
       success: (collection, response, options) =>
         @userStoriesView.render()
-        @fetchTasks()
-        @fetchDefects()
       failure: (collection, xhr, options) =>
         @error = true
     })
