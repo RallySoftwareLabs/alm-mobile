@@ -31,6 +31,7 @@ module.exports = DetailView.extend({
           'Closed'
         ]
     },
+    {'Requirement': 'work_product'},
     'DisplayName',
     {
       'Blocked':

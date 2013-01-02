@@ -1,16 +1,14 @@
-BaseView = require 'views/view'
+utils = require 'lib/utils'
 ArtifactCollection = require 'models/artifact_collection'
 DefectCollection = require 'models/defect_collection'
 TaskCollection = require 'models/task_collection'
+
+BaseView = require 'views/view'
 template  = require './templates/topbar'
 
 module.exports = class TopbarView extends BaseView
 
   ENTER_KEY: 13
-  NAVIGATION_MODEL_TYPES:
-    'hierarchicalrequirement': 'userstory'
-    'defect': 'defect'
-    'task': 'task'
 
   el: '#topbar'
 
@@ -61,7 +59,7 @@ module.exports = class TopbarView extends BaseView
       success: (collection, response, options) =>
         if collection.length > 0
           firstResult = collection.first()
-          @router.navigate "#{@_getNavigationModelType(firstResult)}/#{firstResult.get('ObjectID')}", trigger: true
+          @router.navigate utils.getDetailHash(firstResult), trigger: true
         else
           @_noSearchResults()
 
@@ -103,9 +101,6 @@ module.exports = class TopbarView extends BaseView
 
   _getCurrentPage: ->
     (key for key, value of @router.currentPage)[0]
-
-  _getNavigationModelType: (model) ->
-    @NAVIGATION_MODEL_TYPES[model.get('_type').toLowerCase()]
 
   _noSearchResults: ->
     alert = $('body').append([

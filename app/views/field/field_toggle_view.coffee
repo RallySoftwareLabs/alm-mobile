@@ -3,9 +3,6 @@ FieldView = require './field_view'
 ToggleFields = ['Blocked', 'Ready']
 
 module.exports = class FieldToggleView extends FieldView
-  initialize: (config) ->
-    super config
-    
   afterRender: ->
     super
     addRemove = if @model.get(@options.field) then 'addClass' else 'removeClass'
