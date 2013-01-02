@@ -21,6 +21,7 @@ module.exports = DetailView.extend({
         view: 'titled_well',
         label: 'Task To Do (H)'
     },
+    {'Discussion': 'discussion'},
     {'Tasks': 'tasks'},
     {'Defects': 'defects'},
     {'Description': 'html'},

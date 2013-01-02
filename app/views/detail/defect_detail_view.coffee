@@ -11,14 +11,18 @@ module.exports = DetailView.extend({
     'FormattedID',
     {'Name': 'header'},
     {'Owner': 'owner'},
-    {'PlanEstimate':
+    {'Severity':
       view: 'titled_well'
-      label: 'Plan Est'
+      label: 'Severity'
     },
-    {'Tasks': 'tasks'},
+    {'Priority':
+      view: 'titled_well'
+      label: 'Priority'
+    },
+    {'Discussion': 'discussion'},
     {'Description': 'html'},
     {
-      'ScheduleState':
+      'State':
         view: 'string_with_arrows',
         allowedValues: [
           'Submitted',

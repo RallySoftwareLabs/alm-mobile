@@ -15,7 +15,11 @@ module.exports = class NavigationView extends BaseView
     workType: 'myWork'
 
   doNavigate: (e) ->
+    $('body').removeClass('navigation')
     @router.navigate e.currentTarget.getAttribute('data-target'), trigger: true
+
+  afterRender: ->
+    $('body').addClass('navigation')
 
   getSetting: (setting) -> @settings[setting]
 

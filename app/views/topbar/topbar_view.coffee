@@ -45,7 +45,7 @@ module.exports = class TopbarView extends BaseView
   getDetailTitle:  -> 'S1324: Details'
 
   makeButton: (target, icon, cls = "") ->
-    """<a href="##{target}" class="btn #{cls}"><i class="#{icon}" data-target="#{target}"></i></a>"""
+    """<a href="##{target}" class="btn navbar-inverse #{cls}"><i class="#{icon}" data-target="#{target}"></i></a>"""
 
   getRenderData: ->
     current_page = @_getCurrentPage()

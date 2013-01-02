@@ -3,6 +3,7 @@
     padding-top: 10px;
     text-align: center;
     color: @nearWhite;
+    font-weight: bold;
   }
 
   .right-button {
@@ -11,11 +12,14 @@
 
   .btn {
     background-image: none;
+    // color: @nearWhite;
+    .buttonBackground(@darkGrey, @black, @nearWhite, 0 1px 1px rgba(255,255,255,.75));
     text-shadow: none;
 
     &.cyan {
-      background-color: @cyan;
-      color: @white;
+      .buttonBackground(lighten(@cyan, 20%), @cyan, @nearWhite, 0 1px 1px rgba(255,255,255,.75));
+      text-shadow: none;
+      // color: @white;
     }
   }
 }
