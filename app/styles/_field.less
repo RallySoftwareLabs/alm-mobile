@@ -75,6 +75,7 @@
     }
 
 	.arrows-left, .arrows-right {
+		width: 10%;
 
 		.well {
 			cursor: pointer;
@@ -99,15 +100,26 @@
 		.border-right-radius(@baseBorderRadius);
 	}
 
+	.arrows-left, .arrows-center, .arrows-right {
+		float: left;
+	}
+	.arrows-right::after {
+		clear: both;
+	}
+
 	.arrows-center, .arrows-right {
 	    margin-left: 0;
 	}
 
-	.arrows-center .well {
-		border-left: 0;
-		border-right: 0;
-	    text-align: center;
-	    font-weight: bold;
-	    .border-radius(0);
+	.arrows-center {
+		width: 80%;
+
+		.well {
+			border-left: 0;
+			border-right: 0;
+		    text-align: center;
+		    font-weight: bold;
+		    .border-radius(0);
+		}
 	}
 }

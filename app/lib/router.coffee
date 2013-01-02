@@ -57,8 +57,7 @@ module.exports = class ALMRouter extends Backbone.Router
     view.delegateEvents()
 
   userStoryDetail: (oid) ->
-    @views['userStoryDetail'] ?= {}
-    view = @views['userStoryDetail'][oid] ?= new UserStoryDetailView
+    view = new UserStoryDetailView
       session: app.session
       oid: oid
       autoRender: true
@@ -67,8 +66,7 @@ module.exports = class ALMRouter extends Backbone.Router
     view.delegateEvents()
 
   defectDetail: (oid) ->
-    @views['defectDetail'] ?= {}
-    view = @views['defectDetail'][oid] ?= new DefectDetailView
+    view = new DefectDetailView
       session: app.session
       oid: oid
       autoRender: true
@@ -77,8 +75,7 @@ module.exports = class ALMRouter extends Backbone.Router
     view.delegateEvents()
 
   taskDetail: (oid) ->
-    @views['taskDetail'] ?= {}
-    view = @views['taskDetail'][oid] ?= new TaskDetailView
+    view = new TaskDetailView
       session: app.session
       oid: oid
       autoRender: true

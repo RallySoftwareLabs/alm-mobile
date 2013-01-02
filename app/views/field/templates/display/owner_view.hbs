@@ -1,7 +1,7 @@
 <div class="owner-field">
     {{#if fieldValue}}
         <div class="profile-image" style="background-image: url({{baseUrl}}/profile/image/{{fieldValue.ObjectID}}/80.sp); background-repeat: no-repeat; background-size: contain;"/>
-        <div class="name ellipsis" title="{{fieldValue.DisplayName}}">{{fieldValue.DisplayName}}</div>
+        <div class="name ellipsis" title="{{fieldValue._refObjectName}}">{{fieldValue._refObjectName}}</div>
     {{else}}
         <div class="profile-image no-owner"/>
         <div class="name">Claim</div>
