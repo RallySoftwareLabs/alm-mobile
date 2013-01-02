@@ -13,7 +13,7 @@ module.exports = DetailView.extend({
     {'Owner': 'owner'},
     {'PlanEstimate':
       view: 'titled_well'
-      label: 'Plan'
+      label: 'Plan Est'
     },
     {'Tasks': 'tasks'},
     {'Defects': 'defects'},

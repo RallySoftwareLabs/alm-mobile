@@ -75,7 +75,7 @@
     }
 
 	.arrows-left, .arrows-right {
-		width: 10%;
+		width: 15%;
 
 		.well {
 			cursor: pointer;
@@ -94,10 +94,28 @@
 
 	.arrows-left .well {
 		.border-left-radius(@baseBorderRadius);
+		background-image: url(/img/blueArrow_left_2x.png);
+		background-position: center center;
+		background-repeat: no-repeat;
+		background-size: 50%;
+		border-right: 0;
+
+		&.disabled {
+			background-image: url(/img/greyArrow_left_2x.png);
+		}
 	}
 
 	.arrows-right .well {
 		.border-right-radius(@baseBorderRadius);
+		background-image: url(/img/blueArrow_2x.png);
+		background-position: center center;
+		background-repeat: no-repeat;
+		background-size: 50%;
+		border-left: 0;
+
+		&.disabled {
+			background-image: url(/img/greyArrow_right_2x.png);
+		}
 	}
 
 	.arrows-left, .arrows-center, .arrows-right {
@@ -112,11 +130,10 @@
 	}
 
 	.arrows-center {
-		width: 80%;
+		width: 70%;
 
 		.well {
-			border-left: 0;
-			border-right: 0;
+			height: 20px;
 		    text-align: center;
 		    font-weight: bold;
 		    .border-radius(0);
