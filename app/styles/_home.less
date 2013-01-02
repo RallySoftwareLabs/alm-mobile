@@ -9,51 +9,58 @@
   }
 
   #home-view-navigation {
-    margin: 0 auto 20px auto;
-    width: 290px;
-    display: block;
+    margin-bottom: 10px;
 
-    li.active.btn {
-      background-color: @cyan;
+    .nav {
+      display: block;
+      width: 72%;
+      margin: 0px auto;
+
+      li {
+        padding: 0px 5px 0px 5px;
+      }
+
+      li.active.btn {
+        background-color: @cyan;
+
+        a {
+          background-color: @cyan;
+          color: #ffffff;
+          text-shadow: none;
+        }
+      }
 
       a {
-        background-color: @cyan;
-        color: #ffffff;
-        text-shadow: none;
+        color: @darkGrey;
+        font-weight:bold;
       }
     }
-
-    a {
-      color: @darkGrey;
-      font-weight:bold;
-    }
-
   }
 
   .home-view-wrap {
     margin: 0 auto;
-    width: 90%;
+    width: 94%;
 
     .ready {
-      width: 26px;
-      height: 26px;
+      width: 22px;
+      height: 22px;
       background-image: url('/img/ready_icon_2x.png');
       background-size: 100%;
       background-repeat: no-repeat;
       position: relative;
-      right: 13px;
-      bottom: 6px;
+      right: 11px;
+      bottom: 3px;
     }
 
     .blocked {
-      width: 26px;
-      height: 26px;
+      width: 22px;
+      height: 22px;
       background-image: url('/img/blocked_icon_2x.png');
       background-size: 100%;
       background-repeat: no-repeat;
       position: relative;
-      right: 13px;
-      bottom: 6px;
+      right: 11px;
+      bottom: 3px;
     }
 
     .btn-group {
@@ -74,6 +81,7 @@
 
     .workitem-name {
       text-align: left;
+      overflow: hidden;
     }
 
     .task-clock {
