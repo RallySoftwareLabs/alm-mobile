@@ -1,7 +1,16 @@
-BaseView = require '../view'
+BaseView = require 'views/view'
+ArtifactCollection = require 'models/artifact_collection'
+DefectCollection = require 'models/defect_collection'
+TaskCollection = require 'models/task_collection'
 template  = require './templates/topbar'
 
 module.exports = class TopbarView extends BaseView
+
+  ENTER_KEY: 13
+  NAVIGATION_MODEL_TYPES:
+    'hierarchicalrequirement': 'userstory'
+    'defect': 'defect'
+    'task': 'task'
 
   el: '#topbar'
 
@@ -10,6 +19,7 @@ module.exports = class TopbarView extends BaseView
   events:
     'click button[data-target]': 'doNavigate'
     'swipe': 'gotSwiped'
+    'keydown .search-query': 'searchKeyDown'
 
   initialize: (options) ->
     @router = options.router
@@ -32,6 +42,26 @@ module.exports = class TopbarView extends BaseView
     else
       @router.navigate page, trigger: true
     e.preventDefault()
+
+  searchKeyDown: (event) ->
+    switch event.which
+      when @ENTER_KEY
+        event.preventDefault()
+        @doSearch event.target.value
+
+  doSearch: (keyword) ->
+    $('.search-no-results').remove()
+    new ArtifactCollection().fetch(
+      data:
+        fetch: "ObjectID,Name"
+        search: keyword
+      success: (collection, response, options) =>
+        if collection.length > 0
+          firstResult = collection.first()
+          @router.navigate "#{@_getNavigationModelType(firstResult)}/#{firstResult.get('ObjectID')}", trigger: true
+        else
+          @_noSearchResults()
+    )
 
   gotSwiped: (e) ->
     console.log 'got swiped', e
@@ -71,3 +101,24 @@ module.exports = class TopbarView extends BaseView
 
   _getCurrentPage: ->
     (key for key, value of @router.currentPage)[0]
+
+  _getNavigationModelType: (model) ->
+    @NAVIGATION_MODEL_TYPES[model.get('_type').toLowerCase()]
+
+  _noSearchResults: ->
+    alert = $('body').append([
+      '<div class="search-no-results alert alert-error">',
+      '<button type="button" class="close" data-dismiss="alert">&times;</button>',
+      'No results matched your search.</div>'
+    ].join '')
+    noResults = $('.search-no-results')
+    @_center(noResults)
+    setTimeout(->
+      noResults = $('.search-no-results')
+      noResults.fadeOut(400, -> noResults.remove())
+    , 1500)
+
+  _center: (el) ->
+    container = $(window)
+    boundingRec = $('.search-query')[0].getBoundingClientRect()
+    el.css('top': "#{boundingRec.top + boundingRec.height}px", 'left': "#{boundingRec.left}px")
