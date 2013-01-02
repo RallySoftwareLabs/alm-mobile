@@ -100,7 +100,7 @@ Create an AVD with the target id from an image
 
 Run the AVD with the emulator tool with graphics acceleration for increased responsiveness
 
-    emulator -avd my_avd --gpu on
+    emulator -avd my_avd -gpu on
 
 Download the [WebDriver for Android](http://code.google.com/p/selenium/downloads/list)
 
@@ -114,7 +114,7 @@ Install the Android WebDriver to your emulator
 
 Start the Android WebDriver on your emulator
 
-    platform-tools/adb <serialId> shell am start -a android.intent.action.MAIN -n org.openqa.selenium.android.app/.MainActivity
+    platform-tools/adb -s <serialId> shell am start -a android.intent.action.MAIN -n org.openqa.selenium.android.app/.MainActivity
 
 Set up port forwarding for TCP connections from your hostmachine to your emulator
 
