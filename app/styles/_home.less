@@ -35,21 +35,25 @@
     width: 90%;
 
     .ready {
-      width: 16px;
-      height:16px;
-      background-image: url('/img/status/ready.png');
+      width: 26px;
+      height: 26px;
+      background-image: url('/img/ready_icon_2x.png');
+      background-size: 100%;
       background-repeat: no-repeat;
       position: relative;
-      right: 8px;
+      right: 13px;
+      bottom: 6px;
     }
 
     .blocked {
-      width: 16px;
-      height:16px;
-      background-image: url('/img/status/blocked.png');
+      width: 26px;
+      height: 26px;
+      background-image: url('/img/blocked_icon_2x.png');
+      background-size: 100%;
       background-repeat: no-repeat;
       position: relative;
-      right: 8px;
+      right: 13px;
+      bottom: 6px;
     }
 
     .btn-group {
@@ -73,8 +77,11 @@
     }
 
     .task-clock {
-      padding: 0px 5px 2px 0px;
-      background-image: url('/img/status/status-to-do.png');
+      width: 16px;
+      height: 16px;
+      padding: 0px 10px 0px 0px;
+      background-image: url('/img/todo_icon_2x.png');
+      background-size: 100%;
       background-repeat: no-repeat;
     }
 
@@ -83,11 +90,11 @@
     }
 
     .chevron {
-      color: @cyan;
-      font-size: 20px;
-      font-weight: bold;
-      // background-image: url('/img/chevron-right.png');
-      // background-repeat: no-repeat;
+      width: 13px;
+      height: 18px;
+      background-image: url('/img/blueArrow_2x.png');
+      background-size: 100%;
+      background-repeat: no-repeat;
     }
   }
 }
