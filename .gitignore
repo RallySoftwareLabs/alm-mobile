@@ -6,3 +6,4 @@ tmtags
 tmtagsHistory
 .tm_properties
 *.log
+*.DS_Store
