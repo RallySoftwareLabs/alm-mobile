@@ -36,6 +36,7 @@ module.exports = DetailView.extend({
           'Accepted'
         ]
     },
+    {'WorkProduct': 'work_product'},
     'DisplayName'
   ]
 })
