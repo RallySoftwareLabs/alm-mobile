@@ -35,7 +35,7 @@ module.exports = class NavigationView extends BaseView
     buttons: [
       {
         displayName: if @getSetting('workType') is 'myWork' then 'My Work' else 'My Team'
-        viewHash: 'home'
+        viewHash: ''
       }
       {
         displayName: 'Tracking Board'
