@@ -24,7 +24,9 @@ module.exports = class ALMRouter extends Backbone.Router
 
     # wait until currentPage has been set
     setTimeout =>
-      @views.topbar = new TopbarView(router: @)
+      @views.topbar = new TopbarView
+        settings: @views.settings
+        router:   @
     , 1
 
   routes:

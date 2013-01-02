@@ -21,9 +21,9 @@ module.exports = class TopbarView extends BaseView
     'swipe': 'gotSwiped'
     'keydown .search-query': 'searchKeyDown'
 
-  initialize: (options) ->
-    @router = options.router
-    @render()
+  initialize: ({ @settings, @router }) ->
+
+    @settings.on 'loadedSettings', @updateSettingsData
 
     $(window).on 'hashchange', =>
       setTimeout =>
@@ -33,6 +33,9 @@ module.exports = class TopbarView extends BaseView
         else
           @show()
       , 1
+
+  updateSettingsData: =>
+    @render()
 
   doNavigate: (e) ->
     page = e.currentTarget.getAttribute 'data-target'
@@ -51,7 +54,7 @@ module.exports = class TopbarView extends BaseView
 
   doSearch: (keyword) ->
     $('.search-no-results').remove()
-    new ArtifactCollection().fetch(
+    new ArtifactCollection().fetch
       data:
         fetch: "ObjectID,Name"
         search: keyword
@@ -61,7 +64,6 @@ module.exports = class TopbarView extends BaseView
           @router.navigate "#{@_getNavigationModelType(firstResult)}/#{firstResult.get('ObjectID')}", trigger: true
         else
           @_noSearchResults()
-    )
 
   gotSwiped: (e) ->
     console.log 'got swiped', e
@@ -70,7 +72,7 @@ module.exports = class TopbarView extends BaseView
 
   hide: -> @$el.hide() if @$el.is ':visible'
 
-  getProjectTitle: -> 'Real Project (I Swear)'
+  getProjectTitle: -> @settings.getProjectTitle()
 
   getDetailTitle:  -> 'S1324: Details'
 
