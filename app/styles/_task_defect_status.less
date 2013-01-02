@@ -1,12 +1,13 @@
 .status-value {
-  line-height: 17px;
+  line-height: 20px;
 
   .status-icon{
     background-repeat: no-repeat;
     background-position: left center;
-    height: 17px;
+    background-size: contain;
+    height: 20px;
     overflow: hidden;
-    width: 17px;
+    width: 22px;
   }
 
   &.tasks {
@@ -15,7 +16,7 @@
     }
 
     .DEFINED {
-      background-image: url('/img/status/status-notstarted.png');
+      background-image: url('/img/task_icon_2x.png');
     }
 
     .IN_PROGRESS {
@@ -50,7 +51,7 @@
     }
 
     .NONE_CLOSED {
-      background-image: url('/img/status/status-defect-active.png');
+      background-image: url('/img/defect_icon_red_2x.png');
     }
 
     .SOME_CLOSED {

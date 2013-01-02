@@ -1,5 +1,24 @@
 .well-title {
 	font-weight: bold;
+	color: @darkGrey;
+
+	.icon {
+		float: left;
+		width: 13px;
+		height: 20px;
+		margin-right: 4px;
+		background-size: contain;
+		background-position: center center;
+		background-repeat: no-repeat;
+
+		&.task-todo {
+			background-image: url(/img/todo_icon_2x.png);
+		}
+	}
+
+	::after {
+		clear: both;
+	}
 }
 
 .status-value {
@@ -72,6 +91,10 @@
 	        font-weight: bold;
 	        margin: auto;
     	}
+    }
+
+    .icon.task-todo {
+    	background-image: url(/img/todo_icon_2x.png);
     }
 
 	.arrows-left, .arrows-right {

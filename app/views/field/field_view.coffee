@@ -20,6 +20,7 @@ module.exports = class FieldView extends View
     fieldLabel: @options.label
     fieldValue: @options.value || @model.get(@options.field)
     currentHash: Backbone.history.getHash()
+    icon: @options.icon
   
   afterRender: ->
     if @viewMode is ViewMode.DISPLAY

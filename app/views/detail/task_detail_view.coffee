@@ -18,8 +18,9 @@ module.exports = DetailView.extend({
     },
     {
       'ToDo':
-        view: 'titled_well',
+        view: 'titled_well'
         label: 'Task To Do (H)'
+        icon: 'task-todo'
     },
     {'Discussion': 'discussion'},
     {'Tasks': 'tasks'},
