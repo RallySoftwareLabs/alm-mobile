@@ -41,9 +41,13 @@
 		color: @white;
 	}
 
-	&#ReadyView.on .well {
-		background-color: @green;
-		color: @white;
+	&#ReadyView {
+		margin-left: 0;
+
+		&.on .well {
+			background-color: @green;
+			color: @white;
+		}
 	}
 }
 
