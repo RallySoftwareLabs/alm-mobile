@@ -17,6 +17,7 @@ module.exports = DetailView.extend({
     },
     {'Tasks': 'tasks'},
     {'Defects': 'defects'},
+    {'Discussion': 'discussion'},
     {'Description': 'html'},
     {
       'ScheduleState':
