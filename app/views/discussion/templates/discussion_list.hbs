@@ -1,0 +1,16 @@
+<div class="btn-group btn-group-vertical">
+    {{#each discussion}}
+        <button class="btn btn-block list-item">
+            <div class="profile-image">
+            	<img src="{{profileImageUrl attributes.User._ref 80}}"/>
+            </div>
+            <div class="details">
+            	<div class="status">
+            		<span class="profileLink"><span>{{attributes.User._refObjectName}}</span></span>
+            		{{createdAt attributes._CreatedAt}}
+            	</div>
+            	<div class="detail-text">{{{attributes.Text}}}</div>
+            </div>
+        </button>
+    {{/each}}
+</div>

@@ -19,6 +19,7 @@ module.exports = class FieldView extends View
     field: @options.field
     fieldLabel: @options.label
     fieldValue: @options.value || @model.get(@options.field)
+    allowedValues: @options.allowedValues
     currentHash: Backbone.history.getHash()
     icon: @options.icon
 
@@ -32,7 +33,9 @@ module.exports = class FieldView extends View
 
   _setDisplayTemplate: ->
     try
-      @template = require "views/field/templates/#{@viewMode}/#{@viewType}_view"
+      view = @viewType
+      view = 'titled_well_dropdown' if @viewMode is ViewMode.EDIT and @viewType is 'titled_well' and @options.allowedValues?
+      @template = require "views/field/templates/#{@viewMode}/#{view}_view"
     catch e
       @viewMode = ViewMode.DISPLAY
       @_setDisplayTemplate()

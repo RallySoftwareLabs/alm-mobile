@@ -29,3 +29,10 @@ Handlebars.registerHelper 'profileImageUrl', (ref, size, options) ->
 
 Handlebars.registerHelper 'createdAt', (created) ->
   _(created).capitalize()
+
+Handlebars.registerHelper 'selectOption', (option, selectedValue) ->
+  str = "<option value=\"#{option}\""
+  str += " selected=\"selected\"" if selectedValue is option
+  str += ">#{option}</option>"
+  alert("#{selectedValue}:#{option}")
+  str
