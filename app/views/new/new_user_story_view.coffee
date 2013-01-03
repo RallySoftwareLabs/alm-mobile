@@ -1,24 +1,32 @@
 DetailView = require '../detail/detail_view'
 template = require './templates/new_user_story'
 UserStory = require 'models/user_story'
-# LoadingMaskView = require '../shared/loading_view'
 
-module.exports = DetailView.extend
-  model: new UserStory()
+module.exports = class NewUserStoryView extends DetailView
+  initialize: (options) ->
+    options = options || {}
+    options['new'] = true
+    options['oid'] = ""
+    super options
+    @delegateEvents
+
+  modelType: UserStory
   id: '#new-user-story'
   template: template
 
+  events: ->
+    listeners = super
+    listeners['click #save'] = 'onSave'
+    listeners['click #cancel'] = 'onCancel'
+    listeners
+
   fields: [
-    'FormattedID',
-    {'Name': 'header'},
+    {'Name': 'titled_well'},
     {'Owner': 'owner'},
     {'PlanEstimate':
       view: 'titled_well'
       label: 'Plan Est'
     },
-    {'Tasks': 'tasks'},
-    {'Defects': 'defects'},
-    {'Discussion': 'discussion'},
     {'Description': 'html'},
     {
       'ScheduleState':
@@ -29,15 +37,11 @@ module.exports = DetailView.extend
           'Completed',
           'Accepted'
         ]
-    },
-    'DisplayName',
-    {
-      'Blocked':
-        view: 'toggle'
-    },
-    {
-      'Ready':
-        view: 'toggle'
     }
   ]
-    
+
+  onSave: ->
+    console.log 'onSave'
+
+  onCancel: ->
+    console.log  'onCancel'

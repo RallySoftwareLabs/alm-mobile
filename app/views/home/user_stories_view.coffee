@@ -17,7 +17,6 @@ module.exports = View.extend
     mask.render()
 
   getRenderData: ->
-    debugger
     # error: @options.error
     stories: @model.toJSON()
 

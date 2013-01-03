@@ -42,7 +42,7 @@ module.exports = class ALMRouter extends Backbone.Router
     'new' : 'newUserStory'
 
   beforeAllFilters: ->
-    [@authenticationFilter, 
+    [@authenticationFilter,
      @removeCurrentView]
 
   authenticationFilter: (route, callback) ->
@@ -97,7 +97,6 @@ module.exports = class ALMRouter extends Backbone.Router
     view.delegateEvents()
 
   newUserStory: ->
-    console.log 'handler'
     view = new newUserStoryView()
     @currentPage = 'newUserStory' : view
     $('#content').html(view.render().el)

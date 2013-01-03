@@ -3,18 +3,18 @@ FieldView = require 'views/field/field_view'
 
 module.exports = class DetailView extends View
   initialize: (options) ->
-    debugger
     super options
     @_defineFieldEditFns field for field in @_getFieldNames()
     @fieldViews = {}
     @model = new @modelType(ObjectID: options.oid)
-    @model.fetch({
-      data:
-        fetch: ['ObjectID'].concat(@_getFieldNames()).join ','
-      success: (model, response, opts) =>
-        @delegateEvents()
-        @render() if options.autoRender
-    })
+    unless options['new']? && options['new']
+      @model.fetch({
+        data:
+          fetch: ['ObjectID'].concat(@_getFieldNames()).join ','
+        success: (model, response, opts) =>
+          @delegateEvents()
+          @render() if options.autoRender
+      })
 
   events: ->
     listeners = {}
@@ -52,7 +52,7 @@ module.exports = class DetailView extends View
       dynamicFieldView = require "views/field/field_#{viewType}_view"
     catch e
       dynamicFieldView = FieldView
-    
+
     dynamicFieldView
 
   _defineFieldEditFns: (field) ->
@@ -88,4 +88,3 @@ module.exports = class DetailView extends View
 
   _getFieldNames: ->
     (@_getFieldInfo(field).fieldName for field in @fields)
-    

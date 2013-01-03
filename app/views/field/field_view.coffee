@@ -21,7 +21,7 @@ module.exports = class FieldView extends View
     fieldValue: @options.value || @model.get(@options.field)
     currentHash: Backbone.history.getHash()
     icon: @options.icon
-  
+
   afterRender: ->
     if @viewMode is ViewMode.DISPLAY
       @.$el.addClass('display')
@@ -65,14 +65,14 @@ module.exports = class FieldView extends View
     if @viewMode isnt ViewMode.EDIT
       @viewMode = ViewMode.EDIT
       @_setDisplayTemplate()
-    
+
     @render()
 
   _switchToViewMode: ->
     if @viewMode isnt ViewMode.DISPLAY
       @viewMode = ViewMode.DISPLAY
       @_setDisplayTemplate()
-    
+
     @render()
 
   _otherFieldSave: (field, model) ->
