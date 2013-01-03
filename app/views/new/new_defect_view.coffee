@@ -1,17 +1,17 @@
 app        = require 'application'
 DetailView = require '../detail/detail_view'
-template   = require './templates/new_user_story'
-UserStory  = require 'models/user_story'
+template   = require './templates/new_defect'
+Defect     = require 'models/defect'
 
-module.exports = class NewUserStoryView extends DetailView
+module.exports = class NewDefectView extends DetailView
   initialize: (options) ->
     options = options || {}
     options.newArtifact = true
     super options
     @delegateEvents
 
-  modelType: UserStory
-  id: 'new-user-story'
+  modelType: Defect
+  id: 'new-defect'
   template: template
 
   events: ->
@@ -22,26 +22,46 @@ module.exports = class NewUserStoryView extends DetailView
 
   fields: [
     {'Name': 'titled_well'},
-    {'Owner': 'owner'},
-    {'PlanEstimate':
-      view: 'titled_well'
-      label: 'Plan Est'
-    },
-    {'Description': 'html'},
+    # add story selection
     {
-      'ScheduleState':
-        view: 'string_with_arrows',
+      'State':
+        view: 'string_with_arrows'
         allowedValues: [
-          'Defined',
-          'In-Progress',
-          'Completed',
-          'Accepted'
+          'Submitted',
+          'Open',
+          'Fixed',
+          'Closed'
         ]
-    }
+    },
+    {'Owner': 'owner'},
+    {
+      'Severity':
+        view: 'titled_well'
+        label: 'Severity'
+        allowedValues: [
+          'None'
+          'Crash/Data Loss'
+          'Major Problem'
+          'Minor Problem'
+          'Cosmetic'
+        ]
+    },
+    {
+      'Priority':
+        view: 'titled_well'
+        label: 'Priority'
+        allowedValues: [
+          'None'
+          'Resolve Immediately'
+          'High Attention'
+          'Normal'
+          'Low'
+        ]
+    },
+    {'Description': 'html'}
   ]
 
   onSave: ->
-    # ToDo: Set project from settings
     @model.sync 'create', @model,
       wait: true
       patch: true

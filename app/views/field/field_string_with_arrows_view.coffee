@@ -2,6 +2,10 @@ FieldView = require './field_view'
 
 module.exports = class FieldStringWithArrowsView extends FieldView
 
+  initialize: (options) ->
+    @setEditMode = false
+    super options
+
   events: ->
     events = super
     events['click .arrows-right'] = 'onRightArrow'

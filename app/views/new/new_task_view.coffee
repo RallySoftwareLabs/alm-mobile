@@ -1,17 +1,17 @@
 app        = require 'application'
 DetailView = require '../detail/detail_view'
-template   = require './templates/new_user_story'
-UserStory  = require 'models/user_story'
+template   = require './templates/new_task'
+Task       = require 'models/task'
 
-module.exports = class NewUserStoryView extends DetailView
+module.exports = class NewTaskView extends DetailView
   initialize: (options) ->
     options = options || {}
     options.newArtifact = true
     super options
     @delegateEvents
 
-  modelType: UserStory
-  id: 'new-user-story'
+  modelType: Task
+  id: 'new-task'
   template: template
 
   events: ->
@@ -21,27 +21,33 @@ module.exports = class NewUserStoryView extends DetailView
     listeners
 
   fields: [
+    # ToDo: Project and WorkProduct NEED to be set
     {'Name': 'titled_well'},
-    {'Owner': 'owner'},
-    {'PlanEstimate':
-      view: 'titled_well'
-      label: 'Plan Est'
-    },
-    {'Description': 'html'},
     {
-      'ScheduleState':
+      'State':
         view: 'string_with_arrows',
         allowedValues: [
           'Defined',
           'In-Progress',
-          'Completed',
-          'Accepted'
+          'Completed'
         ]
-    }
+    },
+    {'Owner': 'owner'},
+    {
+      'Estimate':
+        view: 'titled_well'
+        label: 'Task Est (H)'
+    },
+    {
+      'ToDo':
+        view: 'titled_well'
+        label: 'Task To Do (H)'
+        icon: 'task-todo'
+    },
+    {'Description': 'html'}
   ]
 
   onSave: ->
-    # ToDo: Set project from settings
     @model.sync 'create', @model,
       wait: true
       patch: true

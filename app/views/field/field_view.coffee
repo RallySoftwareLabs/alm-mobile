@@ -7,7 +7,8 @@ ViewMode =
 module.exports = class FieldView extends View
   initialize: (options) ->
     @viewType = options.viewType || 'string'
-    @viewMode = if (options.newArtifact? and options.newArtifact) then ViewMode.EDIT else ViewMode.DISPLAY
+    @setEditMode = if @setEditMode? then @setEditMode else true
+    @viewMode = if (options.newArtifact? and options.newArtifact and @setEditMode) then ViewMode.EDIT else ViewMode.DISPLAY
     @_setDisplayTemplate()
     options.detailView.on('fieldSave', @_otherFieldSave, @)
 

@@ -3,6 +3,7 @@ FieldView = require './field_view'
 
 module.exports = class FieldOwnerView extends FieldView
   initialize: (config) ->
+    @setEditMode = false
     super config
 
   startEdit: (event) ->

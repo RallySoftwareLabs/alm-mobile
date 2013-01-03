@@ -13,6 +13,8 @@ UserStoryDetailView = require 'views/detail/user_story_detail_view'
 DefectDetailView    = require 'views/detail/defect_detail_view'
 TaskDetailView      = require 'views/detail/task_detail_view'
 newUserStoryView    = require 'views/new/new_user_story_view'
+newTaskView         = require 'views/new/new_task_view'
+newDefectView       = require 'views/new/new_defect_view'
 DiscussionView      = require 'views/discussion/discussion_view'
 
 module.exports = class ALMRouter extends Backbone.Router
@@ -41,7 +43,9 @@ module.exports = class ALMRouter extends Backbone.Router
     'userstory/:id': 'userStoryDetail'
     'defect/:id': 'defectDetail'
     'task/:id': 'taskDetail'
-    'new' : 'newUserStory'
+    'new/userstory' : 'newUserStory'
+    'new/task' : 'newTask'
+    'new/defect' : 'newDefect'
 
   beforeAllFilters: ->
     [@authenticationFilter,
@@ -108,6 +112,18 @@ module.exports = class ALMRouter extends Backbone.Router
   newUserStory: ->
     view = new newUserStoryView()
     @currentPage = 'newUserStory' : view
+    $('#content').html(view.render().el)
+    view.delegateEvents()
+
+  newTask: ->
+    view = new newTaskView()
+    @currentPage = 'newTask' : view
+    $('#content').html(view.render().el)
+    view.delegateEvents()
+
+  newDefect: ->
+    view = new newDefectView()
+    @currentPage = 'newDefect' : view
     $('#content').html(view.render().el)
     view.delegateEvents()
 

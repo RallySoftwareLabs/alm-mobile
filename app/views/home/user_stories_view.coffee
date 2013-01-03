@@ -21,4 +21,4 @@ module.exports = View.extend
     stories: @model.toJSON()
 
   addUserStory: ->
-    app.router.navigate 'new', {trigger: true, replace: true}
+    app.router.navigate 'new/userstory', {trigger: true, replace: true}
