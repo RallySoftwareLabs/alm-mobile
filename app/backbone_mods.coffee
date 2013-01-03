@@ -28,6 +28,9 @@
     if !options.url
       params.url = _.result(model, 'url') or urlError()
 
+    # ALM WSAPI adds /create to create URL
+    params.url += '/create' if method is 'create'
+
     # Ensure that we have the appropriate request data.
     if (!options.data? and model and (method is 'create' or method is 'update' or method is 'patch'))
       params.contentType = 'application/json'
@@ -65,7 +68,7 @@
 
     success = options.success
     options.success = (resp, status, xhr) ->
-      if resp.OperationResult?.Errors?.length > 0
+      if resp.OperationResult?.Errors?.length > 0 || resp.CreateResult?.Errors?.length > 0
         options.error(xhr, "ws", null)
       else
         success?(resp, status, xhr)
