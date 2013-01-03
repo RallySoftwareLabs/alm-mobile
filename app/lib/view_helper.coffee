@@ -1,3 +1,5 @@
+utils = require 'lib/utils'
+
 # Put your handlebars.js helpers here.
 Handlebars.registerHelper 'isEditing', (field, options) ->
   unless options?
@@ -14,12 +16,6 @@ Handlebars.registerHelper 'isEditing', (field, options) ->
   else
     options.inverse?(@)
 
-Handlebars.registerHelper 'isFieldValue', (field, value, options) ->
-  if @model[field] is value
-    options.fn?(@)
-  else
-    options.inverse?(@)
-
 Handlebars.registerHelper 'state', (blocked, ready) ->
   if blocked
     'blocked'
@@ -28,3 +24,8 @@ Handlebars.registerHelper 'state', (blocked, ready) ->
   else
     ''
 
+Handlebars.registerHelper 'profileImageUrl', (ref, size, options) ->
+  utils.getProfileImageUrl(ref, size)
+
+Handlebars.registerHelper 'createdAt', (created) ->
+  _(created).capitalize()

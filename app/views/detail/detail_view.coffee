@@ -7,7 +7,7 @@ module.exports = class DetailView extends View
     @_defineFieldEditFns field for field in @_getFieldNames()
     @fieldViews = {}
     @model = new @modelType(ObjectID: options.oid)
-    unless options['new']? && options['new']
+    unless options.new? && options.new
       @model.fetch({
         data:
           fetch: ['ObjectID'].concat(@_getFieldNames()).join ','
@@ -15,6 +15,7 @@ module.exports = class DetailView extends View
           @delegateEvents()
           @render() if options.autoRender
       })
+    @modelLoaded = false
 
   events: ->
     listeners = {}
@@ -25,11 +26,22 @@ module.exports = class DetailView extends View
     model: @model.toJSON()
 
   afterRender: ->
-    @renderField field for field in @fields
+    @_removeFieldViews()
+    if @modelLoaded || @options.new
+      @renderField field for field in @fields
+    else
+      @model.fetch({
+        data:
+          fetch: ['ObjectID'].concat(@_getFieldNames()).join ','
+        success: (model, response, opts) =>
+          @modelLoaded = true
+          @render() if @options.autoRender
+          @delegateEvents()
+      })
 
   remove: ->
     super
-    fieldView.remove() for key, fieldView of @fieldViews
+    @_removeFieldViews()
 
   fieldIsEditable: (field) ->
     return false unless field in @_getFieldNames()
@@ -46,6 +58,9 @@ module.exports = class DetailView extends View
     @fieldViews[fieldConfig.fieldName] = fieldView = new FieldViewClass(fieldConfig).render()
 
     fieldView.on('save', @_onFieldSave, @)
+
+  _removeFieldViews: ->
+    fieldView.remove() for key, fieldView of @fieldViews
 
   _getFieldViewClass: (viewType) ->
     try

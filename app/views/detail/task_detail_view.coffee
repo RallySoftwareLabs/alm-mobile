@@ -32,8 +32,7 @@ module.exports = DetailView.extend({
         allowedValues: [
           'Defined',
           'In-Progress',
-          'Completed',
-          'Accepted'
+          'Completed'
         ]
     },
     {'WorkProduct': 'work_product'},

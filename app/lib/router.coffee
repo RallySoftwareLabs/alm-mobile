@@ -13,6 +13,7 @@ UserStoryDetailView = require 'views/detail/user_story_detail_view'
 DefectDetailView    = require 'views/detail/defect_detail_view'
 TaskDetailView      = require 'views/detail/task_detail_view'
 newUserStoryView    = require 'views/new/new_user_story_view'
+DiscussionView      = require 'views/discussion/discussion_view'
 
 module.exports = class ALMRouter extends Backbone.Router
 
@@ -36,6 +37,7 @@ module.exports = class ALMRouter extends Backbone.Router
     'login': 'login'
     'navigation': 'navigation'
     'settings': 'settings'
+    ':type/:id/discussion': 'discussion'
     'userstory/:id': 'userStoryDetail'
     'defect/:id': 'defectDetail'
     'task/:id': 'taskDetail'
@@ -87,6 +89,13 @@ module.exports = class ALMRouter extends Backbone.Router
       oid: oid
       autoRender: true
     @currentPage = 'taskDetail': view
+    $('#content').html(view.render().el)
+    view.delegateEvents()
+
+  discussion: (type, oid) ->
+    view = new DiscussionView
+      type: type
+      oid: oid
     $('#content').html(view.render().el)
     view.delegateEvents()
 

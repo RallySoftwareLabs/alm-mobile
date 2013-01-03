@@ -39,7 +39,7 @@ module.exports = class LoginView extends View
             app.router.navigate(app.afterLogin, {trigger: true, replace: true})
           failure: ->
             debugger
-      error: (xhr, errorType, error) ->
-        alert = this.$('.alert').html('The password you have entered is incorrect.').show()
+      error: (xhr, errorType, error) =>
+        alert = @$('.alert').html('The password you have entered is incorrect.').show()
     )
     event.preventDefault()
