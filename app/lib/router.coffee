@@ -12,6 +12,7 @@ SettingsView        = require 'views/settings/settings_view'
 UserStoryDetailView = require 'views/detail/user_story_detail_view'
 DefectDetailView    = require 'views/detail/defect_detail_view'
 TaskDetailView      = require 'views/detail/task_detail_view'
+newUserStoryView    = require 'views/new/new_user_story_view'
 
 module.exports = class ALMRouter extends Backbone.Router
 
@@ -38,6 +39,7 @@ module.exports = class ALMRouter extends Backbone.Router
     'userstory/:id': 'userStoryDetail'
     'defect/:id': 'defectDetail'
     'task/:id': 'taskDetail'
+    'new' : 'newUserStory'
 
   beforeAllFilters: ->
     [@authenticationFilter, 
@@ -91,6 +93,13 @@ module.exports = class ALMRouter extends Backbone.Router
   login: ->
     view = @views['login'] ?= new LoginView(session: app.session)
     @currentPage = 'login': view
+    $('#content').html(view.render().el)
+    view.delegateEvents()
+
+  newUserStory: ->
+    console.log 'handler'
+    view = new newUserStoryView()
+    @currentPage = 'newUserStory' : view
     $('#content').html(view.render().el)
     view.delegateEvents()
 

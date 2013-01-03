@@ -3,6 +3,7 @@ FieldView = require 'views/field/field_view'
 
 module.exports = class DetailView extends View
   initialize: (options) ->
+    debugger
     super options
     @_defineFieldEditFns field for field in @_getFieldNames()
     @fieldViews = {}
