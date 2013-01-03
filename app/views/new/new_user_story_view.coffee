@@ -1,12 +1,12 @@
+app        = require 'application'
 DetailView = require '../detail/detail_view'
-template = require './templates/new_user_story'
-UserStory = require 'models/user_story'
+template   = require './templates/new_user_story'
+UserStory  = require 'models/user_story'
 
 module.exports = class NewUserStoryView extends DetailView
   initialize: (options) ->
     options = options || {}
-    options['new'] = true
-    options['oid'] = ""
+    options.newArtifact = true
     super options
     @delegateEvents
 
@@ -15,7 +15,7 @@ module.exports = class NewUserStoryView extends DetailView
   template: template
 
   events: ->
-    listeners = super
+    listeners = {}
     listeners['click #save'] = 'onSave'
     listeners['click #cancel'] = 'onCancel'
     listeners
@@ -41,7 +41,17 @@ module.exports = class NewUserStoryView extends DetailView
   ]
 
   onSave: ->
-    console.log 'onSave'
+    # ToDo: Set project from settings
+    @model.save
+      wait: true
+      patch: true
+      success: (model, resp, options) =>
+        opts?.success?(model, resp, options)
+        @trigger('save', @options.field, model)
+        app.router.navigate('home', {trigger: true, replace: true})
+      error: =>
+        opts?.error?(model, resp, options)
+        debugger
 
   onCancel: ->
-    console.log  'onCancel'
+    app.router.navigate('home', {trigger: true, replace: true})

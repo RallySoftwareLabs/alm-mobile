@@ -4,10 +4,11 @@ FieldView = require 'views/field/field_view'
 module.exports = class DetailView extends View
   initialize: (options) ->
     super options
+    @newArtifact = options.newArtifact? and options.newArtifact
     @_defineFieldEditFns field for field in @_getFieldNames()
     @fieldViews = {}
-    @model = new @modelType(ObjectID: options.oid)
-    unless options.new? && options.new
+    @model = if @newArtifact then new @modelType() else new @modelType(ObjectID: options.oid)
+    unless @newArtifact
       @model.fetch({
         data:
           fetch: ['ObjectID'].concat(@_getFieldNames()).join ','
@@ -16,6 +17,7 @@ module.exports = class DetailView extends View
           @render() if options.autoRender
       })
     @modelLoaded = false
+
 
   events: ->
     listeners = {}
@@ -27,7 +29,7 @@ module.exports = class DetailView extends View
 
   afterRender: ->
     @_removeFieldViews()
-    if @modelLoaded || @options.new
+    if @modelLoaded || @newArtifact
       @renderField field for field in @fields
     else
       @model.fetch({
@@ -54,6 +56,7 @@ module.exports = class DetailView extends View
     fieldConfig.el = this.$("##{fieldConfig.fieldName}View")
     fieldConfig.detailView = @
     fieldConfig.session = @options.session
+    fieldConfig.newArtifact = @newArtifact
     FieldViewClass = @_getFieldViewClass fieldConfig.viewType
     @fieldViews[fieldConfig.fieldName] = fieldView = new FieldViewClass(fieldConfig).render()
 

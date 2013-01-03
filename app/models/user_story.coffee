@@ -1,11 +1,14 @@
 Model = require 'models/model'
 
 module.exports = Model.extend
-  urlRoot: window.AppConfig.almWebServiceBaseUrl + '/webservice/2.x/hierarchicalrequirements'
+  initialize: (options) ->
+    @setUrlRoot(options)
+
+  setUrlRoot: (options) ->
+    @urlRoot = window.AppConfig.almWebServiceBaseUrl + '/webservice/2.x/hierarchicalrequirements'
+    unless options?.ObjectID?
+      @urlRoot += '/create'
+
   defaults: {
-    "Description" : "",
-    "Name" : "New User Story",
-    "Owner" : "",
-    "PlanEstimate" : "",
     "ScheduleState" : "Defined"
   }

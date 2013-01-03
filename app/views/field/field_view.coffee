@@ -7,7 +7,7 @@ ViewMode =
 module.exports = class FieldView extends View
   initialize: (options) ->
     @viewType = options.viewType || 'string'
-    @viewMode = ViewMode.DISPLAY
+    @viewMode = if (options.newArtifact? and options.newArtifact) then ViewMode.EDIT else ViewMode.DISPLAY
     @_setDisplayTemplate()
     options.detailView.on('fieldSave', @_otherFieldSave, @)
 
@@ -30,8 +30,12 @@ module.exports = class FieldView extends View
       @.$el.removeClass('display')
       @.$el.addClass('edit')
 
-  _setDisplayTemplate: () ->
-    @template = require "views/field/templates/#{@viewMode}/#{@viewType}_view"
+  _setDisplayTemplate: ->
+    try
+      @template = require "views/field/templates/#{@viewMode}/#{@viewType}_view"
+    catch e
+      @viewMode = ViewMode.DISPLAY
+      @_setDisplayTemplate()
 
   startEdit: ->
     @_switchToEditMode()
@@ -50,6 +54,16 @@ module.exports = class FieldView extends View
       @_switchToViewMode()
 
   saveModel: (updates, opts) ->
+    if @options.newArtifact
+      @_saveLocal(updates, opts)
+    else
+      @_saveRemote(updates, opts)
+
+  _saveLocal: (updates, opts) ->
+    @model.set(updates)
+    @render()
+
+  _saveRemote: (updates, opts) ->
     @model.save updates,
       wait: true
       patch: true
@@ -60,6 +74,7 @@ module.exports = class FieldView extends View
       error: =>
         opts?.error?(model, resp, options)
         debugger
+
 
   _switchToEditMode: ->
     if @viewMode isnt ViewMode.EDIT
