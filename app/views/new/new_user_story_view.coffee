@@ -16,8 +16,8 @@ module.exports = class NewUserStoryView extends DetailView
 
   events: ->
     listeners = {}
-    listeners['click #save'] = 'onSave'
-    listeners['click #cancel'] = 'onCancel'
+    listeners['click #save button'] = 'onSave'
+    listeners['click #cancel button'] = 'onCancel'
     listeners
 
   fields: [
@@ -42,16 +42,16 @@ module.exports = class NewUserStoryView extends DetailView
 
   onSave: ->
     # ToDo: Set project from settings
-    @model.save
+    @model.sync 'create', @model,
       wait: true
       patch: true
       success: (model, resp, options) =>
         opts?.success?(model, resp, options)
         @trigger('save', @options.field, model)
-        app.router.navigate('home', {trigger: true, replace: true})
+        app.router.navigate('', {trigger: true, replace: false})
       error: =>
         opts?.error?(model, resp, options)
         debugger
 
   onCancel: ->
-    app.router.navigate('home', {trigger: true, replace: true})
+    app.router.navigate('', {trigger: true, replace: false})
