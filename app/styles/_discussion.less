@@ -1,5 +1,7 @@
 .discussion-page {
 	.reply {
+		margin-bottom: 20px;
+		
 		button {
 			vertical-align: top;
 		}
@@ -11,8 +13,13 @@
 		    padding: 8px 8px 0 8px;
 		    color: @darkGrey;
 		    border-top: 1px solid #c6c6c6;
+		    border-bottom-width: 0;
 		    clear: left;
 		    cursor: default;
+
+		    &:last-child {
+		    	border-bottom-width: 1px;
+		    }
 
 		    .profileLink {
 		    	color: @cyan;
@@ -36,20 +43,25 @@
 			    color: @darkGrey;
 			}
 
-			.detail-text {
-			    margin-top: 0.5em;
-			    margin-bottom: 0.5em;
-			    word-wrap: break-word;
+			.details {
+				padding-left: 55px;
 
-			    ul li {
-			        list-style-type: disc;
-			        list-style-position: inside;
-			    }
+				.detail-text {
+				    margin-top: 0.5em;
+				    margin-bottom: 0.5em;
+				    word-wrap: break-word;
+				    white-space: normal;
 
-			    ol li {
-			        list-style-type: decimal;
-			        list-style-position: inside;   
-			    }
+				    ul li {
+				        list-style-type: disc;
+				        list-style-position: inside;
+				    }
+
+				    ol li {
+				        list-style-type: decimal;
+				        list-style-position: inside;   
+				    }
+				}
 			}
 		}
 	}
