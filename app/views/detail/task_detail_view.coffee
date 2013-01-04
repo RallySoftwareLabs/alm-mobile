@@ -15,12 +15,14 @@ module.exports = DetailView.extend({
       'Estimate':
         view: 'titled_well'
         label: 'Task Est (H)'
+        inputType: 'number'
     },
     {
       'ToDo':
         view: 'titled_well'
         label: 'Task To Do (H)'
         icon: 'task-todo'
+        inputType: 'number'
     },
     {'Discussion': 'discussion'},
     {'Tasks': 'tasks'},

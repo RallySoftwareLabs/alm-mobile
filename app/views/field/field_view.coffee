@@ -7,6 +7,7 @@ ViewMode =
 module.exports = class FieldView extends View
   initialize: (options) ->
     @viewType = options.viewType || 'string'
+    @inputType = options.inputType || 'text'
     @setEditMode = if @setEditMode? then @setEditMode else true
     @viewMode = if (options.newArtifact? and options.newArtifact and @setEditMode) then ViewMode.EDIT else ViewMode.DISPLAY
     @_setDisplayTemplate()
@@ -20,6 +21,7 @@ module.exports = class FieldView extends View
     field: @options.field
     fieldLabel: @options.label
     fieldValue: @options.value || @model.get(@options.field)
+    inputType: @inputType
     allowedValues: @options.allowedValues
     currentHash: Backbone.history.getHash()
     icon: @options.icon

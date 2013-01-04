@@ -26,6 +26,7 @@ module.exports = class NewUserStoryView extends DetailView
     {'PlanEstimate':
       view: 'titled_well'
       label: 'Plan Est'
+      inputType: 'number'
     },
     {'Description': 'html'},
     {

@@ -13,6 +13,7 @@ module.exports = DetailView.extend({
     {'PlanEstimate':
       view: 'titled_well'
       label: 'Plan Est'
+      inputType: 'number'
     },
     {'Tasks': 'tasks'},
     {'Defects': 'defects'},

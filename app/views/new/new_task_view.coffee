@@ -37,11 +37,13 @@ module.exports = class NewTaskView extends DetailView
       'Estimate':
         view: 'titled_well'
         label: 'Task Est (H)'
+        inputType: 'number'
     },
     {
       'ToDo':
         view: 'titled_well'
         label: 'Task To Do (H)'
+        inputType: 'number'
         icon: 'task-todo'
     },
     {'Description': 'html'}

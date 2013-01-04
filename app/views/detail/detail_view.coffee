@@ -96,6 +96,7 @@ module.exports = class DetailView extends View
         fieldInfo.allowedValues = viewType.allowedValues
         fieldInfo.viewType = viewType.view
         fieldInfo.icon = viewType.icon
+        fieldInfo.inputType = viewType.inputType
       else
         fieldInfo.label = fieldInfo.fieldName
     else
