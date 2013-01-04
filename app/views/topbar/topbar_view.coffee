@@ -23,7 +23,7 @@ module.exports = class TopbarView extends BaseView
   initialize: ({ @settings, @router }) ->
     @subscribe()
 
-    Backbone.on 'loadedSettings', @updateSettingsData, this
+    Backbone.on 'loadedSettings', @render, this
 
     $(window).on 'hashchange', =>
       setTimeout =>
@@ -36,9 +36,6 @@ module.exports = class TopbarView extends BaseView
 
   subscribe: ->
     Backbone.on("updatetitle", @updateTitle, this)
-
-  updateSettingsData: =>
-    @render()
 
   doNavigate: (e) ->
     page = e.currentTarget.getAttribute 'data-target'

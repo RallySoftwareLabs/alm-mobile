@@ -28,7 +28,11 @@ module.exports = Model.extend
   setProject: (@project) ->
 
   getProjectName: ->
-    @project.get('_refObjectName')
+    try
+      @project.get('_refObjectName')
+    catch e
+      ""
+
 
   logout: ->
     $.cookie('ZSESSIONID', "")

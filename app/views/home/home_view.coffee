@@ -52,6 +52,8 @@ module.exports = class HomeView extends View
   load: ->
     @loaded = true
 
+    @updateTitle app.session.getProjectName()
+
     $("##{@currentTab}-tab").addClass('active')
     $("##{@currentTab}-view").addClass('active')
 
