@@ -8,6 +8,7 @@ module.exports = class LoginView extends View
   events:
     'click .sign-in': 'signIn'
     'touchstart .sign-in': 'signIn'
+    'submit form': 'signIn'
 
   afterRender: ->
     $('body').addClass('login')
