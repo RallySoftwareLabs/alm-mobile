@@ -5,7 +5,7 @@ app = require 'application'
 
 module.exports = View.extend
 
-  el: '#tasks-view'
+  el: '#task-view'
   template: template
   events:
     'click #add-task' : 'addTask'

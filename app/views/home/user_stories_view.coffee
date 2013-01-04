@@ -5,11 +5,8 @@ app = require 'application'
 
 module.exports = View.extend
 
-  el: '#user-stories-view'
+  el: '#userstory-view'
   template: template
-
-  events:
-    'click #add-user-story' : 'addUserStory'
 
   renderLoadingMask: ->
     mask = new LoadingMaskView()

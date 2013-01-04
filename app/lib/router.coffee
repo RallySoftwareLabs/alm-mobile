@@ -64,7 +64,7 @@ module.exports = class ALMRouter extends Backbone.Router
     true
 
   home: ->
-    view = @views['home'] ?= new HomeView()
+    view = @views.home ?= new HomeView()
     @currentPage = 'home': view
     $('#content').html(view.render().el)
     view.delegateEvents()

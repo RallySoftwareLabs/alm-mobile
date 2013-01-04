@@ -17,6 +17,8 @@ module.exports = class HomeView extends View
   template: template
   events:
     'click .btn-block': 'onButton'
+    'click .nav a' : 'toggleActive'
+    'click #add-artifact' : 'addArtifact'
 
   initialize: (options) ->
     super
@@ -26,6 +28,8 @@ module.exports = class HomeView extends View
     @userStories = new UserStoryCollection()
     @defects = new DefectCollection()
     @tasks = new TaskCollection()
+
+    @currentTab = "userstory"
 
     @
 
@@ -41,6 +45,9 @@ module.exports = class HomeView extends View
 
   load: ->
     @loaded = true
+
+    $("##{@currentTab}-tab").addClass('active')
+    $("##{@currentTab}-view").addClass('active')
 
     @userStoriesView = new UserStoriesView
       model: @userStories
@@ -88,3 +95,9 @@ module.exports = class HomeView extends View
   onButton: (event) ->
     url = event.currentTarget.id
     app.router.navigate url, {trigger: true}
+
+  toggleActive: (event) ->
+    @currentTab = event.currentTarget.id
+
+  addArtifact: (event) ->
+    app.router.navigate "new/#{@currentTab}", {trigger: true}

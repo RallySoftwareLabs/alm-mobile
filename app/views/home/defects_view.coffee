@@ -5,7 +5,7 @@ app = require 'application'
 
 module.exports = View.extend
 
-  el: '#defects-view'
+  el: '#defect-view'
   template: template
   events:
     'click #add-defect' : 'addDefect'

@@ -1,21 +1,25 @@
 <div id="home-view">
   <div id="home-view-navigation">
     <ul class="nav btn-group">
-      <li class="active btn">
-        <a href="#" data-toggle="pill" data-target="#user-stories-view">Stories</a>
+      <li class="btn" id="userstory-tab">
+        <a href="#" id="userstory" data-toggle="pill" data-target="#userstory-view">Stories</a>
       </li>
-      <li class="btn">
-        <a href="#" data-toggle="pill" data-target="#tasks-view">Tasks</a>
+      <li class="btn" id="task-tab">
+        <a href="#" id="task" data-toggle="pill" data-target="#task-view">Tasks</a>
       </li>
-      <li class="btn">
-        <a href="#" data-toggle="pill" data-target="#defects-view">Defects</a>
+      <li class="btn" id="defect-tab">
+        <a href="#" id="defect" data-toggle="pill" data-target="#defect-view">Defects</a>
       </li>
     </ul>
   </div>
 
   <div class="tab-content">
-    <div class="tab-pane active" id="user-stories-view"></div>
-    <div class="tab-pane" id="tasks-view"></div>
-    <div class="tab-pane" id="defects-view"></div>
+    <div class="tab-pane" id="userstory-view"></div>
+    <div class="tab-pane" id="task-view"></div>
+    <div class="tab-pane" id="defect-view"></div>
+  </div>
+
+  <div class='bottom-centered'>
+    <button class='btn active' id='add-artifact'>+</button>
   </div>
 </div>
