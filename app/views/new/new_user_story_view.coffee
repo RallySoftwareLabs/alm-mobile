@@ -9,6 +9,7 @@ module.exports = class NewUserStoryView extends DetailView
     options.newArtifact = true
     super options
     @delegateEvents
+    Backbone.trigger "updatetitle", "New UserStory"
 
   modelType: UserStory
   id: 'new-user-story'

@@ -31,7 +31,13 @@ module.exports = class HomeView extends View
 
     @currentTab = "userstory"
 
+    Backbone.on "projectready", @updateTitle, this
+
     @
+
+  updateTitle: (title) ->
+    Backbone.trigger "updatetitle", title
+
 
   afterRender: ->
     unless @loaded

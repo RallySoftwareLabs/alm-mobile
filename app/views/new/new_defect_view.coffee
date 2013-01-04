@@ -9,6 +9,7 @@ module.exports = class NewDefectView extends DetailView
     options.newArtifact = true
     super options
     @delegateEvents
+    Backbone.trigger "updatetitle", "New Defect"
 
   modelType: Defect
   id: 'new-defect'

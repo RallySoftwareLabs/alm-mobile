@@ -22,9 +22,13 @@ module.exports = Model.extend
     @projects.fetch
       success: (collection) =>
         @setProject collection.first()
-        @trigger 'loadedSettings'
+        Backbone.trigger "projectready", @getProjectName()
+        Backbone.trigger 'loadedSettings'
 
   setProject: (@project) ->
+
+  getProjectName: ->
+    @project.get('_refObjectName')
 
   logout: ->
     $.cookie('ZSESSIONID', "")

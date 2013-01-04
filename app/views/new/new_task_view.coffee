@@ -9,6 +9,7 @@ module.exports = class NewTaskView extends DetailView
     options.newArtifact = true
     super options
     @delegateEvents
+    Backbone.trigger "updatetitle", "New Task"
 
   modelType: Task
   id: 'new-task'

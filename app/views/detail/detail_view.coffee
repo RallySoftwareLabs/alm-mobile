@@ -14,6 +14,7 @@ module.exports = class DetailView extends View
           fetch: ['ObjectID'].concat(@_getFieldNames()).join ','
         success: (model, response, opts) =>
           @delegateEvents()
+          Backbone.trigger "updatetitle", "#{model.get('FormattedID')}: #{model.get('_refObjectName')}"
           @render() if options.autoRender
       })
     @modelLoaded = false

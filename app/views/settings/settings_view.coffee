@@ -8,7 +8,8 @@ module.exports = class SettingsView extends BaseView
 
   initialize: ->
     super
-    app.session.on 'loadedSettings', @render, this
+    Backbone.on 'loadedSettings', @render, this
+    Backbone.trigger "updatetitle", "Settings"
 
   events:
     'click button.logout': 'triggerLogout'
@@ -24,7 +25,7 @@ module.exports = class SettingsView extends BaseView
 
   updateSelectedProject: ->
     app.session.setProject _find(
-      app.session.projects, 
+      app.session.projects,
       (proj) -> proj.get('_ref') is @$('option:selected').val(),
       this
     )

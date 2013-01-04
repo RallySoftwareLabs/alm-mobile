@@ -21,8 +21,9 @@ module.exports = class TopbarView extends BaseView
     'keydown .search-query': 'searchKeyDown'
 
   initialize: ({ @settings, @router }) ->
+    @subscribe()
 
-    app.session.on 'loadedSettings', @updateSettingsData, this
+    Backbone.on 'loadedSettings', @updateSettingsData, this
 
     $(window).on 'hashchange', =>
       setTimeout =>
@@ -32,6 +33,9 @@ module.exports = class TopbarView extends BaseView
         else
           @show()
       , 1
+
+  subscribe: ->
+    Backbone.on("updatetitle", @updateTitle, this)
 
   updateSettingsData: =>
     @render()
@@ -71,34 +75,32 @@ module.exports = class TopbarView extends BaseView
 
   hide: -> @$el.hide() if @$el.is ':visible'
 
-  getProjectTitle: -> app.session.project.get('_refObjectName')
-
-  getDetailTitle:  -> 'S1324: Details'
-
   makeButton: (target, icon, cls = "") ->
     """<a href="##{target}" class="btn navbar-inverse #{cls}"><i class="#{icon}" data-target="#{target}"></i></a>"""
 
   getRenderData: ->
     current_page = @_getCurrentPage()
 
-    # Default hack.  Need to actually keep track somewhere for more reliability
-    # current_page = 'home' if current_page.length is 0
+    data = {title: @title}
 
     if current_page in ['home', 'board']
-      title: @getProjectTitle()
-      left_button:  @makeButton 'navigation', 'icon-reorder', 'cyan'
-      right_button: @makeButton 'settings', 'icon-cog'
+      data.left_button =  @makeButton 'navigation', 'icon-reorder', 'cyan'
+      data.right_button = @makeButton 'settings', 'icon-cog'
     else if current_page is 'navigation'
-      onNavigateScreen: true
+      data.onNavigateScreen = true
     else if current_page is 'settings'
-      left_button: @makeButton 'back', 'icon-arrow-left'
-      title: 'Settings'
+      data.left_button = @makeButton 'back', 'icon-arrow-left'
     else if current_page is 'login'
-      onLoginScreen: true
+      data.onLoginScreen = true
     else # if current_page in ['detail', 'column']
-      title: @getDetailTitle()
-      left_button:  @makeButton 'back', 'icon-arrow-left'
-      right_button: @makeButton 'settings', 'icon-cog'
+      data.left_button =  @makeButton 'back', 'icon-arrow-left'
+      data.right_button = @makeButton 'settings', 'icon-cog'
+
+    data
+
+  updateTitle: (title) ->
+    @title = title
+    @render()
 
   _getCurrentPage: ->
     (key for key, value of @router.currentPage)[0]
