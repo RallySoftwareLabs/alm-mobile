@@ -64,6 +64,7 @@
       error?(model, xhr, options)
       model.trigger('error', model, xhr, options)
       if xhr.status is 401 or xhr.status is 0
+        document.cookie = 'ZSESSIONID=; expires=Thu, 01 Jan 1970 00:00:01 GMT;'
         Backbone.history.navigate('/login', {trigger: true, replace: true})
 
     success = options.success
