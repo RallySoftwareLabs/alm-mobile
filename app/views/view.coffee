@@ -1,4 +1,5 @@
 require('lib/view_helper')
+LoadingMaskView = require './shared/loading_view'
 
 # Base class for all views.
 module.exports = Backbone.View.extend
@@ -7,6 +8,10 @@ module.exports = Backbone.View.extend
     @renderLoadingMask()
 
   renderLoadingMask: ->
+    mask = new LoadingMaskView()
+    mask.setElement(@el)
+    mask.render()
+
   template: ->
   getRenderData: ->
 

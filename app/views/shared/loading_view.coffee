@@ -1,7 +1,6 @@
-View = require '../view'
 template = require './templates/loading'
 
-module.exports = View.extend
+module.exports = Backbone.View.extend
 
   template: template
 

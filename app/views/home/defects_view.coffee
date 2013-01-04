@@ -1,6 +1,5 @@
 View = require '../view'
 template = require './templates/defects'
-LoadingMaskView = require '../shared/loading_view'
 app = require 'application'
 
 module.exports = View.extend
@@ -9,11 +8,6 @@ module.exports = View.extend
   template: template
   events:
     'click #add-defect' : 'addDefect'
-
-  renderLoadingMask: ->
-    mask = new LoadingMaskView()
-    mask.setElement(@el)
-    mask.render()
 
   getRenderData: ->
     # error: @options.error
