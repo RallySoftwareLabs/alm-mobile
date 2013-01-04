@@ -1,4 +1,5 @@
 utils = require 'lib/utils'
+app = require 'application'
 ArtifactCollection = require 'models/artifact_collection'
 DefectCollection = require 'models/defect_collection'
 TaskCollection = require 'models/task_collection'
@@ -21,7 +22,7 @@ module.exports = class TopbarView extends BaseView
 
   initialize: ({ @settings, @router }) ->
 
-    @settings.on 'loadedSettings', @updateSettingsData
+    app.session.on 'loadedSettings', @updateSettingsData, this
 
     $(window).on 'hashchange', =>
       setTimeout =>
@@ -70,7 +71,7 @@ module.exports = class TopbarView extends BaseView
 
   hide: -> @$el.hide() if @$el.is ':visible'
 
-  getProjectTitle: -> @settings.getProjectTitle()
+  getProjectTitle: -> app.session.project.get('_refObjectName')
 
   getDetailTitle:  -> 'S1324: Details'
 

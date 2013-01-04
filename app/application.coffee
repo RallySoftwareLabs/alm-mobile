@@ -27,6 +27,4 @@ Application =
     
     Object.freeze? this
 
-  setUser: (@user) ->
-
 module.exports = Application

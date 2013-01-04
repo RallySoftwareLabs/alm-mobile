@@ -135,7 +135,6 @@ module.exports = class ALMRouter extends Backbone.Router
 
   settings: ->
     view = @views['settings']
-    view.projects.fetch()
     @currentPage = 'settings': view
     $('#content').html(view.render().el)
     view.delegateEvents()
