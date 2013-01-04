@@ -1,20 +1,26 @@
-<div class="row-fluid settings">
-  <div class="span12">
-    <select class="project">
-      {{#each projects}}
-        <option value="{{ attributes._ref }}">{{ attributes._refObjectName }}</option>
-      {{/each}}
-    </select>
-  </div>
-  <div class="span12">
-      <label class="show-work">Show:</label>
-    <div class="btn-group">
-        <button class="btn">My Work</button>
-        <button class="btn">My Team</button>
+<div class="settings">
+  <div class="row-fluid">
+    <div class="span12">
+      <select class="project">
+        {{#each projects}}
+          <option value="{{ attributes._ref }}">{{ attributes._refObjectName }}</option>
+        {{/each}}
+      </select>
     </div>
   </div>
-  <div class="span12">
-    <br>
-      <button class="btn btn-block logout">Logout</button>
+  <div class="row-fluid">
+    <div class="span2 offset2">
+      <label class="show-work">Show:</label>
+    </div>
+    <div class="btn-group span8">
+          <button class="btn">My Work</button>
+          <button class="btn">My Team</button>
+      </div>
+    </div>
+  </div>
+  <div class="row-fluid">
+    <div class="span4 offset5">
+      <button class="btn logout">Logout</button>
+    </div>
   </div>
 </div>
