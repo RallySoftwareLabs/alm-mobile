@@ -1,4 +1,4 @@
 Model = require 'models/model'
 
 module.exports = Model.extend
-  urlRoot: window.AppConfig.almWebServiceBaseUrl + '/webservice/2.x/user'
+  urlRoot: window.AppConfig.almWebServiceBaseUrl + '/webservice/v2.x/user'
