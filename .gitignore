@@ -1,4 +1,6 @@
-server/lib
+client/gen
+client/dist
+server/gen
 public/
 node_modules/
 Gemfile.lock
