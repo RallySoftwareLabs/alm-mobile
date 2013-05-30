@@ -3,9 +3,9 @@ define [
   'application'
   'views/view'
   'models/discussion'
-  'models/discussion_collection'
+  'collections/discussions'
   'views/discussion/discussion_list_view'
-], (utils, app, View, Discussion, DiscussionCollection, DiscussionListView) ->
+], (utils, app, View, Discussion, Discussions, DiscussionListView) ->
 
   class DiscussionView extends View
     
@@ -16,7 +16,7 @@ define [
     initialize: (config) ->
       super config
       @ref = utils.getRef(config.type, config.oid)
-      @model = new DiscussionCollection()
+      @model = new Discussions()
 
     events: ->
       return {

@@ -1,4 +1,8 @@
-define ['views/detail/detail_view', 'models/defect', 'models/defect_collection'], (DetailView, Defect, DefectCollection) ->
+define [
+  'views/detail/detail_view'
+  'models/defect'
+  'collections/defects'
+], (DetailView, Defect, Defects) ->
 
   DetailView.extend({
     modelType: Defect

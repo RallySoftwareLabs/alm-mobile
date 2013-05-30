@@ -1,4 +1,8 @@
-define ['models/model', 'models/user', 'models/project_collection'], (Model, User, ProjectCollection) ->
+define [
+  'models/model'
+  'models/user'
+  'collections/projects'
+], (Model, User, Projects) ->
 
   Model.extend
     defaults:
@@ -42,7 +46,7 @@ define ['models/model', 'models/user', 'models/project_collection'], (Model, Use
       #   )
 
     setUser: (@user) ->
-      @projects = new ProjectCollection()
+      @projects = new Projects()
       @projects.fetch
         success: (collection) =>
           @setProject collection.first()

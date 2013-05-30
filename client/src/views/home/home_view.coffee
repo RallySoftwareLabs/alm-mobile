@@ -4,10 +4,10 @@ define [
   'views/home/user_stories_view'
   'views/home/defects_view'
   'views/home/tasks_view'
-  'models/user_story_collection'
-  'models/defect_collection'
-  'models/task_collection'
-], (app, View, UserStoriesView, DefectsView, TasksView, UserStoryCollection, DefectCollection, TaskCollection) ->
+  'collections/user_stories'
+  'collections/defects'
+  'collections/tasks'
+], (app, View, UserStoriesView, DefectsView, TasksView, UserStories, Defects, Tasks) ->
   class HomeView extends View
 
     template: JST['home/templates/home']
@@ -21,9 +21,9 @@ define [
 
       @error = false
 
-      @userStories = new UserStoryCollection()
-      @defects = new DefectCollection()
-      @tasks = new TaskCollection()
+      @userStories = new UserStories()
+      @defects = new Defects()
+      @tasks = new Tasks()
 
       @currentTab = "userstory"
 

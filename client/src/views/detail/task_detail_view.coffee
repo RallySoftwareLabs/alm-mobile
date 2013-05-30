@@ -1,4 +1,8 @@
-define ['views/detail/detail_view', 'models/task', 'models/task_collection'], (DetailView, Task, TaskCollection) ->
+define [
+  'views/detail/detail_view'
+  'models/task'
+  'collections/tasks'
+], (DetailView, Task, Tasks) ->
 
   DetailView.extend({
     modelType: Task

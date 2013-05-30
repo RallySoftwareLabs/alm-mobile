@@ -3,8 +3,8 @@ define [
   'application'
   'views/view'
   'models/discussion'
-  'models/discussion_collection'
-], (utils, app, View, Discussion, DiscussionCollection) ->
+  'collections/discussions'
+], (utils, app, View, Discussion, Discussions) ->
 
   class DiscussionListView extends View
     

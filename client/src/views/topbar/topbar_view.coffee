@@ -2,10 +2,10 @@ define [
   'application'
   'lib/utils'
   'views/view'
-  'models/artifact_collection'
-  'models/defect_collection'
-  'models/task_collection'
-], (app, utils, View, ArtifactCollection, DefectCollection, TaskCollection) ->
+  'collections/artifacts'
+  'collections/defects'
+  'collections/tasks'
+], (app, utils, View, Artifacts, Defects, Tasks) ->
 
   class TopbarView extends View
 
@@ -54,7 +54,7 @@ define [
 
     doSearch: (keyword) ->
       $('.search-no-results').remove()
-      new ArtifactCollection().fetch
+      new Artifacts().fetch
         data:
           fetch: "ObjectID,Name"
           search: keyword

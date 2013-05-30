@@ -1,8 +1,8 @@
 define [
   'application'
   'views/view'
-  'models/user_collection'
-], (app, View, UserCollection) ->
+  'collections/users'
+], (app, View, Users) ->
 
   class LoginView extends View
     template: JST['login/templates/login']
@@ -35,7 +35,7 @@ define [
           app.session.load data.securityToken, (err) =>
             return if err
           
-            new UserCollection().fetch
+            new Users().fetch
               params:
                 query: "(UserName = \"#{data.username}\")"
               success: (collection, response, options) =>
