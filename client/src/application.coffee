@@ -19,6 +19,7 @@ define ->
           success: (model, response, opts) =>
             @session.setUser model
       else
-        @afterLogin = Backbone.history.getHash()
+        hash = Backbone.history.getHash()
+        @afterLogin = hash unless hash = '#login'
       
       Object.freeze? this

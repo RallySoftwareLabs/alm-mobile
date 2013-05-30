@@ -25,8 +25,9 @@ define [
   UserStoryDetailView
   DefectDetailView
   TaskDetailView
-  newUserStoryView
-  newTaskView
+  NewUserStoryView
+  NewTaskView
+  NewDefectView
   DiscussionView
 ) ->
 
@@ -61,8 +62,10 @@ define [
       'new/defect' : 'newDefect'
 
     beforeAllFilters: ->
-      [@authenticationFilter,
-       @removeCurrentView]
+      [
+        @authenticationFilter
+        @removeCurrentView
+      ]
 
     authenticationFilter: (route, callback) ->
       if @app.session.authenticated()
@@ -123,19 +126,19 @@ define [
       view.delegateEvents()
 
     newUserStory: ->
-      view = new newUserStoryView()
+      view = new NewUserStoryView()
       @currentPage = 'newUserStory' : view
       $('#content').html(view.render().el)
       view.delegateEvents()
 
     newTask: ->
-      view = new newTaskView()
+      view = new NewTaskView()
       @currentPage = 'newTask' : view
       $('#content').html(view.render().el)
       view.delegateEvents()
 
     newDefect: ->
-      view = new newDefectView()
+      view = new NewDefectView()
       @currentPage = 'newDefect' : view
       $('#content').html(view.render().el)
       view.delegateEvents()

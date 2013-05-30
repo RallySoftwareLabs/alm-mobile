@@ -1,6 +1,7 @@
 
+almWebServiceBaseUrl = process.env.ALM_MOBILE_ALM_WS_BASE_URL || "http://abcd.rallydev.com:7001/slm"
 class ServerConfig
-  almWebServiceBaseUrl: process.env.ALM_MOBILE_ALM_WS_BASE_URL || "http://abcd.rallydev.com:7001/slm"
+  almWebServiceBaseUrl: almWebServiceBaseUrl
   zuulBaseUrl: process.env.ALM_MOBILE_ZUUL_BASE_URL || "http://abcd.zuul1.f4tech.com:3000"
 
   toJSON: ->
@@ -8,5 +9,7 @@ class ServerConfig
       almWebServiceBaseUrl: @almWebServiceBaseUrl
       zuulBaseUrl: @zuulBaseUrl
     }
+
+  console.log "ALM @#{almWebServiceBaseUrl}"
 
 module.exports = new ServerConfig()

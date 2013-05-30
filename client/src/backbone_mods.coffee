@@ -1,4 +1,4 @@
-define ->
+define ['application'], (app) ->
   methodMap =
     'create': 'POST',
     'update': 'POST', #'PUT',
@@ -10,7 +10,13 @@ define ->
   # Copied from backbone-0.9.9.js
   Backbone.sync = (method, model, options={}) ->
     headers = options.headers || {}
-    headers.ZSESSIONID = $.cookie('ZSESSIONID')
+    headers.ZSESSIONID = $.cookie('ZSESSIONID') # Rally override!
+    # headers.JSESSIONID = $.cookie('JSESSIONID') # Rally override!
+    
+    # Rally Override!
+    options.xhrFields =
+      withCredentials: true
+
     options.headers = headers
 
     # origSync.call(Backbone, method, model, options)
@@ -36,6 +42,10 @@ define ->
     if (!options.data? and model and (method is 'create' or method is 'update' or method is 'patch'))
       params.contentType = 'application/json'
       params.data = JSON.stringify({model: (options.attrs or model.toJSON(options))}) #Rally Override!
+
+      # Rally Override!
+      params.url += "?key=#{app.session.getSecurityToken()}"
+
 
     # For older servers, emulate JSON by encoding the request into an HTML-form.
     if options.emulateJSON
@@ -66,6 +76,7 @@ define ->
       model.trigger('error', model, xhr, options)
       if xhr.status is 401 or xhr.status is 0
         document.cookie = 'ZSESSIONID=; expires=Thu, 01 Jan 1970 00:00:01 GMT;'
+        document.cookie = 'JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:01 GMT;'
         Backbone.history.navigate('/login', {trigger: true, replace: true})
 
     success = options.success

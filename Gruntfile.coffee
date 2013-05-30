@@ -131,8 +131,9 @@ module.exports = (grunt) ->
           'vendor/scripts/require-2.1.6.js',
           'vendor/scripts/jquery-1.8.3.js',
           'vendor/scripts/jquery-cookie.js',
+          'vendor/scripts/jquery.base64.js',
           # 'vendor/scripts/spin-1.2.7.js', # included in app.js by requirejs
-          'vendor/scripts/handlebars-1.0.rc.1.js'
+          'vendor/scripts/handlebars-1.0.rc.1.js',
           'vendor/scripts/console-helper.js',
           'vendor/scripts/underscore-1.4.3.js',
           'vendor/scripts/backbone-1.0.0.js',

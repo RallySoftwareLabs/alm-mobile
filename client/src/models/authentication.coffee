@@ -5,15 +5,41 @@ define ['models/model', 'models/user', 'models/project_collection'], (Model, Use
       zsessionid: null
 
     initialize: ->
-      @load()
       @user = new User()
 
     authenticated: ->
-      Boolean(@get("zsessionid"))
+      Boolean(@get("zsessionid")) && Boolean(@get("securityToken")) && Boolean(@get("jsessionid"))
 
-    load: ->
-      @set
-        zsessionid: $.cookie('ZSESSIONID')
+    load: (securityToken, cb) ->
+      @set securityToken: securityToken
+
+      zsessionid = $.cookie('ZSESSIONID')
+      jsessionid = $.cookie('JSESSIONID')
+      if zsessionid && jsessionid
+        @set zsessionid: zsessionid
+        @set jsessionid: jsessionid
+
+      cb(null)
+      #   base64Auth = $.base64.encode "#{username}:#{password}"
+      #   # Get CSRF Token
+      #   $.ajax(
+      #     url: "#{window.AppConfig.almWebServiceBaseUrl}/webservice/v2.x/security/authorize"
+      #     type: 'GET'
+      #     dataType: 'json'
+      #     # crossDomain: true
+      #     beforeSend: (xhr) ->
+      #       xhr.setRequestHeader("Authorization", "Basic " + base64Auth)
+      #       xhr.withCredentials = true
+      #     headers:
+      #     #   Authentication: "Basic #{base64Auth}"
+      #       ZSESSIONID: zsessionid
+      #     success: (data, status, xhr) =>
+      #       @set securityToken: data.OperationResult.SecurityToken
+      #       cb(null)
+
+      #     error: (xhr, errorType, error) =>
+      #       cb('Unable to fetch CSRF token.')
+      #   )
 
     setUser: (@user) ->
       @projects = new ProjectCollection()
@@ -31,8 +57,10 @@ define ['models/model', 'models/user', 'models/project_collection'], (Model, Use
       catch e
         ""
 
+    getSecurityToken: ->
+      @get 'securityToken'
 
     logout: ->
       $.cookie('ZSESSIONID', "")
-      @set
-        zsessionid: null
+      $.cookie('JSESSIONID', "")
+      @set zsessionid: null, securityToken: null

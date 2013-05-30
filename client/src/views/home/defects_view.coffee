@@ -6,7 +6,7 @@ define [
   View.extend
 
     el: '#defect-view'
-    template: JST['home/defects']
+    template: JST['home/templates/defects']
     events:
       'click #add-defect' : 'addDefect'
 

@@ -37,11 +37,11 @@ define [
         @.$el.addClass('edit')
 
     _setDisplayTemplate: ->
-      try
-        view = @viewType
-        view = 'titled_well_dropdown' if @viewMode is ViewMode.EDIT and @viewType is 'titled_well' and @options.allowedValues?
-        @template = JST["field/templates/#{@viewMode}/#{view}_view"]
-      catch e
+      view = @viewType
+      view = 'titled_well_dropdown' if @viewMode is ViewMode.EDIT and @viewType is 'titled_well' and @options.allowedValues?
+      @template = JST["field/templates/#{@viewMode}/#{view}_view"]
+
+      unless @template
         @viewMode = ViewMode.DISPLAY
         @_setDisplayTemplate()
 

@@ -32,15 +32,17 @@ define [
           password: password.value
           # rememberme: checkbox.checked
         success: (data, status, xhr) =>
-          app.session.load()
-          new UserCollection().fetch
-            params:
-              query: "(UserName = \"#{data.username}\")"
-            success: (collection, response, options) =>
-              @options.session.setUser collection.at(0)
-              app.router.navigate(app.afterLogin, {trigger: true, replace: true})
-            failure: ->
-              debugger
+          app.session.load data.securityToken, (err) =>
+            return if err
+          
+            new UserCollection().fetch
+              params:
+                query: "(UserName = \"#{data.username}\")"
+              success: (collection, response, options) =>
+                @options.session.setUser collection.at(0)
+                app.router.navigate(app.afterLogin, {trigger: true, replace: true})
+              failure: ->
+                debugger
         error: (xhr, errorType, error) =>
           alert = @$('.alert').html('The password you have entered is incorrect.').show()
       )

@@ -1,12 +1,15 @@
 define [
   'views/view'
   'views/field/field_view'
+  'views/field/field_discussion_view'
   'views/field/field_header_view'
   'views/field/field_html_view'
+  'views/field/field_input_view'
+  'views/field/field_owner_view'
   'views/field/field_string_with_arrows_view'
   'views/field/field_titled_well_view'
-  'views/field/field_view'
-  'views/field/field_view'
+  'views/field/field_toggle_view'
+  'views/field/field_work_product_view'
 ], (View, FieldView) ->
 
   class DetailView extends View

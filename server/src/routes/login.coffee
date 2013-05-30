@@ -13,8 +13,17 @@ exports.login = (req, res) ->
 				expiration = new Date(Date.now())
 				expiration.setDate(expiration.getDate() + 14)
 
-			res.cookie('ZSESSIONID', authenticateResult.getAuthKey().getId(), { httpOnly: false, expires: expiration})
-			res.end("{\"result\": \"SUCCESS\", \"username\": \"#{authenticateResult.getName()}\"}")
+			res.cookie('ZSESSIONID', authenticateResult.getAuthKey().getId(), { domain: '.rallydev.com', httpOnly: false, expires: expiration})
+			if authenticateResult.getJSessionID()
+				res.cookie('JSESSIONID', authenticateResult.getJSessionID(), { domain: '.rallydev.com', httpOnly: false, expires: expiration})
+			
+			res.end(
+				JSON.stringify(
+					result: "SUCCESS"
+					username: authenticateResult.getName()
+					securityToken: authenticateResult.getSecurityToken()
+				)
+			)
 		else
 			res.status 401
 			res.end('{"result": "FAILURE"}')

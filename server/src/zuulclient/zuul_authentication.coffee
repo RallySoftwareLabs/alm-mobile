@@ -6,14 +6,19 @@ module.exports = class ZuulAuthentication
     1: 'SubscriptionAdmin'
     2: 'SLMAdmin'
 
-  constructor: (response) ->
-    @authenticated = response?.statusCode is 200
-    @jsonResponse = @authenticated and JSON.parse(response.body)
+  constructor: ->
 
-  isAuthenticated: -> @authenticated
+  set: (@zuulResponse, @jsessionid, @securityToken) ->
 
-  getName: -> @jsonResponse.username
+  isAuthenticated: ->
+    @zuulResponse && @securityToken #&& @jsessionid
 
-  getAuthKey: -> new Resource(@jsonResponse.authKey)
+  getName: -> @zuulResponse.username
 
-  getRoles: -> (ROLES[role] for role in @jsonResponse.roles)
+  getAuthKey: -> new Resource(@zuulResponse.authKey)
+
+  getRoles: -> (ROLES[role] for role in @zuulResponse.roles)
+
+  getJSessionID: -> @jsessionid
+
+  getSecurityToken: -> @securityToken
