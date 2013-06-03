@@ -3,7 +3,7 @@ AlmClient = require '../alm/client'
 config = require '../config'
 
 setCookie = (res, name, value, expiration) ->
-	res.cookie(name, value, {domain: '.rallydev.com', httpOnly: false, expires: expiration})
+	res.cookie(name, value, {domain: '.f4tech.com', httpOnly: false, expires: expiration})
 
 module.exports = 
 	login: (req, res) ->
@@ -29,8 +29,6 @@ module.exports =
 				
 				securityToken = authenticateResult.getSecurityToken()
 				req.session.securityToken = securityToken
-
-				req.session._id = zsessionid
 
 				res.json
 					result: "SUCCESS"

@@ -9,7 +9,8 @@ module.exports = (app) ->
   app.post '/login',
     LoginRoutes.login
   
-  # app.get '/isLoggedIn', (req, res) -> res.json { loggedIn: !!req.session._id }
+  app.get '/isLoggedIn', (req, res) ->
+    res.json { loggedIn: !!req.session.zsessionid }
 
   app.get '/getSessionInfo',
     Auth.isUserLoggedIn

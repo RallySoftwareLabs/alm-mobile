@@ -30,6 +30,7 @@ module.exports = class AlmClient
 
     # Get CSRF Token
     request(requestConfig, (err, authResponse, body) ->
+      console.log err, response?.statusCode, body
       unless err
         # console.log body
         try
