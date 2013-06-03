@@ -1,10 +1,13 @@
 require [
+  'jquery'
+  'backbone'
+  'bootstrap'
   'application'
   'backbone_mods'
   'lib/router'
   'models/user'
   'models/authentication'
-], (app, backboneMods, Router, User, Session) ->
+], ($, Backbone, Bootstrap, app, backboneMods, Router, User, Session) ->
 
   $(->
     app.initialize(Router, User, Session)

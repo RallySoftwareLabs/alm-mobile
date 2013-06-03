@@ -1,15 +1,16 @@
 define [
+  'hbsTemplate'
   'lib/utils'
   'application'
   'views/view'
   'models/discussion'
   'collections/discussions'
   'views/discussion/discussion_list_view'
-], (utils, app, View, Discussion, Discussions, DiscussionListView) ->
+], (hbs, utils, app, View, Discussion, Discussions, DiscussionListView) ->
 
   class DiscussionView extends View
     
-    template: JST['discussion/templates/discussion']
+    template: hbs['discussion/templates/discussion']
 
     className: 'discussion-page'
 

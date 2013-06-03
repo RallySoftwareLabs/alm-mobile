@@ -1,8 +1,9 @@
 define [
+  'jqueryCookie'
   'models/model'
   'models/user'
   'collections/projects'
-], (Model, User, Projects) ->
+], (jqueryCookie, Model, User, Projects) ->
 
   Model.extend
     defaults:

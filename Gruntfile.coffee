@@ -83,17 +83,43 @@ module.exports = (grunt) ->
         # Options: https://github.com/jrburke/r.js/blob/master/build/example.build.js
         options:
           name: 'initialize'
+          paths:
+            jquery: "../../../../vendor/scripts/jquery-2.0.2"
+            bootstrap: "../../../../vendor/scripts/bootstrap-2.3.2"
+            spin: "../../../../vendor/scripts/spin-1.2.7"
+            jqueryCookie: "../../../../vendor/scripts/jquery-cookie"
+            base64: "../../../../vendor/scripts/jquery.base64"
+            underscore: "../../../../vendor/scripts/lodash-1.2.1"
+            backbone: "../../../../vendor/scripts/backbone-1.0.0"
+            chaplin: "../../../../vendor/scripts/chaplin-0.9.0"
+            handlebars: "../../../../vendor/scripts/handlebars.runtime-1.0.0"
+            hbsTemplate: "../../../dist/js/hbs.min"
+            backboneBeforeAllFilter: "../../../../vendor/scripts/backbone-before-all-filter"
           shim:
+            jquery:
+              exports: "$"
             backbone:
               deps: ["underscore", "jquery"]
               exports: "Backbone"
+            chaplin:
+              deps: ["backbone"]
+            handlebars:
+              deps: ["backbone"]
+              exports: "Handlebars"
+            hbsTemplate:
+              deps: ["backbone"]
+            backboneBeforeAllFilter:
+              deps: ["backbone"]
             underscore:
               exports: "_"
-          paths:
-            spin: "../../../../vendor/scripts/spin-1.2.7"
-            jquery: "../../../../vendor/scripts/jquery-2.0.2"
-            underscore: "../../../../vendor/scripts/lodash-1.2.1"
-            backbone: "../../../../vendor/scripts/backbone-1.0.0"
+            bootstrap:
+              deps: ["jquery"]
+            spin:
+              deps: ["jquery"]
+            jqueryCookie:
+              deps: ["jquery"]
+            base64:
+              deps: ["jquery"]
           out: 'client/dist/js/app.js'
           baseUrl: 'client/gen/js/src'
           optimize: "none"
@@ -104,6 +130,7 @@ module.exports = (grunt) ->
     handlebars:
       compile:
         options:
+          amd: true
           processName: (filePath, x) ->
             # console.log(JSON.stringify(filePath, x))
             filePath
@@ -120,43 +147,9 @@ module.exports = (grunt) ->
           yuicompress: false
 
         files:
-          "client/gen/styles/app.css": [
-            "vendor/styles/bootstrap/bootstrap.less"
-            "client/styles/main.less"
-          ]
+          "client/gen/styles/app.css": ["client/styles/main.less"]
 
     concat:
-      vendor:
-        src: [
-          'vendor/scripts/require-2.1.6.js',
-          'vendor/scripts/jquery-2.0.2.js',
-          'vendor/scripts/jquery-cookie.js',
-          'vendor/scripts/jquery.base64.js',
-          # 'vendor/scripts/spin-1.2.7.js', # included in app.js by requirejs
-          'vendor/scripts/handlebars.runtime-1.0.0-rc.4.js',
-          'vendor/scripts/console-helper.js',
-          # 'vendor/scripts/lodash-1.2.1.js',
-          'vendor/scripts/backbone-1.0.0.js',
-          'vendor/scripts/chaplin-0.9.0.js',
-          'vendor/scripts/backbone-before-all-filter.js',
-          # 'vendor/scripts/backbone-mediator.js',
-
-          # Twitter Bootstrap jquery plugins
-          'vendor/scripts/bootstrap/bootstrap-transition.js',
-          'vendor/scripts/bootstrap/bootstrap-alert.js',
-          'vendor/scripts/bootstrap/bootstrap-button.js',
-          'vendor/scripts/bootstrap/bootstrap-carousel.js',
-          'vendor/scripts/bootstrap/bootstrap-collapse.js',
-          'vendor/scripts/bootstrap/bootstrap-dropdown.js',
-          'vendor/scripts/bootstrap/bootstrap-modal.js',
-          'vendor/scripts/bootstrap/bootstrap-scrollspy.js',
-          'vendor/scripts/bootstrap/bootstrap-tooltip.js',
-          'vendor/scripts/bootstrap/bootstrap-popover.js',
-          'vendor/scripts/bootstrap/bootstrap-tab.js',
-          'vendor/scripts/bootstrap/bootstrap-typeahed.js',
-          'vendor/scripts/bootstrap/bootstrap-affix.js'
-        ]
-        dest: 'client/dist/js/vendor.js'
 
       css:
         src: ['client/gen/styles/*.css']
@@ -167,6 +160,7 @@ module.exports = (grunt) ->
         files:
           'client/dist/js/initialize.js': 'client/gen/js/src/initialize.js'
           'client/dist/js/lodash-1.2.1.js': 'vendor/scripts/lodash-1.2.1.js'
+          'client/dist/js/require-2.1.6.js': 'vendor/scripts/require-2.1.6.js'
       assets:
         files: [
           {expand: true, dest: 'client/dist/', cwd: 'client/assets/', src: '**', filter: 'isFile'}

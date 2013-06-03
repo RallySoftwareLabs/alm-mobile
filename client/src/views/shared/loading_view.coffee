@@ -1,9 +1,11 @@
 define [
+  'backbone'
+  'hbsTemplate'
   'spin'
-], (Spinner) ->
+], (Backbone, hbs, Spinner) ->
   Backbone.View.extend
 
-    template: JST['shared/templates/loading']
+    template: hbs['shared/templates/loading']
 
     getRenderData: (el) ->
       opts = {top: 1, left: 1}

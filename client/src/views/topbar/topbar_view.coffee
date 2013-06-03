@@ -1,11 +1,12 @@
 define [
+  'hbsTemplate'
   'application'
   'lib/utils'
   'views/view'
   'collections/artifacts'
   'collections/defects'
   'collections/tasks'
-], (app, utils, View, Artifacts, Defects, Tasks) ->
+], (hbs, app, utils, View, Artifacts, Defects, Tasks) ->
 
   class TopbarView extends View
 
@@ -13,7 +14,7 @@ define [
 
     el: '#topbar'
 
-    template: JST['topbar/templates/topbar']
+    template: hbs['topbar/templates/topbar']
 
     events:
       'click button[data-target]': 'doNavigate'

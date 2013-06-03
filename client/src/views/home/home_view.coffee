@@ -1,4 +1,5 @@
 define [
+  'hbsTemplate'
   'application'
   'views/view'
   'views/home/user_stories_view'
@@ -7,10 +8,10 @@ define [
   'collections/user_stories'
   'collections/defects'
   'collections/tasks'
-], (app, View, UserStoriesView, DefectsView, TasksView, UserStories, Defects, Tasks) ->
+], (hbs, app, View, UserStoriesView, DefectsView, TasksView, UserStories, Defects, Tasks) ->
   class HomeView extends View
 
-    template: JST['home/templates/home']
+    template: hbs['home/templates/home']
     events:
       'click .btn-block': 'onButton'
       'click .nav a' : 'toggleActive'

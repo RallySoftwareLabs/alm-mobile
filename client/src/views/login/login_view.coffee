@@ -1,11 +1,12 @@
 define [
+  'hbsTemplate'
   'application'
   'views/view'
   'collections/users'
-], (app, View, Users) ->
+], (hbs, app, View, Users) ->
 
   class LoginView extends View
-    template: JST['login/templates/login']
+    template: hbs['login/templates/login']
     events:
       'click .sign-in': 'signIn'
       'touchstart .sign-in': 'signIn'

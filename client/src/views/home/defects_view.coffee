@@ -1,12 +1,13 @@
 define [
+  'hbsTemplate'
   'application'
   'views/view'
-], (app, View) ->
+], (hbs, app, View) ->
 
   View.extend
 
     el: '#defect-view'
-    template: JST['home/templates/defects']
+    template: hbs['home/templates/defects']
     events:
       'click #add-defect' : 'addDefect'
 

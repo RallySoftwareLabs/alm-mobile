@@ -1,8 +1,9 @@
 define [
+  'hbsTemplate'
   'application'
   'views/detail/detail_view'
   'models/user_story'
-], (app, DetailView, UserStory) ->
+], (hbs, app, DetailView, UserStory) ->
 
   class NewUserStoryView extends DetailView
     initialize: (options) ->
@@ -14,7 +15,7 @@ define [
 
     modelType: UserStory
     id: 'new-user-story'
-    template: JST['new/templates/new_user_story']
+    template: hbs['new/templates/new_user_story']
 
     events: ->
       listeners = {}

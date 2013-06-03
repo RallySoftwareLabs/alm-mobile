@@ -1,8 +1,9 @@
 define [
+  'hbsTemplate'
   'application'
   'views/detail/detail_view'
   'models/task'
-], (app, DetailView, Task) ->
+], (hbs, app, DetailView, Task) ->
 
   class NewTaskView extends DetailView
     initialize: (options) ->
@@ -14,7 +15,7 @@ define [
 
     modelType: Task
     id: 'new-task'
-    template: JST['new/templates/new_task']
+    template: hbs['new/templates/new_task']
 
     events: ->
       listeners = {}

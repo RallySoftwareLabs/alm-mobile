@@ -1,14 +1,15 @@
 define [
+  'hbsTemplate'
   'lib/utils'
   'application'
   'views/view'
   'models/discussion'
   'collections/discussions'
-], (utils, app, View, Discussion, Discussions) ->
+], (hbs, utils, app, View, Discussion, Discussions) ->
 
   class DiscussionListView extends View
     
-    template: JST['discussion/templates/discussion_list']
+    template: hbs['discussion/templates/discussion_list']
 
     initialize: (config) ->
       super config

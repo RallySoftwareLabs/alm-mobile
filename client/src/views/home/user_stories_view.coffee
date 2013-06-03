@@ -1,12 +1,13 @@
 define [
+  'hbsTemplate'
   'application'
   'views/view'
-], (app, View) ->
+], (hbs, app, View) ->
 
   View.extend
 
     el: '#userstory-view'
-    template: JST['home/templates/user_stories']
+    template: hbs['home/templates/user_stories']
 
     getRenderData: ->
       # error: @options.error

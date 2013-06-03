@@ -1,9 +1,13 @@
-define ['views/detail/detail_view', 'models/user_story'], (DetailView, UserStory) ->
+define [
+  'hbsTemplate'
+  'views/detail/detail_view'
+  'models/user_story'
+], (hbs, DetailView, UserStory) ->
 
   DetailView.extend({
     modelType: UserStory
     id: 'user-story-detail-view'
-    template: JST['detail/templates/user_story_detail']
+    template: hbs['detail/templates/user_story_detail']
     fields: [
       'FormattedID',
       {'Name': 'header'},

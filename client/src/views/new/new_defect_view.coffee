@@ -1,8 +1,9 @@
 define [
+  'hbsTemplate'
   'application'
   'views/detail/detail_view'
   'models/defect'
-], (app, DetailView, Defect) ->
+], (hbs, app, DetailView, Defect) ->
 
   class NewDefectView extends DetailView
     initialize: (options) ->
@@ -14,7 +15,7 @@ define [
 
     modelType: Defect
     id: 'new-defect'
-    template: JST['new/templates/new_defect']
+    template: hbs['new/templates/new_defect']
 
     events: ->
       listeners = {}

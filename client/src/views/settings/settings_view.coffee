@@ -1,11 +1,12 @@
 define [
+  'hbsTemplate'
   'application'
   'views/view'
-], (app, View) ->
+], (hbs, app, View) ->
 
   class SettingsView extends View
 
-    template: JST['settings/templates/settings']
+    template: hbs['settings/templates/settings']
 
     initialize: ->
       super
@@ -21,8 +22,8 @@ define [
       currentProject: app.session.project
 
     triggerLogout: ->
-      @session.logout()
-      @router.navigate 'login', trigger: true
+      app.session.logout()
+      app.router.navigate 'login', trigger: true
 
     updateSelectedProject: ->
       app.session.setProject _find(

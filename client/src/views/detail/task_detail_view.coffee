@@ -1,13 +1,14 @@
 define [
+  'hbsTemplate'
   'views/detail/detail_view'
   'models/task'
   'collections/tasks'
-], (DetailView, Task, Tasks) ->
+], (hbs, DetailView, Task, Tasks) ->
 
   DetailView.extend({
     modelType: Task
     id: 'task-detail-view'
-    template: JST['detail/templates/task_detail']
+    template: hbs['detail/templates/task_detail']
     fields: [
       'FormattedID',
       {'Name': 'header'},

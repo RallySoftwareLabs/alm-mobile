@@ -1,6 +1,7 @@
 define [
+  'hbsTemplate'
   'views/view'
-], (View) ->
+], (hbs, View) ->
 
   class NavigationView extends View
 
@@ -10,7 +11,7 @@ define [
     events:
       'click button[data-target]': 'doNavigate'
 
-    template: JST['navigation/templates/navigation']
+    template: hbs['navigation/templates/navigation']
 
     settings:
       workType: 'myWork'

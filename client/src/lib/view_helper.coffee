@@ -1,4 +1,4 @@
-define ['lib/utils'], (utils) ->
+define ['handlebars', 'lib/utils'], (Handlebars, utils) ->
 
   # Put your handlebars.js helpers here.
   Handlebars.registerHelper 'isEditing', (field, options) ->
