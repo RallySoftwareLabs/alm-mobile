@@ -12,39 +12,23 @@ define [
     initialize: ->
       @user = new User()
 
-    authenticated: ->
-      Boolean(@get("zsessionid")) && Boolean(@get("securityToken")) && Boolean(@get("jsessionid"))
+    authenticated: (cb) ->
+      $.ajax(
+        url: Backbone.history.root + 'getSessionInfo'
+        type: 'GET'
+        dataType: 'json'
+        success: (data, status, xhr) =>
+          @set
+            zsessionid: $.cookie('ZSESSIONID')
+            jsessionid: $.cookie('JSESSIONID')
+            securityToken: data.securityToken
+          cb?(true)
+        error: (xhr, errorType, error) =>
+          cb?(false)
+      )
 
-    load: (securityToken, cb) ->
-      @set securityToken: securityToken
-
-      zsessionid = $.cookie('ZSESSIONID')
-      jsessionid = $.cookie('JSESSIONID')
-      if zsessionid && jsessionid
-        @set zsessionid: zsessionid
-        @set jsessionid: jsessionid
-
-      cb(null)
-      #   base64Auth = $.base64.encode "#{username}:#{password}"
-      #   # Get CSRF Token
-      #   $.ajax(
-      #     url: "#{window.AppConfig.almWebServiceBaseUrl}/webservice/v2.x/security/authorize"
-      #     type: 'GET'
-      #     dataType: 'json'
-      #     # crossDomain: true
-      #     beforeSend: (xhr) ->
-      #       xhr.setRequestHeader("Authorization", "Basic " + base64Auth)
-      #       xhr.withCredentials = true
-      #     headers:
-      #     #   Authentication: "Basic #{base64Auth}"
-      #       ZSESSIONID: zsessionid
-      #     success: (data, status, xhr) =>
-      #       @set securityToken: data.OperationResult.SecurityToken
-      #       cb(null)
-
-      #     error: (xhr, errorType, error) =>
-      #       cb('Unable to fetch CSRF token.')
-      #   )
+    hasSecurityToken: ->
+       Boolean(@get("securityToken"))
 
     setUser: (@user) ->
       @projects = new Projects()
@@ -64,6 +48,12 @@ define [
 
     getSecurityToken: ->
       @get 'securityToken'
+
+    setSecurityToken: (securityToken) ->
+      @set
+        zsessionid: $.cookie('ZSESSIONID')
+        jsessionid: $.cookie('JSESSIONID')
+        securityToken: securityToken
 
     logout: ->
       $.cookie('ZSESSIONID', "")

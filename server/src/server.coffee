@@ -5,8 +5,6 @@ express = require('express')
 path = require('path')
 http = require('http')
 hbs = require('hbs')
-auth = require('./routes/login')
-index = require('./routes/index')
 config = require('./config')
 
 module.exports = app = express()
@@ -15,6 +13,8 @@ app.configure ->
   app.set('port', process.env.PORT || 3000)
   app.use(express.logger('dev'))  #'default', 'short', 'tiny', 'dev'
   app.use(express.bodyParser())
+  app.use(express.cookieParser())
+  app.use(express.cookieSession(key: 'mblsessid', secret: 'mblsup3rs3cr3t'))
   app.use(app.router)
   app.use(express.static(path.join(__dirname, '..', '..', '..', '..', 'client', 'dist')))
 
@@ -29,8 +29,7 @@ app.configure 'development', ->
 app.configure 'production', ->
   app.use express.errorHandler()
 
-app.get('/', index)
-app.post('/login', auth.login)
+require('./api-private-routes')(app)
 
 
 # options =

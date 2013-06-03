@@ -11,10 +11,6 @@ require [
 
   $(->
     app.initialize(Router, User, Session)
-    Backbone.history.start(
-      # root: '/m'
-      # pushState: true
-    )
     $(document).on 'click', 'a:not([data-bypass])', (evt) ->
 
       href = $(this).attr('href')

@@ -1,6 +1,6 @@
-require '../../../server/src/zuulclient/resource'
+require '../../../server/src/zuul/resource'
 
-describe 'zuulclient.resource', ->
+describe 'zuul.resource', ->
   it 'parses a valid resource', ->
     expectedType = 'key'
     expectedId = 'abc123'
