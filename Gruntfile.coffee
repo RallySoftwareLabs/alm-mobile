@@ -91,9 +91,9 @@ module.exports = (grunt) ->
               exports: "_"
           paths:
             spin: "../../../../vendor/scripts/spin-1.2.7"
-            jquery: "../../../../vendor/scripts/jquery-1.8.3"
-            underscore: "../../../../vendor/scripts/underscore-1.4.3"
-            backbone: "../../../../vendor/scripts/backbone-0.9.9"
+            jquery: "../../../../vendor/scripts/jquery-2.0.2"
+            underscore: "../../../../vendor/scripts/lodash-1.2.1"
+            backbone: "../../../../vendor/scripts/backbone-1.0.0"
           out: 'client/dist/js/app.js'
           baseUrl: 'client/gen/js/src'
           optimize: "none"
@@ -129,14 +129,15 @@ module.exports = (grunt) ->
       vendor:
         src: [
           'vendor/scripts/require-2.1.6.js',
-          'vendor/scripts/jquery-1.8.3.js',
+          'vendor/scripts/jquery-2.0.2.js',
           'vendor/scripts/jquery-cookie.js',
           'vendor/scripts/jquery.base64.js',
           # 'vendor/scripts/spin-1.2.7.js', # included in app.js by requirejs
           'vendor/scripts/handlebars.runtime-1.0.0-rc.4.js',
           'vendor/scripts/console-helper.js',
-          'vendor/scripts/underscore-1.4.3.js',
+          # 'vendor/scripts/lodash-1.2.1.js',
           'vendor/scripts/backbone-1.0.0.js',
+          'vendor/scripts/chaplin-0.9.0.js',
           'vendor/scripts/backbone-before-all-filter.js',
           # 'vendor/scripts/backbone-mediator.js',
 
@@ -165,6 +166,7 @@ module.exports = (grunt) ->
       js:
         files:
           'client/dist/js/initialize.js': 'client/gen/js/src/initialize.js'
+          'client/dist/js/lodash-1.2.1.js': 'vendor/scripts/lodash-1.2.1.js'
       assets:
         files: [
           {expand: true, dest: 'client/dist/', cwd: 'client/assets/', src: '**', filter: 'isFile'}

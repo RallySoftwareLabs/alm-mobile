@@ -1,4 +1,4 @@
-define ['application'], (app) ->
+define ['jquery', 'underscore', 'application'], ($, _, app) ->
   methodMap =
     'create': 'POST',
     'update': 'POST', #'PUT',
