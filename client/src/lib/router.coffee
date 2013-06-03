@@ -80,7 +80,7 @@ define [
       true
 
     home: ->
-      view = @views.home ?= new HomeView()
+      view = new HomeView()
       @currentPage = 'home': view
       $('#content').html(view.render().el)
       view.delegateEvents()
