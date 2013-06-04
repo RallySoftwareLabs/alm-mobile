@@ -1,33 +1,36 @@
 define [
+  'underscore'
   'hbsTemplate'
   'application'
-  'views/view'
-], (hbs, app, View) ->
+  'views/base/page_view'
+], (_, hbs, app, PageView) ->
 
-  class SettingsView extends View
-
+  class SettingsView extends PageView
+    autoRender: true
     template: hbs['settings/templates/settings']
 
-    initialize: ->
-      super
-      Backbone.on 'loadedSettings', @render, this
-      Backbone.trigger "updatetitle", "Settings"
+    listen:
+      'loadedSettings mediator': 'render'
 
     events:
       'click button.logout': 'triggerLogout'
       'change select.project': 'updateSelectedProject'
 
-    getRenderData: ->
+    initialize: ->
+      super
+      @publishEvent "updatetitle", "Settings"
+
+    getTemplateData: ->
       projects: app.session.projects?.models
       currentProject: app.session.project
 
     triggerLogout: ->
       app.session.logout()
-      app.router.navigate 'login', trigger: true
+      @publishEvent '!router:routeByName', 'auth#login'
 
     updateSelectedProject: ->
-      app.session.setProject _find(
-        app.session.projects,
+      app.session.setProject _.find(
+        app.session.projects.models,
         (proj) -> proj.get('_ref') is @$('option:selected').val(),
         this
       )

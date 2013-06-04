@@ -1,9 +1,10 @@
 define [
+  'chaplin'
   'jqueryCookie'
   'models/model'
   'models/user'
   'collections/projects'
-], (jqueryCookie, Model, User, Projects) ->
+], (Chaplin, jqueryCookie, Model, User, Projects) ->
 
   Model.extend
     initialize: ->
@@ -16,7 +17,7 @@ define [
       return authCache if !cb?
 
       $.ajax(
-        url: 'getSessionInfo'
+        url: '/getSessionInfo'
         type: 'GET'
         dataType: 'json'
         success: (data, status, xhr) =>
@@ -33,13 +34,16 @@ define [
     hasSecurityToken: ->
        Boolean(@get("securityToken"))
 
+    hasSessionCookie: ->
+      !!$.cookie('JSESSIONID')
+
     setUser: (@user) ->
       @projects = new Projects()
       @projects.fetch
         success: (collection) =>
           @setProject collection.first()
-          Backbone.trigger "projectready", @getProjectName()
-          Backbone.trigger 'loadedSettings'
+          Chaplin.mediator.publish "projectready", @getProjectName()
+          Chaplin.mediator.publish 'loadedSettings'
 
     setProject: (@project) ->
 

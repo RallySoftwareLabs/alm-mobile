@@ -7,11 +7,10 @@ define [
     ENTER_KEY: 13
     ESCAPE_KEY: 27
 
-    events: ->
-      _events = super
-      _events['blur input'] = 'onBlur'
-      _events['keydown input'] = 'onKeyDown'
-      _events
+    initialize: ->
+      super
+      @delegate 'blur', 'input', @onBlur
+      @delegate 'keydown', 'input', @onKeyDown
 
     onBlur: (event) ->
       @endEdit event

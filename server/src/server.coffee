@@ -30,6 +30,7 @@ app.configure 'production', ->
   app.use express.errorHandler()
 
 require('./api-private-routes')(app)
+require('./app-routes')(app)
 
 
 # options =

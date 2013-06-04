@@ -2,8 +2,7 @@ define [
   'hbsTemplate'
   'views/detail/detail_view'
   'models/defect'
-  'collections/defects'
-], (hbs, DetailView, Defect, Defects) ->
+], (hbs, DetailView, Defect) ->
 
   DetailView.extend({
     modelType: Defect

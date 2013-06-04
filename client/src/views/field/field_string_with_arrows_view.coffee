@@ -7,16 +7,17 @@ define [
       @setEditMode = false
       super options
 
-    events: ->
-      events = super
-      events['click .arrows-right'] = 'onRightArrow'
-      events['click .arrows-left'] = 'onLeftArrow'
-      events
+    initialize: ->
+      super
+      @delegate 'click', '.arrows-right', @onRightArrow
+      @delegate 'click', '.arrows-left', @onLeftArrow
 
-    getRenderData: ->
+    getTemplateData: ->
+      allowedValues = @options.allowedValues
+      fieldValue = @model.get(@options.field)
       data = super
-      data.cantGoLeft = @options.allowedValues.indexOf(@model.get(@options.field)) is 0
-      data.cantGoRight = @options.allowedValues.indexOf(@model.get(@options.field)) is (@options.allowedValues.length - 1)
+      data.cantGoLeft = allowedValues.indexOf(fieldValue) is 0
+      data.cantGoRight = allowedValues.indexOf(fieldValue) is (allowedValues.length - 1)
       data
 
     startEdit: ->

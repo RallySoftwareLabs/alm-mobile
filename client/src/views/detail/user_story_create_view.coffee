@@ -2,20 +2,20 @@ define [
   'hbsTemplate'
   'application'
   'views/detail/detail_view'
-  'models/task'
-], (hbs, app, DetailView, Task) ->
+  'models/user_story'
+], (hbs, app, DetailView, UserStory) ->
 
-  class NewTaskView extends DetailView
+  class NewUserStoryView extends DetailView
     initialize: (options) ->
       options = options || {}
       options.newArtifact = true
       super options
       @delegateEvents
-      Backbone.trigger "updatetitle", "New Task"
+      @publishEvent "updatetitle", "New UserStory"
 
-    modelType: Task
-    id: 'new-task'
-    template: hbs['new/templates/new_task']
+    modelType: UserStory
+    id: 'new-user-story'
+    template: hbs['new/templates/new_user_story']
 
     events: ->
       listeners = {}
@@ -24,45 +24,38 @@ define [
       listeners
 
     fields: [
-      # ToDo: Project and WorkProduct NEED to be set
       {'Name': 'titled_well'},
+      {'Owner': 'owner'},
+      {'PlanEstimate':
+        view: 'titled_well'
+        label: 'Plan Est'
+        inputType: 'number'
+      },
+      {'Description': 'html'},
       {
-        'State':
+        'ScheduleState':
           view: 'string_with_arrows',
           allowedValues: [
             'Defined',
             'In-Progress',
-            'Completed'
+            'Completed',
+            'Accepted'
           ]
-      },
-      {'Owner': 'owner'},
-      {
-        'Estimate':
-          view: 'titled_well'
-          label: 'Task Est (H)'
-          inputType: 'number'
-      },
-      {
-        'ToDo':
-          view: 'titled_well'
-          label: 'Task To Do (H)'
-          inputType: 'number'
-          icon: 'task-todo'
-      },
-      {'Description': 'html'}
+      }
     ]
 
     onSave: ->
+      # ToDo: Set project from settings
       @model.sync 'create', @model,
         wait: true
         patch: true
         success: (model, resp, options) =>
           opts?.success?(model, resp, options)
           @trigger('save', @options.field, model)
-          app.router.navigate('', {trigger: true, replace: false})
+          @publishEvent '!router:route', ''
         error: =>
           opts?.error?(model, resp, options)
           debugger
 
     onCancel: ->
-      app.router.navigate('', {trigger: true, replace: false})
+      @publishEvent '!router:route', ''

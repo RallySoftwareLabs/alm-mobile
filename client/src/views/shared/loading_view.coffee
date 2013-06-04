@@ -7,7 +7,7 @@ define [
 
     template: hbs['shared/templates/loading']
 
-    getRenderData: (el) ->
+    getTemplateData: (el) ->
       opts = {top: 1, left: 1}
       spinner: new Spinner(opts).spin().el
 

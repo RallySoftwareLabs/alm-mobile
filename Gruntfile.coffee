@@ -34,7 +34,7 @@ module.exports = (grunt) ->
 
       clientTemplates:
         files: 'client/src/views/**/templates/*.hbs'
-        tasks: ['handlebars', 'uglify:hbs']
+        tasks: ['handlebars', 'requirejs:compile', 'uglify:hbs']
 
       clientTest:
         files: 'client/test/**/*.coffee'
@@ -101,8 +101,6 @@ module.exports = (grunt) ->
             backbone:
               deps: ["underscore", "jquery"]
               exports: "Backbone"
-            chaplin:
-              deps: ["backbone"]
             handlebars:
               deps: ["backbone"]
               exports: "Handlebars"

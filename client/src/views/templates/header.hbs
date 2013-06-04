@@ -1,0 +1,21 @@
+{{#unless onLoginScreen}}
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container-fluid">
+      <div class="row-fluid">
+        {{#if onNavigateScreen}}
+          <div class="span12">
+            <form class="navbar-search pull-left">
+              <input type="text" class="search-query" placeholder="Search">
+            </form>
+          </div>
+        {{else}}
+          <div class="span2">{{{ this.left_button }}}</div>
+          <div class="span8 title"><p class="ellipsis">{{ this.title }}</p></div>
+          <div class="span2 right-button">{{{ this.right_button }}}</div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</div>
+{{/unless}}

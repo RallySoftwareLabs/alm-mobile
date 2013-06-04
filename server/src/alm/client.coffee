@@ -13,6 +13,10 @@ module.exports = class AlmClient
     requestConfig =
       uri: "#{config.almWebServiceBaseUrl}/webservice/v2.x/security/authorize"
       method: 'GET'
+      jar: false
+      strictSSL: false
+
+    console.log "Getting AuthToken from #{requestConfig.uri}"
 
     if options.username? && options.password?
       base64Auth = new Buffer("#{options.username}:#{options.password}").toString('base64')

@@ -1,5 +1,6 @@
 define [
-  'views/view'
+  'underscore'
+  'views/base/view'
   'views/field/field_view'
   'views/field/field_discussion_view'
   'views/field/field_header_view'
@@ -10,37 +11,23 @@ define [
   'views/field/field_titled_well_view'
   'views/field/field_toggle_view'
   'views/field/field_work_product_view'
-], (View, FieldView) ->
+], (_, View, FieldView) ->
 
   class DetailView extends View
+    region: 'main'
+    autoRender: true
+
     initialize: (options) ->
-      super options
       @newArtifact = options.newArtifact? and options.newArtifact
-      @_defineFieldEditFns field for field in @_getFieldNames()
       @fieldViews = {}
       @model = if @newArtifact then new @modelType() else new @modelType(ObjectID: options.oid)
-      unless @newArtifact
-        @model.fetch({
-          data:
-            fetch: ['ObjectID'].concat(@_getFieldNames()).join ','
-          success: (model, response, opts) =>
-            @delegateEvents()
-            Backbone.trigger "updatetitle", "#{model.get('FormattedID')}: #{model.get('_refObjectName')}"
-            @render() if options.autoRender
-        })
+      super options
       @modelLoaded = false
 
-
-    events: ->
-      listeners = {}
-      listeners["click ##{key}View.display"] = "startEdit#{key}" for key of @model.attributes when @fieldIsEditable(key)
-      listeners
-
-    getRenderData: ->
+    getTemplateData: ->
       model: @model.toJSON()
 
     afterRender: ->
-      @_removeFieldViews()
       if @modelLoaded || @newArtifact
         @renderField field for field in @fields
       else
@@ -49,33 +36,35 @@ define [
             fetch: ['ObjectID'].concat(@_getFieldNames()).join ','
           success: (model, response, opts) =>
             @modelLoaded = true
-            @render() if @options.autoRender
-            @delegateEvents()
+            @publishEvent "updatetitle", "#{model.get('FormattedID')}: #{model.get('_refObjectName')}"
+            @render()
         })
 
-    remove: ->
-      super
-      @_removeFieldViews()
-
     fieldIsEditable: (field) ->
-      return false unless field in @_getFieldNames()
-      if field in ['FormattedID'] then false else true
+      _.contains(@_getFieldNames(), field) && !_.contains(['FormattedID'], field)
 
     renderField: (field) ->
       fieldConfig = @_getFieldInfo(field)
-      fieldConfig.field = fieldConfig.fieldName
-      fieldConfig.model = @model
-      fieldConfig.el = this.$("##{fieldConfig.fieldName}View")
-      fieldConfig.detailView = @
-      fieldConfig.session = @options.session
-      fieldConfig.newArtifact = @newArtifact
+      fieldName = fieldConfig.fieldName
+
+      _.assign fieldConfig,
+        autoRender: true
+        container: @$("##{fieldConfig.fieldName}View")
+        model: @model
+        field: fieldConfig.fieldName
+        detailView: @
+        session: @options.session
+        newArtifact: @newArtifact
+        editable: @fieldIsEditable(fieldName)
+
       FieldViewClass = @_getFieldViewClass fieldConfig.viewType
-      @fieldViews[fieldConfig.fieldName] = fieldView = new FieldViewClass(fieldConfig).render()
 
-      fieldView.on('save', @_onFieldSave, @)
+      fieldView = new FieldViewClass fieldConfig
 
-    _removeFieldViews: ->
-      fieldView.remove() for key, fieldView of @fieldViews
+      @subview fieldName, fieldView
+      
+      @listenTo fieldView, 'save', @_onFieldSave
+
 
     _getFieldViewClass: (viewType) ->
       try
@@ -84,15 +73,6 @@ define [
         dynamicFieldView = FieldView
 
       dynamicFieldView
-
-    _defineFieldEditFns: (field) ->
-      unless @["startEdit#{field}"]?
-        @["startEdit#{field}"] = ->
-          @_startEdit(field)
-
-    _startEdit: (field) ->
-      fieldName = @_getFieldInfo(field).fieldName
-      @fieldViews[fieldName].startEdit()
 
     _onFieldSave: (field, model) ->
       @trigger 'fieldSave', field, model
@@ -103,18 +83,20 @@ define [
         [fieldInfo.fieldName, viewType] = ([key, value] for key, value of field)[0]
         fieldInfo.viewType = viewType
         if typeof fieldInfo.viewType is 'object'
-          fieldInfo.label = viewType.label
-          fieldInfo.fieldValue = viewType.value
-          fieldInfo.allowedValues = viewType.allowedValues
-          fieldInfo.viewType = viewType.view
-          fieldInfo.icon = viewType.icon
-          fieldInfo.inputType = viewType.inputType
+          _.assign fieldInfo,
+            label: viewType.label
+            fieldValue: viewType.value
+            allowedValues: viewType.allowedValues
+            viewType: viewType.view
+            icon: viewType.icon
+            inputType: viewType.inputType
         else
           fieldInfo.label = fieldInfo.fieldName
       else
-        fieldInfo.fieldName = field
-        fieldInfo.viewType = null
-        fieldInfo.label = field
+        _.assign fieldInfo,
+          fieldName: field
+          viewType: null
+          label: field
       fieldInfo
 
     _getFieldNames: ->

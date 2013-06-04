@@ -1,108 +1,135 @@
 define [
+  'chaplin'
   'hbsTemplate'
   'application'
-  'views/view'
+  'views/base/page_view'
   'views/home/user_stories_view'
   'views/home/defects_view'
   'views/home/tasks_view'
   'collections/user_stories'
   'collections/defects'
   'collections/tasks'
-], (hbs, app, View, UserStoriesView, DefectsView, TasksView, UserStories, Defects, Tasks) ->
-  class HomeView extends View
-
+], (Chaplin, hbs, app, PageView, UserStoriesView, DefectsView, TasksView, UserStories, Defects, Tasks) ->
+  class HomeView extends PageView
+    region: 'main'
     template: hbs['home/templates/home']
+
+    listen:
+      'projectready mediator': 'updateTitle'
+
     events:
       'click .btn-block': 'onButton'
-      'click .nav a' : 'toggleActive'
-      'click #add-artifact' : 'addArtifact'
 
     initialize: (options) ->
       super
 
       @error = false
 
-      @userStories = new UserStories()
-      @defects = new Defects()
-      @tasks = new Tasks()
-
-      @currentTab = "userstory"
-
-      Backbone.on "projectready", @updateTitle, this
+      @currentTab = options.tab || "userstories"
 
       @
 
-    updateTitle: (title) ->
-      Backbone.trigger "updatetitle", title
-
-
     afterRender: ->
-      unless @loaded
-        setTimeout =>
-          @load()
-        , 1
+      if app.session.project?
+        @load()
+      else
+        @subscribeEvent 'projectready', @onProjectReady
 
-    remove: ->
-      super
-      @loaded = false
+    getTemplateData: ->
+      createRoute: @_getCreateRoute()
+      tabs: @_getTabs()
+
+    onProjectReady: ->
+      @unsubscribeEvent 'projectready', @onProjectReady
+      @load()
 
     load: ->
-      @loaded = true
+      @updateTitle()
 
-      @updateTitle app.session.getProjectName()
-
-      $("##{@currentTab}-tab").addClass('active')
-      $("##{@currentTab}-view").addClass('active')
-
-      @userStoriesView = new UserStoriesView
-        model: @userStories
-
-      @tasksView = new TasksView
-        model: @tasks
-
-      @defectsView = new DefectsView
-        model: @defects
-
-      @fetchUserStories()
-      @fetchTasks()
-      @fetchDefects()
+      switch @currentTab
+        when 'userstories' then @fetchUserStories()
+        when 'tasks' then @fetchTasks()
+        when 'defects' then @fetchDefects()
 
     fetchUserStories: ->
-      @userStories.fetch({
+      userStories = new UserStories()
+
+      @userStoriesView = new UserStoriesView
+        container: @$('#userstories-view .listing')
+        collection: userStories
+
+      userStories.fetch(
         data:
           fetch: ['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked'].join ','
+          query: "(Project = #{app.session.project.get('_ref')})"
+          order: "CreationDate DESC,ObjectID"
         success: (collection, response, options) =>
           @userStoriesView.render()
         failure: (collection, xhr, options) =>
           @error = true
-      })
+      )
 
     fetchTasks: ->
-      @tasks.fetch({
+      tasks = new Tasks()
+      @tasksView = new TasksView
+        container: @$('#tasks-view .listing')
+        collection: tasks
+      tasks.fetch(
         data:
           fetch: ['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked', 'ToDo'].join ','
-        success: (collection, response, options) =>
-          @tasksView.render()
+          query: "(Project = #{app.session.project.get('_ref')})"
+          order: "CreationDate DESC,ObjectID"
+        # success: (collection, response, options) =>
+        #   @tasksView.render()
         failure: (collection, xhr, options) =>
           @error = true
-      })
+      )
 
     fetchDefects: ->
-      @defects.fetch({
+      defects = new Defects()
+      @defectsView = new DefectsView
+        container: @$('#defects-view .listing')
+        collection: defects
+      defects.fetch(
         data:
           fetch: ['ObjectID', 'FormattedID', 'Name'].join ','
-        success: (collection, response, options) =>
-          @defectsView.render()
+          query: "(Project = #{app.session.project.get('_ref')})"
+          order: "CreationDate DESC,ObjectID"
+        # success: (collection, response, options) =>
+        #   @defectsView.render()
         failure: (collection, xhr, options) =>
           @error = true
-      })
+      )
 
     onButton: (event) ->
       url = event.currentTarget.id
-      app.router.navigate url, {trigger: true}
+      @publishEvent '!router:route', url
 
-    toggleActive: (event) ->
-      @currentTab = event.currentTarget.id
+    updateTitle: ->
+      @publishEvent 'updatetitle', [_.find(@_getTabs(), active: true).value, app.session.getProjectName()].join ' in '
 
-    addArtifact: (event) ->
-      app.router.navigate "new/#{@currentTab}", {trigger: true}
+    _getCreateRoute: ->
+      map =
+        userstories: 'userstory'
+        tasks: 'task'
+        defects: 'defect'
+      "new/#{map[@currentTab]}"
+
+    _getTabs: ->
+      [
+        {
+          key: 'userstories'
+          value: 'Stories'
+          active: @currentTab == 'userstories'
+        }
+        {
+          key: 'tasks'
+          value: 'Tasks'
+          active: @currentTab == 'tasks'
+        }
+        {
+          key: 'defects'
+          value: 'Defects'
+          active: @currentTab == 'defects'
+        }
+      ]

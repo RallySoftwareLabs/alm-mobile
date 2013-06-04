@@ -8,7 +8,7 @@ define [
     afterRender: ->
       super
       addRemove = if @model.get(@options.field) then 'addClass' else 'removeClass'
-      @.$el[addRemove]('on')
+      @$el[addRemove]('on')
 
     startEdit: (event) ->
       updates = {}

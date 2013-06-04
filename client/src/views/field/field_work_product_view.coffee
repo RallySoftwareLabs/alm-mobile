@@ -8,4 +8,4 @@ define [
 
     startEdit: (event) ->
       field = @model.get @options.field
-      app.router.navigate(utils.getDetailHash(field), trigger: true)
+      @publishEvent '!router:route', utils.getDetailHash(field)

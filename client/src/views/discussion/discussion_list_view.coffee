@@ -2,25 +2,10 @@ define [
   'hbsTemplate'
   'lib/utils'
   'application'
-  'views/view'
-  'models/discussion'
-  'collections/discussions'
-], (hbs, utils, app, View, Discussion, Discussions) ->
+  'views/base/collection_view'
+  'views/discussion/discussion_view'
+], (hbs, utils, app, CollectionView, DiscussionView) ->
 
-  class DiscussionListView extends View
-    
-    template: hbs['discussion/templates/discussion_list']
-
-    initialize: (config) ->
-      super config
-      @model.fetch(
-        data:
-          fetch: "Text,User,Artifact,CreationDate"
-          query: "(Artifact = #{config.artifact})"
-          order: "CreationDate DESC,ObjectID"
-        success: (collection, response, options) =>
-          @render()
-      )
-
-    getRenderData: ->
-      discussion: @model.models
+  class DiscussionListView extends CollectionView
+    className: "btn-group btn-group-vertical"
+    itemView: DiscussionView

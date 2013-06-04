@@ -1,17 +1,14 @@
 define [
   'hbsTemplate'
   'application'
-  'views/view'
-], (hbs, app, View) ->
+  'views/base/collection_view'
+  'views/home/user_story_view'
+], (hbs, app, CollectionView, UserStoryView) ->
 
-  View.extend
+  class UserStoriesView extends CollectionView
 
-    el: '#userstory-view'
-    template: hbs['home/templates/user_stories']
-
-    getRenderData: ->
-      # error: @options.error
-      stories: @model.toJSON()
+    className: "btn-group btn-group-vertical"
+    itemView: UserStoryView
 
     addUserStory: ->
-      app.router.navigate 'new/userstory', {trigger: true, replace: true}
+      @publishEvent '!router:routeByName', 'user_story_detail#create', replace: true

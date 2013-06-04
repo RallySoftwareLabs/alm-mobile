@@ -1,16 +1,19 @@
 define [
   'jquery'
+  'chaplin'
   'models/user'
   'models/authentication'
-], ($, User, Session) ->
+  'routes'
+], ($, Chaplin, User, Session, routes) ->
 
-  Application = 
-    initialize: (Router, User, Session) ->
+  class Application extends Chaplin.Application
+    title: 'Rally ALM Mobile'
+
+    initialize: ->
+      super
 
       @session = new Session()
-      @router = new Router(this)
-      @afterLogin = 'home'
-
+      @afterLogin = ''
       @session.authenticated (authenticated) =>
         if authenticated
           @fetchUserInfo()
@@ -19,10 +22,37 @@ define [
           @afterLogin = hash unless hash == 'login'
           Backbone.history.navigate 'login', trigger: true, replace: true
 
-        Backbone.history.start(
-          # root: '/m'
-          # pushState: true
-        )
+       # @initRouter routes, pushState: false, root: '/subdir/'
+      @initRouter routes
+
+      # Dispatcher listens for routing events and initialises controllers.
+      @initDispatcher controllerSuffix: '_controller'
+
+      # Layout listens for click events & delegates internal links to router.
+      @initLayout()
+
+      # Composer grants the ability for views and stuff to be persisted.
+      @initComposer()
+
+      # Mediator is a global message broker which implements pub / sub pattern.
+      @initMediator()
+
+      # Actually start routing.
+      @startRouting()
+
+      # Freeze the application instance to prevent further changes.
+      Object.freeze? this
+
+    initLayout: ->
+      @layout = new Chaplin.Layout {@title}
+
+    # Create additional mediator properties.
+    initMediator: ->
+      # Add additional application-specific properties and methods
+      # e.g. Chaplin.mediator.prop = null
+      Chaplin.mediator.user = null
+      # Seal the mediator.
+      Chaplin.mediator.seal()
         
     fetchUserInfo: (cb) ->
       u = new User()
@@ -35,3 +65,5 @@ define [
           cb?(model)
       
       Object.freeze? this
+
+  new Application

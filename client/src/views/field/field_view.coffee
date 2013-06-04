@@ -1,6 +1,6 @@
 define [
   'hbsTemplate'
-  'views/view'
+  'views/base/view'
 ], (hbs, View) ->
 
   ViewMode =
@@ -14,12 +14,14 @@ define [
       @setEditMode = if @setEditMode? then @setEditMode else true
       @viewMode = if (options.newArtifact? and options.newArtifact and @setEditMode) then ViewMode.EDIT else ViewMode.DISPLAY
       @_setDisplayTemplate()
-      options.detailView.on('fieldSave', @_otherFieldSave, @)
+      @listenTo options.detailView, 'fieldSave', @_otherFieldSave
 
-    events: ->
-      return {}
+      if options.editable
+        @delegate "click", @startEdit
 
-    getRenderData: ->
+      super options
+
+    getTemplateData: ->
       model: @model.toJSON()
       field: @options.field
       fieldLabel: @options.label
@@ -31,11 +33,11 @@ define [
 
     afterRender: ->
       if @viewMode is ViewMode.DISPLAY
-        @.$el.addClass('display')
-        @.$el.removeClass('edit')
+        @$el.addClass('display')
+        @$el.removeClass('edit')
       else
-        @.$el.removeClass('display')
-        @.$el.addClass('edit')
+        @$el.removeClass('display')
+        @$el.addClass('edit')
 
     _setDisplayTemplate: ->
       view = @viewType
@@ -48,7 +50,7 @@ define [
 
     startEdit: ->
       @_switchToEditMode()
-      @render()
+      # @render()
       this.$(".editor").focus()
 
     endEdit: (event) ->
@@ -84,20 +86,20 @@ define [
           opts?.error?(model, resp, options)
           debugger
 
-
     _switchToEditMode: ->
       if @viewMode isnt ViewMode.EDIT
         @viewMode = ViewMode.EDIT
         @_setDisplayTemplate()
 
-      @render()
+        @render()
 
     _switchToViewMode: ->
       if @viewMode isnt ViewMode.DISPLAY
         @viewMode = ViewMode.DISPLAY
         @_setDisplayTemplate()
 
-      @render()
+        @render()
 
     _otherFieldSave: (field, model) ->
       @model = model
+      @render()

@@ -4,12 +4,11 @@ define [
 
   class FieldTitledWellView extends FieldInputView
 
-    events: ->
-      _events = super
-      _events['blur select'] = 'onBlur'
-      _events['change select'] = 'onBlur'
-      _events['keydown select'] = 'onSelectKeydown'
-      _events
+    initialize: ->
+      super
+      @delegate 'blur', 'select', @onBlur
+      @delegate 'change', 'select', @onBlur
+      @delegate 'keydown', 'select', @onSelectKeydown
 
     onSelectKeydown: (event) ->
       switch event.which

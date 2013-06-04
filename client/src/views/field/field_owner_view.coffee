@@ -1,7 +1,7 @@
 define [
-  'lib/utils'
+  'application'
   'views/field/field_view'
-], (utils, FieldView) ->
+], (app, FieldView) ->
 
   class FieldOwnerView extends FieldView
     initialize: (config) ->
@@ -9,4 +9,4 @@ define [
       super config
 
     startEdit: (event) ->
-      @saveModel(Owner: @options.session.user.get('_ref'))
+      @saveModel Owner: app.session.user.get('_ref')

@@ -11,7 +11,7 @@ define [
       options.newArtifact = true
       super options
       @delegateEvents
-      Backbone.trigger "updatetitle", "New Defect"
+      @publishEvent "updatetitle", "New Defect"
 
     modelType: Defect
     id: 'new-defect'
@@ -71,10 +71,10 @@ define [
         success: (model, resp, options) =>
           opts?.success?(model, resp, options)
           @trigger('save', @options.field, model)
-          app.router.navigate('', {trigger: true, replace: false})
+          @publishEvent '!router:route', '', replace: false
         error: =>
           opts?.error?(model, resp, options)
           debugger
 
     onCancel: ->
-      app.router.navigate('', {trigger: true, replace: false})
+      @publishEvent '!router:route', '', replace: false

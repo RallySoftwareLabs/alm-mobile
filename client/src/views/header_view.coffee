@@ -1,30 +1,31 @@
 define [
+  'chaplin'
+  'views/base/view'
   'hbsTemplate'
-  'application'
-  'lib/utils'
-  'views/view'
-  'collections/artifacts'
-  'collections/defects'
-  'collections/tasks'
-], (hbs, app, utils, View, Artifacts, Defects, Tasks) ->
+], (Chaplin, View, hbs) ->
 
-  class TopbarView extends View
+  class HeaderView extends View
+    autoRender: true
+    region: 'header'
+    template: hbs['templates/header']
 
     ENTER_KEY: 13
 
-    el: '#topbar'
-
     template: hbs['topbar/templates/topbar']
 
+    listen:
+      'projectready mediator': 'updateTitle'
+      'updatetitle mediator': 'updateTitle'
+      'loadedSettings mediator': 'render'
+      'dispatcher:dispatch mediator': 'render'
+
     events:
-      'click button[data-target]': 'doNavigate'
+      'click div[data-target]': 'doNavigate'
       'swipe': 'gotSwiped'
       'keydown .search-query': 'searchKeyDown'
 
-    initialize: ({ @settings, @router }) ->
-      @subscribe()
-
-      Backbone.on 'loadedSettings', @render, this
+    initialize: ->
+      super
 
       $(window).on 'hashchange', =>
         setTimeout =>
@@ -35,16 +36,13 @@ define [
             @show()
         , 1
 
-    subscribe: ->
-      Backbone.on("updatetitle", @updateTitle, this)
-
     doNavigate: (e) ->
       page = e.currentTarget.getAttribute 'data-target'
 
       if page is 'back'
         window.history.back()
       else
-        @router.navigate page, trigger: true
+        @publishEvent '!router:route', page
       e.preventDefault()
 
     searchKeyDown: (event) ->
@@ -62,7 +60,7 @@ define [
         success: (collection, response, options) =>
           if collection.length > 0
             firstResult = collection.first()
-            @router.navigate utils.getDetailHash(firstResult), trigger: true
+            @publishEvent '!router:route', utils.getDetailHash(firstResult)
           else
             @_noSearchResults()
 
@@ -74,22 +72,20 @@ define [
     hide: -> @$el.hide() if @$el.is ':visible'
 
     makeButton: (target, icon, cls = "") ->
-      """<a href="##{target}" class="btn navbar-inverse #{cls}"><i class="#{icon}" data-target="#{target}"></i></a>"""
+      """<div class="btn navbar-inverse #{cls}" data-target="#{target}"><i class="#{icon}"></i></div>"""
 
-    getRenderData: ->
+    getTemplateData: ->
       current_page = @_getCurrentPage()
 
       data = {title: @title}
 
-      if current_page in ['home', 'board']
+      if current_page in ['/userstories', '/defects', '/tasks']
         data.left_button =  @makeButton 'navigation', 'icon-reorder', 'cyan'
         data.right_button = @makeButton 'settings', 'icon-cog'
-      else if current_page is 'navigation'
+      else if current_page is '/navigation'
         data.onNavigateScreen = true
-      else if current_page is 'settings'
+      else if current_page is '/settings'
         data.left_button = @makeButton 'back', 'icon-arrow-left'
-      else if current_page is 'login'
-        data.onLoginScreen = true
       else # if current_page in ['detail', 'column']
         data.left_button =  @makeButton 'back', 'icon-arrow-left'
         data.right_button = @makeButton 'settings', 'icon-cog'
@@ -101,7 +97,7 @@ define [
       @render()
 
     _getCurrentPage: ->
-      (key for key, value of @router.currentPage)[0]
+      window.location.pathname
 
     _noSearchResults: ->
       alert = $('body').append([

@@ -1,7 +1,12 @@
-<form class="replyForm">
-    <div class="row-fluid reply">
-    	<input type="text" class="span9" placeholder="Enter comments"/>
-    	<button type="submit" class="btn active">Reply</button>
+<button class="btn btn-block list-item">
+    <div class="profile-image">
+    	<img src="{{profileImageUrl discussion.User._ref 80}}"/>
     </div>
-</form>
-<div class="row-fluid listing"></div>
+    <div class="details">
+    	<div class="status">
+    		<span class="profileLink"><span>{{discussion.User._refObjectName}}</span></span>
+    		{{createdAt discussion._CreatedAt}}
+    	</div>
+    	<div class="detail-text">{{{discussion.Text}}}</div>
+    </div>
+</button>

@@ -3,11 +3,10 @@ define [
 ], (FieldInputView) ->
   class FieldHtmlView extends FieldInputView
 
-    events: ->
-      _events = super
-      _events['blur textarea'] = 'onBlur'
-      _events['keydown textarea'] = 'onKeyDown'
-      _events
+    initialize: ->
+      super
+      @delegate 'blur', 'textarea', @onBlur
+      @delegate 'keydown', 'textarea', @onKeyDown
 
     onKeyDown: (event) ->
       switch event.which

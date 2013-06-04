@@ -1,25 +1,25 @@
 <div id="home-view">
   <div id="home-view-navigation">
     <ul class="nav btn-group">
-      <li class="btn" id="userstory-tab">
-        <a href="#" id="userstory" data-toggle="pill" data-target="#userstory-view">Stories</a>
+      {{#each tabs}}
+      <li class="btn{{#if this.active}} active{{/if}}" id="{{this.key}}-tab">
+        <a href="{{this.key}}" id="{{this.key}}" data-toggle="pill" data-target="#{{this.key}}-view">
+          {{this.value}}
+        </a>
       </li>
-      <li class="btn" id="task-tab">
-        <a href="#" id="task" data-toggle="pill" data-target="#task-view">Tasks</a>
-      </li>
-      <li class="btn" id="defect-tab">
-        <a href="#" id="defect" data-toggle="pill" data-target="#defect-view">Defects</a>
-      </li>
+      {{/each}}
     </ul>
   </div>
 
   <div class="tab-content">
-    <div class="tab-pane" id="userstory-view"></div>
-    <div class="tab-pane" id="task-view"></div>
-    <div class="tab-pane" id="defect-view"></div>
+    {{#each tabs}}
+    <div class="tab-pane{{#if this.active}} active{{/if}}" id="{{this.key}}-view">
+      <div class="row-fluid listing"/>
+    </div>
+    {{/each}}
   </div>
 
   <div class='bottom-centered'>
-    <button class='btn active' id='add-artifact'>+</button>
+    <a href="{{createRoute}}" class='btn active' id='add-artifact'>+</a>
   </div>
 </div>

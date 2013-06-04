@@ -1,10 +1,7 @@
 Auth = require './auth'
 LoginRoutes = require './routes/login'
-index = require './routes/index'
 
 module.exports = (app) ->
-  app.get '/',
-    index
   
   app.post '/login',
     LoginRoutes.login

@@ -1,19 +1,16 @@
 define [
   'hbsTemplate'
   'application'
-  'views/view'
-], (hbs, app, View) ->
+  'views/base/collection_view'
+  'views/home/task_view'
+], (hbs, app, CollectionView, TaskView) ->
 
-  View.extend
+  class UserStoriesView extends CollectionView
 
-    el: '#task-view'
-    template: hbs['home/templates/tasks']
+    className: "btn-group btn-group-vertical"
+    itemView: TaskView
     events:
       'click #add-task' : 'addTask'
 
-    getRenderData: ->
-      # error: @options.error
-      tasks: @model.toJSON()
-
     addTask: ->
-      app.router.navigate 'new/task', {trigger: true, replace: true}
+      @publishEvent '!router:routeByName', 'task_detail#create', replace: true

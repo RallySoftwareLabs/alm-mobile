@@ -1,12 +1,10 @@
 define [
   'hbsTemplate'
-  'views/view'
-], (hbs, View) ->
+  'views/base/page_view'
+], (hbs, PageView) ->
 
-  class NavigationView extends View
-
-    initialize: (options) ->
-      @router = options.router
+  class NavigationView extends PageView
+    autoRender: true
 
     events:
       'click button[data-target]': 'doNavigate'
@@ -17,17 +15,18 @@ define [
       workType: 'myWork'
 
     doNavigate: (e) ->
-      @router.navigate e.currentTarget.getAttribute('data-target'), trigger: true
+      @publishEvent '!router:route', e.currentTarget.getAttribute('data-target')
 
     afterRender: ->
       $('body').addClass('navigation')
 
-    remove: ->
+    dispose: ->
       $('body').removeClass('navigation')
+      super
 
     getSetting: (setting) -> @settings[setting]
 
-    getRenderData: ->
+    getTemplateData: ->
       timeRemaining: 4
       timeRemainingUnits: 'Days'
       percentAccepted: 50

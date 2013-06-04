@@ -1,19 +1,21 @@
 define [
   'hbsTemplate'
   'application'
-  'views/view'
-], (hbs, app, View) ->
+  'views/base/collection_view'
+  'views/home/defect_view'
+], (hbs, app, CollectionView, DefectView) ->
 
-  View.extend
+  class UserStoriesView extends CollectionView
 
-    el: '#defect-view'
-    template: hbs['home/templates/defects']
+    className: "btn-group btn-group-vertical"
+    itemView: DefectView
+
     events:
       'click #add-defect' : 'addDefect'
 
-    getRenderData: ->
+    getTemplateData: ->
       # error: @options.error
       defects: @model.toJSON()
 
     addDefect: ->
-      app.router.navigate 'new/defect', {trigger: true, replace: true}
+      @publishEvent '!router:routeByName', 'defect_detail#create', replace: true
