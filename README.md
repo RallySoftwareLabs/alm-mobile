@@ -4,13 +4,22 @@ Clone the repo:
 
         git clone ssh://git/export/git/alm-mobile.git
 
+If you need to install node, run:
+
+        brew update
+        brew install node
+
 To install required node modules, run:
 
         npm install
 
-If you need to add the npm bin directory to your PATH for cake and brunch, run:
+Then install the Grunt Command Line and Nodemon programs:
 
-        export PATH=$PATH:`npm bin`
+        npm install -g grunt-cli nodemon
+
+If you need to add the npm bin directory to your PATH for grunt, run or add this to the bottom of your ~/.zshrc file:
+
+        export PATH=$PATH:`npm config get prefix`/bin
 
 To compile and build the application, run:
 
@@ -27,10 +36,11 @@ Edit /etc/apache2/httpd.conf to enable the virtual hosts file. Uncomment out the
         # Virtual hosts
         Include /private/etc/apache2/extra/httpd-vhosts.conf
 
-Edit /etc/apache2/extra/httpd-vhosts.conf with the following, swapping out _[hostname]_ for your machine's actual hostname:
+Edit /etc/apache2/extra/httpd-vhosts.conf with the following, swapping out _[hostname]_ for your machine's actual hostname.
+Edit your /etc/hosts file and add alm.f4tech.com at the end of the 127.0.0.1 line:
 
         <VirtualHost *:80>
-            ServerAdmin mparrish@rallydev.com
+            ServerAdmin [email]
             ServerName [hostname]
             ServerAlias [hostname]
             ProxyPass / http://localhost:3000/
@@ -39,12 +49,21 @@ Edit /etc/apache2/extra/httpd-vhosts.conf with the following, swapping out _[hos
             CustomLog "/private/var/log/apache2/[hostname]-access_log" common
         </VirtualHost>
 
+        <VirtualHost *:80>
+            ServerAdmin [email]
+            ServerName alm.f4tech.com
+            ServerAlias alm.f4tech.com
+            ProxyPass / http://localhost:7001/
+            ProxyPassReverse / http://localhost:7001/
+            ErrorLog "/private/var/log/apache2/[alm.f4tech.com]-error_log"
+            CustomLog "/private/var/log/apache2/[alm.f4tech.com]-access_log" common
+        </VirtualHost>
+
 ## Server ENV Variables
 
 You will need to set the following environment variables where you run the server
 
 * `ALM_MOBILE_ALM_WS_BASE_URL`=http://[hostname].f4tech.com:7001/slm
-* `ALM_MOBILE_ZUUL_BASE_URL`=http://[dbname from ~/.m2/settings.xml].zuul1.f4tech.com:3000
 
 ## Rally ALM Feature Toggles
 
@@ -58,7 +77,11 @@ All Bootstrap stylesheet files can be found separated into:
 
     vendor/styles/bootstrap
 
-They're in original [LESS](http://lesscss.org/) format in order to be easily customized, and compiled together with the app build.
+They're in original [LESS](http://lesscss.org/) format in order to be easily customized, and compiled together with the app build. The proper way to override any bootstrap styles or variables is to modify:
+
+    client/styles/_bootstrap.less
+
+**Do not directly modify any files in vendor/styles/bootstrap. The changes will be overwritten as we upgrade that library.**
 
 ## Exclude Bootstrap jQuery plugins
 

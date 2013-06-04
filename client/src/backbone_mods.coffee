@@ -10,7 +10,7 @@ define ['jquery', 'underscore', 'backbone', 'application'], ($, _, Backbone, app
   # Copied from backbone-1.0.0.js
   Backbone.sync = (method, model, options = {}) ->
     headers = options.headers || {}
-    headers.ZSESSIONID = $.cookie('ZSESSIONID') # Rally override!
+    # headers.ZSESSIONID = $.cookie('ZSESSIONID') # Rally override!
     # headers.JSESSIONID = $.cookie('JSESSIONID') # Rally override!
     
     # Rally Override!
@@ -79,7 +79,7 @@ define ['jquery', 'underscore', 'backbone', 'application'], ($, _, Backbone, app
       error?(model, xhr, options)
       model.trigger('error', model, xhr, options)
       if xhr.status is 401 or xhr.status is 0
-        document.cookie = 'ZSESSIONID=; expires=Thu, 01 Jan 1970 00:00:01 GMT;'
+        # document.cookie = 'ZSESSIONID=; expires=Thu, 01 Jan 1970 00:00:01 GMT;'
         document.cookie = 'JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:01 GMT;'
         Backbone.history.navigate('/login', {trigger: true, replace: true})
 

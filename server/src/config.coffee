@@ -1,15 +1,12 @@
 
-almWebServiceBaseUrl = process.env.ALM_MOBILE_ALM_WS_BASE_URL || "http://abcd.rallydev.com:7001/slm"
 class ServerConfig
-  almWebServiceBaseUrl: almWebServiceBaseUrl
-  zuulBaseUrl: process.env.ALM_MOBILE_ZUUL_BASE_URL || "http://abcd.zuul1.f4tech.com:3000"
+  almWebServiceBaseUrl: process.env.ALM_MOBILE_ALM_WS_BASE_URL || "http://abcd.rallydev.com:7001/slm"
+  cookieDomain: process.env.ALM_MOBILE_COOKIE_DOMAIN || '.f4tech.com'
 
   toJSON: ->
-    return {
-      almWebServiceBaseUrl: @almWebServiceBaseUrl
-      zuulBaseUrl: @zuulBaseUrl
-    }
+    almWebServiceBaseUrl: @almWebServiceBaseUrl
 
-  console.log "ALM @#{almWebServiceBaseUrl}"
+console.log "ALM @#{ServerConfig::almWebServiceBaseUrl}"
+console.log "Setting cookie domain as #{ServerConfig::cookieDomain}"
 
 module.exports = new ServerConfig()

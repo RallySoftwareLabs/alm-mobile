@@ -33,7 +33,7 @@ module.exports = (grunt) ->
         tasks: ['less:client', 'concat:css']
 
       clientTemplates:
-        files: 'client/views/**/templates/*.hbs'
+        files: 'client/src/views/**/templates/*.hbs'
         tasks: ['handlebars', 'uglify:hbs']
 
       clientTest:
@@ -93,7 +93,7 @@ module.exports = (grunt) ->
             backbone: "../../../../vendor/scripts/backbone-1.0.0"
             chaplin: "../../../../vendor/scripts/chaplin-0.9.0"
             handlebars: "../../../../vendor/scripts/handlebars.runtime-1.0.0"
-            hbsTemplate: "../../../dist/js/hbs.min"
+            hbsTemplate: "../../../dist/js/hbs"
             backboneBeforeAllFilter: "../../../../vendor/scripts/backbone-before-all-filter"
           shim:
             jquery:
@@ -168,7 +168,7 @@ module.exports = (grunt) ->
     uglify:
       js:
         files:
-          'client/dist/js/vendor.min.js' : 'client/dist/js/vendor.js'
+          # 'client/dist/js/vendor.min.js' : 'client/dist/js/vendor.js'
           'client/dist/js/app.min.js' : 'client/dist/js/app.js'
           'client/dist/js/initialize.min.js' : 'client/dist/js/initialize.js'
       hbs:

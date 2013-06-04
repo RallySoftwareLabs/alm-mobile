@@ -6,22 +6,25 @@ define [
 ], (jqueryCookie, Model, User, Projects) ->
 
   Model.extend
-    defaults:
-      zsessionid: null
-
     initialize: ->
       @user = new User()
 
     authenticated: (cb) ->
+      authCache = @get 'authenticated'
+      return cb?(true) if authCache && cb?
+
+      return authCache if !cb?
+
       $.ajax(
-        url: Backbone.history.root + 'getSessionInfo'
+        url: 'getSessionInfo'
         type: 'GET'
         dataType: 'json'
         success: (data, status, xhr) =>
           @set
-            zsessionid: $.cookie('ZSESSIONID')
+            # zsessionid: $.cookie('ZSESSIONID')
             jsessionid: $.cookie('JSESSIONID')
             securityToken: data.securityToken
+            authenticated: true
           cb?(true)
         error: (xhr, errorType, error) =>
           cb?(false)
@@ -51,11 +54,11 @@ define [
 
     setSecurityToken: (securityToken) ->
       @set
-        zsessionid: $.cookie('ZSESSIONID')
+        # zsessionid: $.cookie('ZSESSIONID')
         jsessionid: $.cookie('JSESSIONID')
         securityToken: securityToken
 
     logout: ->
-      $.cookie('ZSESSIONID', "")
+      # $.cookie('ZSESSIONID', "")
       $.cookie('JSESSIONID', "")
-      @set zsessionid: null, securityToken: null
+      @set securityToken: null

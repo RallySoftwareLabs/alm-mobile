@@ -8,25 +8,17 @@ module.exports = class AlmClient
   # @param {Object} options
   # @param {String} options.username
   # @param {String} options.password
-  # @param {String} options.jsessionid
-  # @param {String} zsessionid
   ###
-  authorize: (options, zsessionid, cb) ->
+  authorize: (options, cb) ->
     requestConfig =
       uri: "#{config.almWebServiceBaseUrl}/webservice/v2.x/security/authorize"
       method: 'GET'
-      headers:
-        ZSESSIONID: zsessionid
 
     if options.username? && options.password?
       base64Auth = new Buffer("#{options.username}:#{options.password}").toString('base64')
       requestConfig.auth = "#{options.username}:#{options.password}"
-    else if options.jsessionid?
-      j = request.jar()
-      j.add request.cookie("JSESSIONID=#{options.jsessionid}")
-      requestConfig.jar = j
     else
-      return cb('You must pass either username/password or jsessionid to get a security token')
+      return cb('You must pass both username and password to get a security token')
 
     # Get CSRF Token
     request(requestConfig, (err, authResponse, body) ->
@@ -47,9 +39,9 @@ module.exports = class AlmClient
             , {})
 
             jsessionid = cookies.jsessionid
-            # console.log "Cookies: ", cookies, "jsessionid", jsessionid
+            console.log "Cookies: ", cookies, "jsessionid", jsessionid
         catch e
-          err = "Unable to parse JSON from: J: #{options.jsessionid}, Z: #{zsessionid}, Body: #{body}"
+          err = "Unable to parse JSON from: J: #{options.jsessionid}, Body: #{body}"
           console.log err
       
       cb?(err, jsessionid, securityToken)

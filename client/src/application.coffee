@@ -11,11 +11,6 @@ define [
       @router = new Router(this)
       @afterLogin = 'home'
 
-      Backbone.history.start(
-        # root: '/m'
-        # pushState: true
-      )
-
       @session.authenticated (authenticated) =>
         if authenticated
           @fetchUserInfo()
@@ -24,6 +19,11 @@ define [
           @afterLogin = hash unless hash == 'login'
           Backbone.history.navigate 'login', trigger: true, replace: true
 
+        Backbone.history.start(
+          # root: '/m'
+          # pushState: true
+        )
+        
     fetchUserInfo: (cb) ->
       u = new User()
       u.fetch
