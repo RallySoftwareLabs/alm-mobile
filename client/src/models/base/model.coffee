@@ -1,7 +1,9 @@
-define ->
+define [
+  'chaplin'
+], (Chaplin) ->
 
   # Base class for all models.
-  Backbone.Model.extend
+  class Model extends Chaplin.Model
     idAttribute: 'ObjectID'
 
     parse: (resp) ->

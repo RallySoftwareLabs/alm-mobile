@@ -44,15 +44,3 @@ define [
         projectScopeUp: false
         projectScopeDown: true
         order: "CreationDate DESC,ObjectID"
-
-      
-    afterProjectLoaded: (callback) ->
-      if app.session.project?
-        callback?()
-      else
-        @subscribeEvent 'projectready', @onProjectReady(callback)
-
-    onProjectReady: (callback) ->
-      => 
-        @unsubscribeEvent 'projectready', @onProjectReady
-        callback?()

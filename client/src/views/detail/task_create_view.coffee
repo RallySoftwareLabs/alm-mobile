@@ -43,4 +43,4 @@ define [
 
     initialize: ->
       super
-      @publishEvent "updatetitle", "New Task"
+      @updateTitle "New Task"

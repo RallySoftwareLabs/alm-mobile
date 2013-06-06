@@ -1,8 +1,13 @@
-define ['models/model'], (Model) ->
+define [
+  'models/base/model'
+], (Model) ->
 
-  Model.extend
+  class Defect extends Model
     urlRoot: window.AppConfig.almWebServiceBaseUrl + '/webservice/v2.x/defects'
 
-    defaults: {
+    defaults:
       "State" : "Open"
-    }
+
+    allowedValues:
+    	ScheduleState: ['Defined', 'In-Progress', 'Completed', 'Accepted']
+    	State: ['Submitted', 'Open', 'Fixed', 'Closed']

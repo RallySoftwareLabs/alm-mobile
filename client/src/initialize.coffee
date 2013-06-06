@@ -17,6 +17,7 @@ require [
   'controllers/user_story_detail_controller'
   'controllers/defect_detail_controller'
   'controllers/task_detail_controller'
+  'controllers/board_controller'
 
   # required views
   # 'views/topbar/topbar_view'

@@ -1,12 +1,11 @@
 define [
-  'chaplin'
   'jqueryCookie'
-  'models/model'
+  'models/base/model'
   'models/user'
   'collections/projects'
-], (Chaplin, jqueryCookie, Model, User, Projects) ->
+], (jqueryCookie, Model, User, Projects) ->
 
-  Model.extend
+  class Authentication extends Model
     initialize: ->
       @user = new User()
 
@@ -42,8 +41,8 @@ define [
       @projects.fetch
         success: (collection) =>
           @setProject collection.first()
-          Chaplin.mediator.publish "projectready", @getProjectName()
-          Chaplin.mediator.publish 'loadedSettings'
+          @publishEvent "projectready", @getProjectName()
+          @publishEvent 'loadedSettings'
 
     setProject: (@project) ->
 

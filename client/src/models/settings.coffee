@@ -1,6 +1,8 @@
-define ['models/model'], (Model) ->
+define [
+  'models/base/model'
+], (Model) ->
 
-  class SettingsModel extends Model
+  class Settings extends Model
 
     initialize: ->
       super

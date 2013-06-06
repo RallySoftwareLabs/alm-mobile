@@ -27,7 +27,7 @@ define [
       newRoute = e.currentTarget.getAttribute('data-target')
 
       @publishEvent 'navigation:hide'
-      unless newRoute == currentRoute || newRoute != '' || _.contains(['/userstories', '/tasks', '/defects'], currentRoute)
+      unless newRoute == currentRoute || (newRoute == '' && _.contains(['/userstories', '/tasks', '/defects'], currentRoute))
         @publishEvent '!router:route', newRoute
 
     onNavigationShow: ->

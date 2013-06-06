@@ -55,4 +55,4 @@ define [
 
     initialize: ->
       super
-      @publishEvent "updatetitle", "New Defect"
+      @updateTitle "New Defect"

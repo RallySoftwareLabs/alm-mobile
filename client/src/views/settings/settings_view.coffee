@@ -18,7 +18,7 @@ define [
 
     initialize: ->
       super
-      @publishEvent "updatetitle", "Settings"
+      @updateTitle "Settings"
 
     getTemplateData: ->
       projects: app.session.projects?.models

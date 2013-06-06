@@ -24,3 +24,10 @@ define [
       @
 
     afterRender: ->
+
+    updateTitle: (title) ->
+      @publishEvent "updatetitle", title
+
+    # listens to an event on the object and refires is as its own
+    bubbleEvent: (obj, event, mappedAs = event) ->
+      @listenTo obj, event, (args...) => @trigger.apply this, [mappedAs].concat(args) 

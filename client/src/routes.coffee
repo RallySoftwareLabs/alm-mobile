@@ -11,9 +11,11 @@ define ->
     match 'userstory/:id', 'user_story_detail#show'
     match 'defect/:id', 'defect_detail#show'
     match 'task/:id', 'task_detail#show'
-    match 'new/userstory' , 'user_story_detail#create'
-    match 'new/task' , 'task_detail#create'
-    match 'new/defect' , 'defect_detail#create'
+    match 'new/userstory', 'user_story_detail#create'
+    match 'new/task', 'task_detail#create'
+    match 'new/defect', 'defect_detail#create'
+    match 'board', 'board#index'
+    match 'board/:column', 'board#column'
 
 #   class ALMRouter extends Backbone.Router
 

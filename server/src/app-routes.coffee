@@ -9,3 +9,5 @@ module.exports = (app) ->
   app.get '/task/:id/discussion', index
   app.get '/defect/:id/discussion', index
   app.get '/new/:type', index
+  app.get '/board', index
+  app.get '/board/:type', index

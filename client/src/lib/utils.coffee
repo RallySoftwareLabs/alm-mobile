@@ -5,10 +5,11 @@ define ->
   WSAPI_MODEL_TYPES = {}
   WSAPI_MODEL_TYPES[value] = key for key, value of NAVIGATION_MODEL_TYPES
 
-  _.mixin(
+  _.mixin
     capitalize: (string) ->
       string.charAt(0).toUpperCase() + string.substring(1).toLowerCase()
-  )
+    getAttribute: (attr) ->
+      return -> @get(attr)
 
   return {
     getDetailHash: (model) ->

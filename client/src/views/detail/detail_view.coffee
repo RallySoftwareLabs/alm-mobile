@@ -33,7 +33,7 @@ define [
             fetch: ['ObjectID'].concat(@_getFieldNames()).join ','
           success: (model, response, opts) =>
             @modelLoaded = true
-            @publishEvent "updatetitle", "#{model.get('FormattedID')}: #{model.get('_refObjectName')}"
+            @updateTitle "#{model.get('FormattedID')}: #{model.get('_refObjectName')}"
 
     getTemplateData: ->
       model: @model.toJSON()

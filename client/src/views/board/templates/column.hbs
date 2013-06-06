@@ -1,0 +1,10 @@
+<div class="column">
+    <div class="header">{{header}}</div>
+    <div class="body">
+        {{#each cards}}
+        	<div class="card" id="{{this.ObjectID}}-{{this._type}}">
+        		<div>{{this.FormattedID}}</div>
+        	</div>
+        {{/each}}
+    </div>
+</div>
