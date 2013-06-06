@@ -1,6 +1,6 @@
 define [
   'underscore'
-  'views/base/view'
+  'views/base/page_view'
   'views/field/field_view'
   'views/field/field_discussion_view'
   'views/field/field_header_view'
@@ -11,11 +11,10 @@ define [
   'views/field/field_titled_well_view'
   'views/field/field_toggle_view'
   'views/field/field_work_product_view'
-], (_, View, FieldView) ->
+], (_, PageView, FieldView) ->
 
-  class DetailView extends View
+  class DetailView extends PageView
     region: 'main'
-    autoRender: true
 
     initialize: (options) ->
       @newArtifact = options.newArtifact? and options.newArtifact
@@ -24,21 +23,19 @@ define [
       super options
       @modelLoaded = false
 
-    getTemplateData: ->
-      model: @model.toJSON()
-
-    afterRender: ->
-      if @modelLoaded || @newArtifact
-        @renderField field for field in @fields
-      else
-        @model.fetch({
+      unless @newArtifact
+        @model.fetch
           data:
             fetch: ['ObjectID'].concat(@_getFieldNames()).join ','
           success: (model, response, opts) =>
             @modelLoaded = true
             @publishEvent "updatetitle", "#{model.get('FormattedID')}: #{model.get('_refObjectName')}"
-            @render()
-        })
+
+    getTemplateData: ->
+      model: @model.toJSON()
+
+    afterRender: ->
+      @renderField field for field in @fields
 
     fieldIsEditable: (field) ->
       _.contains(@_getFieldNames(), field) && !_.contains(['FormattedID'], field)

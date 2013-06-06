@@ -2,13 +2,13 @@ define [
   'hbsTemplate'
   'lib/utils'
   'application'
-  'views/base/view'
+  'views/base/page_view'
   'models/discussion'
   'collections/discussions'
   'views/discussion/discussion_list_view'
-], (hbs, utils, app, View, Discussion, Discussions, DiscussionListView) ->
+], (hbs, utils, app, PageView, Discussion, Discussions, DiscussionListView) ->
 
-  class DiscussionPageView extends View
+  class DiscussionPageView extends PageView
     
     template: hbs['discussion/templates/discussion_page']
 

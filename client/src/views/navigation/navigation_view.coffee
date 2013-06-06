@@ -1,10 +1,11 @@
 define [
   'hbsTemplate'
-  'views/base/page_view'
-], (hbs, PageView) ->
+  'views/base/view'
+], (hbs, View) ->
 
-  class NavigationView extends PageView
+  class NavigationView extends View
     autoRender: true
+    region: 'navigation'
 
     events:
       'click button[data-target]': 'doNavigate'
@@ -14,15 +15,24 @@ define [
     settings:
       workType: 'myWork'
 
-    doNavigate: (e) ->
-      @publishEvent '!router:route', e.currentTarget.getAttribute('data-target')
-
-    afterRender: ->
-      $('body').addClass('navigation')
-
-    dispose: ->
-      $('body').removeClass('navigation')
+    initialize: ->
       super
+      @subscribeEvent 'navigation:show', @onNavigationShow
+
+    doNavigate: (e) ->
+      @$el.parent().attr('class', @$el.parent().attr('class').replace(/center/, 'left'))
+      $('#page-container').attr('class', $('#page-container').attr('class').replace(/right/, 'center'))
+
+      currentRoute = window.location.pathname
+      newRoute = e.currentTarget.getAttribute('data-target')
+
+      @publishEvent 'navigation:hide'
+      unless newRoute == currentRoute || newRoute != '' || _.contains(['/userstories', '/tasks', '/defects'], currentRoute)
+        @publishEvent '!router:route', newRoute
+
+    onNavigationShow: ->
+      $('#page-container').attr('class', $('#page-container').attr('class').replace(/(\spage\stransition\scenter)?$/, ' page transition right'))
+      @$el.parent().attr('class', @$el.parent().attr('class').replace(/(transition\s)?left/, 'transition center'))
 
     getSetting: (setting) -> @settings[setting]
 

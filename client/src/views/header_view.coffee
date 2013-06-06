@@ -26,21 +26,16 @@ define [
 
     initialize: ->
       super
-
-      $(window).on 'hashchange', =>
-        setTimeout =>
-          @render()
-          if @_getCurrentPage in ['login']
-            @hide()
-          else
-            @show()
-        , 1
+      @subscribeEvent 'navigation:show', @onNavigationShow
+      @subscribeEvent 'navigation:hide', @onNavigationHide
 
     doNavigate: (e) ->
       page = e.currentTarget.getAttribute 'data-target'
 
       if page is 'back'
         window.history.back()
+      else if page is 'navigation'
+        @publishEvent 'navigation:show'
       else
         @publishEvent '!router:route', page
       e.preventDefault()
@@ -79,11 +74,11 @@ define [
 
       data = {title: @title}
 
-      if current_page in ['/userstories', '/defects', '/tasks']
+      if @onNavigateScreen
+        data.onNavigateScreen = true
+      else if current_page in ['/userstories', '/defects', '/tasks']
         data.left_button =  @makeButton 'navigation', 'icon-reorder', 'cyan'
         data.right_button = @makeButton 'settings', 'icon-cog'
-      else if current_page is '/navigation'
-        data.onNavigateScreen = true
       else if current_page is '/settings'
         data.left_button = @makeButton 'back', 'icon-arrow-left'
       else # if current_page in ['detail', 'column']
@@ -94,6 +89,14 @@ define [
 
     updateTitle: (title) ->
       @title = title
+      @render()
+
+    onNavigationShow: ->
+      @onNavigateScreen = true
+      @render()
+
+    onNavigationHide: ->
+      @onNavigateScreen = false
       @render()
 
     _getCurrentPage: ->

@@ -2,18 +2,20 @@ define [
   'views/base/view'
 ], (View) ->
 
+  pageSlider = null
+
   class PageView extends View
     region: 'main'
     renderedSubviews: no
 
-    initialize: ->
+    initialize: (options) ->
       super
       modelOrCollection = @model or @collection
       if modelOrCollection
-        rendered = no
+        rendered = options?.autoRender || @autoRender || false
         @listenTo modelOrCollection, 'change', =>
           @render() unless rendered
-          rendered = yes
+          rendered = true
 
     getNavigationData: ->
       {}
@@ -21,7 +23,7 @@ define [
     renderSubviews: ->
       return
 
-    render: ->
+    render: (transition = true) ->
       super
       unless @renderedSubviews
         @renderSubviews()

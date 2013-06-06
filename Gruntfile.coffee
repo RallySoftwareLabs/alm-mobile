@@ -114,8 +114,6 @@ module.exports = (grunt) ->
               deps: ["jquery"]
             jqueryCookie:
               deps: ["jquery"]
-            base64:
-              deps: ["jquery"]
           out: 'client/dist/js/app.js'
           baseUrl: 'client/gen/js/src'
           optimize: "none"

@@ -2,7 +2,8 @@ define [
   'controllers/base/controller'
   'views/site_view'
   'views/header_view'
-], (Controller, SiteView, HeaderView) ->
+  'views/navigation/navigation_view'
+], (Controller, SiteView, HeaderView, NavigationView) ->
 # Navigation = require 'models/navigation'
 # NavigationView = require 'views/navigation-view'
 
@@ -10,6 +11,7 @@ define [
     beforeAction: (params, route) ->
       @compose 'site', SiteView
       @compose 'header', HeaderView
+      @compose 'navigation', NavigationView
       # @compose 'auth', ->
       #   SessionController = require 'controllers/session_controller'
       #   @controller = new SessionController

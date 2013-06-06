@@ -1,49 +1,47 @@
-.navigation
-{
-  background-color: @darkGrey;
+#navigation {
+  position: absolute;
+  width: 80%;
+  height: 100%;
+  overflow: hidden;
 
-  .summary 
-  {
+  background-color: @darkGrey;
+  top: 40px;
+  padding: 10px;
+
+  .summary {
     text-align: center;
     border-radius: 2px;
 
-    .lead
-    {
+    .lead {
       font-weight: bold;
     }
   }
 
-  .timeRemainingSummary, .activeDefectsSummary
-  {
+  .timeRemainingSummary, .activeDefectsSummary {
     background-color: @nearWhite;
   }
 
-  .percentAcceptedSummary
-  {
+  .percentAcceptedSummary {
     background-color: @red;
   }
 
-  .buttons
-  {
+  .buttons {
     margin-top: 20px;
     margin-left: 0px;
 
-    .btn
-    {
+    .btn {
       padding-left: 10px;
       padding-right: 10px;
       margin-bottom: 4px;
       color: @nearWhite;
     }
 
-    .displayName
-    {
+    .displayName {
       text-align: left;
       padding-top: 4px;
     }
 
-    .icon
-    {
+    .icon {
       text-align: right;
     }
   }

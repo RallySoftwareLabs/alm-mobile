@@ -9,6 +9,6 @@ define [
     id: 'site-container'
     regions:
       '#header': 'header'
-      # '#navigation-container': 'navigation'
+      '#navigation': 'navigation'
       '#content': 'main'
     template: hbs['templates/site']
