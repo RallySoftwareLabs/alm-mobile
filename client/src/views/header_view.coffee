@@ -14,7 +14,6 @@ define [
     template: hbs['topbar/templates/topbar']
 
     listen:
-      'projectready mediator': 'updateTitle'
       'updatetitle mediator': 'updateTitle'
       'loadedSettings mediator': 'render'
       'dispatcher:dispatch mediator': 'render'
