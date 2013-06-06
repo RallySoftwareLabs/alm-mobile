@@ -6,22 +6,11 @@ define [
 ], (hbs, app, DetailView, UserStory) ->
 
   class NewUserStoryView extends DetailView
-    initialize: (options) ->
-      options = options || {}
-      options.newArtifact = true
-      super options
-      @delegateEvents
-      @publishEvent "updatetitle", "New UserStory"
-
+    newArtifact: true
     modelType: UserStory
     id: 'new-user-story'
     template: hbs['new/templates/new_user_story']
-
-    events: ->
-      listeners = {}
-      listeners['click #save button'] = 'onSave'
-      listeners['click #cancel button'] = 'onCancel'
-      listeners
+    homeRoute: '/userstories'
 
     fields: [
       {'Name': 'titled_well'},
@@ -44,18 +33,6 @@ define [
       }
     ]
 
-    onSave: ->
-      # ToDo: Set project from settings
-      @model.sync 'create', @model,
-        wait: true
-        patch: true
-        success: (model, resp, options) =>
-          opts?.success?(model, resp, options)
-          @trigger('save', @options.field, model)
-          @publishEvent '!router:route', ''
-        error: =>
-          opts?.error?(model, resp, options)
-          debugger
-
-    onCancel: ->
-      @publishEvent '!router:route', ''
+    initialize: ->
+      super
+      @publishEvent "updatetitle", "New Story"

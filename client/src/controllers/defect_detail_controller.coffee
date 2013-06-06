@@ -8,4 +8,4 @@ define [
 			@view = new ShowView oid: params.id
 
 		create: (params) ->
-			@view = new CreateView
+			@view = new CreateView autoRender: true

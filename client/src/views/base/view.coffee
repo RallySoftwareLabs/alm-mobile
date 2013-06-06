@@ -18,7 +18,7 @@ define [
     getTemplateFunction: -> @template
     getTemplateData: ->
 
-    render: ->
+    attach: ->
       super
       @afterRender()
       @

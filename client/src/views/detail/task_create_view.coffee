@@ -6,22 +6,11 @@ define [
 ], (hbs, app, DetailView, Task) ->
 
   class NewTaskView extends DetailView
-    initialize: (options) ->
-      options = options || {}
-      options.newArtifact = true
-      super options
-      @delegateEvents
-      @publishEvent "updatetitle", "New Task"
-
+    newArtifact: true
     modelType: Task
     id: 'new-task'
     template: hbs['new/templates/new_task']
-
-    events: ->
-      listeners = {}
-      listeners['click #save button'] = 'onSave'
-      listeners['click #cancel button'] = 'onCancel'
-      listeners
+    homeRoute: '/tasks'
 
     fields: [
       # ToDo: Project and WorkProduct NEED to be set
@@ -52,17 +41,6 @@ define [
       {'Description': 'html'}
     ]
 
-    onSave: ->
-      @model.sync 'create', @model,
-        wait: true
-        patch: true
-        success: (model, resp, options) =>
-          opts?.success?(model, resp, options)
-          @trigger('save', @options.field, model)
-          @publishEvent '!router:route', ''
-        error: =>
-          opts?.error?(model, resp, options)
-          debugger
-
-    onCancel: ->
-      @publishEvent '!router:route', ''
+    initialize: ->
+      super
+      @publishEvent "updatetitle", "New Task"

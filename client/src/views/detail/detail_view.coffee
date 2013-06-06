@@ -1,5 +1,6 @@
 define [
   'underscore'
+  'application'
   'views/base/page_view'
   'views/field/field_view'
   'views/field/field_discussion_view'
@@ -11,13 +12,16 @@ define [
   'views/field/field_titled_well_view'
   'views/field/field_toggle_view'
   'views/field/field_work_product_view'
-], (_, PageView, FieldView) ->
+], (_, app, PageView, FieldView) ->
 
   class DetailView extends PageView
     region: 'main'
 
+    events:
+      'click #save button': 'onSave'
+      'click #cancel button': 'onCancel'
+
     initialize: (options) ->
-      @newArtifact = options.newArtifact? and options.newArtifact
       @fieldViews = {}
       @model = if @newArtifact then new @modelType() else new @modelType(ObjectID: options.oid)
       super options
@@ -62,6 +66,23 @@ define [
       
       @listenTo fieldView, 'save', @_onFieldSave
 
+    # New artifact events
+
+    onSave: ->
+      @model.set Project: app.session.project.get('_ref')
+      @model.sync 'create', @model,
+        wait: true
+        patch: true
+        success: (model, resp, options) =>
+          opts?.success?(model, resp, options)
+          @trigger('save', @options.field, model)
+          @publishEvent '!router:route', @homeRoute, replace: false
+        error: =>
+          opts?.error?(model, resp, options)
+          debugger
+
+    onCancel: ->
+      @publishEvent '!router:route', @homeRoute, replace: false
 
     _getFieldViewClass: (viewType) ->
       try

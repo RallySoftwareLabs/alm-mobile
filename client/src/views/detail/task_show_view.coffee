@@ -5,7 +5,7 @@ define [
   'collections/tasks'
 ], (hbs, DetailView, Task, Tasks) ->
 
-  DetailView.extend({
+  class TaskShowView extends DetailView
     modelType: Task
     id: 'task-detail-view'
     template: hbs['detail/templates/task_detail']
@@ -42,4 +42,3 @@ define [
       {'WorkProduct': 'work_product'},
       'DisplayName'
     ]
-  })

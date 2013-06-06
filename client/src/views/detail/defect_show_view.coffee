@@ -4,7 +4,7 @@ define [
   'models/defect'
 ], (hbs, DetailView, Defect) ->
 
-  DetailView.extend({
+  class DefectShowView extends DetailView
     modelType: Defect
     id: 'defect-detail-view'
     template: hbs['detail/templates/defect_detail']
@@ -61,4 +61,3 @@ define [
           value: 'Ready'
       }
     ]
-  })

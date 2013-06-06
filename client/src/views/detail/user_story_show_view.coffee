@@ -4,7 +4,7 @@ define [
   'models/user_story'
 ], (hbs, DetailView, UserStory) ->
 
-  DetailView.extend({
+  class UserStoryShowView extends DetailView
     modelType: UserStory
     id: 'user-story-detail-view'
     template: hbs['detail/templates/user_story_detail']
@@ -41,4 +41,3 @@ define [
           view: 'toggle'
       }
     ]
-  })

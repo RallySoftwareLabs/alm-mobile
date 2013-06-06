@@ -33,7 +33,7 @@ module.exports = (grunt) ->
         tasks: ['less:client', 'concat:css']
 
       clientTemplates:
-        files: 'client/src/views/**/templates/*.hbs'
+        files: 'client/src/views/**/templates/**/*.hbs'
         tasks: ['handlebars', 'requirejs:compile', 'uglify:hbs']
 
       clientTest:

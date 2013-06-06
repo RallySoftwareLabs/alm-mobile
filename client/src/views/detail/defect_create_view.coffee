@@ -6,22 +6,11 @@ define [
 ], (hbs, app, DetailView, Defect) ->
 
   class NewDefectView extends DetailView
-    initialize: (options) ->
-      options = options || {}
-      options.newArtifact = true
-      super options
-      @delegateEvents
-      @publishEvent "updatetitle", "New Defect"
-
+    newArtifact: true
     modelType: Defect
     id: 'new-defect'
     template: hbs['new/templates/new_defect']
-
-    events: ->
-      listeners = {}
-      listeners['click #save button'] = 'onSave'
-      listeners['click #cancel button'] = 'onCancel'
-      listeners
+    homeRoute: '/defects'
 
     fields: [
       {'Name': 'titled_well'},
@@ -64,17 +53,6 @@ define [
       {'Description': 'html'}
     ]
 
-    onSave: ->
-      @model.sync 'create', @model,
-        wait: true
-        patch: true
-        success: (model, resp, options) =>
-          opts?.success?(model, resp, options)
-          @trigger('save', @options.field, model)
-          @publishEvent '!router:route', '', replace: false
-        error: =>
-          opts?.error?(model, resp, options)
-          debugger
-
-    onCancel: ->
-      @publishEvent '!router:route', '', replace: false
+    initialize: ->
+      super
+      @publishEvent "updatetitle", "New Defect"
