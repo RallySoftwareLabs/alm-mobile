@@ -3,7 +3,7 @@
     <ul class="nav btn-group">
       {{#each tabs}}
       <li class="btn{{#if this.active}} active{{/if}}" id="{{this.key}}-tab">
-        <a href="{{this.key}}" id="{{this.key}}" data-toggle="pill" data-target="#{{this.key}}-view">
+        <a href="{{this.key}}" id="{{this.key}}" data-toggle="pill">
           {{this.value}}
         </a>
       </li>
@@ -12,11 +12,7 @@
   </div>
 
   <div class="tab-content">
-    {{#each tabs}}
-    <div class="tab-pane{{#if this.active}} active{{/if}}" id="{{this.key}}-view">
       <div class="row-fluid listing"/>
-    </div>
-    {{/each}}
   </div>
 
   <div class='bottom-centered'>
