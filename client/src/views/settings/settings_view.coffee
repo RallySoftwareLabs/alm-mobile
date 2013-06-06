@@ -22,7 +22,7 @@ define [
 
     getTemplateData: ->
       projects: app.session.projects?.models
-      currentProject: app.session.project
+      currentProject: app.session.project.get('_ref')
 
     triggerLogout: ->
       app.session.logout()

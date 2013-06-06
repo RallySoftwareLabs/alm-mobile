@@ -30,8 +30,8 @@ define ['handlebars', 'lib/utils'], (Handlebars, utils) ->
   Handlebars.registerHelper 'createdAt', (created) ->
     _(created).capitalize()
 
-  Handlebars.registerHelper 'selectOption', (option, selectedValue) ->
-    str = "<option value=\"#{option}\""
-    str += " selected=\"selected\"" if selectedValue is option
-    str += ">#{option}</option>"
+  Handlebars.registerHelper 'selectOption', (value, label, selectedValue) ->
+    str = "<option value=\"#{value}\""
+    str += " selected=\"selected\"" if selectedValue is value
+    str += ">#{label}</option>"
     str
