@@ -88,13 +88,11 @@ module.exports = (grunt) ->
             bootstrap: "../../../../vendor/scripts/bootstrap-2.3.2"
             spin: "../../../../vendor/scripts/spin-1.2.7"
             jqueryCookie: "../../../../vendor/scripts/jquery-cookie"
-            base64: "../../../../vendor/scripts/jquery.base64"
             underscore: "../../../../vendor/scripts/lodash-1.2.1"
             backbone: "../../../../vendor/scripts/backbone-1.0.0"
             chaplin: "../../../../vendor/scripts/chaplin-0.9.0"
             handlebars: "../../../../vendor/scripts/handlebars.runtime-1.0.0"
             hbsTemplate: "../../../dist/js/hbs"
-            backboneBeforeAllFilter: "../../../../vendor/scripts/backbone-before-all-filter"
           shim:
             jquery:
               exports: "$"
