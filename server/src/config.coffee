@@ -5,6 +5,7 @@ class ServerConfig
 
   toJSON: ->
     almWebServiceBaseUrl: @almWebServiceBaseUrl
+    cookieDomain: @cookieDomain
 
 console.log "ALM @#{ServerConfig::almWebServiceBaseUrl}"
 console.log "Setting cookie domain as #{ServerConfig::cookieDomain}"

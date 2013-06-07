@@ -1,10 +1,9 @@
-define [
-  'jquery'
-  'chaplin'
-  'models/user'
-  'models/authentication'
-  'routes'
-], ($, Chaplin, User, Session, routes) ->
+define ->
+  $ = require 'jquery'
+  Chaplin = require 'chaplin'
+  User = require 'models/user'
+  Session = require 'models/session'
+  routes = require 'routes'
 
   class Application extends Chaplin.Application
     title: 'Rally ALM Mobile'
@@ -61,7 +60,7 @@ define [
         params:
           fetch: 'ObjectID,DisplayName'
         success: (model, response, opts) =>
-          @session.setUser model
+          @session.set user: model
           cb?(model)
       
       Object.freeze? this

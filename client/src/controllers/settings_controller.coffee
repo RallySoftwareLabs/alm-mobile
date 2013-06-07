@@ -1,8 +1,16 @@
-define [
-	'controllers/base/site_controller'
-	'views/settings/settings_view'
-], (SiteController, SettingsView) ->
-	class NavigationController extends SiteController
+define ->
+  $ = require 'jquery'
+  app = require 'application'
+  SiteController = require 'controllers/base/site_controller'
+  SettingsView = require 'views/settings/settings_view'
 
-		show: (params) ->
-			@view = new SettingsView region: 'main'
+  class SettingsController extends SiteController
+
+    show: (params) ->
+      @afterProjectLoaded ->
+        mode = app.session.get('mode')
+        @view = new SettingsView region: 'main', mode: mode
+        @listenTo @view, 'toggleMode', @onToggleMode
+
+    onToggleMode: (mode) ->
+      app.session.set 'mode', mode

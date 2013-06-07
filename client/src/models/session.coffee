@@ -1,13 +1,17 @@
-define [
-  'jqueryCookie'
-  'models/base/model'
-  'models/user'
-  'collections/projects'
-], (jqueryCookie, Model, User, Projects) ->
+define ->
+  jqueryCookie = require 'jqueryCookie'
+  Model = require 'models/base/model'
+  User = require 'models/user'
+  Projects = require 'collections/projects'
 
-  class Authentication extends Model
+  class Session extends Model
     initialize: ->
-      @user = new User()
+      super
+      @set
+        user: new User()
+        mode: $.cookie('mode') || 'team'
+      @listenTo this, 'change:user', @_onUserChange
+      @listenTo this, 'change:mode', @_onModeChange
 
     authenticated: (cb) ->
       authCache = @get 'authenticated'
@@ -21,7 +25,6 @@ define [
         dataType: 'json'
         success: (data, status, xhr) =>
           @set
-            # zsessionid: $.cookie('ZSESSIONID')
             jsessionid: $.cookie('JSESSIONID')
             securityToken: data.securityToken
             authenticated: true
@@ -36,14 +39,6 @@ define [
     hasSessionCookie: ->
       !!$.cookie('JSESSIONID')
 
-    setUser: (@user) ->
-      @projects = new Projects()
-      @projects.fetch
-        success: (collection) =>
-          @setProject collection.first()
-          @publishEvent "projectready", @getProjectName()
-          @publishEvent 'loadedSettings'
-
     setProject: (@project) ->
 
     getProjectName: ->
@@ -57,11 +52,20 @@ define [
 
     setSecurityToken: (securityToken) ->
       @set
-        # zsessionid: $.cookie('ZSESSIONID')
         jsessionid: $.cookie('JSESSIONID')
         securityToken: securityToken
 
     logout: ->
-      # $.cookie('ZSESSIONID', "")
-      $.cookie('JSESSIONID', "")
+      $.removeCookie('JSESSIONID', domain: window.AppConfig.cookieDomain)
       @set securityToken: null
+
+    _onUserChange: (model, value, options) ->
+      @projects = new Projects()
+      @projects.fetch
+        success: (collection) =>
+          @setProject collection.first()
+          @publishEvent "projectready", @getProjectName()
+          @publishEvent 'loadedSettings'
+
+    _onModeChange: (model, value, options) ->
+      $.cookie('mode', value, cookieDomain: window.AppConfig.cookieDomain)

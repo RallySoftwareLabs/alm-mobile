@@ -17,8 +17,8 @@
       <label class="show-work">Show:</label>
     </div>
     <div class="btn-group span9">
-          <button class="btn btn-large">My Work</button>
-          <button class="btn btn-large active">My Team</button>
+          <button class="btn btn-large self{{#if isSelf}} active{{/if}}">My Work</button>
+          <button class="btn btn-large team{{#if isTeam}} active{{/if}}">My Team</button>
       </div>
     </div>
   </div>

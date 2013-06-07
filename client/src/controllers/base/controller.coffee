@@ -1,9 +1,6 @@
-define [
-	'chaplin'
-	'application'
-], (Chaplin, app) ->
-# Navigation = require 'models/navigation'
-# NavigationView = require 'views/navigation-view'
+define ->
+  Chaplin = require 'chaplin'
+  app = require 'application'
 
   class Controller extends Chaplin.Controller
       
@@ -16,4 +13,4 @@ define [
     onProjectReady: (callback) ->
       => 
         @unsubscribeEvent 'projectready', @onProjectReady
-        callback?()
+        callback?.apply this
