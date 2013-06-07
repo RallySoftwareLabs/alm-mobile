@@ -9,4 +9,4 @@ define [
       super config
 
     startEdit: (event) ->
-      @saveModel Owner: app.session.user.get('_ref')
+      @saveModel Owner: app.session.get('user').get('_ref')

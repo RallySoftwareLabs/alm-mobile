@@ -28,10 +28,10 @@ define [
         throw new Error("You must define the create route in the HomeView subclass")
 
       @listenTo @collection, 'sync', @onFetch
+      @updateTitle [_.find(@_getTabs(), active: true).value, app.session.getProjectName()].join ' in '
 
     onFetch: ->
       @stopListening @collection, 'sync', @onFetch
-      @updateTitle()
       @view = new @listView
         autoRender: true
         container: @$(".listing")
@@ -40,9 +40,6 @@ define [
     getTemplateData: ->
       createRoute: @createRoute
       tabs: @_getTabs()
-
-    updateTitle: ->
-      @publishEvent 'updatetitle', [_.find(@_getTabs(), active: true).value, app.session.getProjectName()].join ' in '
 
     onButton: (event) ->
       url = event.currentTarget.id

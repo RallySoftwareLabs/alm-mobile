@@ -1,14 +1,14 @@
-define [
-  'application'
-  'collections/user_stories'
-  'collections/tasks'
-  'collections/defects'
-	'controllers/base/site_controller'
-  'views/home/home_view'
-  'views/home/user_stories_page_view'
-  'views/home/tasks_page_view'
-	'views/home/defects_page_view'
-], (app, UserStories, Tasks, Defects, SiteController, HomeView, UserStoriesPageView, TasksPageView, DefectsPageView) ->
+define ->
+  app = require 'application'
+  UserStories = require 'collections/user_stories'
+  Tasks = require 'collections/tasks'
+  Defects = require 'collections/defects'
+  SiteController = require 'controllers/base/site_controller'
+  HomeView = require 'views/home/home_view'
+  UserStoriesPageView = require 'views/home/user_stories_page_view'
+  TasksPageView = require 'views/home/tasks_page_view'
+  DefectsPageView = require 'views/home/defects_page_view'
+
   class HomeController extends SiteController
     show: (params) ->
       @redirectToRoute 'home#userstories', replace: true
@@ -16,31 +16,33 @@ define [
     userstories: (params) ->
       userStories = new UserStories()
       
-      @view = new UserStoriesPageView autoRender: true, tab: 'userstories', collection: userStories
-
-      @afterProjectLoaded =>
-        userStories.fetch @getFetchData(['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked'])
+      @afterProjectLoaded ->
+        @view = new UserStoriesPageView autoRender: true, tab: 'userstories', collection: userStories
+        userStories.fetch data: @getFetchData(['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked'])
       
     tasks: (params) ->
       tasks = new Tasks()
-      
-      @view = new TasksPageView autoRender: true, tab: 'tasks', collection: tasks
 
       @afterProjectLoaded =>
-        tasks.fetch @getFetchData(['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked', 'ToDo'])
+        @view = new TasksPageView autoRender: true, tab: 'tasks', collection: tasks
+        tasks.fetch data: @getFetchData(['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked', 'ToDo'])
 
     defects: (params) ->
       defects = new Defects()
-      
-      @view = new DefectsPageView autoRender: true, tab: 'defects', collection: defects
 
       @afterProjectLoaded =>
-        defects.fetch @getFetchData(['ObjectID', 'FormattedID', 'Name'])
+        @view = new DefectsPageView autoRender: true, tab: 'defects', collection: defects
+        defects.fetch data: @getFetchData(['ObjectID', 'FormattedID', 'Name'])
 
     getFetchData: (fetch) ->
-      data:
+      data =
         fetch: fetch.join ','
         project: app.session.project.get('_ref')
         projectScopeUp: false
         projectScopeDown: true
         order: "CreationDate DESC,ObjectID"
+
+      if app.session.isSelfMode()
+        data.query = "(Owner = #{app.session.get('user').get('_ref')})"
+
+      data

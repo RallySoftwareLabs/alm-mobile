@@ -47,6 +47,9 @@ define ->
       catch e
         ""
 
+    isSelfMode: -> @get('mode') == 'self'
+    isTeamMode: -> @get('mode') == 'team'
+
     getSecurityToken: ->
       @get 'securityToken'
 

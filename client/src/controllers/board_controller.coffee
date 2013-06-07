@@ -38,12 +38,18 @@ define ->
       @redirectToRoute "#{mappedType}#show", id: oid
 
     getFetchData: (field, value) ->
-      fetch: ['ObjectID', 'FormattedID', 'DragAndDropRank'].join ','
-      query: "(#{field} = \"#{value}\")"
-      project: app.session.project.get('_ref')
-      projectScopeUp: false
-      projectScopeDown: true
-      order: "DragAndDropRank DESC"
+      data =
+        fetch: ['ObjectID', 'FormattedID', 'DragAndDropRank'].join ','
+        query: "(#{field} = \"#{value}\")"
+        project: app.session.project.get('_ref')
+        projectScopeUp: false
+        projectScopeDown: true
+        order: "DragAndDropRank DESC"
+
+      if app.session.isSelfMode()
+        data.query = "(#{data.query} AND (Owner = #{app.session.get('user').get('_ref')}))"
+
+      data
 
     getRouteTypeFromModelType: (type = 'hierarchicalrequirement') ->
       routeTypes =

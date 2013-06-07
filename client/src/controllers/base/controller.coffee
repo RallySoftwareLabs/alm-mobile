@@ -6,7 +6,7 @@ define ->
       
     afterProjectLoaded: (callback) ->
       if app.session.project?
-        callback?()
+        callback?.apply this
       else
         @subscribeEvent 'projectready', @onProjectReady(callback)
 

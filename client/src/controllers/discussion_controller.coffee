@@ -35,7 +35,7 @@ define [
         updates =
           Text: text
           Artifact: @artifactRef
-          User: app.session.user?.get('_ref')
+          User: app.session.get('user')?.get('_ref')
         new Discussion().save updates,
           wait: true
           patch: true
