@@ -1,12 +1,11 @@
-define [
-  'underscore'
-  'application'
-  'controllers/base/site_controller'
-  'models/column'
-  'models/user_story'
-  'views/board/board_view'
-  'views/board/column_page_view'
-], (_, app, SiteController, Column, UserStory, BoardView, ColumnPageView) ->
+define ->
+  _ = require 'underscore'
+  app = require 'application'
+  SiteController = require 'controllers/base/site_controller'
+  Column = require 'models/column'
+  UserStory = require 'models/user_story'
+  BoardView = require 'views/board/board_view'
+  ColumnPageView = require 'views/board/column_page_view'
 
   class BoardController extends SiteController
     index: (params) ->

@@ -1,7 +1,6 @@
-define [
-	'hbsTemplate'
-	'views/base/view'
-], (hbs, View) ->
+define ->
+	hbs = require 'hbsTemplate'
+	View = require 'views/base/view'
 
 	class ColumnView extends View
 		template: hbs['board/templates/column']
