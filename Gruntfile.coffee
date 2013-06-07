@@ -106,8 +106,8 @@ module.exports = (grunt) ->
               deps: ["backbone"]
             backboneBeforeAllFilter:
               deps: ["backbone"]
-            underscore:
-              exports: "_"
+            # underscore:
+            #   exports: "_"
             bootstrap:
               deps: ["jquery"]
             spin:
@@ -118,6 +118,7 @@ module.exports = (grunt) ->
           baseUrl: 'client/gen/js/src'
           optimize: "none"
           preserveLicenseComments: false
+          findNestedDependencies: true
           useStrict: true
           wrap: true
 
