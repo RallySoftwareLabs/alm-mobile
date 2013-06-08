@@ -1,15 +1,12 @@
-define [
-  'chaplin'
-  'views/base/view'
-  'hbsTemplate'
-], (Chaplin, View, hbs) ->
+define ->
+  Chaplin = require 'chaplin'
+  hbs = require 'hbsTemplate'
+  View = require 'views/base/view'
 
   class HeaderView extends View
     autoRender: true
     region: 'header'
     template: hbs['templates/header']
-
-    ENTER_KEY: 13
 
     template: hbs['topbar/templates/topbar']
 
@@ -17,16 +14,12 @@ define [
       'updatetitle mediator': 'updateTitle'
       'loadedSettings mediator': 'render'
       'dispatcher:dispatch mediator': 'render'
+      'navigation:show mediator': 'onNavigationShow'
+      'navigation:hide mediator': 'onNavigationHide'
 
     events:
       'click div[data-target]': 'doNavigate'
       'swipe': 'gotSwiped'
-      'keydown .search-query': 'searchKeyDown'
-
-    initialize: ->
-      super
-      @subscribeEvent 'navigation:show', @onNavigationShow
-      @subscribeEvent 'navigation:hide', @onNavigationHide
 
     doNavigate: (e) ->
       page = e.currentTarget.getAttribute 'data-target'
@@ -39,24 +32,6 @@ define [
         @publishEvent '!router:route', page
       e.preventDefault()
 
-    searchKeyDown: (event) ->
-      switch event.which
-        when @ENTER_KEY
-          event.preventDefault()
-          @doSearch event.target.value
-
-    doSearch: (keyword) ->
-      $('.search-no-results').remove()
-      new Artifacts().fetch
-        data:
-          fetch: "ObjectID,Name"
-          search: keyword
-        success: (collection, response, options) =>
-          if collection.length > 0
-            firstResult = collection.first()
-            @publishEvent '!router:route', utils.getDetailHash(firstResult)
-          else
-            @_noSearchResults()
 
     gotSwiped: (e) ->
       console.log 'got swiped', e
@@ -71,11 +46,11 @@ define [
     getTemplateData: ->
       current_page = @_getCurrentPage()
 
-      data = {title: @title}
+      data =
+        title: @title
+        onNavigateScreen: @onNavigateScreen
 
-      if @onNavigateScreen
-        data.onNavigateScreen = true
-      else if current_page in ['/userstories', '/defects', '/tasks']
+      if current_page in ['/userstories', '/defects', '/tasks']
         data.left_button =  @makeButton 'navigation', 'icon-reorder', 'cyan'
         data.right_button = @makeButton 'settings', 'icon-cog'
       else if current_page is '/settings'
@@ -100,21 +75,3 @@ define [
 
     _getCurrentPage: ->
       window.location.pathname
-
-    _noSearchResults: ->
-      alert = $('body').append([
-        '<div class="search-no-results alert alert-error">',
-        '<button type="button" class="close" data-dismiss="alert">&times;</button>',
-        'No results matched your search.</div>'
-      ].join '')
-      noResults = $('.search-no-results')
-      @_center(noResults)
-      setTimeout(->
-        noResults = $('.search-no-results')
-        noResults.fadeOut(400, -> noResults.remove())
-      , 1500)
-
-    _center: (el) ->
-      container = $(window)
-      boundingRec = $('.search-query')[0].getBoundingClientRect()
-      el.css('top': "#{boundingRec.top + boundingRec.height}px", 'left': "#{boundingRec.left}px")

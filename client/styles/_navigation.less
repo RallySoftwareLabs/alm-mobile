@@ -1,11 +1,21 @@
+#mask {
+  position: absolute;
+  z-index: 1400;
+  opacity: 0.8;
+  height: 100%;
+  width: 100%;
+  background-color: @medGrey;
+}
+
 #navigation {
   position: absolute;
   width: 80%;
   height: 100%;
   overflow: hidden;
+  z-index: 1500;
 
   background-color: @darkGrey;
-  top: 40px;
+  top: 0;
   padding: 10px;
 
   .summary {
