@@ -8,8 +8,6 @@ define ->
     region: 'header'
     template: hbs['templates/header']
 
-    template: hbs['topbar/templates/topbar']
-
     listen:
       'updatetitle mediator': 'updateTitle'
       'loadedSettings mediator': 'render'
