@@ -1,8 +1,7 @@
-define [
-  'chaplin'
-  'lib/view_helper'
-  'views/shared/loading_view'
-], (Chaplin, ViewHelper, LoadingMaskView) ->
+define ->
+  Chaplin = require 'chaplin'
+  ViewHelper = require 'lib/view_helper'
+  LoadingMaskView = require 'views/shared/loading_view'
 
 # Base class for all views.
   class View extends Chaplin.View
@@ -20,12 +19,11 @@ define [
     #   mask.render()
 
     getTemplateFunction: -> @template
-    getTemplateData: ->
 
     attach: ->
       super
       @afterRender()
-      @
+      this
 
     afterRender: ->
 

@@ -1,12 +1,7 @@
-define [
-  'hbsTemplate'
-  'views/base/view'
-], (hbs, View) ->
+define ->
+  hbs = require 'hbsTemplate'
+  View = require 'views/base/view'
 
   class DiscussionView extends View
 
     template: hbs['discussion/templates/discussion']
-
-    getTemplateData: ->
-      # error: @options.error
-      discussion: @model.toJSON()

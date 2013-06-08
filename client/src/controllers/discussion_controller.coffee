@@ -1,12 +1,12 @@
-define [
-  'application'
-  'lib/utils'
-  'models/discussion'
-  'collections/discussions'
-	'controllers/base/site_controller'
-	'views/discussion/discussion_page_view'
-], (app, utils, Discussion, Discussions, SiteController, DiscussionPageView) ->
-	class DiscussionController extends SiteController
+define ->
+  app = require 'application'
+  utils = require 'lib/utils'
+  Discussion = require 'models/discussion'
+  Discussions = require 'collections/discussions'
+  SiteController = require 'controllers/base/site_controller'
+  DiscussionPageView = require 'views/discussion/discussion_page_view'
+
+  class DiscussionController extends SiteController
     show: (params) ->
       @discussions = new Discussions()
 
@@ -17,7 +17,7 @@ define [
         autoRender: true
         collection: @discussions
 
-      @listenTo @view, 'reply', @_onReplyClick
+      @listenTo @view, 'reply', @onReplyClick
 
       @discussions.fetch
         data:
@@ -27,7 +27,7 @@ define [
         # success: (collection, response, options) =>
         #   @render()
 
-    _onReplyClick: (text) ->
+    onReplyClick: (text) ->
       @_addComment(text)
 
     _addComment: (text) ->

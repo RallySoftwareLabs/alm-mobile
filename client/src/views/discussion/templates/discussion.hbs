@@ -1,12 +1,12 @@
 <button class="btn btn-block list-item">
     <div class="profile-image">
-    	<img src="{{profileImageUrl discussion.User._ref 80}}"/>
+    	<img src="{{profileImageUrl User._ref 80}}"/>
     </div>
     <div class="details">
     	<div class="status">
-    		<span class="profileLink"><span>{{discussion.User._refObjectName}}</span></span>
-    		{{createdAt discussion._CreatedAt}}
+    		<span class="profileLink"><span>{{User._refObjectName}}</span></span>
+    		{{createdAt _CreatedAt}}
     	</div>
-    	<div class="detail-text">{{{discussion.Text}}}</div>
+    	<div class="detail-text">{{{Text}}}</div>
     </div>
 </button>
