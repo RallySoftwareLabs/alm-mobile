@@ -1,6 +1,6 @@
-define [
-  'views/field/field_input_view'
-], (FieldInputView) ->
+define ->
+  FieldInputView = require 'views/field/field_input_view'
+
   class FieldHtmlView extends FieldInputView
 
     initialize: ->

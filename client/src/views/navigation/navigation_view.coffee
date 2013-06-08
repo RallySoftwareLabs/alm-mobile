@@ -6,8 +6,6 @@ define ->
   class NavigationView extends View
     template: hbs['navigation/templates/navigation']
 
-    ENTER_KEY: 13
-
     listen:
       'navigation:show mediator': 'show'
 
@@ -20,7 +18,7 @@ define ->
 
     searchKeyDown: (event) ->
       switch event.which
-        when @ENTER_KEY
+        when @keyCodes.ENTER_KEY
           event.preventDefault()
           $('.search-no-results').remove()
           @trigger 'search', event.target.value

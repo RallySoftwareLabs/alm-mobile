@@ -1,7 +1,6 @@
-define [
-  'application',
-  'views/field/field_view'
-], (app, FieldView) ->
+define ->
+  FieldView = require 'views/field/field_view'
+
   class FieldDiscussionView extends FieldView
 
     startEdit: (event) ->

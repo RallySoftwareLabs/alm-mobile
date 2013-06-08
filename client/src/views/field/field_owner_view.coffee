@@ -1,7 +1,6 @@
-define [
-  'application'
-  'views/field/field_view'
-], (app, FieldView) ->
+define ->
+  app = require 'application'
+  FieldView = require 'views/field/field_view'
 
   class FieldOwnerView extends FieldView
     initialize: (config) ->

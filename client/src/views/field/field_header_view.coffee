@@ -1,5 +1,4 @@
-define [
-  'views/field/field_input_view'
-], (FieldInputView) ->
+define ->
+  FieldInputView = require 'views/field/field_input_view'
 
   class FieldHeaderView extends FieldInputView

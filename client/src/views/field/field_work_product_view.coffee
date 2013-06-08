@@ -1,8 +1,6 @@
-define [
-  'application',
-  'lib/utils'
-  'views/field/field_view'
-], (app, utils, FieldView) ->
+define ->
+  utils = require 'lib/utils'
+  FieldView = require 'views/field/field_view'
 
   class FieldWorkProductView extends FieldView
 

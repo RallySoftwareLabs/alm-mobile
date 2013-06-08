@@ -1,6 +1,5 @@
-define [
-  'views/field/field_input_view'
-], (FieldInputView) ->
+define ->
+  FieldInputView = require 'views/field/field_input_view'
 
   class FieldTitledWellView extends FieldInputView
 
@@ -12,5 +11,5 @@ define [
 
     onSelectKeydown: (event) ->
       switch event.which
-        when @ENTER_KEY then @endEdit event
-        when @ESCAPE_KEY then @_switchToViewMode()
+        when @keyCodes.ENTER_KEY then @endEdit event
+        when @keyCodes.ESCAPE_KEY then @_switchToViewMode()

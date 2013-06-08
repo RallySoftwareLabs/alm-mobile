@@ -1,6 +1,5 @@
-define [
-  'views/field/field_view'
-], (FieldView) ->
+define ->
+  FieldView = require 'views/field/field_view'
 
   ToggleFields = ['Blocked', 'Ready']
 

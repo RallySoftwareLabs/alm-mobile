@@ -1,11 +1,7 @@
-define [
-  'views/field/field_view'
-], (FieldView) ->
+define ->
+  FieldView = require 'views/field/field_view'
 
   class FieldInputView extends FieldView
-
-    ENTER_KEY: 13
-    ESCAPE_KEY: 27
 
     initialize: ->
       super
@@ -17,5 +13,5 @@ define [
 
     onKeyDown: (event) ->
       switch event.which
-        when @ENTER_KEY then @endEdit event
-        when @ESCAPE_KEY then @_switchToViewMode()
+        when @keyCodes.ENTER_KEY then @endEdit event
+        when @keyCodes.ESCAPE_KEY then @_switchToViewMode()

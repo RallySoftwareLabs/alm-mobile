@@ -6,6 +6,10 @@ define [
 
 # Base class for all views.
   class View extends Chaplin.View
+    keyCodes:
+      ENTER_KEY: 13
+      ESCAPE_KEY: 27
+
     # initialize: ->
       # @render = _.bind(@render, @)
       # @renderLoadingMask()

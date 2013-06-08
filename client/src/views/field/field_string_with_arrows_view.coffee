@@ -1,13 +1,10 @@
-define [
-  'views/field/field_view'
-], (FieldView) ->
+define ->
+  FieldView = require 'views/field/field_view'
+
   class FieldStringWithArrowsView extends FieldView
 
-    initialize: (options) ->
-      @setEditMode = false
-      super options
-
     initialize: ->
+      @setEditMode = false
       super
       @delegate 'click', '.arrows-right', @onRightArrow
       @delegate 'click', '.arrows-left', @onLeftArrow
