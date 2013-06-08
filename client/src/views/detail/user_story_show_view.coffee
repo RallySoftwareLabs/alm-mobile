@@ -1,8 +1,7 @@
-define [
-  'hbsTemplate'
-  'views/detail/detail_view'
-  'models/user_story'
-], (hbs, DetailView, UserStory) ->
+define ->
+  hbs = require 'hbsTemplate'
+  DetailView = require 'views/detail/detail_view'
+  UserStory = require 'models/user_story'
 
   class UserStoryShowView extends DetailView
     modelType: UserStory

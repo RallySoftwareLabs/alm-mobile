@@ -1,9 +1,7 @@
-define [
-  'hbsTemplate'
-  'views/detail/detail_view'
-  'models/task'
-  'collections/tasks'
-], (hbs, DetailView, Task, Tasks) ->
+define ->
+  hbs = require 'hbsTemplate'
+  DetailView = require 'views/detail/detail_view'
+  Task = require 'models/task'
 
   class TaskShowView extends DetailView
     modelType: Task

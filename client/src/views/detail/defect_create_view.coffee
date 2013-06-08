@@ -1,15 +1,13 @@
-define [
-  'hbsTemplate'
-  'application'
-  'views/detail/detail_view'
-  'models/defect'
-], (hbs, app, DetailView, Defect) ->
+define ->
+  hbs = require 'hbsTemplate'
+  DetailView = require 'views/detail/detail_view'
+  Defect = require 'models/defect'
 
   class NewDefectView extends DetailView
     newArtifact: true
     modelType: Defect
     id: 'new-defect'
-    template: hbs['new/templates/new_defect']
+    template: hbs['detail/templates/create_defect']
     homeRoute: '/defects'
 
     fields: [

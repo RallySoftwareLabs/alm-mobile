@@ -1,15 +1,13 @@
-define [
-  'hbsTemplate'
-  'application'
-  'views/detail/detail_view'
-  'models/task'
-], (hbs, app, DetailView, Task) ->
+define ->
+  hbs = require 'hbsTemplate'
+  DetailView = require 'views/detail/detail_view'
+  Task = require 'models/task'
 
   class NewTaskView extends DetailView
     newArtifact: true
     modelType: Task
     id: 'new-task'
-    template: hbs['new/templates/new_task']
+    template: hbs['detail/templates/create_task']
     homeRoute: '/tasks'
 
     fields: [

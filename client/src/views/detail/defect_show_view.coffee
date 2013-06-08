@@ -1,8 +1,7 @@
-define [
-  'hbsTemplate'
-  'views/detail/detail_view'
-  'models/defect'
-], (hbs, DetailView, Defect) ->
+define ->
+  hbs = require 'hbsTemplate'
+  DetailView = require 'views/detail/detail_view'
+  Defect = require 'models/defect'
 
   class DefectShowView extends DetailView
     modelType: Defect
