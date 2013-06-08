@@ -1,12 +1,9 @@
 define ->
+  app = require 'application'
   hbs = require 'hbsTemplate'
-  utils = require 'lib/utils'
-  Artifacts = require 'collections/artifacts'
   View = require 'views/base/view'
 
   class NavigationView extends View
-    autoRender: true
-    region: 'navigation'
     template: hbs['navigation/templates/navigation']
 
     ENTER_KEY: 13
@@ -18,37 +15,15 @@ define ->
       'click button[data-target]': 'doNavigate'
       'keydown .search-query': 'searchKeyDown'
 
-    settings:
-      workType: 'myWork'
-
     doNavigate: (e) ->
-      @hide()
-
-      currentRoute = window.location.pathname
-      newRoute = e.currentTarget.getAttribute('data-target')
-
-      unless newRoute == currentRoute || (newRoute == '' && _.contains(['/userstories', '/tasks', '/defects'], currentRoute))
-        @publishEvent '!router:route', newRoute
+      @trigger 'navigate', e.currentTarget.getAttribute('data-target')
 
     searchKeyDown: (event) ->
       switch event.which
         when @ENTER_KEY
           event.preventDefault()
-          @doSearch event.target.value
-
-    doSearch: (keyword) ->
-      $('.search-no-results').remove()
-      new Artifacts().fetch
-        data:
-          fetch: "ObjectID,Name"
-          search: keyword
-        success: (collection, response, options) =>
-          if collection.length > 0
-            @hide()
-            firstResult = collection.first()
-            @publishEvent '!router:route', utils.getDetailHash(firstResult)
-          else
-            @_noSearchResults()
+          $('.search-no-results').remove()
+          @trigger 'search', event.target.value
 
     show: ->
       $('#page-container').attr('class', $('#page-container').attr('class').replace(/(\spage\stransition\scenter)?$/, ' page transition right'))
@@ -61,9 +36,6 @@ define ->
       $('#mask').hide()
       @publishEvent 'navigation:hide'
 
-
-    getSetting: (setting) -> @settings[setting]
-
     getTemplateData: ->
       timeRemaining: 4
       timeRemainingUnits: 'Days'
@@ -73,7 +45,7 @@ define ->
       activeDefects: 3
       buttons: [
         {
-          displayName: if @getSetting('workType') is 'myWork' then 'My Work' else 'My Team'
+          displayName: if app.session.isSelfMode() then 'My Work' else 'My Team'
           viewHash: ''
         }
         {
@@ -90,7 +62,7 @@ define ->
         }
       ]
 
-    _noSearchResults: ->
+    displayNoSearchResults: ->
       alert = $('body').append([
         '<div class="search-no-results alert alert-error">',
         '<button type="button" class="close" data-dismiss="alert">&times;</button>',

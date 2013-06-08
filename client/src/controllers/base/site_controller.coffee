@@ -1,17 +1,20 @@
-define [
-  'controllers/base/controller'
-  'views/site_view'
-  'views/header_view'
-  'views/navigation/navigation_view'
-], (Controller, SiteView, HeaderView, NavigationView) ->
-# Navigation = require 'models/navigation'
-# NavigationView = require 'views/navigation-view'
+define ->
+  Controller = require 'controllers/base/controller'
+  NavigationController = require 'controllers/navigation_controller'
+  SiteView = require 'views/site_view'
+  HeaderView = require 'views/header_view'
+  NavigationView = require 'views/navigation/navigation_view'
 
   class SiteController extends Controller
     beforeAction: (params, route) ->
       @compose 'site', SiteView
       @compose 'header', HeaderView
-      @compose 'navigation', NavigationView
+      @compose 'navigation',
+        compose: ->
+          @controller = new NavigationController
+          @view = @controller.view
+
+        check: -> false
       # @compose 'auth', ->
       #   SessionController = require 'controllers/session_controller'
       #   @controller = new SessionController
