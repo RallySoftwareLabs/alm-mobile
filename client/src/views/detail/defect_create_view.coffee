@@ -16,37 +16,18 @@ define ->
       {
         'State':
           view: 'string_with_arrows'
-          allowedValues: [
-            'Submitted',
-            'Open',
-            'Fixed',
-            'Closed'
-          ]
+          label: 'State'
       },
       {'Owner': 'owner'},
       {
         'Severity':
           view: 'titled_well'
           label: 'Severity'
-          allowedValues: [
-            'None'
-            'Crash/Data Loss'
-            'Major Problem'
-            'Minor Problem'
-            'Cosmetic'
-          ]
       },
       {
         'Priority':
           view: 'titled_well'
           label: 'Priority'
-          allowedValues: [
-            'None'
-            'Resolve Immediately'
-            'High Attention'
-            'Normal'
-            'Low'
-          ]
       },
       {'Description': 'html'}
     ]

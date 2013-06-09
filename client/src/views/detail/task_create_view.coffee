@@ -15,12 +15,8 @@ define ->
       {'Name': 'titled_well'},
       {
         'State':
-          view: 'string_with_arrows',
-          allowedValues: [
-            'Defined',
-            'In-Progress',
-            'Completed'
-          ]
+          view: 'string_with_arrows'
+          label: 'State'
       },
       {'Owner': 'owner'},
       {

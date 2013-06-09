@@ -10,17 +10,16 @@ define ->
       @delegate 'click', '.arrows-left', @onLeftArrow
 
     getTemplateData: ->
-      allowedValues = @options.allowedValues
-      fieldValue = @model.get(@options.field)
       data = super
-      data.cantGoLeft = allowedValues.indexOf(fieldValue) is 0
-      data.cantGoRight = allowedValues.indexOf(fieldValue) is (allowedValues.length - 1)
+      allowedValues = @getAllowedValues()
+      data.cantGoLeft = allowedValues.indexOf(data.fieldValue) is 0
+      data.cantGoRight = allowedValues.indexOf(data.fieldValue) is (allowedValues.length - 1)
       data
 
     startEdit: ->
 
     onRightArrow: ->
-      allowedValues = @options.allowedValues
+      allowedValues = @getAllowedValues()
       currentIndex = allowedValues.indexOf(@model.get(@options.field))
 
       if currentIndex < allowedValues.length - 1
@@ -30,7 +29,7 @@ define ->
         @saveModel modelUpdates
 
     onLeftArrow: ->
-      allowedValues = @options.allowedValues
+      allowedValues = @getAllowedValues()
       currentIndex = allowedValues.indexOf(@model.get(@options.field))
 
       if currentIndex > 0

@@ -22,13 +22,7 @@ define ->
       {'Description': 'html'},
       {
         'ScheduleState':
-          view: 'string_with_arrows',
-          allowedValues: [
-            'Defined',
-            'In-Progress',
-            'Completed',
-            'Accepted'
-          ]
+          view: 'string_with_arrows'
       },
       'DisplayName',
       {

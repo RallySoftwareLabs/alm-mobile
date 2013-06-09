@@ -15,37 +15,18 @@ define ->
         'Severity':
           view: 'titled_well'
           label: 'Severity'
-          allowedValues: [
-            'None'
-            'Crash/Data Loss'
-            'Major Problem'
-            'Minor Problem'
-            'Cosmetic'
-          ]
       },
       {
         'Priority':
           view: 'titled_well'
           label: 'Priority'
-          allowedValues: [
-            'None'
-            'Resolve Immediately'
-            'High Attention'
-            'Normal'
-            'Low'
-          ]
       },
       {'Discussion': 'discussion'},
       {'Description': 'html'},
       {
         'State':
           view: 'string_with_arrows'
-          allowedValues: [
-            'Submitted',
-            'Open',
-            'Fixed',
-            'Closed'
-          ]
+          label: 'State'
       },
       {'Requirement': 'work_product'},
       'DisplayName',

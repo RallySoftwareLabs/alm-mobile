@@ -32,6 +32,9 @@ define ->
   Handlebars.registerHelper 'createdAt', (created) ->
     _(created).capitalize()
 
+  Handlebars.registerHelper 'objectIDFromRef', (ref) ->
+    utils.getOidFromRef ref
+
   Handlebars.registerHelper 'selectOption', (value, label, selectedValue) ->
     str = "<option value=\"#{value}\""
     str += " selected=\"selected\"" if selectedValue is value

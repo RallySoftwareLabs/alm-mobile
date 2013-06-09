@@ -24,9 +24,9 @@ define ->
       model: @model.toJSON()
       field: @options.field
       fieldLabel: @options.label
-      fieldValue: @options.value || @model.get(@options.field)
+      fieldValue: @getFieldValue()
       inputType: @inputType
-      allowedValues: @options.allowedValues
+      allowedValues: @getAllowedValues()
       currentHash: Backbone.history.getHash()
       icon: @options.icon
 
@@ -40,7 +40,7 @@ define ->
 
     _setDisplayTemplate: ->
       view = @viewType
-      view = 'titled_well_dropdown' if @viewMode is ViewMode.EDIT and @viewType is 'titled_well' and @options.allowedValues?
+      view = 'titled_well_dropdown' if @viewMode is ViewMode.EDIT and @viewType is 'titled_well' and @model.allowedValues?[@options.field]
       @template = hbs["field/templates/#{@viewMode}/#{view}_view"]
 
       unless @template
@@ -68,6 +68,12 @@ define ->
         @_saveLocal(updates, opts)
       else
         @_saveRemote(updates, opts)
+
+    getFieldValue: ->
+      @options.value || @model.get(@options.field)
+
+    getAllowedValues: ->
+      @model.allowedValues?[@options.field]
 
     _saveLocal: (updates, opts) ->
       @model.set(updates)
