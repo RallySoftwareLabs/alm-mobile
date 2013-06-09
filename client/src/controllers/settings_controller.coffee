@@ -9,8 +9,13 @@ define ->
     show: (params) ->
       @afterProjectLoaded ->
         mode = app.session.get('mode')
-        @view = new SettingsView region: 'main', mode: mode
-        @listenTo @view, 'toggleMode', @onToggleMode
+        boardField = app.session.get('boardField')
+        @view = new SettingsView region: 'main', mode: mode, boardField: boardField
+        @listenTo @view, 'changeMode', @onChangeMode
+        @listenTo @view, 'changeBoardField', @onChangeBoardField
 
-    onToggleMode: (mode) ->
+    onChangeMode: (mode) ->
       app.session.set 'mode', mode
+
+    onChangeBoardField: (boardField) ->
+      app.session.set 'boardField', boardField

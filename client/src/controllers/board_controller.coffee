@@ -9,7 +9,7 @@ define ->
 
   class BoardController extends SiteController
     index: (params) ->
-      field = 'ScheduleState'
+      field = app.session.get('boardField')
       columns = _.map UserStory::allowedValues[field], (value) -> new Column(field: field, value: value)
 
       @afterProjectLoaded =>
@@ -19,7 +19,7 @@ define ->
         @listenTo @view, 'columnClick', @onColumnClick
 
     column: (params) ->
-      field = 'ScheduleState'
+      field = app.session.get('boardField')
       colValue = params.column
       
       @afterProjectLoaded =>

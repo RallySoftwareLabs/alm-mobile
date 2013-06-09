@@ -10,8 +10,10 @@ define ->
       @set
         user: new User()
         mode: $.cookie('mode') || 'team'
+        boardField: $.cookie('boardField') || 'ScheduleState'
       @listenTo this, 'change:user', @_onUserChange
       @listenTo this, 'change:mode', @_onModeChange
+      @listenTo this, 'change:boardField', @_onBoardFieldChange
 
     authenticated: (cb) ->
       authCache = @get 'authenticated'
@@ -72,3 +74,6 @@ define ->
 
     _onModeChange: (model, value, options) ->
       $.cookie('mode', value, cookieDomain: window.AppConfig.cookieDomain)
+
+    _onBoardFieldChange: (model, value, options) ->
+      $.cookie('boardField', value, cookieDomain: window.AppConfig.cookieDomain)

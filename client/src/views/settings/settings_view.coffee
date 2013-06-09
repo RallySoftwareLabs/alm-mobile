@@ -14,24 +14,34 @@ define ->
 
     initialize: (options) ->
       @mode = options.mode
+      @boardField = options.boardField
       super
       @updateTitle "Settings"
-      @delegate 'click', '.self', => @toggleMode 'self'
-      @delegate 'click', '.team', => @toggleMode 'team'
+      @delegate 'click', '.self', => @changeMode 'self'
+      @delegate 'click', '.team', => @changeMode 'team'
+      @delegate 'click', '.schedule-state', => @changeBoardField 'ScheduleState'
+      @delegate 'click', '.kanban-state', => @changeBoardField 'c_KanbanState'
 
     getTemplateData: ->
       projects: app.session.projects?.models
       currentProject: app.session.project.get('_ref')
       isTeam: @mode == 'team'
       isSelf: @mode == 'self'
+      isScheduleState: @boardField == 'ScheduleState'
+      isKanbanState: @boardField == 'c_KanbanState'
 
     triggerLogout: ->
       app.session.logout()
       @publishEvent '!router:routeByName', 'auth#login'
 
-    toggleMode: (mode) ->
+    changeMode: (mode) ->
       @mode = mode
-      @trigger 'toggleMode', mode
+      @trigger 'changeMode', mode
+      @render()
+
+    changeBoardField: (boardField) ->
+      @boardField = boardField
+      @trigger 'changeBoardField', boardField
       @render()
 
     updateSelectedProject: ->

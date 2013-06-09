@@ -17,9 +17,17 @@
       <label class="show-work">Show:</label>
     </div>
     <div class="btn-group span9">
-          <button class="btn btn-large self{{#if isSelf}} active{{/if}}">My Work</button>
-          <button class="btn btn-large team{{#if isTeam}} active{{/if}}">My Team</button>
-      </div>
+      <button class="btn btn-large self{{#if isSelf}} active{{/if}}">My Work</button>
+      <button class="btn btn-large team{{#if isTeam}} active{{/if}}">My Team</button>
+    </div>
+  </div>
+  <div class="row-fluid">
+    <div class="span2 offset1">
+      <label class="board-field">Board Column:</label>
+    </div>
+    <div class="btn-group span9">
+      <button class="btn btn-large schedule-state{{#if isScheduleState}} active{{/if}}">Schedule State</button>
+      <button class="btn btn-large kanban-state{{#if isKanbanState}} active{{/if}}">Kanban State</button>
     </div>
   </div>
   <div class="row-fluid">

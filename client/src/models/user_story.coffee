@@ -9,4 +9,5 @@ define [
       "ScheduleState" : "Defined"
     
     allowedValues:
-    	ScheduleState: ['Defined', 'In-Progress', 'Completed', 'Accepted']
+      ScheduleState: ['Defined', 'In-Progress', 'Completed', 'Accepted']
+      c_KanbanState: ['Ready', 'Building', 'Testing', 'Accepting']

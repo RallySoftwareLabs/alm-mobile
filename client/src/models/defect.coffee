@@ -9,5 +9,6 @@ define [
       "State" : "Open"
 
     allowedValues:
-    	ScheduleState: ['Defined', 'In-Progress', 'Completed', 'Accepted']
-    	State: ['Submitted', 'Open', 'Fixed', 'Closed']
+      ScheduleState: ['Defined', 'In-Progress', 'Completed', 'Accepted']
+      State: ['Submitted', 'Open', 'Fixed', 'Closed']
+      c_KanbanState: ['Ready', 'Building', 'Testing', 'Accepting']
