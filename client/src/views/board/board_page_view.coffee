@@ -6,7 +6,7 @@ define ->
   PageView = require 'views/base/page_view'
   ColumnView = require 'views/board/column_view'
 
-  class BoardView extends PageView
+  class BoardPageView extends PageView
     region: 'main'
     className: 'board row-fluid'
     template: hbs['board/templates/board']
@@ -22,7 +22,8 @@ define ->
       _.map @columns, (col) =>
         colView = new ColumnView autoRender: true, model: col, container: "#col-#{utils.toCssClass(col.get('value'))}"
         @subview colView
-        @bubbleEvent colView, 'click', 'columnClick'
+        @bubbleEvent colView, 'headerclick', 'headerclick'
+        @bubbleEvent colView, 'cardclick', 'cardclick'
 
     getTemplateData: ->
       columns: _.invoke @columns, _.getAttribute('value')

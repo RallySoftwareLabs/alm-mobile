@@ -1,28 +1,19 @@
-define [
-  'application'
-  'hbsTemplate'
-  'views/base/page_view'
-], (app, hbs, PageView) ->
+define ->
+  app = require 'application'
+  hbs = require 'hbsTemplate'
+  PageView = require 'views/base/page_view'
+  ColumnViewMixin = require 'views/board/column_view_mixin'
 
   class ColumnPageView extends PageView
     region: 'main'
     className: 'board row-fluid'
     template: hbs['board/templates/column']
 
+    _.extend @prototype, ColumnViewMixin
+
     initialize: ->
       super
-      @model.synced => @render()
-      @delegate 'click', '.card', @onCardClick
+      @initializeMixin()
 
       @updateTitle app.session.getProjectName()
       
-    getTemplateData: ->
-      storiesAndDefects = @model.stories.toJSON().concat(@model.defects.toJSON())
-      header = @model.get('value') + (if @model.isSynced() then " (#{storiesAndDefects.length})" else " ...")
-      data = 
-        header: header
-        cards: storiesAndDefects
-
-    onCardClick: (e) ->
-      [oid, type] = e.currentTarget.id.split('-')
-      @trigger 'cardClick', oid, type

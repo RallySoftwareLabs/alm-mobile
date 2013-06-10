@@ -4,7 +4,7 @@ define ->
   SiteController = require 'controllers/base/site_controller'
   Column = require 'models/column'
   UserStory = require 'models/user_story'
-  BoardView = require 'views/board/board_view'
+  BoardPageView = require 'views/board/board_page_view'
   ColumnPageView = require 'views/board/column_page_view'
 
   class BoardController extends SiteController
@@ -14,9 +14,10 @@ define ->
 
       @afterProjectLoaded =>
         col.fetch(@getFetchData(field, col.get('value'))) for col in columns
-        @view = new BoardView autoRender: true, columns: columns, field: field
+        @view = new BoardPageView autoRender: true, columns: columns, field: field
 
-        @listenTo @view, 'columnClick', @onColumnClick
+        @listenTo @view, 'headerclick', @onColumnClick
+        @listenTo @view, 'cardclick', @onCardClick
 
     column: (params) ->
       field = app.session.get('boardField')
@@ -27,7 +28,8 @@ define ->
         col.fetch @getFetchData(field, colValue)
 
         @view = new ColumnPageView autoRender: true, model: col
-        @listenTo @view, 'cardClick', @onCardClick
+        @listenTo @view, 'headerclick', @onColumnClick
+        @listenTo @view, 'cardclick', @onCardClick
 
     onColumnClick: (col) =>
       colValue = col.get('value')
