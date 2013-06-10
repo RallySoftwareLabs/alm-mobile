@@ -1,10 +1,11 @@
-define [
-  'jquery'
-  'chaplin'
-  'models/base/model'
-  'collections/user_stories'
-  'collections/defects'
-], ($, Chaplin, Model, UserStories, Defects) ->
+define ->
+  $ = require 'jquery'
+  Chaplin = require 'chaplin'
+  Model = require 'models/base/model'
+  UserStories= require 'collections/user_stories'
+  Defects = require 'collections/defects'
+  Artifacts = require 'collections/artifacts'
+
   class Column extends Model
 
     _.extend @prototype, Chaplin.SyncMachine
@@ -24,3 +25,6 @@ define [
       ).done (s, d) =>
         # Set the machine into `synced` state
         @finishSync()
+
+    artifacts: ->
+      new Artifacts @stories.models.concat(@defects.models)

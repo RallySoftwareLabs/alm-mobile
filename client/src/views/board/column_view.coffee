@@ -1,4 +1,5 @@
 define ->
+	_ = require 'underscore'
 	hbs = require 'hbsTemplate'
 	View = require 'views/base/view'
 
@@ -12,8 +13,11 @@ define ->
 			@delegate 'click', => @trigger 'click', @model
 
 		getTemplateData: ->
-			storiesAndDefects = @model.stories.toJSON().concat(@model.defects.toJSON())
-			header = @model.get('value')[0] + (if @model.isSynced() then " (#{storiesAndDefects.length})" else " ...")
+			storiesAndDefects = _.sortBy @model.artifacts().serialize(), 'Rank'
+			header = @getColumnHeaderAbbreviation() + (if @model.isSynced() then " (#{storiesAndDefects.length})" else " ...")
 			data = 
 				header: header
 				cards: storiesAndDefects
+
+		getColumnHeaderAbbreviation: ->
+			_.map(@model.get('value').replace(/-/g, ' ').split(' '), (word) -> word[0]).join ''

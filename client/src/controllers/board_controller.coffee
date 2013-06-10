@@ -44,7 +44,6 @@ define ->
         project: app.session.get('project').get('_ref')
         projectScopeUp: false
         projectScopeDown: true
-        order: "Rank ASC,ObjectID"
 
       if app.session.isSelfMode()
         data.query = "(#{data.query} AND (Owner = #{app.session.get('user').get('_ref')}))"

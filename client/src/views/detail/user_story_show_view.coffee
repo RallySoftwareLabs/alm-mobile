@@ -23,6 +23,7 @@ define ->
       {
         'ScheduleState':
           view: 'string_with_arrows'
+          label: 'Schedule State'
       },
       'DisplayName',
       {

@@ -1,6 +1,7 @@
-define ['collections/collection', 'models/artifact'], (Collection, Artifact) ->
+define ->
+  Chaplin = require 'chaplin'
+  Artifact = require 'models/artifact'
 
-  Collection.extend(
+  class Artifacts extends Chaplin.Collection
     url: window.AppConfig.almWebServiceBaseUrl + '/webservice/v2.x/artifacts'
     model: Artifact
-  )
