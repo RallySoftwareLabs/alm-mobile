@@ -1,6 +1,6 @@
 <div class="settings">
   <div class="row-fluid">
-      {{! <button class="btn btn-large span10 offset1">
+      {{! <button class="btn btn-block span10 offset1">
         <div class="span11">{{currentProject.attributes._refObjectName}\}</div>
         <div class="span1"><div class="chevron"/></div>
       </button> }}
@@ -13,26 +13,26 @@
     </div>
   </div>
   <div class="row-fluid">
-    <div class="span2 offset1">
+    <div class="span5">
       <label class="show-work">Show:</label>
     </div>
-    <div class="btn-group span9">
-      <button class="btn btn-large self{{#if isSelf}} active{{/if}}">My Work</button>
-      <button class="btn btn-large team{{#if isTeam}} active{{/if}}">My Team</button>
+    <div class="span4">
+      <button class="btn btn-block self{{#if isSelf}} active{{/if}}">My Work</button>
+      <button class="btn btn-block team{{#if isTeam}} active{{/if}}">My Team</button>
     </div>
   </div>
   <div class="row-fluid">
-    <div class="span2 offset1">
+    <div class="span5">
       <label class="board-field">Board Column:</label>
     </div>
-    <div class="btn-group span9">
-      <button class="btn btn-large schedule-state{{#if isScheduleState}} active{{/if}}">Schedule State</button>
-      <button class="btn btn-large kanban-state{{#if isKanbanState}} active{{/if}}">Kanban State</button>
+    <div class="span4">
+      <button class="btn btn-block schedule-state{{#if isScheduleState}} active{{/if}}">Schedule State</button>
+      <button class="btn btn-block kanban-state{{#if isKanbanState}} active{{/if}}">Kanban State</button>
     </div>
   </div>
   <div class="row-fluid">
-    <div class="span4 offset4">
-      <button class="btn btn-large active logout">Logout</button>
+    <div class="span12">
+      <button class="btn active logout">Logout</button>
     </div>
   </div>
 </div>

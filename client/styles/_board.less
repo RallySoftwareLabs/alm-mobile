@@ -1,5 +1,17 @@
 .board {
 
+    .column-container {
+        display: table;
+        table-layout: fixed;
+
+        width: 100%;
+
+        .column-cell {
+            display: table-cell;
+            height: 100%;
+            padding: 0 3px;
+        }
+    }
     .column {
 
         .header {
@@ -15,8 +27,7 @@
             cursor: pointer;
             line-height: 2.5em;
             padding: 5px;
-            margin-bottom: 3px;
-            margin-top: 3px;
+            margin: 5px 0;
         }
 	}
 

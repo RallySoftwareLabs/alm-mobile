@@ -2,7 +2,7 @@
     <div class="header">{{header}}</div>
     <div class="body">
         {{#each cards}}
-        	<div class="card" id="{{this.ObjectID}}-{{this._type}}">
+        	<div class="card" id="{{this.ObjectID}}-{{this._type}}"{{#if this.DisplayColor}} style="background-color: {{this.DisplayColor}}; color: white;"{{/if}}>
         		<div>{{this.FormattedID}}</div>
         	</div>
         {{/each}}

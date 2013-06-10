@@ -1,3 +1,5 @@
+<div class="column-container">
 {{#each columns}}
-	<div class="column span3" id="col-{{this}}"></div>
+	<div class="column-cell" id="col-{{{toCssClass this}}}"></div>
 {{/each}}
+</div>

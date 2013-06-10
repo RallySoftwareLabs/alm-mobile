@@ -13,4 +13,4 @@ define [
       State: ['Submitted', 'Open', 'Fixed', 'Closed']
       Priority: ['None', 'Resolve Immediately', 'High Attention', 'Normal', 'Low']
       Severity: ['None', 'Crash/Data Loss', 'Major Problem', 'Minor Problem', 'Cosmetic']
-      c_KanbanState: ['Ready', 'Building', 'Testing', 'Accepting']
+      c_KanbanState: ['Ready', 'Test Planning', 'Building', 'Ready to Toggle On', 'Released']

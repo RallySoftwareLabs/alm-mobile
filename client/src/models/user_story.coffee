@@ -10,4 +10,4 @@ define [
     
     allowedValues:
       ScheduleState: ['Defined', 'In-Progress', 'Completed', 'Accepted']
-      c_KanbanState: ['Ready', 'Building', 'Testing', 'Accepting']
+      c_KanbanState: ['Ready', 'Test Planning', 'Building', 'Ready to Toggle On', 'Released']

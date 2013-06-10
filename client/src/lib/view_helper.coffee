@@ -40,3 +40,6 @@ define ->
     str += " selected=\"selected\"" if selectedValue is value
     str += ">#{label}</option>"
     str
+
+  Handlebars.registerHelper 'toCssClass', (value) ->
+    utils.toCssClass value
