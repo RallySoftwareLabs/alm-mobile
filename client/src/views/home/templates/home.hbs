@@ -3,7 +3,7 @@
     <ul class="nav btn-group">
       {{#each tabs}}
       <li class="btn{{#if this.active}} active{{/if}}" id="{{this.key}}-tab">
-        <a href="/{{this.key}}" id="{{this.key}}" data-toggle="pill">
+        <a href="/{{this.key}}" id="{{this.key}}">
           {{this.value}}
         </a>
       </li>
@@ -11,9 +11,7 @@
     </ul>
   </div>
 
-  <div class="tab-content">
-      <div class="row-fluid listing"/>
-  </div>
+  <div class="row-fluid listing"/>
 
   <div class='bottom-centered'>
     <a href="{{createRoute}}" class='btn active' id='add-artifact'>+</a>
