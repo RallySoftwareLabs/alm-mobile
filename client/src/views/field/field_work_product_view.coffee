@@ -4,6 +4,12 @@ define ->
 
   class FieldWorkProductView extends FieldView
 
+    getTemplateFunction: ->
+      if @getFieldValue()
+        super
+      else
+        _.template('')
+
     afterRender: ->
       super
       @$el.parent().addClass('hidden') unless @getFieldValue()
