@@ -12,7 +12,7 @@ define ->
 
 		getTemplateData: ->
 			storiesAndDefects = @model.stories.toJSON().concat(@model.defects.toJSON())
-			header = @model.get('value') + (if @model.isSynced() then " (#{storiesAndDefects.length})" else " ...")
+			header = @model.get('value')[0] + (if @model.isSynced() then " (#{storiesAndDefects.length})" else " ...")
 			data = 
 				header: header
 				cards: storiesAndDefects
