@@ -4,6 +4,7 @@ define ->
 
 	class ColumnView extends View
 		template: hbs['board/templates/column']
+		loadingIndicator: true
 
 		initialize: (options = {}) ->
 			super

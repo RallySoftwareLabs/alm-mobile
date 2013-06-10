@@ -17,6 +17,7 @@ define ->
 
   class DetailView extends PageView
     region: 'main'
+    loadingIndicator: true
 
     events:
       'click #save button': 'onSave'

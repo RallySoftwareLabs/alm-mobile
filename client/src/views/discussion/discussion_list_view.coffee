@@ -5,3 +5,4 @@ define ->
   class DiscussionListView extends CollectionView
     className: "btn-group btn-group-vertical"
     itemView: DiscussionView
+    loadingIndicator: true

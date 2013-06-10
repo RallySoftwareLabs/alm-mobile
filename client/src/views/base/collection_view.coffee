@@ -1,11 +1,9 @@
-define [
-  'chaplin'
-  'lib/view_helper'
-  'views/base/view'
-  'views/shared/loading_view'
-], (Chaplin, ViewHelper, View, LoadingMaskView) ->
+define ->
+  Chaplin = require 'chaplin'
+  View = require 'views/base/view'
+  Spinner = require 'spin'
 
-# Base class for collection views.
+  # Base class for collection views.
   class CollectionView extends Chaplin.CollectionView
     # initialize: ->
       # @render = _.bind(@render, @)
@@ -18,9 +16,6 @@ define [
 
     getTemplateFunction: View::getTemplateFunction
 
-    render: ->
-      super
-      @afterRender()
-      @
+    attach: View::attach
 
-    afterRender: ->
+    afterRender: View::afterRender

@@ -89,7 +89,6 @@ define ['jquery', 'underscore', 'backbone', 'application'], ($, _, Backbone, app
         options.error(xhr, "ws", null)
       else
         success?(resp, status, xhr)
-        model.trigger('sync', model, resp, options)
 
     # Make the request, allowing the user to override any Ajax options.
     xhr = options.xhr = Backbone.ajax(_.extend(params, options))

@@ -1,13 +1,14 @@
-define [
-  'hbsTemplate'
-  'application'
-  'views/base/page_view'
-], (hbs, app, PageView) ->
+define ->
+  hbs = require 'hbsTemplate'
+  app = require 'application'
+  PageView = require 'views/base/page_view'
+
   class HomeView extends PageView
     listView: null
     tabPane: null
     region: 'main'
     template: hbs['home/templates/home']
+    loadingIndicator: true
 
     listen:
       'projectready mediator': 'updateTitle'
