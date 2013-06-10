@@ -1,66 +1,61 @@
-.discussion-page {
-	.reply {
-		margin-bottom: 20px;
-		
-		button {
-			vertical-align: top;
-		}
+.discussion-reply {
+	margin-bottom: 20px;
+	
+	button {
+		vertical-align: top;
+	}
+}
+
+.discussion-item {
+    padding: 8px 8px 4px 8px;
+    color: @darkGrey;
+    border-top: 1px solid #c6c6c6;
+    border-bottom-width: 0;
+    clear: left;
+    cursor: default;
+
+    &:last-child {
+    	border-bottom-width: 1px;
+    }
+
+    .profile-link {
+    	color: @cyan;
+        font-weight: bold;
+    }
+
+	.profile-image {
+		border: 1px solid #CCC;
+	    max-width: 50px;
+	    max-height: 50px;
+	    margin-right: 5px;
+	    margin-bottom: 10px;
+	    float: left;
+
 	}
 
-	.listing {
+	.status {
+	    color: @darkGrey;
+	}
 
-		.list-item {
-		    padding: 8px 8px 4px 8px;
-		    color: @darkGrey;
-		    border-top: 1px solid #c6c6c6;
-		    border-bottom-width: 0;
-		    clear: left;
-		    cursor: default;
+	.details {
+		padding-left: 55px;
 
-		    &:last-child {
-		    	border-bottom-width: 1px;
+		.detail-text {
+		    margin-top: 0.5em;
+		    margin-bottom: 0.5em;
+		    word-wrap: break-word;
+		    white-space: normal;
+		    font-weight: normal;
+
+		    ul li {
+		        list-style-type: disc;
+		        list-style-position: inside;
 		    }
 
-		    .profileLink {
-		    	color: @cyan;
-		        font-weight: bold;
+		    ol li {
+		        list-style-type: decimal;
+		        list-style-position: inside;   
 		    }
-
-			.profile-image {
-				border: 1px solid #CCC;
-			    max-width: 50px;
-			    max-height: 50px;
-			    margin-right: 5px;
-			    margin-bottom: 10px;
-			    float: left;
-
-			}
-
-			.status {
-			    color: @darkGrey;
-			}
-
-			.details {
-				padding-left: 55px;
-
-				.detail-text {
-				    margin-top: 0.5em;
-				    margin-bottom: 0.5em;
-				    word-wrap: break-word;
-				    white-space: normal;
-				    font-weight: normal;
-
-				    ul li {
-				        list-style-type: disc;
-				        list-style-position: inside;
-				    }
-
-				    ol li {
-				        list-style-type: decimal;
-				        list-style-position: inside;   
-				    }
-				}
-			}
 		}
 	}
 }

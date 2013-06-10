@@ -16,3 +16,4 @@ define ->
     match 'new/defect', 'defect_detail#create'
     match 'board', 'board#index'
     match 'board/:column', 'board#column'
+    match 'recentActivity', 'recent_activity#show'

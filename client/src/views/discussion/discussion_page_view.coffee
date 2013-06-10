@@ -14,7 +14,7 @@ define ->
     className: 'discussion-page'
 
     events:
-      'click .reply button': '_onReplyClick'
+      'click .discussion-reply button': '_onReplyClick'
       'submit form': '_onReplyClick'
 
     afterRender: ->
@@ -41,4 +41,4 @@ define ->
       event.preventDefault()
 
     _getInputField: ->
-      @.$('.reply input')
+      @.$('.discussion-reply input')
