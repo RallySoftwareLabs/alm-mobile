@@ -39,12 +39,12 @@ define ->
 
     getFetchData: (field, value) ->
       data =
-        fetch: ['ObjectID', 'FormattedID', 'DragAndDropRank'].join ','
+        fetch: ['ObjectID', 'FormattedID', 'Rank'].join ','
         query: "(#{field} = \"#{value}\")"
         project: app.session.project.get('_ref')
         projectScopeUp: false
         projectScopeDown: true
-        order: "DragAndDropRank DESC"
+        order: "Rank DESC"
 
       if app.session.isSelfMode()
         data.query = "(#{data.query} AND (Owner = #{app.session.get('user').get('_ref')}))"
