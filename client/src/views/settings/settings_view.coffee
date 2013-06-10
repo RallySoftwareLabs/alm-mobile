@@ -23,8 +23,8 @@ define ->
       @delegate 'click', '.kanban-state', => @changeBoardField 'c_KanbanState'
 
     getTemplateData: ->
-      projects: app.session.projects?.models
-      currentProject: app.session.project.get('_ref')
+      projects: app.session.get('projects')?.models
+      currentProject: app.session.get('project').get('_ref')
       isTeam: @mode == 'team'
       isSelf: @mode == 'self'
       isScheduleState: @boardField == 'ScheduleState'
@@ -45,8 +45,8 @@ define ->
       @render()
 
     updateSelectedProject: ->
-      app.session.setProject _.find(
-        app.session.projects.models,
+      app.session.set 'project', _.find(
+        app.session.get('projects').models,
         (proj) -> proj.get('_ref') is @$('option:selected').val(),
         this
       )

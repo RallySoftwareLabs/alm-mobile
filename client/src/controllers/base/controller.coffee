@@ -5,7 +5,7 @@ define ->
   class Controller extends Chaplin.Controller
       
     afterProjectLoaded: (callback) ->
-      if app.session.project?
+      if app.session.get('project')?
         callback?.apply this
       else
         @subscribeEvent 'projectready', @onProjectReady(callback)

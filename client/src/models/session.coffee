@@ -14,6 +14,7 @@ define ->
       @listenTo this, 'change:user', @_onUserChange
       @listenTo this, 'change:mode', @_onModeChange
       @listenTo this, 'change:boardField', @_onBoardFieldChange
+      @listenTo this, 'change:project', @_onProjectChange
 
     authenticated: (cb) ->
       authCache = @get 'authenticated'
@@ -41,11 +42,12 @@ define ->
     hasSessionCookie: ->
       !!$.cookie('JSESSIONID')
 
-    setProject: (@project) ->
+    hasProjectCookie: ->
+      !!$.cookie('project')
 
     getProjectName: ->
       try
-        @project.get('_refObjectName')
+        @get('project').get('_refObjectName')
       catch e
         ""
 
@@ -62,18 +64,29 @@ define ->
 
     logout: ->
       $.removeCookie('JSESSIONID', domain: window.AppConfig.cookieDomain)
+      $.removeCookie('mblsessid')
       @set securityToken: null
 
     _onUserChange: (model, value, options) ->
-      @projects = new Projects()
-      @projects.fetch
+      projects = new Projects()
+      @set 'projects', projects
+      projects.fetch
         success: (collection) =>
-          @setProject collection.first()
+          if @hasProjectCookie()
+            savedProjRef = $.cookie('project')
+            savedProject = collection.find (proj) -> proj.get('_ref') == savedProjRef
+            @set('project', savedProject) if savedProject
+
+          if !@get 'project'
+            @set 'project', collection.first()
+
           @publishEvent "projectready", @getProjectName()
-          @publishEvent 'loadedSettings'
 
     _onModeChange: (model, value, options) ->
-      $.cookie('mode', value, cookieDomain: window.AppConfig.cookieDomain)
+      $.cookie('mode', value)
 
     _onBoardFieldChange: (model, value, options) ->
-      $.cookie('boardField', value, cookieDomain: window.AppConfig.cookieDomain)
+      $.cookie('boardField', value)
+
+    _onProjectChange: (model, value, options) ->
+      $.cookie('project', value.get('_ref'))

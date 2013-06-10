@@ -41,7 +41,7 @@ define ->
       data =
         fetch: ['ObjectID', 'FormattedID', 'Rank', 'DisplayColor'].join ','
         query: "(#{field} = \"#{value}\")"
-        project: app.session.project.get('_ref')
+        project: app.session.get('project').get('_ref')
         projectScopeUp: false
         projectScopeDown: true
         order: "Rank ASC,ObjectID"

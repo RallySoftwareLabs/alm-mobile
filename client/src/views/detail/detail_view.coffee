@@ -70,7 +70,7 @@ define ->
     # New artifact events
 
     onSave: ->
-      @model.set Project: app.session.project.get('_ref')
+      @model.set Project: app.session.get('project').get('_ref')
       @model.sync 'create', @model,
         wait: true
         patch: true

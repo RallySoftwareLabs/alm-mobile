@@ -12,7 +12,7 @@ define ->
         discussions.fetch
           data:
             fetch: "Text,User,Artifact,CreationDate"
-            project: app.session.project.get('_ref')
+            project: app.session.get('project').get('_ref')
             projectScopeUp: false
             projectScopeDown: true
             order: "CreationDate DESC,ObjectID"

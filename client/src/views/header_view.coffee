@@ -10,7 +10,7 @@ define ->
 
     listen:
       'updatetitle mediator': 'updateTitle'
-      'loadedSettings mediator': 'render'
+      'projectready mediator': 'render'
       'dispatcher:dispatch mediator': 'render'
       'navigation:show mediator': 'onNavigationShow'
       'navigation:hide mediator': 'onNavigationHide'
