@@ -13,7 +13,7 @@ define [
       'projectready mediator': 'updateTitle'
 
     events:
-      'click .btn-block': 'onButton'
+      'click .nav .btn': 'onButton'
 
     initialize: (options) ->
       super
@@ -42,8 +42,8 @@ define [
       tabs: @_getTabs()
 
     onButton: (event) ->
-      url = event.currentTarget.id
-      @publishEvent '!router:route', url
+      url = event.currentTarget.id.replace /\-tab$/, ''
+      @publishEvent '!router:route', "/#{url}"
 
     _getTabs: ->
       [

@@ -3,7 +3,7 @@
     <ul class="nav btn-group">
       {{#each tabs}}
       <li class="btn{{#if this.active}} active{{/if}}" id="{{this.key}}-tab">
-        <a href="{{this.key}}" id="{{this.key}}" data-toggle="pill">
+        <a href="/{{this.key}}" id="{{this.key}}" data-toggle="pill">
           {{this.value}}
         </a>
       </li>
