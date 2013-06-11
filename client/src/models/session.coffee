@@ -1,7 +1,9 @@
 define ->
   jqueryCookie = require 'jqueryCookie'
+  utils = require 'lib/utils'
   Model = require 'models/base/model'
   User = require 'models/user'
+  UserProfile = require 'models/user_profile'
   Projects = require 'collections/projects'
 
   class Session extends Model
@@ -93,7 +95,7 @@ define ->
         headers:
           "X-Requested-By": "Rally"
         params:
-          fetch: 'ObjectID,DisplayName'
+          fetch: 'ObjectID,DisplayName,UserProfile'
         success: (model, resp, opts) =>
           @set 'user', model
           cb?(null, model)
@@ -103,15 +105,27 @@ define ->
     _onUserChange: (model, value, options) ->
       projects = new Projects()
       @set 'projects', projects
-      projects.fetch
-        success: (collection) =>
+
+      up = new UserProfile
+        ObjectID: utils.getOidFromRef(@get('user').get('UserProfile')._ref)
+
+      $.when(
+        projects.fetch(
+          data:
+            pagesize: 200
+            order: 'Name'
+        ),
+        up.fetch()
+      ).done (p, u) =>
           if @hasProjectCookie()
             savedProjRef = $.cookie('project')
-            savedProject = collection.find (proj) -> proj.get('_ref') == savedProjRef
+            savedProject = projects.find (proj) -> proj.get('_ref') == savedProjRef
             @set('project', savedProject) if savedProject
 
           if !@get 'project'
-            @set 'project', collection.first()
+            defaultProject = up.get('DefaultProject')?._ref
+            proj = projects.find (proj) -> proj.get('_ref') == defaultProject
+            @set 'project', proj || projects.first()
 
           @publishEvent "projectready", @getProjectName()
 

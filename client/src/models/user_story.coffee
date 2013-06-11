@@ -1,9 +1,8 @@
-define [
-  'models/base/model'
-], (Model) ->
+define ->
+  Model = require 'models/base/model'
 
   class UserStory extends Model
-    urlRoot: window.AppConfig.almWebServiceBaseUrl + '/webservice/v2.x/hierarchicalrequirements'
+    urlRoot: window.AppConfig.almWebServiceBaseUrl + '/webservice/v2.x/hierarchicalrequirement'
     
     defaults:
       "ScheduleState" : "Defined"

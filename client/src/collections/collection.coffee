@@ -1,6 +1,7 @@
 define ->
+  Chaplin = require 'chaplin'
 
   # Base class for all collections.
-  Backbone.Collection.extend
+  class Collection extends Chaplin.Collection
     parse: (resp) ->
       resp.QueryResult.Results

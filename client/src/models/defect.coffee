@@ -1,9 +1,8 @@
-define [
-  'models/base/model'
-], (Model) ->
+define ->
+  Model = require 'models/base/model'
 
   class Defect extends Model
-    urlRoot: window.AppConfig.almWebServiceBaseUrl + '/webservice/v2.x/defects'
+    urlRoot: window.AppConfig.almWebServiceBaseUrl + '/webservice/v2.x/defect'
 
     defaults:
       "State" : "Open"

@@ -34,7 +34,9 @@ define ->
     })
 
     # Default JSON-request options.
-    params = {type: type, dataType: 'json'}
+    params =
+      type: type
+      dataType: 'json'
 
     # Ensure that we have a URL.
     if !options.url
@@ -80,6 +82,11 @@ define ->
       params.xhr = ->
         return new ActiveXObject("Microsoft.XMLHTTP")
       
+
+    # Rally override
+    params.data ?= {}
+    params.data.pagesize ?= 50
+
     error = options.error
     options.error = (xhr, status, thrown) ->
       error?(xhr, status, thrown)
