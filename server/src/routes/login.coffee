@@ -4,6 +4,9 @@ config = require '../config'
 setCookie = (res, name, value, expiration) ->
   res.cookie(name, value, {domain: config.cookieDomain, httpOnly: false, expires: expiration})
 
+clearCookie = (res, name) ->
+  res.clearCookie(name, {domain: config.cookieDomain})
+
 module.exports = 
   login: (req, res) ->
     username = req.body.username
@@ -29,6 +32,12 @@ module.exports =
         result: "SUCCESS"
         securityToken: securityToken
         jsessionid: jsessionid
+
+  logout: (req, res) ->
+    req.session = null
+    clearCookie(res, 'JSESSIONID')
+
+    res.json result: "SUCCESS"
 
   getSessionInfo: (req, res) ->
     jsessionid = req.session.jsessionid

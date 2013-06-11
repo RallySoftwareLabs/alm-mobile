@@ -5,6 +5,7 @@ define ->
     match 'defects', 'home#defects'
     match 'tasks', 'home#tasks'
     match 'login', 'auth#login'
+    match 'logout', 'auth#logout'
     match 'navigation', 'navigation#show'
     match 'settings', 'settings#show'
     match ':type/:id/discussion', 'discussion#show'

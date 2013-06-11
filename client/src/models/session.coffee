@@ -31,7 +31,16 @@ define ->
             jsessionid: $.cookie('JSESSIONID')
             securityToken: data.securityToken
             authenticated: true
-          cb?(true)
+
+          @fetchUserInfo (err, model) =>
+            if err?
+              @logout 
+                success: (data, status, xhr) ->
+                  cb?(true)
+                error: (xhr, errorType, error) ->
+                  cb?(false)
+            else
+              cb?(true)
         error: (xhr, errorType, error) =>
           cb?(false)
       )
@@ -62,10 +71,34 @@ define ->
         jsessionid: $.cookie('JSESSIONID')
         securityToken: securityToken
 
-    logout: ->
-      $.removeCookie('JSESSIONID', domain: window.AppConfig.cookieDomain)
-      $.removeCookie('mblsessid')
+    logout: (options = {}) ->
+      $.ajax(
+        url: "#{window.AppConfig.almWebServiceBaseUrl}/resources/jsp/security/logout.jsp"
+        type: 'GET'
+        dataType: 'html'
+      )
+      $.ajax(
+        url: Backbone.history.root + 'logout'
+        type: 'POST'
+        dataType: 'json'
+        success: options.success
+        error: options.error
+      )
       @set securityToken: null
+          
+    fetchUserInfo: (cb) ->
+      u = new User()
+      u.fetch
+        url: "#{u.urlRoot}:current"
+        headers:
+          "X-Requested-By": "Rally"
+        params:
+          fetch: 'ObjectID,DisplayName'
+        success: (model, resp, opts) =>
+          @set 'user', model
+          cb?(null, model)
+        error: (model, resp, options) =>
+          cb?('auth', model)
 
     _onUserChange: (model, value, options) ->
       projects = new Projects()
@@ -83,10 +116,10 @@ define ->
           @publishEvent "projectready", @getProjectName()
 
     _onModeChange: (model, value, options) ->
-      $.cookie('mode', value)
+      $.cookie('mode', value, path: '/')
 
     _onBoardFieldChange: (model, value, options) ->
-      $.cookie('boardField', value)
+      $.cookie('boardField', value, path: '/')
 
     _onProjectChange: (model, value, options) ->
-      $.cookie('project', value.get('_ref'))
+      $.cookie('project', value.get('_ref'), path: '/')

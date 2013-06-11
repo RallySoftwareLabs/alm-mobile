@@ -87,8 +87,8 @@ define ->
           opts?.success?(model, resp, options)
           @_switchToViewMode()
           @trigger('save', @options.field, model)
-        error: =>
-          opts?.error?(model, resp, options)
+        error: (model, xhr, options) =>
+          opts?.error?(model, xhr, options)
           debugger
 
     _switchToEditMode: ->

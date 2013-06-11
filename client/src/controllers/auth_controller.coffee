@@ -1,10 +1,15 @@
-define [
-  'chaplin'
-  'application'
-  'controllers/base/controller'
-  'views/auth/login_view'
-], (Chaplin, app, Controller, LoginView) ->
+define ->
+  Chaplin = require 'chaplin'
+  app = require 'application'
+  Controller = require 'controllers/base/controller'
+  LoginView = require 'views/auth/login_view'
+
   class AuthController extends Controller
+
+    logout: (params) ->
+      app.session.logout()
+      @redirectToRoute 'auth#login'
+
     login: (params) ->
       @view = new LoginView
       @listenTo @view, 'submit', @onSubmit
@@ -21,8 +26,11 @@ define [
         success: (data, status, xhr) =>
           app.session.setSecurityToken data.securityToken
           if app.session.hasSessionCookie()
-            app.fetchUserInfo =>
-              @redirectTo app.afterLogin, replace: true
+            app.session.fetchUserInfo (err, user) =>
+              if err?
+                @redirectToRoute 'auth#logout'
+              else
+                @redirectTo app.afterLogin, replace: true
         error: (xhr, errorType, error) =>
           alert = @$('.alert').html('The password you have entered is incorrect.').show()
       )

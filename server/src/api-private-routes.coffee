@@ -5,6 +5,9 @@ module.exports = (app) ->
   
   app.post '/login',
     LoginRoutes.login
+
+  app.post '/logout',
+    LoginRoutes.logout
   
   app.get '/isLoggedIn', (req, res) ->
     res.json { loggedIn: !!req.session.jsessionid }

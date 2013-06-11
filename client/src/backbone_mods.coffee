@@ -1,4 +1,9 @@
-define ['jquery', 'underscore', 'backbone', 'application'], ($, _, Backbone, app) ->
+define ->
+  $ = require 'jquery'
+  _ = require 'underscore'
+  Backbone = require 'backbone'
+  app = require 'application'
+  
   methodMap =
     'create': 'POST',
     'update': 'POST', #'PUT',
@@ -10,6 +15,7 @@ define ['jquery', 'underscore', 'backbone', 'application'], ($, _, Backbone, app
   # Copied from backbone-1.0.0.js
   Backbone.sync = (method, model, options = {}) ->
     headers = options.headers || {}
+    headers["X-Requested-By"] = "Rally"
     # headers.ZSESSIONID = $.cookie('ZSESSIONID') # Rally override!
     # headers.JSESSIONID = $.cookie('JSESSIONID') # Rally override!
     
@@ -76,11 +82,10 @@ define ['jquery', 'underscore', 'backbone', 'application'], ($, _, Backbone, app
       
     error = options.error
     options.error = (xhr, status, thrown) ->
-      error?(model, xhr, options)
+      error?(xhr, status, thrown)
       model.trigger('error', model, xhr, options)
       if xhr.status is 401 or xhr.status is 0
-        # document.cookie = 'ZSESSIONID=; expires=Thu, 01 Jan 1970 00:00:01 GMT;'
-        document.cookie = 'JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:01 GMT;'
+        app.session.logout()
         Backbone.history.navigate('/login', {trigger: true, replace: true})
 
     success = options.success
