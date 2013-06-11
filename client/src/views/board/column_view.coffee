@@ -7,6 +7,8 @@ define ->
 	class ColumnView extends View
 		template: hbs['board/templates/column']
 		loadingIndicator: true
+		abbreviateHeader: true
+		showFields: false
 
 		_.extend @prototype, ColumnViewMixin
 

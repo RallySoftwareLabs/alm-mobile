@@ -8,6 +8,8 @@ define ->
     region: 'main'
     className: 'board row-fluid'
     template: hbs['board/templates/column']
+    abbreviateHeader: false
+    showFields: true
 
     _.extend @prototype, ColumnViewMixin
 

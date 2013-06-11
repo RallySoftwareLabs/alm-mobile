@@ -2,8 +2,25 @@
     <div class="header">{{header}}</div>
     <div class="body">
         {{#each cards}}
-        	<div class="card" id="{{this.ObjectID}}-{{this._type}}"{{#if this.DisplayColor}} style="background-color: {{this.DisplayColor}}; color: white;"{{/if}}>
-        		<div>{{this.FormattedID}}</div>
+        	<div class="card{{#if this.DisplayColor}} colored{{/if}}{{#if ../showFields}} full{{/if}}" id="{{this.ObjectID}}-{{this._type}}"{{#if this.DisplayColor}} style="background-color: {{this.DisplayColor}}; color: white;"{{/if}}>
+        		<div class="field formatted-id">{{this.FormattedID}}</div>
+        		{{#if ../showFields}}
+        		<div class="field owner">
+        			{{#if this.Owner}}
+	        			<div class="owner-name">
+        					{{this.Owner._refObjectName}}
+        				</div>
+        				<div class="profile-image" style="background-image: url({{profileImageUrl this.Owner._ref 50}});"/>
+        			{{else}}
+        				<div class="owner-name">
+        					No owner
+        				</div>
+        				<div class="profile-image no-owner"/>
+        			{{/if}}
+        		</div>
+        		<div class="clear"/>
+        		<div class="field name">{{this.Name}}</div>
+        		{{/if}}
         	</div>
         {{/each}}
     </div>

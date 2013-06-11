@@ -25,10 +25,56 @@
         .card {
             cursor: pointer;
             background-color: @white;
-            color: @cyan;
-            line-height: 2.5em;
             padding: 5px;
             margin: 5px 0;
+
+
+            &.full {
+                .field {
+                    line-height: 1.5em;
+                }
+                .formatted-id {
+                    float: left;
+                }
+            }
+
+            .field {
+                line-height: 2.5em;
+            }
+            .formatted-id {
+                color: @cyan;
+            }
+
+            .owner {
+                float: right;
+
+                .owner-name {
+                    display: inline-block;
+                }
+
+                .profile-image {
+                    display: inline-block;
+                    width: 25px;
+                    height: 25px;
+                    background-position: center center;
+                    background-repeat: no-repeat;
+                    background-size: contain;
+
+                    &.no-owner {
+                        background-image: url(/img/noOwner_2x.png);
+                    }
+                }
+            }
+
+            .clear {
+                clear: both;
+            }
+
+            &.colored {
+                .field {
+                    color: @white;
+                }
+            }
         }
 	}
 

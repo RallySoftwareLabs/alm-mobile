@@ -21,11 +21,11 @@ define ->
 
     column: (params) ->
       field = app.session.get('boardField')
-      colValue = params.column
+      colValue = decodeURI(params.column)
       
       @afterProjectLoaded =>
         col = new Column(field: field, value: colValue)
-        col.fetch @getFetchData(field, colValue)
+        col.fetch @getFetchData(field, colValue, ['Name', 'Owner'])
 
         @view = new ColumnPageView autoRender: true, model: col
         @listenTo @view, 'headerclick', @onColumnClick
@@ -39,9 +39,9 @@ define ->
       mappedType = @getRouteTypeFromModelType(type)
       @redirectToRoute "#{mappedType}#show", id: oid
 
-    getFetchData: (field, value) ->
+    getFetchData: (field, value, extraFetch = []) ->
       data =
-        fetch: ['ObjectID', 'FormattedID', 'Rank', 'DisplayColor'].join ','
+        fetch: ['ObjectID', 'FormattedID', 'Rank', 'DisplayColor'].concat(extraFetch).join ','
         query: "(#{field} = \"#{value}\")"
         project: app.session.get('project').get('_ref')
         projectScopeUp: false

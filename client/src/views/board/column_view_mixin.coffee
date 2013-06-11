@@ -1,4 +1,5 @@
 define ->
+
   return {
     initializeMixin: ->
       @model.synced => @render()
@@ -11,9 +12,15 @@ define ->
       data = 
         header: header
         cards: storiesAndDefects
+        showFields: @showFields
 
     getColumnHeaderAbbreviation: ->
-      _.map(@model.get('value').replace(/-/g, ' ').split(' '), (word) -> word[0]).join ''
+      fieldValue = @model.get('value')
+
+      return if @abbreviateHeader
+        _.map(fieldValue.replace(/-/g, ' ').split(' '), (word) -> word[0]).join ''
+      else
+        fieldValue
 
     onCardClick: (e) ->
       [oid, type] = e.currentTarget.id.split('-')
