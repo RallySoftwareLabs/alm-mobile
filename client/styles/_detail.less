@@ -6,6 +6,14 @@
     input, textarea {
         width: auto;
         margin-bottom: 0;
+        border-width: 0;
+        .box-shadow(none);
+        background-color: transparent;
+        color: @darkGrey;
+
+        &:focus {
+            outline: 0;
+        }
     }
 
     textarea {
