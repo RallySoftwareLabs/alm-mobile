@@ -1,5 +1,7 @@
-define ['collections/collection', 'models/task'], (Collection, Task) ->
+define ->
+  Collection = require 'collections/collection'
+  Task = require 'models/task'
 
-  Collection.extend
+  class Tasks extends Collection
     url: window.AppConfig.almWebServiceBaseUrl + '/webservice/v2.x/tasks'
     model: Task

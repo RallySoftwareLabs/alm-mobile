@@ -1,5 +1,7 @@
-define ['collections/collection', 'models/defect'], (Collection, Defect) ->
+define ->
+  Collection = require 'collections/collection'
+  Defect = require 'models/defect'
 
-  Collection.extend
+  class Defects extends Collection
     url: window.AppConfig.almWebServiceBaseUrl + '/webservice/v2.x/defects'
     model: Defect

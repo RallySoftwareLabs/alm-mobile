@@ -1,6 +1,7 @@
-define ['collections/collection', 'models/user_story'], (Collection, UserStory) ->
+define ->
+  Collection = require 'collections/collection'
+  UserStory = require 'models/user_story'
 
-  Collection.extend(
+  class UserStories extends Collection
     url: window.AppConfig.almWebServiceBaseUrl + '/webservice/v2.x/hierarchicalrequirements'
     model: UserStory
-  )
