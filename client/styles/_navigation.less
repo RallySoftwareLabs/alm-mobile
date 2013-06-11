@@ -1,6 +1,6 @@
 #mask {
   position: absolute;
-  z-index: 1400;
+  z-index: @zindexFixedNavbar + 1;
   opacity: 0.8;
   height: 100%;
   width: 100%;
@@ -12,7 +12,7 @@
   width: 80%;
   height: 100%;
   overflow: hidden;
-  z-index: 1500;
+  z-index: @zindexFixedNavbar + 2;
 
   background-color: @darkGrey;
   top: 0;
@@ -59,4 +59,9 @@
       text-align: right;
     }
   }
+}
+
+.search-no-results {
+  position: absolute;
+  z-index: @zindexFixedNavbar + 3;
 }

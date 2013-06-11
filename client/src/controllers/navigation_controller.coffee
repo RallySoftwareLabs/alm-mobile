@@ -1,6 +1,7 @@
 define ->
+  app = require 'application'
   utils = require 'lib/utils'
-  Artifacts = require 'collections/artifacts'
+  UserStories = require 'collections/user_stories'
   Controller = require 'controllers/base/controller'
   NavigationView = require 'views/navigation/navigation_view'
 
@@ -20,14 +21,17 @@ define ->
         @redirectTo newRoute
 
     onSearch: (keyword) ->
-      new Artifacts().fetch
+      new UserStories().fetch
         data:
           fetch: "ObjectID,Name"
           search: keyword
+          project: app.session.get('project').get('_ref')
+          projectScopeUp: false
+          projectScopeDown: true
         success: (collection, response, options) =>
           if collection.length > 0
             @view.hide()
             firstResult = collection.first()
             @redirectTo utils.getDetailHash(firstResult)
           else
-            @displayNoSearchResults()
+            @view.displayNoSearchResults()
