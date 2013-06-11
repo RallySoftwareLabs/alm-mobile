@@ -1,8 +1,7 @@
-define [
-	'views/home/home_view'
-	'views/home/tasks_view'
-], (HomeView, TasksView) ->
+define ->
+  HomeView = require 'views/home/home_view'
+  TasksView = require 'views/home/tasks_view'
 
-	class TasksPageView extends HomeView
-		listView: TasksView
-		createRoute: 'new/task'
+  class TasksPageView extends HomeView
+    listView: TasksView
+    createRoute: 'new/task'

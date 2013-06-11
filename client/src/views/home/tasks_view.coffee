@@ -1,9 +1,8 @@
-define [
-  'hbsTemplate'
-  'application'
-  'views/base/collection_view'
-  'views/home/task_view'
-], (hbs, app, CollectionView, TaskView) ->
+define ->
+  hbs = require 'hbsTemplate'
+  app = require 'application'
+  CollectionView = require 'views/base/collection_view'
+  TaskView = require 'views/home/task_view'
 
   class UserStoriesView extends CollectionView
 

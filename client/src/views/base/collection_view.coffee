@@ -14,6 +14,8 @@ define ->
     #   mask.setElement(@el)
     #   mask.render()
 
+    animationDuration: 0
+
     getTemplateFunction: View::getTemplateFunction
 
     attach: View::attach

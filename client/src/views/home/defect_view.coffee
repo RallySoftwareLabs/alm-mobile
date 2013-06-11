@@ -1,8 +1,7 @@
-define [
-  'hbsTemplate'
-  'application'
-  'views/base/view'
-], (hbs, app, View) ->
+define ->
+  hbs = require 'hbsTemplate'
+  app = require 'application'
+  View = require 'views/base/view'
 
   class DefectView extends View
 
