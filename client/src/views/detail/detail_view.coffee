@@ -38,10 +38,16 @@ define ->
             @updateTitle "#{model.get('FormattedID')}: #{model.get('_refObjectName')}"
 
     getTemplateData: ->
-      model: @model.toJSON()
+      data = 
+        model: @model.toJSON()
+
+      if @getScheduleStateField?
+        data.ScheduleStateFieldName = @_getFieldInfo(@getScheduleStateField()).fieldName
+
+      data
 
     afterRender: ->
-      @renderField field for field in @fields
+      @renderField field for field in @getFields()
 
     fieldIsEditable: (field) ->
       _.contains(@_getFieldNames(), field) && !_.contains(['FormattedID'], field)
@@ -55,7 +61,7 @@ define ->
         container: @$("##{fieldConfig.fieldName}View")
         model: @model
         field: fieldConfig.fieldName
-        detailView: @
+        detailView: this
         session: @options.session
         newArtifact: @newArtifact
         editable: @fieldIsEditable(fieldName)
@@ -120,4 +126,4 @@ define ->
       fieldInfo
 
     _getFieldNames: ->
-      (@_getFieldInfo(field).fieldName for field in @fields)
+      (@_getFieldInfo(field).fieldName for field in @getFields())
