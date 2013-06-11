@@ -9,13 +9,13 @@ define ->
     return unless model && @loadingIndicator
 
     syncEvent = if _.isFunction(model.isSyncing) then 'syncStateChange' else 'sync'
-    @listenTo model, syncEvent, _.bind(__toggleLoadingIndicator__, this)
-    __toggleLoadingIndicator__.apply this
+    @listenTo model, syncEvent, _.bind(__toggleLoadingIndicator__, this, false)
+    __toggleLoadingIndicator__.call this, true
 
-  __toggleLoadingIndicator__ = ->
+  __toggleLoadingIndicator__ = (show = false) ->
     model = @model || @collection
 
-    visible = if _.isFunction(model.isSyncing) then model.isSyncing() else model.length == 0
+    visible = if _.isFunction(model.isSyncing) then model.isSyncing() else show
 
     if visible
       @$el.append(new Spinner().spin().el)
