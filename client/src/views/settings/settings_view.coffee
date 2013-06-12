@@ -44,9 +44,4 @@ define ->
       @render()
 
     updateSelectedProject: ->
-      app.session.set 'project', _.find(
-        app.session.get('projects').models,
-        (proj) -> proj.get('_ref') is @$('option:selected').val(),
-        this
-      )
-      @render()
+      @trigger 'changeProject', @$('option:selected').val()

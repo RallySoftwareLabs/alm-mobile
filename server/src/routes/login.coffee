@@ -44,3 +44,12 @@ module.exports =
     res.json
       jsessionid: req.session.jsessionid
       securityToken: req.session.securityToken
+
+  getSchema: (req, res) ->
+    jsessionid = req.session.jsessionid
+    securityToken = req.session.securityToken
+    new AlmClient().getSchema jsessionid, securityToken, req.params.projectOid, (err, resp, body) ->
+      res.send 500 if err?
+
+      res.status resp.statusCode
+      res.send body

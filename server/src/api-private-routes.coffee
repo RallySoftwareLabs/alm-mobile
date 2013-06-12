@@ -15,3 +15,7 @@ module.exports = (app) ->
   app.get '/getSessionInfo',
     Auth.isUserLoggedIn
     LoginRoutes.getSessionInfo
+
+  app.get '/schema/:projectOid',
+    Auth.isUserLoggedIn
+    LoginRoutes.getSchema

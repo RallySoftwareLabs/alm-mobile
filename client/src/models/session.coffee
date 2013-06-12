@@ -3,7 +3,11 @@ define ->
   utils = require 'lib/utils'
   Model = require 'models/base/model'
   User = require 'models/user'
+  Defect = require 'models/defect'
+  Task = require 'models/task'
+  UserStory = require 'models/user_story'
   UserProfile = require 'models/user_profile'
+  Schema = require 'collections/schema'
   Projects = require 'collections/projects'
 
   class Session extends Model
@@ -68,12 +72,19 @@ define ->
 
     logout: (options = {}) ->
       @set securityToken: null, rallySession: null
-      $.ajax(
-        url: '/logout'
-        type: 'POST'
-        dataType: 'json'
-        success: options.success
-        error: options.error
+      $.when(
+        $.ajax(
+          url: "#{window.AppConfig.almWebServiceBaseUrl}/resources/jsp/security/clear.jsp"
+          type: 'GET'
+          dataType: 'html'
+        )
+        $.ajax(
+          url: '/logout'
+          type: 'POST'
+          dataType: 'json'
+          success: options.success
+          error: options.error
+        )
       )
           
     fetchUserInfo: (cb) ->
@@ -136,7 +147,15 @@ define ->
         proj = projects.find (proj) -> proj.get('_ref') == defaultProject
         @set 'project', proj || projects.first()
 
-      @publishEvent "projectready", @getProjectName()
+
+    _loadSchema: (project) ->
+      projectRef = project.get('_ref')
+      projectOid = utils.getOidFromRef projectRef
+
+      schema = new Schema()
+      schema.url = "/schema/#{projectOid}"
+      schema.fetch(accepts: json: 'text/plain').done =>
+        $.when.apply($, _.map [Defect, Task, UserStory], (model) -> model.updateFromSchema(schema))
 
     _onModeChange: (model, value, options) ->
       $.cookie('mode', value, path: '/')
@@ -145,4 +164,10 @@ define ->
       $.cookie('boardField', value, path: '/')
 
     _onProjectChange: (model, value, options) ->
-      $.cookie('project', value.get('_ref'), path: '/')
+      projectRef = value.get('_ref')
+      projectOid = utils.getOidFromRef projectRef
+
+      $.cookie('project', projectRef, path: '/')
+
+      $.when(@_loadSchema(value)).then =>
+        @publishEvent "projectready", @getProjectName()

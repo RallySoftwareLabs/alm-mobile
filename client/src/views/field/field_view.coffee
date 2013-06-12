@@ -73,7 +73,8 @@ define ->
       @options.value || @model.get(@options.field)
 
     getAllowedValues: ->
-      @model.allowedValues?[@options.field]
+      av = @model.getAllowedValues?(@options.field)
+      return if av? then _.pluck(av, 'StringValue') else av
 
     _saveLocal: (updates, opts) ->
       @model.set(updates)
@@ -89,7 +90,6 @@ define ->
           @trigger('save', @options.field, model)
         error: (model, xhr, options) =>
           opts?.error?(model, xhr, options)
-          debugger
 
     _switchToEditMode: ->
       if @viewMode isnt ViewMode.EDIT

@@ -11,6 +11,6 @@ define ->
         @subscribeEvent 'projectready', @onProjectReady(callback)
 
     onProjectReady: (callback) ->
-      => 
-        @unsubscribeEvent 'projectready', @onProjectReady
+      func = => 
+        @unsubscribeEvent 'projectready', func
         callback?.apply this

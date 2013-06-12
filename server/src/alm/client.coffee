@@ -4,6 +4,8 @@ _ = require 'lodash'
 
 module.exports = class AlmClient
 
+  @isSecure: -> config.almWebServiceBaseUrl.indexOf('https') > -1
+
   ###
   # @param {Object} options
   # @param {String} options.username
@@ -25,7 +27,7 @@ module.exports = class AlmClient
       return cb('You must pass both username and password to get a security token')
 
     # Get CSRF Token
-    request(requestConfig, (err, authResponse, body) ->
+    request requestConfig, (err, authResponse, body) ->
       console.log err, response?.statusCode, body
       unless err
         # console.log body
@@ -49,7 +51,16 @@ module.exports = class AlmClient
           console.log err
       
       cb?(err, jsessionid, securityToken)
-    )
 
-  @isSecure: -> config.almWebServiceBaseUrl.indexOf('https') > -1
+  getSchema: (jsessionid, securityToken, projectOid, cb) ->
+    j = request.jar()
+    cookie = request.cookie("JSESSIONID=#{jsessionid}")
+    j.add(cookie)
+    console.log "schema sending #{jsessionid} and #{securityToken}"
+    requestConfig =
+      uri: "#{config.almWebServiceBaseUrl}/schema/v2.x/project/#{projectOid}?key=#{securityToken}"
+      method: 'GET'
+      jar: j
+      strictSSL: false
 
+    request requestConfig, cb

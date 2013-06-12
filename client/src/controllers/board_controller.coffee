@@ -10,9 +10,9 @@ define ->
   class BoardController extends SiteController
     index: (params) ->
       field = app.session.get('boardField')
-      columns = _.map UserStory::allowedValues[field], (value) -> new Column(field: field, value: value)
-
       @afterProjectLoaded =>
+        columns = _.map _.pluck(UserStory.getAllowedValues(field), 'StringValue'), (value) -> new Column(field: field, value: value)
+
         col.fetch(@getFetchData(field, col.get('value'))) for col in columns
         @view = new BoardPageView autoRender: true, columns: columns, field: field
 

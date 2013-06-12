@@ -42,5 +42,3 @@ define ->
           success: (model, resp, options) =>
             @discussions.add model, at: 0
             @view.clearInputField()
-          error: =>
-            debugger

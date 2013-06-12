@@ -87,7 +87,6 @@ define ->
           @publishEvent '!router:route', @homeRoute, replace: false
         error: =>
           opts?.error?(model, resp, options)
-          debugger
 
     onCancel: ->
       @publishEvent '!router:route', @homeRoute, replace: false
