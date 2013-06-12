@@ -1,12 +1,10 @@
 <button class="btn btn-block" id="defect/{{defect.ObjectID}}">
-    <div class="span2 formatted-id">
-        <div class="row-fluid">
-            <div class="span4">
-                <div class={{state defect.Blocked defect.Ready}}></div>
-            </div>
-            <div class="span8">{{defect.FormattedID}}</div>
+    <div class="span11 item">
+        <div class={{state defect.Blocked defect.Ready}}></div>
+        <div class="item-id-name">
+            <div class="formatted-id">{{defect.FormattedID}}</div>
+            <div class="workitem-name">{{defect.Name}}</div>
         </div>
     </div>
-    <div class="span9 workitem-name">{{defect.Name}}</div>
     <div class="span1 chevron"><i class="icon-chevron-right"></i></div>
 </button>

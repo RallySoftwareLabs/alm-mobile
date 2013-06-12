@@ -1,13 +1,11 @@
 <button class="btn btn-block" id="task/{{task.ObjectID}}">
-    <div class="span2 formatted-id">
-        <div class="row-fluid">
-            <div class="span4">
-                <div class={{state task.Blocked task.Ready}}></div>
-            </div>
-            <div class="span8">{{task.FormattedID}}</div>
+    <div class="span9 item">
+        <div class={{state task.Blocked task.Ready}}></div>
+        <div class="item-id-name">
+            <div class="formatted-id">{{task.FormattedID}}</div>
+            <div class="workitem-name">{{task.Name}}</div>
         </div>
     </div>
-    <div class="span7 workitem-name">{{task.Name}}</div>
     <div class="span2">
         <div>
             <div class="span5 task-clock"></div>
