@@ -3,5 +3,5 @@ define ->
   Artifact = require 'models/artifact'
 
   class Artifacts extends Collection
-    url: window.AppConfig.almWebServiceBaseUrl + '/webservice/v2.x/artifacts'
+    url: window.AppConfig.almWebServiceBaseUrl + '/webservice/v2.x/artifact'
     model: Artifact

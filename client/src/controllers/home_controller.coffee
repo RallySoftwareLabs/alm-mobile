@@ -18,31 +18,32 @@ define ->
       
       @afterProjectLoaded ->
         @view = new UserStoriesPageView autoRender: true, tab: 'userstories', collection: userStories
-        userStories.fetch data: @getFetchData(['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked'])
+        userStories.fetch data: @getFetchData(['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked'], """(((ScheduleState != "Completed") AND (ScheduleState != "Accepted")) AND (ScheduleState != "Released"))""")
       
     tasks: (params) ->
       tasks = new Tasks()
 
       @afterProjectLoaded =>
         @view = new TasksPageView autoRender: true, tab: 'tasks', collection: tasks
-        tasks.fetch data: @getFetchData(['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked', 'ToDo'])
+        tasks.fetch data: @getFetchData(['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked', 'ToDo'], """(State != "Completed")""")
 
     defects: (params) ->
       defects = new Defects()
 
       @afterProjectLoaded =>
         @view = new DefectsPageView autoRender: true, tab: 'defects', collection: defects
-        defects.fetch data: @getFetchData(['ObjectID', 'FormattedID', 'Name'])
+        defects.fetch data: @getFetchData(['ObjectID', 'FormattedID', 'Name'], """(((ScheduleState != "Completed") AND (ScheduleState != "Accepted")) AND (ScheduleState != "Released"))""")
 
-    getFetchData: (fetch) ->
+    getFetchData: (fetch, query) ->
       data =
         fetch: fetch.join ','
         project: app.session.get('project').get('_ref')
         projectScopeUp: false
         projectScopeDown: true
         order: "Rank"
+        query: query
 
       if app.session.isSelfMode()
-        data.query = "(Owner = #{app.session.get('user').get('_ref')})"
+        data.query = "(#{data.query} AND (Owner = #{app.session.get('user').get('_ref')}))"
 
       data
