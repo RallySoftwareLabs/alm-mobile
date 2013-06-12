@@ -23,13 +23,6 @@ define ->
     options.xhrFields =
       withCredentials: true
 
-
-    beforeSend = options.beforeSend
-    options.beforeSend = (xhr) ->
-      xhr.setRequestHeader('Cookie', "JSESSIONID=#{app.session.get('rallySession')}")
-      if beforeSend
-        return beforeSend.apply(this, arguments)
-
     options.headers = headers
 
     type = methodMap[method]
