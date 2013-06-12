@@ -1,8 +1,8 @@
 AlmClient = require '../alm/client'
 config = require '../config'
 
-setCookie = (res, name, value, expiration) ->
-  res.cookie(name, value, {domain: config.cookieDomain, httpOnly: true, secure: true, expires: expiration})
+setCookie = (res, name, value, expiration, secure = false) ->
+  res.cookie(name, value, {domain: config.cookieDomain, httpOnly: true, secure: secure, expires: expiration})
 
 clearCookie = (res, name) ->
   res.clearCookie(name, {domain: config.cookieDomain})
@@ -23,7 +23,7 @@ module.exports =
         expiration.setDate(expiration.getDate() + 14)
 
       if jsessionid
-        setCookie(res, 'JSESSIONID', jsessionid, expiration)
+        setCookie(res, 'JSESSIONID', jsessionid, expiration, AlmClient.isSecure())
         req.session.jsessionid = jsessionid
       
       req.session.securityToken = securityToken

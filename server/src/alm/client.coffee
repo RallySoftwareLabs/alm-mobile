@@ -50,3 +50,6 @@ module.exports = class AlmClient
       
       cb?(err, jsessionid, securityToken)
     )
+
+  @isSecure: -> config.almWebServiceBaseUrl.indexOf('https') > -1
+
