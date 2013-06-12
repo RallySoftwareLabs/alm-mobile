@@ -36,15 +36,13 @@ define ->
 
           @fetchUserInfo (err, model) =>
             if err?
-              @logout 
-                success: (data, status, xhr) ->
-                  cb?(true)
-                error: (xhr, errorType, error) ->
-                  cb?(false)
+              @logout().done (data, status, xhr) ->
+                cb? status == 'success'
             else
               cb?(true)
         error: (xhr, errorType, error) =>
-          cb?(false)
+          @logout().done (data, status, xhr) ->
+            cb? status == 'success'
       )
 
     hasSecurityToken: ->
@@ -74,19 +72,21 @@ define ->
         securityToken: securityToken
 
     logout: (options = {}) ->
-      $.ajax(
-        url: "#{window.AppConfig.almWebServiceBaseUrl}/resources/jsp/security/logout.jsp"
-        type: 'GET'
-        dataType: 'html'
-      )
-      $.ajax(
-        url: Backbone.history.root + 'logout'
-        type: 'POST'
-        dataType: 'json'
-        success: options.success
-        error: options.error
-      )
       @set securityToken: null
+      $.when(
+        $.ajax(
+          url: "#{window.AppConfig.almWebServiceBaseUrl}/resources/jsp/security/clear.jsp"
+          type: 'GET'
+          dataType: 'html'
+        )
+        $.ajax(
+          url: '/logout'
+          type: 'POST'
+          dataType: 'json'
+          success: options.success
+          error: options.error
+        )
+      )
           
     fetchUserInfo: (cb) ->
       u = new User()

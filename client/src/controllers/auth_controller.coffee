@@ -32,5 +32,5 @@ define ->
               else
                 @redirectTo app.afterLogin, replace: true
         error: (xhr, errorType, error) =>
-          alert = @$('.alert').html('The password you have entered is incorrect.').show()
+          view.showError 'The password you have entered is incorrect.'
       )

@@ -24,9 +24,12 @@ define [
       super
 
     signIn: (event) ->
-      this.$('.alert').hide()
-      username = this.$('#username')[0]
-      password = this.$('#password')[0]
-      checkbox = this.$('#remember-me')[0]
+      @$('.alert').hide()
+      username = @$('#username')[0]
+      password = @$('#password')[0]
+      checkbox = @$('#remember-me')[0]
       @trigger 'submit', username, password, checkbox
       event.preventDefault()
+
+    showError: (error) ->
+      @$('.alert').html(error).show()
