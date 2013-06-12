@@ -28,9 +28,11 @@ define ->
           if app.session.hasSessionCookie()
             app.session.fetchUserInfo (err, user) =>
               if err?
-                @redirectToRoute 'auth#logout'
+                app.session.logout()
+                @view.showError 'There was an error signing in. Please try again.'
               else
                 @redirectTo app.afterLogin, replace: true
         error: (xhr, errorType, error) =>
-          view.showError 'The password you have entered is incorrect.'
+          app.session.logout()
+          @view.showError 'The password you have entered is incorrect.'
       )

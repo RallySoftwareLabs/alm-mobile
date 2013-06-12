@@ -15,8 +15,7 @@ define [
       'touchstart .sign-in': 'signIn'
       'submit form': 'signIn'
 
-    render: ->
-      super
+    afterRender: ->
       $('body').addClass('login-body')
 
     dispose: ->
@@ -25,11 +24,12 @@ define [
 
     signIn: (event) ->
       @$('.alert').hide()
-      username = @$('#username')[0]
+      @username = @$('#username')[0]
       password = @$('#password')[0]
       checkbox = @$('#remember-me')[0]
       @trigger 'submit', username, password, checkbox
       event.preventDefault()
 
     showError: (error) ->
+      @$('#password').html('')
       @$('.alert').html(error).show()

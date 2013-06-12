@@ -30,26 +30,21 @@ define ->
         dataType: 'json'
         success: (data, status, xhr) =>
           @set
-            jsessionid: $.cookie('JSESSIONID')
+            rallySession: data.jsessionid
             securityToken: data.securityToken
             authenticated: true
 
           @fetchUserInfo (err, model) =>
-            if err?
-              @logout().done (data, status, xhr) ->
-                cb? status == 'success'
-            else
-              cb?(true)
+            cb? !err?
         error: (xhr, errorType, error) =>
-          @logout().done (data, status, xhr) ->
-            cb? status == 'success'
+          cb? false
       )
 
     hasSecurityToken: ->
        Boolean(@get("securityToken"))
 
     hasSessionCookie: ->
-      !!$.cookie('JSESSIONID')
+      !!@get('rallySession')
 
     hasProjectCookie: ->
       !!$.cookie('project')
@@ -66,26 +61,19 @@ define ->
     getSecurityToken: ->
       @get 'securityToken'
 
-    setSecurityToken: (securityToken) ->
+    setSecurityToken: (jsessionid, securityToken) ->
       @set
-        jsessionid: $.cookie('JSESSIONID')
+        rallySession: jsessionid
         securityToken: securityToken
 
     logout: (options = {}) ->
-      @set securityToken: null
-      $.when(
-        $.ajax(
-          url: "#{window.AppConfig.almWebServiceBaseUrl}/resources/jsp/security/clear.jsp"
-          type: 'GET'
-          dataType: 'html'
-        )
-        $.ajax(
-          url: '/logout'
-          type: 'POST'
-          dataType: 'json'
-          success: options.success
-          error: options.error
-        )
+      @set securityToken: null, rallySession: null
+      $.ajax(
+        url: '/logout'
+        type: 'POST'
+        dataType: 'json'
+        success: options.success
+        error: options.error
       )
           
     fetchUserInfo: (cb) ->
@@ -106,28 +94,49 @@ define ->
       projects = new Projects()
       @set 'projects', projects
 
-      up = new UserProfile
+      userProfile = new UserProfile
         ObjectID: utils.getOidFromRef(@get('user').get('UserProfile')._ref)
 
+      pagesize = 200
       $.when(
         projects.fetch(
           data:
-            pagesize: 200
+            pagesize: pagesize
             order: 'Name'
         ),
-        up.fetch()
+        userProfile.fetch()
       ).done (p, u) =>
-          if @hasProjectCookie()
-            savedProjRef = $.cookie('project')
-            savedProject = projects.find (proj) -> proj.get('_ref') == savedProjRef
-            @set('project', savedProject) if savedProject
+        totalProjectResults = p[0].QueryResult.TotalResultCount
+        @_fetchRestOfProjects(projects, pagesize, totalProjectResults).done =>
+          @_setDefaultProject projects, userProfile
 
-          if !@get 'project'
-            defaultProject = up.get('DefaultProject')?._ref
-            proj = projects.find (proj) -> proj.get('_ref') == defaultProject
-            @set 'project', proj || projects.first()
+    _fetchRestOfProjects: (projects, pagesize, totalCount) ->
+      start = pagesize + 1
+      projectFetches = while totalCount >= start
+        fetch = projects.fetch(
+          remove: false
+          data:
+            start: start
+            pagesize: pagesize
+            order: 'Name'
+        )
+        start += pagesize
+        fetch
 
-          @publishEvent "projectready", @getProjectName()
+      $.when.apply($, projectFetches)
+
+    _setDefaultProject: (projects, userProfile) ->
+      if @hasProjectCookie()
+        savedProjRef = $.cookie('project')
+        savedProject = projects.find (proj) -> proj.get('_ref') == savedProjRef
+        @set('project', savedProject) if savedProject
+
+      if !@get 'project'
+        defaultProject = userProfile.get('DefaultProject')?._ref
+        proj = projects.find (proj) -> proj.get('_ref') == defaultProject
+        @set 'project', proj || projects.first()
+
+      @publishEvent "projectready", @getProjectName()
 
     _onModeChange: (model, value, options) ->
       $.cookie('mode', value, path: '/')

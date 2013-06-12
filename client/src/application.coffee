@@ -39,7 +39,7 @@ define ->
         unless authenticated
           hash = Backbone.history.getHash()
           @afterLogin = hash unless hash == 'login'
-          Backbone.history.navigate 'login', trigger: true, replace: true
+          @publishEvent '!router:route', 'logout'
 
     initLayout: ->
       @layout = new Chaplin.Layout {@title}

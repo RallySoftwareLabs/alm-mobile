@@ -2,7 +2,7 @@ AlmClient = require '../alm/client'
 config = require '../config'
 
 setCookie = (res, name, value, expiration) ->
-  res.cookie(name, value, {domain: config.cookieDomain, httpOnly: false, expires: expiration})
+  res.cookie(name, value, {domain: config.cookieDomain, httpOnly: true, secure: true, expires: expiration})
 
 clearCookie = (res, name) ->
   res.clearCookie(name, {domain: config.cookieDomain})
