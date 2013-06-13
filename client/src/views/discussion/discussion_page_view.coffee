@@ -18,10 +18,10 @@ define ->
       'submit form': '_onReplyClick'
 
     afterRender: ->
-      listView = new DiscussionListView(
+      listView = new DiscussionListView
         container: @$(".listing")
         collection: @collection
-      )
+
       @subview 'list', listView
 
       @_getInputField().focus()

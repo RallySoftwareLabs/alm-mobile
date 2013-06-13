@@ -6,3 +6,12 @@ define ->
     className: "btn-group btn-group-vertical"
     itemView: DiscussionView
     loadingIndicator: true
+
+    initialize: (options = {}) ->
+    	@showItemArtifact = options.showItemArtifact
+    	super
+
+    initItemView: (model) ->
+    	view = super
+    	view.showItemArtifact = @showItemArtifact
+    	view

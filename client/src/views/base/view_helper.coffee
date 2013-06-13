@@ -43,3 +43,11 @@ define ->
 
   Handlebars.registerHelper 'toCssClass', (value) ->
     utils.toCssClass value
+
+  Handlebars.registerHelper 'toLowerCase', (value) ->
+    return if _.isString(value) then value.toLowerCase() else ''
+
+  Handlebars.registerHelper 'typeForDetailLink', (value) ->
+    str = (value || '').toLowerCase()
+    str = 'userstory' if str == 'hierarchicalrequirement'
+    str

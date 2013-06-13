@@ -13,5 +13,6 @@ define ->
       listView = new DiscussionListView(
         container: @$el
         collection: @collection
+        showItemArtifact: true
       )
       @subview 'list', listView

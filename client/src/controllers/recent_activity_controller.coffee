@@ -11,7 +11,7 @@ define ->
         discussions = new Discussions()
         discussions.fetch
           data:
-            fetch: "Text,User,Artifact,CreationDate"
+            fetch: "Text,User,Artifact,CreationDate,FormattedID"
             project: app.session.get('project').get('_ref')
             projectScopeUp: false
             projectScopeDown: true

@@ -1,4 +1,10 @@
 <button class="btn btn-block discussion-item">
+    {{#if showItemArtifact}}
+    <div class="artifact">
+        <a class="artifact-link" href="/{{typeForDetailLink Artifact._type}}/{{objectIDFromRef Artifact._ref}}">{{Artifact.FormattedID}}</a>
+        {{Artifact._refObjectName}}
+    </div>
+    {{/if}}
     <div class="profile-image">
     	<img src="{{profileImageUrl User._ref 80}}"/>
     </div>
