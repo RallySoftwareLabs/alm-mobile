@@ -50,10 +50,10 @@ define ->
           displayName: 'Tracking Board'
           viewHash: 'board'
         }
-        {
-          displayName: 'Burndown Chart'
-          viewHash: 'burndown'
-        }
+        # {
+        #   displayName: 'Burndown Chart'
+        #   viewHash: 'burndown'
+        # }
         {
           displayName: 'Recent Activity'
           viewHash: 'recentActivity'
