@@ -1,38 +1,64 @@
 <div class="settings">
-  <div class="row-fluid">
-      {{! <button class="btn btn-block span10 offset1">
-        <div class="span11">{{currentProject.attributes._refObjectName}\}</div>
-        <div class="span1"><div class="chevron"/></div>
-      </button> }}
-    <div class="span12">
-      <select class="project">
-        {{#each projects}}
-          {{{selectOption attributes._ref attributes._refObjectName ../currentProject}}}
-        {{/each}}
-      </select>
+    <div class="row-fluid">
+            {{! <button class="btn btn-block span10 offset1">
+                <div class="span11">{{currentProject.attributes._refObjectName}\}</div>
+                <div class="span1"><div class="chevron"/></div>
+            </button> }}
+        <div class="span12">
+            <select class="project">
+                {{#each projects}}
+                    {{{selectOption attributes._ref attributes._refObjectName ../currentProject}}}
+                {{/each}}
+            </select>
+        </div>
     </div>
-  </div>
-  <div class="row-fluid">
-    <div class="span5">
-      <label class="show-work">Show:</label>
+    <div class="row-fluid scope">
+        <div class="span4">
+            <label class="show-work">Show:</label>
+        </div>
+        <div class="span8 listing">
+            <div class="btn-group btn-group-vertical">
+                <div>
+                    <button class="btn btn-block self">
+                        <div class="span1 selection-icon">{{#if isSelf}} <i class="icon-ok"/>{{else}}&nbsp;{{/if}}</div>
+                        <div class="span11">My Work</div>
+                    </button>
+                </div>
+                <div>
+                    <button class="btn btn-block team">
+                        <div class="span1 selection-icon">{{#if isTeam}} <i class="icon-ok"/>{{else}}&nbsp;{{/if}}</div>
+                        <div class="span11">My Team</div>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="span4">
-      <button class="btn btn-block self{{#if isSelf}} active{{/if}}">My Work</button>
-      <button class="btn btn-block team{{#if isTeam}} active{{/if}}">My Team</button>
+    <div class="row-fluid board-column">
+        <div class="span4">
+            <label class="board-field">Board Column:</label>
+        </div>
+        <div class="span8 listing">
+            <div class="btn-group btn-group-vertical">
+                <div>
+                    <button class="btn btn-block schedule-state">
+                        <div class="span1 selection-icon">{{#if isScheduleState}} <i class="icon-ok"/>{{else}}&nbsp;{{/if}}</div>
+                        <div class="span10">Schedule State</div>
+                        <div class="span1 chevron"><i class="icon-chevron-right"></i></div>
+                    </button>
+                </div>
+                <div>
+                    <button class="btn btn-block kanban-state">
+                        <div class="span1 selection-icon">{{#if isKanbanState}} <i class="icon-ok"/>{{else}}&nbsp;{{/if}}</div>
+                        <div class="span10">Kanban State</div>
+                        <div class="span1 chevron"><i class="icon-chevron-right"></i></div>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="row-fluid">
-    <div class="span5">
-      <label class="board-field">Board Column:</label>
+    <div class="row-fluid">
+        <div class="span12">
+            <button class="btn active logout">Logout</button>
+        </div>
     </div>
-    <div class="span4">
-      <button class="btn btn-block schedule-state{{#if isScheduleState}} active{{/if}}">Schedule State</button>
-      <button class="btn btn-block kanban-state{{#if isKanbanState}} active{{/if}}">Kanban State</button>
-    </div>
-  </div>
-  <div class="row-fluid">
-    <div class="span12">
-      <button class="btn active logout">Logout</button>
-    </div>
-  </div>
 </div>

@@ -1,0 +1,15 @@
+<div class="row-fluid board-columns">
+    <div class="span12 listing">
+        <div class="btn-group btn-group-vertical">
+            {{#each columns}}
+            <div>
+                <button class="btn btn-block board-column" data-target="{{this.StringValue}}">
+                    <div class="span1 selection-icon">{{#if this.showing}} <i class="icon-ok"/>{{else}}&nbsp;{{/if}}</div>
+                    <div class="span11">{{this.StringValue}}</div>
+                </button>
+            </div>
+            {{/each}}
+            </div>
+        </div>
+    </div>
+</div>

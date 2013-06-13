@@ -8,6 +8,7 @@ define ->
     match 'logout', 'auth#logout'
     match 'navigation', 'navigation#show'
     match 'settings', 'settings#show'
+    match 'settings/board', 'settings#board'
     match ':type/:id/discussion', 'discussion#show'
     match 'userstory/:id', 'user_story_detail#show'
     match 'defect/:id', 'defect_detail#show'

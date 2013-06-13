@@ -101,6 +101,44 @@ define ->
         error: (model, resp, options) =>
           cb?('auth', model)
 
+    initColumnsFor: (boardField) ->
+      columnProp = "#{boardField}-columns"
+      columns = $.cookie(columnProp)
+      if columns
+        columns = columns.split ','
+      else
+        allowedValues = UserStory.getAllowedValues boardField
+        columns = _.pluck(allowedValues, 'StringValue')
+
+      @setBoardColumns boardField, columns
+      columns
+
+    getBoardColumns: (boardField = @get('boardField')) ->
+      columns = @get "#{boardField}-columns"
+      unless columns
+        columns = @initColumnsFor boardField
+
+      columns
+
+    toggleBoardColumn: (column, boardField = @get('boardField')) ->
+      columnProp = "#{boardField}-columns"
+      shownColumns = @getBoardColumns boardField
+
+      newColumns = if _.contains(shownColumns, column)
+        _.without(shownColumns, column)
+      else
+        allowedValues = UserStory.getAllowedValues boardField
+        columns = _.pluck(allowedValues, 'StringValue')
+
+        _.intersection(columns, shownColumns.concat([column]))
+        
+      @setBoardColumns boardField, newColumns
+
+    setBoardColumns: (boardField, columns) ->
+      columnProp = "#{boardField}-columns"
+      $.cookie(columnProp, columns.join(','), path: '/')
+      @set columnProp, columns
+
     _onUserChange: (model, value, options) ->
       projects = new Projects()
       @set 'projects', projects
@@ -116,9 +154,9 @@ define ->
             order: 'Name'
         ),
         userProfile.fetch()
-      ).done (p, u) =>
+      ).then (p, u) =>
         totalProjectResults = p[0].QueryResult.TotalResultCount
-        @_fetchRestOfProjects(projects, pagesize, totalProjectResults).done =>
+        @_fetchRestOfProjects(projects, pagesize, totalProjectResults).then =>
           @_setDefaultProject projects, userProfile
 
     _fetchRestOfProjects: (projects, pagesize, totalCount) ->
@@ -154,7 +192,7 @@ define ->
 
       schema = new Schema()
       schema.url = "/schema/#{projectOid}"
-      schema.fetch(accepts: json: 'text/plain').done =>
+      schema.fetch(accepts: json: 'text/plain').then =>
         $.when.apply($, _.map [Defect, Task, UserStory], (model) -> model.updateFromSchema(schema))
 
     _onModeChange: (model, value, options) ->
@@ -170,4 +208,5 @@ define ->
       $.cookie('project', projectRef, path: '/')
 
       $.when(@_loadSchema(value)).then =>
+        @initColumnsFor @get('boardField')
         @publishEvent "projectready", @getProjectName()

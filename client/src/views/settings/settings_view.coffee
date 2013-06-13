@@ -5,7 +5,6 @@ define ->
   PageView = require 'views/base/page_view'
 
   class SettingsView extends PageView
-    autoRender: true
     template: hbs['settings/templates/settings']
 
     events:

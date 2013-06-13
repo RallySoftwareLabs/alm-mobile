@@ -11,7 +11,7 @@ define ->
     index: (params) ->
       field = app.session.get('boardField')
       @afterProjectLoaded =>
-        columns = _.map _.pluck(UserStory.getAllowedValues(field), 'StringValue'), (value) -> new Column(field: field, value: value)
+        columns = _.map app.session.getBoardColumns(), (value) -> new Column(field: field, value: value)
 
         col.fetch(@getFetchData(field, col.get('value'))) for col in columns
         @view = new BoardPageView autoRender: true, columns: columns, field: field
