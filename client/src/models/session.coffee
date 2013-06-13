@@ -102,14 +102,16 @@ define ->
           cb?('auth', model)
 
     initColumnsFor: (boardField) ->
-      columnProp = "#{boardField}-columns"
+      projectOid = utils.getOidFromRef @get('project').get('_ref')
+      columnProp = "#{boardField}-columns-#{projectOid}"
       columns = $.cookie(columnProp)
 
       @setBoardColumns boardField, if columns then columns.split ',' else []
       columns
 
     getBoardColumns: (boardField = @get('boardField')) ->
-      columns = @get "#{boardField}-columns"
+      projectOid = utils.getOidFromRef @get('project').get('_ref')
+      columns = @get "#{boardField}-columns-#{projectOid}"
       unless columns
         columns = @initColumnsFor boardField
 
@@ -130,7 +132,8 @@ define ->
       @setBoardColumns boardField, newColumns
 
     setBoardColumns: (boardField, columns) ->
-      columnProp = "#{boardField}-columns"
+      projectOid = utils.getOidFromRef @get('project').get('_ref')
+      columnProp = "#{boardField}-columns-#{projectOid}"
       $.cookie(columnProp, columns.join(','), path: '/')
       @set columnProp, columns
 

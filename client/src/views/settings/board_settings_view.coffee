@@ -6,6 +6,7 @@ define ->
 
   class BoardSettingsView extends PageView
     template: hbs['settings/templates/board_settings']
+    className: 'board-settings'
 
     initialize: (options) ->
       @fieldName = options.fieldName
@@ -15,6 +16,7 @@ define ->
       @delegate 'click', '.board-column', @onColumnClick
 
     getTemplateData: ->
+      projectName: app.session.getProjectName()
       fieldName: @fieldName
       columns: @columns
 
