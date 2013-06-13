@@ -1,14 +1,14 @@
 define ->
   _ = require 'underscore'
   Model = require 'models/base/model'
-  AllowedValuesMixin = require 'models/base/allowed_values_mixin'
+  SchemaMixin = require 'models/base/schema_mixin'
 
   class Defect extends Model
     typePath: 'defect'
     urlRoot: window.AppConfig.almWebServiceBaseUrl + '/webservice/v2.x/defect'
 
-    _.extend this, AllowedValuesMixin.static
-    _.extend @prototype, AllowedValuesMixin.prototype
+    _.extend this, SchemaMixin.static
+    _.extend @prototype, SchemaMixin.prototype
 
     defaults:
       "State" : "Open"

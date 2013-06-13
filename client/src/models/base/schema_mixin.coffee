@@ -18,13 +18,21 @@ define ->
         allowedValues = []
 
         if model
+          @prototype.fields = {}
+          attributes = model.get('Attributes')
+
+          _.each attributes, (attr) => @prototype.fields[attr.ElementName] = {Name: attr.Name}
+          
           allowedValues = _.map(
-            _.filter(model.get('Attributes'), (attr) => attr.ElementName in @prototype.allowedValueFields),
+            _.filter(attributes, (attr) => attr.ElementName in @prototype.allowedValueFields),
             @_getAttributeAllowedValues
           )
 
         $.when.apply($, allowedValues).then (values...) =>
           @prototype.allowedValues = _.object values
+
+      getFieldDisplayName: (fieldElementName) ->
+        @prototype.fields[fieldElementName]?.Name
 
       _getAttributeAllowedValues: (attr) ->
         return if _.isArray attr.AllowedValues

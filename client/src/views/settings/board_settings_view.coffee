@@ -8,11 +8,14 @@ define ->
     template: hbs['settings/templates/board_settings']
 
     initialize: (options) ->
+      @fieldName = options.fieldName
       @setColumns options.columns
       super
+      @updateTitle "Board Settings"
       @delegate 'click', '.board-column', @onColumnClick
 
     getTemplateData: ->
+      fieldName: @fieldName
       columns: @columns
 
     setColumns: (@columns) ->

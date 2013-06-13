@@ -21,8 +21,8 @@ define ->
 
     board: (params) ->
       @afterProjectLoaded ->
-        
-        @view = new BoardSettingsView region: 'main', autoRender: true, columns: @_getColumnsForView()
+        fieldName = UserStory.getFieldDisplayName app.session.get('boardField')
+        @view = new BoardSettingsView region: 'main', autoRender: true, fieldName: fieldName, columns: @_getColumnsForView()
         @listenTo @view, 'columnClick', @onColumnClick
 
     onChangeMode: (mode) ->
