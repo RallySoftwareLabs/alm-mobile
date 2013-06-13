@@ -24,7 +24,7 @@ define ->
           password: password.value
           # rememberme: checkbox.checked
         success: (data, status, xhr) =>
-          app.session.setSecurityToken data.securityToken
+          app.session.setSecurityToken data.jsessionid, data.securityToken
           if app.session.hasSessionCookie()
             app.session.fetchUserInfo (err, user) =>
               if err?
