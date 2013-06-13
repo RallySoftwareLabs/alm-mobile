@@ -48,7 +48,7 @@ define ->
         title: @title
         onNavigateScreen: @onNavigateScreen
 
-      if current_page in ['/userstories', '/defects', '/tasks', '/board']
+      if current_page in ['/userstories', '/defects', '/tasks', '/board', '/recentActivity']
         data.left_button =  @makeButton 'navigation', 'icon-reorder', 'cyan'
         data.right_button = @makeButton 'settings', 'icon-cog'
       else if current_page is '/settings'
