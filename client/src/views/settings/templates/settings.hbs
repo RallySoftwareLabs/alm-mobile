@@ -1,11 +1,10 @@
 <div class="settings">
-    <div class="row-fluid">
-            {{! <button class="btn btn-block span10 offset1">
-                <div class="span11">{{currentProject.attributes._refObjectName}\}</div>
-                <div class="span1"><div class="chevron"/></div>
-            </button> }}
-        <div class="span12">
-            <select class="project">
+    <div class="row-fluid project">
+        <div class="span4">
+            <label class="choose-project">Project:</label>
+        </div>
+        <div class="span8 btn-group btn-group-vertical">
+            <select class="project-select btn btn-block">
                 {{#each projects}}
                     {{{selectOption attributes._ref attributes._refObjectName ../currentProject}}}
                 {{/each}}

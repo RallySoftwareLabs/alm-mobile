@@ -9,7 +9,7 @@ define ->
 
     events:
       'click button.logout': 'triggerLogout'
-      'change select.project': 'updateSelectedProject'
+      'change select.project-select': 'updateSelectedProject'
 
     initialize: (options) ->
       @mode = options.mode
