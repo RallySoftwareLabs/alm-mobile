@@ -104,13 +104,8 @@ define ->
     initColumnsFor: (boardField) ->
       columnProp = "#{boardField}-columns"
       columns = $.cookie(columnProp)
-      if columns
-        columns = columns.split ','
-      else
-        allowedValues = UserStory.getAllowedValues boardField
-        columns = _.pluck(allowedValues, 'StringValue')
 
-      @setBoardColumns boardField, columns
+      @setBoardColumns boardField, if columns then columns.split ',' else []
       columns
 
     getBoardColumns: (boardField = @get('boardField')) ->
@@ -131,7 +126,7 @@ define ->
         columns = _.pluck(allowedValues, 'StringValue')
 
         _.intersection(columns, shownColumns.concat([column]))
-        
+
       @setBoardColumns boardField, newColumns
 
     setBoardColumns: (boardField, columns) ->
