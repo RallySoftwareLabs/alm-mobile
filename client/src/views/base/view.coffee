@@ -32,7 +32,7 @@ define ->
 
     attach: ->
       super
-      __initLoadingIndicator__.apply this
+      __initLoadingIndicator__.apply this unless @showLoadingIndicator == false
       @afterRender()
       this
 

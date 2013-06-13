@@ -10,6 +10,7 @@ define ->
     id: 'new-user-story'
     template: hbs['detail/templates/user_story_create']
     homeRoute: '/userstories'
+    showLoadingIndicator: false
 
     initialize: ->
       super

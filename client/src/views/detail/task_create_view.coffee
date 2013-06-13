@@ -9,6 +9,7 @@ define ->
     id: 'new-task'
     template: hbs['detail/templates/task_create']
     homeRoute: '/tasks'
+    showLoadingIndicator: false
 
     initialize: ->
       super

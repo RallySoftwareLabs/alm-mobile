@@ -10,6 +10,7 @@ define ->
     id: 'new-defect'
     template: hbs['detail/templates/defect_create']
     homeRoute: '/defects'
+    showLoadingIndicator: false
 
     initialize: ->
       super
