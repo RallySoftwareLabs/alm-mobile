@@ -2,7 +2,7 @@
     <div class="header">{{header}}</div>
     <div class="body">
         {{#each cards}}
-        	<div class="card{{#if this.DisplayColor}} colored{{/if}}{{#if ../showFields}} full{{/if}}" id="{{this.ObjectID}}-{{this._type}}"{{#if this.DisplayColor}} style="background-color: {{this.DisplayColor}}; color: white;"{{/if}}>
+        	<div class="card{{#if this.Blocked}} blocked{{/if}}{{#if this.Ready}} ready{{/if}}{{#if this.DisplayColor}} colored{{/if}}{{#if ../showFields}} full{{/if}}" id="{{this.ObjectID}}-{{this._type}}"{{#if this.DisplayColor}} style="background-color: {{this.DisplayColor}}; color: white;"{{/if}}>
         		<div class="field formatted-id">{{this.FormattedID}}</div>
         		{{#if ../showFields}}
         		<div class="field owner">

@@ -41,7 +41,7 @@ define ->
 
     getFetchData: (field, value, extraFetch = []) ->
       data =
-        fetch: ['ObjectID', 'FormattedID', 'Rank', 'DisplayColor'].concat(extraFetch).join ','
+        fetch: ['ObjectID', 'FormattedID', 'Rank', 'DisplayColor', 'Blocked', 'Ready'].concat(extraFetch).join ','
         query: "(#{field} = \"#{value}\")"
         order: "Rank ASC,ObjectID"
         project: app.session.get('project').get('_ref')
