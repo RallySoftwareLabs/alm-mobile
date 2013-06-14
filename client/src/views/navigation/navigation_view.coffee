@@ -27,10 +27,12 @@ define ->
       $('#page-container').attr('class', $('#page-container').attr('class').replace(/(\spage\stransition\scenter)?$/, ' page transition right'))
       @$el.parent().attr('class', @$el.parent().attr('class').replace(/(transition\s)?left/, 'transition center'))
       $('#mask').show()
+      $('#mask').on('click', _.bind(@hide, this))
 
     hide: ->
       @$el.parent().attr('class', @$el.parent().attr('class').replace(/center/, 'left'))
       $('#page-container').attr('class', $('#page-container').attr('class').replace(/right/, 'center'))
+      $('#mask').off('click', _.bind(@hide, this))
       $('#mask').hide()
       @publishEvent 'navigation:hide'
 
