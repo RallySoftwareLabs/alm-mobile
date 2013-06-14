@@ -12,21 +12,21 @@
   </div>
 </div>
 <div class="body row-fluid">
-  <div class="span4 summary time-remaining-summary">
-    <span class="lead">{{ this.timeRemaining }}</span> <br>
-    {{ this.timeRemainingUnits }} <br>
+  {{! <div class="span4 summary time-remaining-summary">
+    <span class="lead">{{ this.timeRemaining } }</span> <br>
+    {{ this.timeRemainingUnits } } <br>
     Remaining
   </div>
   <div class="span4 summary percent-accepted-summary">
-    <span class="lead">{{ this.percentAccepted }}%</span> <br>
+    <span class="lead">{{ this.percentAccepted } }%</span> <br>
     Accepted <br>
-    ({{ this.pointsAccepted }} of {{ this.totalPoints }} Points)
+    ({{ this.pointsAccepted } } of {{ this.totalPoints } } Points)
   </div>
   <div class="span4 summary active-defects-summary">
-    <span class="lead">{{ this.activeDefects }}</span> <br>
+    <span class="lead">{{ this.activeDefects } }</span> <br>
     Active <br>
     Defects
-  </div>
+  </div> }}
   <div class="span12 buttons">
     {{#each buttons}}
       <button class="btn btn-inverse btn-block" type="button" data-target="{{ viewHash }}">
