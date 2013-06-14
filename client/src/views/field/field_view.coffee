@@ -75,10 +75,11 @@ define ->
 
     getAllowedValues: ->
       if app.session.get('boardField') == @options.field
-        app.session.getBoardColumns()
-      else
-        av = @model.getAllowedValues?(@options.field)
-        av && _.pluck(av, 'StringValue')
+        boardColumns = app.session.getBoardColumns()
+        return boardColumns if _.contains boardColumns, @getFieldValue()
+        
+      av = @model.getAllowedValues?(@options.field)
+      av && _.pluck(av, 'StringValue')
 
     _saveLocal: (updates, opts) ->
       @model.set(updates)

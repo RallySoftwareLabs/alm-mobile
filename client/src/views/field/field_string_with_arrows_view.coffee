@@ -12,7 +12,7 @@ define ->
     getTemplateData: ->
       data = super
       allowedValues = @getAllowedValues()
-      data.cantGoLeft = allowedValues.indexOf(data.fieldValue) is 0
+      data.cantGoLeft = allowedValues.indexOf(data.fieldValue) <= 0
       data.cantGoRight = allowedValues.indexOf(data.fieldValue) is (allowedValues.length - 1)
       data
 
