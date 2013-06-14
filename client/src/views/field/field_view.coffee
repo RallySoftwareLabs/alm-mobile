@@ -1,4 +1,5 @@
 define ->
+  app = require 'application'
   hbs = require 'hbsTemplate'
   View = require 'views/base/view'
 
@@ -73,8 +74,11 @@ define ->
       @options.value || @model.get(@options.field)
 
     getAllowedValues: ->
-      av = @model.getAllowedValues?(@options.field)
-      return if av? then _.pluck(av, 'StringValue') else av
+      if app.session.get('boardField') == @options.field
+        app.session.getBoardColumns()
+      else
+        av = @model.getAllowedValues?(@options.field)
+        av && _.pluck(av, 'StringValue')
 
     _saveLocal: (updates, opts) ->
       @model.set(updates)
