@@ -29,7 +29,7 @@ define ->
             app.session.fetchUserInfo (err, user) =>
               if err?
                 app.session.logout()
-                @view.showError 'There was an error signing in. Please try again.'
+                @view.showError 'There was an error signing in. Please try clearing your cookies.'
               else
                 @redirectTo app.afterLogin, replace: true
         error: (xhr, errorType, error) =>
