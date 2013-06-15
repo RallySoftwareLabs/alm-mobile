@@ -11,6 +11,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-simple-mocha'
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-compile-handlebars'
+  grunt.loadNpmTasks 'grunt-s3'
 
   grunt.registerTask 'default', ['clean','coffee','less','handlebars','compile-handlebars','requirejs','copy','concat','uglify']
 
@@ -162,4 +163,21 @@ module.exports = (grunt) ->
         src: [
           'node_modules/chai/chai.js'
           'client/gen/js/test/**/*.js'
+        ]
+
+    aws: grunt.file.readJSON('grunt-aws.json')
+    s3:
+      options:
+        key: '<%= aws.key %>'
+        secret: '<%= aws.secret %>'
+        bucket: '<%= aws.bucket %>'
+        access: 'public-read'
+      dev:
+        upload: [
+          {src: 'client/dist/*', dest: '/'}
+          {src: 'client/dist/css/*', dest: 'css/'}
+          {src: 'client/dist/font/*', dest: 'font/'}
+          {src: 'client/dist/img/*', dest: 'img/'}
+          {src: 'client/dist/img/status/*', dest: 'img/status/'}
+          {src: 'client/dist/js/*', dest: 'js/'}
         ]
