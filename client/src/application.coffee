@@ -36,8 +36,11 @@ define ->
         # Freeze the application instance to prevent further changes.
         Object.freeze? this
         
-        unless authenticated
-          hash = Backbone.history.getHash()
+        hash = Backbone.history.fragment
+        if authenticated
+          if hash == 'login'
+            @publishEvent '!router:route', ''
+        else
           @afterLogin = hash unless hash == 'login'
           @publishEvent '!router:route', 'logout'
 
