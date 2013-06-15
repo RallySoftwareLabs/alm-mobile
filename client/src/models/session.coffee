@@ -1,5 +1,6 @@
 define ->
   jqueryCookie = require 'jqueryCookie'
+  appConfig = require 'appConfig'
   utils = require 'lib/utils'
   Model = require 'models/base/model'
   User = require 'models/user'
@@ -23,32 +24,28 @@ define ->
       @listenTo this, 'change:project', @_onProjectChange
 
     authenticated: (cb) ->
-      authCache = @get 'authenticated'
-      return cb?(true) if authCache && cb?
+      @authenticate null, null, cb
 
-      return authCache if !cb?
-
+    authenticate: (username, password, cb) ->
       $.ajax(
-        url: '/getSessionInfo'
+        url: "#{appConfig.almWebServiceBaseUrl}/webservice/v2.x/security/authorize"
         type: 'GET'
         dataType: 'json'
+        username: username
+        password: password
+        xhrFields:
+          withCredentials: true
         success: (data, status, xhr) =>
-          @set
-            rallySession: data.jsessionid
-            securityToken: data.securityToken
-            authenticated: true
+          if data.OperationResult.Errors.length > 0
+            return cb? false
+
+          @set 'securityToken', data.OperationResult.SecurityToken
 
           @fetchUserInfo (err, model) =>
             cb? !err?
         error: (xhr, errorType, error) =>
           cb? false
       )
-
-    hasSecurityToken: ->
-       Boolean(@get("securityToken"))
-
-    hasSessionCookie: ->
-      !!@get('rallySession')
 
     hasProjectCookie: ->
       !!$.cookie('project')
@@ -65,26 +62,12 @@ define ->
     getSecurityToken: ->
       @get 'securityToken'
 
-    setSecurityToken: (jsessionid, securityToken) ->
-      @set
-        rallySession: jsessionid
-        securityToken: securityToken
-
     logout: (options = {}) ->
-      @set securityToken: null, rallySession: null
-      $.when(
-        $.ajax(
-          url: "#{window.AppConfig.almWebServiceBaseUrl}/resources/jsp/security/clear.jsp"
-          type: 'GET'
-          dataType: 'html'
-        )
-        $.ajax(
-          url: '/logout'
-          type: 'POST'
-          dataType: 'json'
-          success: options.success
-          error: options.error
-        )
+      @set securityToken: null
+      $.ajax(
+        url: "#{appConfig.almWebServiceBaseUrl}/resources/jsp/security/clear.jsp"
+        type: 'GET'
+        dataType: 'html'
       )
           
     fetchUserInfo: (cb) ->
@@ -189,7 +172,7 @@ define ->
       projectOid = utils.getOidFromRef projectRef
 
       schema = new Schema()
-      schema.url = "/schema/#{projectOid}"
+      schema.url = "#{appConfig.almWebServiceBaseUrl}/schema/v2.x/project/#{projectOid}"
       schema.fetch(accepts: json: 'text/plain').then =>
         $.when.apply($, _.map [Defect, Task, UserStory], (model) -> model.updateFromSchema(schema))
 

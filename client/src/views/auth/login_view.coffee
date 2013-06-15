@@ -24,10 +24,10 @@ define [
 
     signIn: (event) ->
       @$('.alert').hide()
-      @username = @$('#username')[0]
-      password = @$('#password')[0]
-      checkbox = @$('#remember-me')[0]
-      @trigger 'submit', username, password, checkbox
+      username = @$('#username')[0].value
+      password = @$('#password')[0].value
+      rememberme = @$('#remember-me')[0]?.checked
+      @trigger 'submit', username, password, rememberme
       event.preventDefault()
 
     showError: (error) ->

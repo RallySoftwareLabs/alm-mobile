@@ -22,7 +22,8 @@
     "request": "2.12.0",
     "hbs": "2.3.0",
     "handlebars": "1.0.12",
-    "lodash": "1.2.1"
+    "lodash": "1.2.1",
+    "ejs": "0.8.4"
   },
   "devDependencies": {
     "grunt-contrib-clean": "0.4.1",
@@ -34,6 +35,7 @@
     "grunt-simple-mocha": "0.4.0",
     "grunt-lib-contrib": "0.5.1",
     "grunt-contrib-handlebars": "0.5.9",
+    "grunt-compile-handlebars": "0.6.0",
     "grunt-contrib-requirejs": "0.4.1",
     "mocha": "1.7.4",
     "expect.js": "0.2.0",

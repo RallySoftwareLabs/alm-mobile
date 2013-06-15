@@ -1,4 +1,6 @@
 define ->
+  appConfig = require 'appConfig'
+  
   NAVIGATION_MODEL_TYPES =
     'hierarchicalrequirement': 'userstory'
 
@@ -28,7 +30,7 @@ define ->
 
     getProfileImageUrl: (ref, size = 25) ->
       return "/img/noOwner_2x.png" unless ref
-      baseUrl = window.AppConfig.almWebServiceBaseUrl
+      baseUrl = appConfig.almWebServiceBaseUrl
       "#{baseUrl}/profile/image/#{@getOidFromRef(ref)}/#{size}.sp"
 
     toCssClass: (value) ->

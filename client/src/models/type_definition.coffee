@@ -1,5 +1,6 @@
 define ->
   _ = require 'underscore'
+  appConfig = require 'appConfig'
   Model = require 'models/base/model'
   Defect = require 'models/defect'
   Task = require 'models/task'
@@ -7,7 +8,7 @@ define ->
 
   class TypeDefinition extends Model
     typePath: 'typedefinition'
-    urlRoot: window.AppConfig.almWebServiceBaseUrl + '/webservice/v2.x/typedefinition'
+    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/v2.x/typedefinition'
 
     initialize: ->
       super

@@ -1,11 +1,12 @@
 define ->
   _ = require 'underscore'
+  appConfig = require 'appConfig'
   Model = require 'models/base/model'
   SchemaMixin = require 'models/base/schema_mixin'
 
   class Defect extends Model
     typePath: 'defect'
-    urlRoot: window.AppConfig.almWebServiceBaseUrl + '/webservice/v2.x/defect'
+    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/v2.x/defect'
 
     _.extend this, SchemaMixin.static
     _.extend @prototype, SchemaMixin.prototype

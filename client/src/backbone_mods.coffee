@@ -16,8 +16,6 @@ define ->
   Backbone.sync = (method, model, options = {}) ->
     headers = options.headers || {}
     headers["X-Requested-By"] = "Rally" unless model.typePath == '__schema__'
-    # headers.ZSESSIONID = $.cookie('ZSESSIONID') # Rally override!
-    # headers.JSESSIONID = $.cookie('JSESSIONID') # Rally override!
     
     # Rally Override!
     options.xhrFields =

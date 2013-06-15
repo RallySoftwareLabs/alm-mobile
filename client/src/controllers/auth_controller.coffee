@@ -14,25 +14,14 @@ define ->
       @view = new LoginView
       @listenTo @view, 'submit', @onSubmit
 
-    onSubmit: (username, password, checkbox) ->
-      $.ajax(
-        url: Backbone.history.root + 'login'
-        type: 'POST'
-        dataType: 'json'
-        data:
-          username: username.value
-          password: password.value
-          # rememberme: checkbox.checked
-        success: (data, status, xhr) =>
-          app.session.setSecurityToken data.jsessionid, data.securityToken
-          if app.session.hasSessionCookie()
-            app.session.fetchUserInfo (err, user) =>
-              if err?
-                app.session.logout()
-                @view.showError 'There was an error signing in. Please try clearing your cookies.'
-              else
-                @redirectTo app.afterLogin, replace: true
-        error: (xhr, errorType, error) =>
+    onSubmit: (username, password, rememberme) ->
+      app.session.authenticate username, password, (authenticated) =>
+        if err?
           app.session.logout()
-          @view.showError 'The password you have entered is incorrect.'
-      )
+          @view.showError 'There was an error signing in. Please try again.'
+        else
+          if authenticated
+            @redirectTo app.afterLogin, replace: true
+          else
+            app.session.logout()
+            @view.showError 'The password you have entered is incorrect.'

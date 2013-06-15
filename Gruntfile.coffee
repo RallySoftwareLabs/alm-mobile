@@ -1,6 +1,5 @@
 module.exports = (grunt) ->
 
-
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
@@ -11,12 +10,13 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-requirejs'
   grunt.loadNpmTasks 'grunt-simple-mocha'
   grunt.loadNpmTasks 'grunt-contrib-copy'
+  grunt.loadNpmTasks 'grunt-compile-handlebars'
 
-  grunt.registerTask 'default', ['clean','coffee','less','handlebars','requirejs','copy','concat','uglify']
+  grunt.registerTask 'default', ['clean','coffee','less','handlebars','compile-handlebars','requirejs','copy','concat','uglify']
 
   grunt.registerTask 'test', ['clean', 'coffee', 'simplemocha']
 
-  grunt.registerTask 'heroku', ['clean','coffee','less','handlebars','requirejs','copy','concat','uglify']
+  grunt.registerTask 'heroku', ['clean','coffee','less','handlebars','compile-handlebars','requirejs','copy','concat','uglify']
 
   grunt.initConfig
 
@@ -36,6 +36,10 @@ module.exports = (grunt) ->
         files: 'client/src/views/**/templates/**/*.hbs'
         tasks: ['handlebars', 'requirejs:compile', 'uglify:hbs']
 
+      clientIndexHtml:
+        files: ['config.json', 'client/src/*.hbs']
+        tasks: ['compile-handlebars']
+
       clientTest:
         files: 'client/test/**/*.coffee'
         tasks: ['coffee:clientTest']
@@ -43,11 +47,6 @@ module.exports = (grunt) ->
       serverSrc:
         files: 'server/src/**/*.coffee'
         tasks: ['coffee:serverSrc']
-
-      serverTest:
-        files: 'server/test/**/*.coffee'
-        tasks: ['coffee:serverTest']
-
 
     coffee:
       clientSrc:
@@ -71,49 +70,26 @@ module.exports = (grunt) ->
         dest: 'server/gen/js/src'
         ext: '.js'
 
-      serverTest:
-        expand: true
-        cwd: 'server/test/'
-        src: ['**/*.coffee']
-        dest: 'server/gen/js/test'
-        ext: '.js'
-      
     requirejs:
       compile:
-        # Options: https://github.com/jrburke/r.js/blob/master/build/example.build.js
         options:
           name: 'initialize'
           paths:
-            jquery: "../../../../vendor/scripts/jquery-2.0.2"
-            bootstrap: "../../../../vendor/scripts/bootstrap-2.3.2"
-            spin: "../../../../vendor/scripts/spin-1.2.7"
-            jqueryCookie: "../../../../vendor/scripts/jquery-cookie"
-            underscore: "../../../../vendor/scripts/lodash-1.2.1"
-            backbone: "../../../../vendor/scripts/backbone-1.0.0"
+            jquery: "empty:"
+            bootstrap: "empty:"
+            spin: "empty:"
+            jqueryCookie: "empty:"
+            underscore: "../../../../vendor/scripts/lodash-1.3.1"
+            backbone: "empty:"
             chaplin: "../../../../vendor/scripts/chaplin-0.9.0"
-            handlebars: "../../../../vendor/scripts/handlebars.runtime-1.0.0"
+            handlebars: "empty:"
             hbsTemplate: "../../../dist/js/hbs"
+            appConfig: "empty:"
           shim:
-            jquery:
-              exports: "$"
-            backbone:
-              deps: ["underscore", "jquery"]
-              exports: "Backbone"
-            handlebars:
-              deps: ["backbone"]
-              exports: "Handlebars"
             hbsTemplate:
               deps: ["backbone"]
-            backboneBeforeAllFilter:
-              deps: ["backbone"]
-            # underscore:
-            #   exports: "_"
-            bootstrap:
-              deps: ["jquery"]
-            spin:
-              deps: ["jquery"]
-            jqueryCookie:
-              deps: ["jquery"]
+            appConfig:
+              exports: "AppConfig"
           out: 'client/dist/js/app.js'
           baseUrl: 'client/gen/js/src'
           optimize: "none"
@@ -127,14 +103,19 @@ module.exports = (grunt) ->
         options:
           amd: true
           processName: (filePath, x) ->
-            # console.log(JSON.stringify(filePath, x))
             filePath
             pieces = filePath.split("/")
             path = pieces.splice(3).join("/")
             path.replace(/\.hbs$/, '')
         files:
           "client/dist/js/hbs.js": ["client/src/views/**/*.hbs"]
-          "server/gen/js/templates/hbs.js": ["server/src/views/**/*.hbs"]
+          "server/gen/templates/hbs.js": ["server/src/views/**/*.hbs"]
+
+    'compile-handlebars':
+      allStatic:
+        template: 'client/src/index.hbs'
+        templateData: 'config.json'
+        output: 'client/dist/index.html'
 
     less:
       client:
@@ -154,7 +135,8 @@ module.exports = (grunt) ->
       js:
         files:
           'client/dist/js/initialize.js': 'client/gen/js/src/initialize.js'
-          'client/dist/js/lodash-1.2.1.js': 'vendor/scripts/lodash-1.2.1.js'
+          'client/dist/js/bootstrap-2.3.2.js': 'vendor/scripts/bootstrap-2.3.2.js'
+          'client/dist/js/lodash-1.3.1.js': 'vendor/scripts/lodash-1.3.1.js'
           'client/dist/js/require-2.1.6.js': 'vendor/scripts/require-2.1.6.js'
       assets:
         files: [
@@ -163,7 +145,6 @@ module.exports = (grunt) ->
     uglify:
       js:
         files:
-          # 'client/dist/js/vendor.min.js' : 'client/dist/js/vendor.js'
           'client/dist/js/app.min.js' : 'client/dist/js/app.js'
           'client/dist/js/initialize.min.js' : 'client/dist/js/initialize.js'
       hbs:
@@ -180,5 +161,5 @@ module.exports = (grunt) ->
       all:
         src: [
           'node_modules/chai/chai.js'
-          'server/gen/js/test/**/*.js'
+          'client/gen/js/test/**/*.js'
         ]
