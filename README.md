@@ -43,8 +43,8 @@ Edit your /etc/hosts file and add alm.f4tech.com at the end of the 127.0.0.1 lin
             ServerAdmin [email]
             ServerName [hostname]
             ServerAlias [hostname]
-            ProxyPass / http://localhost:3000/
-            ProxyPassReverse / http://localhost:3000/
+            ProxyPass / http://[hostname]:3000/
+            ProxyPassReverse / http://[hostname]:3000/
             ErrorLog "/private/var/log/apache2/[hostname]-error_log"
             CustomLog "/private/var/log/apache2/[hostname]-access_log" common
         </VirtualHost>
@@ -53,23 +53,15 @@ Edit your /etc/hosts file and add alm.f4tech.com at the end of the 127.0.0.1 lin
             ServerAdmin [email]
             ServerName alm.f4tech.com
             ServerAlias alm.f4tech.com
-            ProxyPass / http://localhost:7001/
-            ProxyPassReverse / http://localhost:7001/
+            ProxyPass / http://alm.f4tech.com:7001/
+            ProxyPassReverse / http://alm.f4tech.com:7001/
             ErrorLog "/private/var/log/apache2/[alm.f4tech.com]-error_log"
             CustomLog "/private/var/log/apache2/[alm.f4tech.com]-access_log" common
         </VirtualHost>
 
-## Server ENV Variables
+## Server Configuration
 
-You will need to set the following environment variables where you run the server
-
-* `ALM_MOBILE_ALM_WS_BASE_URL`=http://[hostname].f4tech.com:7001/slm
-
-## Rally ALM Feature Toggles
-
-Rally ALM will need the following features toggled on:
-
-* Enable WSAPI 2.0 - DO NOT toggle on globally - remove toggle instead
+You will need to create a config.json file to configure the ALM url. You should copy from config.json.example as a template. If you're running ALM locally, you should set its value to http://alm.f4tech.com:7001/slm
 
 ## Customize Bootstrap Stylesheets
 
