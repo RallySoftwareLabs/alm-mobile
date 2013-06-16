@@ -16,6 +16,7 @@ define ->
   Backbone.sync = (method, model, options = {}) ->
     headers = options.headers || {}
     headers["X-Requested-By"] = "Rally" unless model.typePath == '__schema__'
+    headers["X-RallyIntegrationName"] = "Rally ALM Mobile"
     
     # Rally Override!
     options.xhrFields =

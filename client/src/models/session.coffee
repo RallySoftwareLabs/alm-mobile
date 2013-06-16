@@ -37,6 +37,7 @@ define ->
           withCredentials: true
         beforeSend: (xhr) ->
           xhr.setRequestHeader("X-Requested-By", "Rally")
+          xhr.setRequestHeader("X-RallyIntegrationName", "Rally ALM Mobile")
         success: (data, status, xhr) =>
           if data.OperationResult.Errors.length > 0
             return cb? false
@@ -70,6 +71,9 @@ define ->
         url: "#{appConfig.almWebServiceBaseUrl}/resources/jsp/security/clear.jsp"
         type: 'GET'
         dataType: 'html'
+        beforeSend: (xhr) ->
+          xhr.setRequestHeader("X-Requested-By", "Rally")
+          xhr.setRequestHeader("X-RallyIntegrationName", "Rally ALM Mobile")
       )
           
     fetchUserInfo: (cb) ->
@@ -78,6 +82,7 @@ define ->
         url: "#{u.urlRoot}:current"
         headers:
           "X-Requested-By": "Rally"
+          "X-RallyIntegrationName": "Rally ALM Mobile"
         params:
           fetch: 'ObjectID,DisplayName,UserProfile'
         success: (model, resp, opts) =>
