@@ -35,6 +35,8 @@ define ->
         password: password
         xhrFields:
           withCredentials: true
+        beforeSend: (xhr) ->
+          xhr.setRequestHeader("X-Requested-By", "Rally")
         success: (data, status, xhr) =>
           if data.OperationResult.Errors.length > 0
             return cb? false
