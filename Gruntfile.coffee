@@ -21,7 +21,7 @@ module.exports = (grunt) ->
 
   grunt.initConfig
 
-    clean: ['client/gen/*', 'sever/gen/*']
+    clean: ['client/gen/*', 'client/dist/*', 'sever/gen/*']
 
     #watch and compile all folders separately for the quickest compile time
     watch:
@@ -80,6 +80,7 @@ module.exports = (grunt) ->
             bootstrap: "empty:"
             spin: "empty:"
             jqueryCookie: "empty:"
+            jqueryBase64: "empty:"
             underscore: "../../../../vendor/scripts/lodash-1.3.1"
             backbone: "empty:"
             chaplin: "../../../../vendor/scripts/chaplin-0.9.0"
@@ -139,6 +140,7 @@ module.exports = (grunt) ->
           'client/dist/js/bootstrap-2.3.2.js': 'vendor/scripts/bootstrap-2.3.2.js'
           'client/dist/js/lodash-1.3.1.js': 'vendor/scripts/lodash-1.3.1.js'
           'client/dist/js/require-2.1.6.js': 'vendor/scripts/require-2.1.6.js'
+          'client/dist/js/jquery.base64.min.js': 'vendor/scripts/jquery.base64.min.js'
       assets:
         files: [
           {expand: true, dest: 'client/dist/', cwd: 'client/assets/', src: '**', filter: 'isFile'}
