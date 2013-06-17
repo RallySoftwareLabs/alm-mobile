@@ -1,5 +1,6 @@
 define ->
   jqueryCookie = require 'jqueryCookie'
+  jqueryBase64 = require 'jqueryBase64'
   appConfig = require 'appConfig'
   utils = require 'lib/utils'
   Model = require 'models/base/model'
@@ -31,11 +32,13 @@ define ->
         url: "#{appConfig.almWebServiceBaseUrl}/webservice/v2.x/security/authorize"
         type: 'GET'
         dataType: 'json'
-        username: username
-        password: password
+        # username: username
+        # password: password
         xhrFields:
           withCredentials: true
         beforeSend: (xhr) ->
+          if username && password
+            xhr.setRequestHeader("Authorization", """Basic #{$.base64.encode(username + ':' + password)}""")
           xhr.setRequestHeader("X-Requested-By", "Rally")
           xhr.setRequestHeader("X-RallyIntegrationName", "Rally ALM Mobile")
         success: (data, status, xhr) =>
