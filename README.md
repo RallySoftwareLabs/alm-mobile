@@ -75,9 +75,17 @@ They're in original [LESS](http://lesscss.org/) format in order to be easily cus
 
 **Do not directly modify any files in vendor/styles/bootstrap. The changes will be overwritten as we upgrade that library.**
 
-## Exclude Bootstrap jQuery plugins
+# Deploying to S3
 
-jQuery plugins used by Bootstrap are all listed (in the right order) inside the Gruntfile.coffee file. Comment the ones you want to exclude from the build with a #. (Pay attention to dependencies!)
+The application can easily be deployed to an Amazon S3 Bucket and served up as a static website. This is accomplished via the [grunt-s3](https://github.com/pifantastic/grunt-s3) NPM module. In order to deploy the site, you need to create and configure a __grunt-aws.json__ file in the root directory of this repo. The __grunt-aws.json.example__ files is given as a skeleton to start from. All you need to do is supply your S3 Access Key Id, Secret Access Key and the name of the Bucket to deploy to. Once that is done, you can run the
+
+        grunt
+
+command to package up the application. To deploy it, run
+
+        grunt s3
+
+Your bucket should be configured for Website Hosting. Here's a link to AWS Documentation to [Configure a Bucket for Website Hosting](http://docs.aws.amazon.com/AmazonS3/latest/dev/HowDoIWebsiteConfiguration.html). You'll want to set both the Index document and Error document to be "index.html".
 
 # Testing
 
