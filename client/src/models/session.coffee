@@ -138,6 +138,7 @@ define ->
       $.when(
         projects.fetch(
           data:
+            fetch: 'Name,SchemaVersion'
             pagesize: pagesize
             order: 'Name'
         ),
@@ -153,6 +154,7 @@ define ->
         fetch = projects.fetch(
           remove: false
           data:
+            fetch: 'Name,SchemaVersion'
             start: start
             pagesize: pagesize
             order: 'Name'
@@ -177,9 +179,10 @@ define ->
     _loadSchema: (project) ->
       projectRef = project.get('_ref')
       projectOid = utils.getOidFromRef projectRef
+      projectSchema = project.get('SchemaVersion')
 
       schema = new Schema()
-      schema.url = "#{appConfig.almWebServiceBaseUrl}/schema/v2.x/project/#{projectOid}"
+      schema.url = "#{appConfig.almWebServiceBaseUrl}/schema/v2.x/project/#{projectOid}/#{projectSchema}"
       schema.fetch(accepts: json: 'text/plain').then =>
         $.when.apply($, _.map [Defect, Task, UserStory], (model) -> model.updateFromSchema(schema))
 
