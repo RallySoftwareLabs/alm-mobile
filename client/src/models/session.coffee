@@ -19,39 +19,47 @@ define ->
         user: new User()
         mode: $.cookie('mode') || 'team'
         boardField: $.cookie('boardField') || 'ScheduleState'
+        securityToken: window.sessionStorage.getItem 'token'
       @listenTo this, 'change:user', @_onUserChange
       @listenTo this, 'change:mode', @_onModeChange
       @listenTo this, 'change:boardField', @_onBoardFieldChange
       @listenTo this, 'change:project', @_onProjectChange
 
     authenticated: (cb) ->
+
       @authenticate null, null, cb
 
     authenticate: (username, password, cb) ->
-      $.ajax(
-        url: "#{appConfig.almWebServiceBaseUrl}/webservice/v2.x/security/authorize"
-        type: 'GET'
-        dataType: 'json'
-        # username: username
-        # password: password
-        xhrFields:
-          withCredentials: true
-        beforeSend: (xhr) ->
-          if username && password
+      if username && password
+        $.ajax(
+          url: "#{appConfig.almWebServiceBaseUrl}/webservice/v2.x/security/authorize"
+          type: 'GET'
+          dataType: 'json'
+          # username: username
+          # password: password
+          xhrFields:
+            withCredentials: true
+          beforeSend: (xhr) ->
             xhr.setRequestHeader("Authorization", """Basic #{$.base64.encode(username + ':' + password)}""")
-          xhr.setRequestHeader("X-Requested-By", "Rally")
-          xhr.setRequestHeader("X-RallyIntegrationName", "Rally ALM Mobile")
-        success: (data, status, xhr) =>
-          if data.OperationResult.Errors.length > 0
-            return cb? false
+            xhr.setRequestHeader("X-Requested-By", "Rally")
+            xhr.setRequestHeader("X-RallyIntegrationName", "Rally ALM Mobile")
+          success: (data, status, xhr) =>
+            if data.OperationResult.Errors.length > 0
+              return cb? false
 
-          @set 'securityToken', data.OperationResult.SecurityToken
+            @setSecurityToken data.OperationResult.SecurityToken
 
-          @fetchUserInfo (err, model) =>
-            cb? !err?
-        error: (xhr, errorType, error) =>
-          cb? false
-      )
+            @fetchUserInfo (err, model) =>
+              cb? !err?
+          error: (xhr, errorType, error) =>
+            cb? false
+        )
+      else
+        if !@get('securityToken')
+          return cb? false
+
+        @fetchUserInfo (err, model) =>
+          cb? !err?
 
     hasProjectCookie: ->
       !!$.cookie('project')
@@ -65,11 +73,16 @@ define ->
     isSelfMode: -> @get('mode') == 'self'
     isTeamMode: -> @get('mode') == 'team'
 
+    setSecurityToken: (securityToken) ->
+      @set 'securityToken', securityToken
+      window.sessionStorage.setItem 'token', if securityToken then securityToken else ''
+
     getSecurityToken: ->
       @get 'securityToken'
 
     logout: (options = {}) ->
-      @set securityToken: null
+      @setSecurityToken null
+
       $.ajax(
         url: "#{appConfig.almWebServiceBaseUrl}/resources/jsp/security/clear.jsp"
         type: 'GET'
