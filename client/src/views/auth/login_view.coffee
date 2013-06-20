@@ -17,6 +17,9 @@ define [
 
     afterRender: ->
       $('body').addClass('login-body')
+      if window.loginError
+        @$('.alert').html(window.loginError).show()
+        delete window.loginError
 
     dispose: ->
       $('body').removeClass('login-body')    

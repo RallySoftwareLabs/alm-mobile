@@ -91,14 +91,16 @@ define ->
     options.error = (xhr, status, thrown) ->
       error?(xhr, status, thrown)
       model.trigger('error', model, xhr, options)
-      if xhr.status is 401 or xhr.status is 0
+      if xhr.status is 401 or xhr.status is 0 or status.indexOf('Not authorized') > -1
         app.session.logout()
+        window.loginError = "Your session has expired. Please login again."
         Backbone.history.navigate('/login', {trigger: true, replace: true})
 
     success = options.success
     options.success = (resp, status, xhr) ->
-      if resp.OperationResult?.Errors?.length > 0 || resp.CreateResult?.Errors?.length > 0
-        options.error(xhr, "ws", null)
+      errors = resp.OperationResult?.Errors || resp.CreateResult?.Errors
+      if errors?.length > 0
+        options.error(xhr, errors[0], null)
       else
         success?(resp, status, xhr)
 
