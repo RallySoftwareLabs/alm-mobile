@@ -59,11 +59,7 @@ Edit your /etc/hosts file and add alm.f4tech.com at the end of the 127.0.0.1 lin
             CustomLog "/private/var/log/apache2/[alm.f4tech.com]-access_log" common
         </VirtualHost>
 
-## Server Configuration
-
-You will need to create a config.json file to configure the ALM url. You should copy from config.json.example as a template. If you're running ALM locally, you should set its value to http://alm.f4tech.com:7001/slm
-
-## Customize Bootstrap Stylesheets
+## Customizing Bootstrap Stylesheets
 
 All Bootstrap stylesheet files can be found separated into:
 
@@ -74,6 +70,15 @@ They're in original [LESS](http://lesscss.org/) format in order to be easily cus
     client/styles/_bootstrap.less
 
 **Do not directly modify any files in vendor/styles/bootstrap. The changes will be overwritten as we upgrade that library.**
+
+## Application Configuration
+
+You will need to create a config.json file to configure the ALM url. You should copy from config.json.example as a template.
+
+#### Properties
+
+- almWebServiceBaseUrl: You should change this value if you want to point to a different Rally ALM Server URL
+- appName: You should change this value so that it is a unique name that represents your application and who your are.
 
 # Deploying to S3
 

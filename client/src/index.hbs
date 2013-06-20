@@ -55,7 +55,7 @@
     define('appConfig', function() {
       return {
         {{#each config}}
-          "{{@key}}": "{{this}}"
+          "{{@key}}": "{{this}}",
         {{/each}}
       };
     });

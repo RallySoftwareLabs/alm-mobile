@@ -42,7 +42,7 @@ define ->
           beforeSend: (xhr) ->
             xhr.setRequestHeader("Authorization", """Basic #{$.base64.encode(username + ':' + password)}""")
             xhr.setRequestHeader("X-Requested-By", "Rally")
-            xhr.setRequestHeader("X-RallyIntegrationName", "Rally ALM Mobile")
+            xhr.setRequestHeader("X-RallyIntegrationName", appConfig.appName)
           success: (data, status, xhr) =>
             if data.OperationResult.Errors.length > 0
               return cb? false
@@ -89,7 +89,7 @@ define ->
         dataType: 'html'
         beforeSend: (xhr) ->
           xhr.setRequestHeader("X-Requested-By", "Rally")
-          xhr.setRequestHeader("X-RallyIntegrationName", "Rally ALM Mobile")
+          xhr.setRequestHeader("X-RallyIntegrationName", appConfig.appName)
       )
           
     fetchUserInfo: (cb) ->
@@ -98,7 +98,7 @@ define ->
         url: "#{u.urlRoot}:current"
         headers:
           "X-Requested-By": "Rally"
-          "X-RallyIntegrationName": "Rally ALM Mobile"
+          "X-RallyIntegrationName": appConfig.appName
         params:
           fetch: 'ObjectID,DisplayName,UserProfile'
         success: (model, resp, opts) =>

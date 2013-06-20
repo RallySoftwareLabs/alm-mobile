@@ -3,6 +3,7 @@ define ->
   _ = require 'underscore'
   Backbone = require 'backbone'
   app = require 'application'
+  appConfig = require 'appConfig'
   
   methodMap =
     'create': 'POST',
@@ -16,7 +17,7 @@ define ->
   Backbone.sync = (method, model, options = {}) ->
     headers = options.headers || {}
     headers["X-Requested-By"] = "Rally" unless model.typePath == '__schema__'
-    headers["X-RallyIntegrationName"] = "Rally ALM Mobile"
+    headers["X-RallyIntegrationName"] = appConfig.appName
     
     # Rally Override!
     options.xhrFields =
