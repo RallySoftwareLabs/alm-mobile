@@ -13,9 +13,21 @@ define ->
 
     _.extend @prototype, ColumnViewMixin
 
-    initialize: ->
+    events:
+      'click .go-left': 'goLeft'
+      'click .go-right': 'goRight'
+
+    initialize: (options = {}) ->
       super
+      @columns = options.columns
       @initializeMixin()
 
       @updateTitle app.session.getProjectName()
       
+    goLeft: (e) ->
+      @trigger 'goleft', @model
+      e.preventDefault()
+      
+    goRight: (e) ->
+      @trigger 'goright', @model
+      e.preventDefault()

@@ -13,6 +13,8 @@ define ->
         header: header
         cards: storiesAndDefects
         showFields: @showFields
+        canGoLeft: @showFields && !@isColumnAtIndex(0)
+        canGoRight: @showFields && !@isColumnAtIndex(@columns.length - 1)
 
     getColumnHeaderAbbreviation: ->
       fieldValue = @model.get('value')
@@ -21,6 +23,9 @@ define ->
         _.map(fieldValue.replace(/-/g, ' ').split(' '), (word) -> word[0]).join ''
       else
         fieldValue
+
+    isColumnAtIndex: (index) ->
+      @columns[index]?.get('value') == @model.get('value')
 
     onCardClick: (e) ->
       [oid, type] = e.currentTarget.id.split('-')

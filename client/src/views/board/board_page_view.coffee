@@ -20,7 +20,7 @@ define ->
 
     afterRender: ->
       _.map @columns, (col) =>
-        colView = new ColumnView autoRender: true, model: col, container: "#col-#{utils.toCssClass(col.get('value'))}"
+        colView = new ColumnView autoRender: true, model: col, columns: @columns, container: "#col-#{utils.toCssClass(col.get('value'))}"
         @subview colView
         @bubbleEvent colView, 'headerclick', 'headerclick'
         @bubbleEvent colView, 'cardclick', 'cardclick'

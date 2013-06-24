@@ -1,5 +1,9 @@
 <div class="column">
-    <div class="header">{{header}}</div>
+    <div class="header">
+        {{#if canGoLeft}}<i class="go-left icon-chevron-left"></i>{{/if}}
+        {{header}}
+        {{#if canGoRight}}<i class="go-right icon-chevron-right"></i>{{/if}}
+    </div>
     <div class="body">
         {{#each cards}}
         	<div class="card{{#if this.Blocked}} blocked{{/if}}{{#if this.Ready}} ready{{/if}}{{#if this.DisplayColor}} colored{{/if}}{{#if ../showFields}} full{{/if}}" id="{{this.ObjectID}}-{{this._type}}"{{#if this.DisplayColor}} style="background-color: {{this.DisplayColor}}; color: white;"{{/if}}>
