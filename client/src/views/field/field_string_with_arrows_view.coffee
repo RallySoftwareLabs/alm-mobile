@@ -1,13 +1,14 @@
 define ->
-  FieldView = require 'views/field/field_view'
+  FieldInputView = require 'views/field/field_input_view'
 
-  class FieldStringWithArrowsView extends FieldView
+  class FieldStringWithArrowsView extends FieldInputView
 
     initialize: ->
       @setEditMode = false
       super
       @delegate 'click', '.arrows-right', @onRightArrow
       @delegate 'click', '.arrows-left', @onLeftArrow
+      @delegate 'change', 'select', @onBlur
 
     getTemplateData: ->
       data = super
@@ -16,9 +17,9 @@ define ->
       data.cantGoRight = allowedValues.indexOf(data.fieldValue) is (allowedValues.length - 1)
       data
 
-    startEdit: ->
-
-    onRightArrow: ->
+    onRightArrow: (e) ->
+      e.preventDefault()
+      e.stopPropagation()
       allowedValues = @getAllowedValues()
       currentIndex = allowedValues.indexOf(@model.get(@options.field))
 
@@ -28,7 +29,9 @@ define ->
         modelUpdates[@options.field] = newValue
         @saveModel modelUpdates
 
-    onLeftArrow: ->
+    onLeftArrow: (e) ->
+      e.preventDefault()
+      e.stopPropagation()
       allowedValues = @getAllowedValues()
       currentIndex = allowedValues.indexOf(@model.get(@options.field))
 

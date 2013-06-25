@@ -5,6 +5,7 @@ define ->
 
     initialize: ->
       super
+      @delegate 'blur', 'select', @onBlur
       @delegate 'blur', 'input', @onBlur
       @delegate 'keydown', 'input', @onKeyDown
 

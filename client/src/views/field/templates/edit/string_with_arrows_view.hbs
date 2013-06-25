@@ -1,0 +1,8 @@
+<div class="well-title">{{fieldLabel}}</div>
+<div class="well well-small">
+    <select class="editor" id="{{field}}">
+    	{{#each allowedValues}}
+    		{{{selectOption this this ../fieldValue}}}
+    	{{/each}}
+    </select>
+</div>
