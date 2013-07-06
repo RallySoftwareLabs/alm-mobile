@@ -136,10 +136,6 @@ module.exports = (grunt) ->
     copy:
       js:
         files:
-          'client/dist/js/initialize.js': 'client/gen/js/src/initialize.js'
-          'client/dist/js/bootstrap-2.3.2.js': 'vendor/scripts/bootstrap-2.3.2.js'
-          'client/dist/js/lodash-1.3.1.js': 'vendor/scripts/lodash-1.3.1.js'
-          'client/dist/js/require-2.1.6.js': 'vendor/scripts/require-2.1.6.js'
           'client/dist/js/jquery.base64.min.js': 'vendor/scripts/jquery.base64.min.js'
       assets:
         files: [
@@ -149,7 +145,6 @@ module.exports = (grunt) ->
       js:
         files:
           'client/dist/js/app.min.js' : 'client/dist/js/app.js'
-          'client/dist/js/initialize.min.js' : 'client/dist/js/initialize.js'
       hbs:
         files:
           'client/dist/js/hbs.min.js' : 'client/dist/js/hbs.js'
