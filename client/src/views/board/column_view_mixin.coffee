@@ -1,4 +1,6 @@
 define ->
+  _ = require 'underscore'
+  app = require 'application'
 
   return {
     initializeMixin: ->
@@ -15,6 +17,7 @@ define ->
         showFields: @showFields
         canGoLeft: @showFields && !@isColumnAtIndex(0)
         canGoRight: @showFields && !@isColumnAtIndex(@columns.length - 1)
+        iteration: @showIteration && app.session.get('iteration')?.toJSON()
 
     getColumnHeaderAbbreviation: ->
       fieldValue = @model.get('value')

@@ -85,6 +85,7 @@ module.exports = (grunt) ->
             backbone: "empty:"
             chaplin: "../../../../vendor/scripts/chaplin-0.9.0"
             handlebars: "empty:"
+            moment: "empty:"
             hbsTemplate: "../../../dist/js/hbs"
             appConfig: "empty:"
           shim:

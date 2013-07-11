@@ -16,6 +16,8 @@ define ->
       string.charAt(0).toUpperCase() + string.substring(1).toLowerCase()
     getAttribute: (attr) ->
       return -> @get(attr)
+    isAttributeEqual: (attr, value) ->
+      return (model) -> model.get(attr) == value
 
   return {
     getDetailHash: (model) ->

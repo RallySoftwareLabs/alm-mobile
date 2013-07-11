@@ -1,8 +1,12 @@
 define ->
+  moment = require 'moment'
   Handlebars = require 'handlebars'
   utils = require 'lib/utils'
 
   # Put your handlebars.js helpers here.
+  Handlebars.registerHelper 'date', (d) ->
+    moment(d).format 'L'
+
   Handlebars.registerHelper 'isEditing', (field, options) ->
     unless options?
       options = field

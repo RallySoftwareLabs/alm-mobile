@@ -1,3 +1,9 @@
+{{#if iteration}}
+<div class="iteration-header">
+    Iteration: <span class="name">{{iteration.Name}}</span>
+    <span class="dates">{{date iteration.StartDate}} - {{date iteration.EndDate}}</span>
+</div>
+{{/if}}
 <div class="column">
     <div class="header">
         {{#if canGoLeft}}<i class="go-left icon-chevron-left"></i>{{/if}}

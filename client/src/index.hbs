@@ -10,10 +10,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  <link href='//fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel='stylesheet' href='//fonts.googleapis.com/css?family=Droid+Sans:400,700' type='text/css'>
   <link rel="stylesheet" href="/css/app.css">
   <link rel="stylesheet" href="/css/pageslider-2013-06-06.css">
-  <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.6/require.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.6/require.min.js"></script>
   <script type="text/javascript">
     require.config({
       paths: {
@@ -23,7 +23,8 @@
         "bootstrap": "//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min",
         "backbone": "//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min",
         "handlebars": "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0/handlebars.runtime.min",
-        "spin": "//cdnjs.cloudflare.com/ajax/libs/spin.js/1.2.7/spin.min"
+        "spin": "//cdnjs.cloudflare.com/ajax/libs/spin.js/1.2.7/spin.min",
+        "moment": "//cdnjs.cloudflare.com/ajax/libs/moment.js/2.0.0/moment.min"
       },
       shim: {
         jquery: {
@@ -48,6 +49,9 @@
         },
         spin: {
           deps: ["jquery"]
+        },
+        moment: {
+          exports: "moment"
         }
       }
     });

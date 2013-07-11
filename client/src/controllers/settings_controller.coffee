@@ -2,6 +2,7 @@ define ->
   $ = require 'jquery'
   _ = require 'underscore'
   app = require 'application'
+  utils = require 'lib/utils'
   UserStory = require 'models/user_story'
   SiteController = require 'controllers/base/site_controller'
   SettingsView = require 'views/settings/settings_view'
@@ -17,6 +18,7 @@ define ->
         @listenTo @view, 'changeMode', @onChangeMode
         @listenTo @view, 'changeBoardField', @onChangeBoardField
         @listenTo @view, 'changeProject', @onChangeProject
+        @listenTo @view, 'changeIteration', @onChangeIteration
         @subscribeEvent 'projectready', => @view.render()
 
     board: (params) ->
@@ -33,7 +35,12 @@ define ->
       @redirectToRoute 'settings#board'
 
     onChangeProject: (project) ->
-      app.session.set 'project', app.session.get('projects').find (proj) -> proj.get('_ref') == project
+      app.session.set 'project', _.find app.session.get('projects').models, _.isAttributeEqual '_ref', project
+
+    onChangeIteration: (iteration) ->
+      if iteration == 'null'
+        return app.session.set 'iteration', null
+      app.session.set 'iteration', _.find app.session.get('iterations').models, _.isAttributeEqual '_ref', iteration
 
     onColumnClick: (column) ->
       app.session.toggleBoardColumn column

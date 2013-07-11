@@ -10,6 +10,7 @@ define ->
     template: hbs['board/templates/column']
     abbreviateHeader: false
     showFields: true
+    showIteration: true
 
     _.extend @prototype, ColumnViewMixin
 

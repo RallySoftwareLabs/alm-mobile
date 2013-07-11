@@ -46,4 +46,7 @@ define ->
       if app.session.isSelfMode()
         data.query = "(#{data.query} AND (Owner = #{app.session.get('user').get('_ref')}))"
 
+      iterationRef = app.session.get('iteration')?.get('_ref')
+      if iterationRef
+        data.query = "(#{data.query} AND (Iteration = \"#{iterationRef}\"))"
       data

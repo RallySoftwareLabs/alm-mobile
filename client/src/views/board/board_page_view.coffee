@@ -27,3 +27,4 @@ define ->
 
     getTemplateData: ->
       columns: _.invoke @columns, _.getAttribute('value')
+      iteration: app.session.get('iteration')?.toJSON()

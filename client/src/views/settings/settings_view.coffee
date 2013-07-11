@@ -10,6 +10,7 @@ define ->
     events:
       'click button.logout': 'triggerLogout'
       'change select.project-select': 'updateSelectedProject'
+      'change select.iteration-select': 'updateSelectedIteration'
 
     initialize: (options) ->
       @mode = options.mode
@@ -24,6 +25,9 @@ define ->
     getTemplateData: ->
       projects: app.session.get('projects')?.models
       currentProject: app.session.get('project').get('_ref')
+      iterations: app.session.get('iterations')?.models
+      currentIteration: app.session.get('iteration')?.get('_ref')
+      noCurrentIteration: !app.session.get('iteration')?
       isTeam: @mode == 'team'
       isSelf: @mode == 'self'
       isScheduleState: @boardField == 'ScheduleState'
@@ -43,4 +47,7 @@ define ->
       @render()
 
     updateSelectedProject: ->
-      @trigger 'changeProject', @$('option:selected').val()
+      @trigger 'changeProject', @$('.project-select option:selected').val()
+
+    updateSelectedIteration: ->
+      @trigger 'changeIteration', @$('.iteration-select option:selected').val()

@@ -10,11 +10,13 @@ define ->
   UserStory = require 'models/user_story'
   UserProfile = require 'models/user_profile'
   Schema = require 'collections/schema'
+  Iterations = require 'collections/iterations'
   Projects = require 'collections/projects'
 
   class Session extends Model
     initialize: ->
       super
+      @pagesize = 200
       @set
         user: new User()
         mode: $.cookie('mode') || 'team'
@@ -24,45 +26,53 @@ define ->
       @listenTo this, 'change:mode', @_onModeChange
       @listenTo this, 'change:boardField', @_onBoardFieldChange
       @listenTo this, 'change:project', @_onProjectChange
+      @listenTo this, 'change:iteration', @_onIterationChange
 
     authenticated: (cb) ->
+      if !@get('securityToken')
+        return cb? false
 
-      @authenticate null, null, cb
+      @fetchUserInfo (err, model) =>
+        cb? !err?
 
     authenticate: (username, password, cb) ->
-      if username && password
-        $.ajax(
-          url: "#{appConfig.almWebServiceBaseUrl}/webservice/v2.x/security/authorize"
-          type: 'GET'
-          dataType: 'json'
-          # username: username
-          # password: password
-          xhrFields:
-            withCredentials: true
-          beforeSend: (xhr) ->
-            xhr.setRequestHeader("Authorization", """Basic #{$.base64.encode(username + ':' + password)}""")
-            xhr.setRequestHeader("X-Requested-By", "Rally")
-            xhr.setRequestHeader("X-RallyIntegrationName", appConfig.appName)
-          success: (data, status, xhr) =>
-            if data.OperationResult.Errors.length > 0
-              return cb? false
+      $.ajax(
+        url: "#{appConfig.almWebServiceBaseUrl}/webservice/v2.x/security/authorize"
+        type: 'GET'
+        dataType: 'json'
+        xhrFields:
+          withCredentials: true
+        beforeSend: (xhr) ->
+          xhr.setRequestHeader("Authorization", """Basic #{$.base64.encode(username + ':' + password)}""")
+          xhr.setRequestHeader("X-Requested-By", "Rally")
+          xhr.setRequestHeader("X-RallyIntegrationName", appConfig.appName)
+        success: (data, status, xhr) =>
+          if data.OperationResult.Errors.length > 0
+            return cb? false
 
-            @setSecurityToken data.OperationResult.SecurityToken
+          @setSecurityToken data.OperationResult.SecurityToken
 
-            @fetchUserInfo (err, model) =>
-              cb? !err?
-          error: (xhr, errorType, error) =>
-            cb? false
-        )
-      else
-        if !@get('securityToken')
-          return cb? false
-
-        @fetchUserInfo (err, model) =>
-          cb? !err?
+          @fetchUserInfo (err, model) =>
+            cb? !err?
+        error: (xhr, errorType, error) =>
+          cb? false
+      )
 
     hasProjectCookie: ->
       !!$.cookie('project')
+
+    getIterationCookie: ->
+      projectOid = utils.getOidFromRef @get('project').get('_ref')
+      iterationProp = "iteration-#{projectOid}"
+      $.cookie(iterationProp)
+
+    setIterationCookie: (value) ->
+      projectOid = utils.getOidFromRef @get('project').get('_ref')
+      iterationProp = "iteration-#{projectOid}"
+      if value
+        $.cookie(iterationProp, value, path: '/')
+      else
+        $.removeCookie(iterationProp, path: '/')
 
     getProjectName: ->
       try
@@ -150,32 +160,31 @@ define ->
       userProfile = new UserProfile
         ObjectID: utils.getOidFromRef(@get('user').get('UserProfile')._ref)
 
-      pagesize = 200
       $.when(
         projects.fetch(
           data:
             fetch: 'Name,SchemaVersion'
-            pagesize: pagesize
+            pagesize: @pagesize
             order: 'Name'
         ),
         userProfile.fetch()
-      ).then (p, u) =>
+      ).then (p, u, i) =>
         totalProjectResults = p[0].QueryResult.TotalResultCount
-        @_fetchRestOfProjects(projects, pagesize, totalProjectResults).then =>
+        @_fetchRestOfProjects(projects, totalProjectResults).then =>
           @_setDefaultProject projects, userProfile
 
-    _fetchRestOfProjects: (projects, pagesize, totalCount) ->
-      start = pagesize + 1
+    _fetchRestOfProjects: (projects, totalCount) ->
+      start = @pagesize + 1
       projectFetches = while totalCount >= start
         fetch = projects.fetch(
           remove: false
           data:
             fetch: 'Name,SchemaVersion'
             start: start
-            pagesize: pagesize
+            pagesize: @pagesize
             order: 'Name'
         )
-        start += pagesize
+        start += @pagesize
         fetch
 
       $.when.apply($, projectFetches)
@@ -183,7 +192,7 @@ define ->
     _setDefaultProject: (projects, userProfile) ->
       if @hasProjectCookie()
         savedProjRef = $.cookie('project')
-        savedProject = projects.find (proj) -> proj.get('_ref') == savedProjRef
+        savedProject = _.find projects.models, _.isAttributeEqual('_ref', savedProjRef)
         @set('project', savedProject) if savedProject
 
       if !@get 'project'
@@ -191,6 +200,11 @@ define ->
         proj = projects.find (proj) -> proj.get('_ref') == defaultProject
         @set 'project', proj || projects.first()
 
+    _setIteration: ->
+      savedIterationRef = @getIterationCookie()
+      if savedIterationRef
+        savedIteration = _.find @get('iterations').models, _.isAttributeEqual('_ref', savedIterationRef)
+        @set('iteration', savedIteration) if savedIteration
 
     _loadSchema: (project) ->
       projectRef = project.get('_ref')
@@ -210,10 +224,26 @@ define ->
 
     _onProjectChange: (model, value, options) ->
       projectRef = value.get('_ref')
-      projectOid = utils.getOidFromRef projectRef
 
       $.cookie('project', projectRef, path: '/')
 
-      $.when(@_loadSchema(value)).then =>
+      iterations = new Iterations()
+      @set 'iterations', iterations
+
+      $.when(
+        @_loadSchema(value),
+        iterations.fetch(
+          data:
+            fetch: 'Name,StartDate,EndDate'
+            pagesize: @pagesize
+            order: 'StartDate DESC,EndDate DESC,ObjectID'
+            query: "(Project = \"#{projectRef}\")"
+        )
+      ).then (s, i) =>
         @initColumnsFor @get('boardField')
+        @_setIteration()
         @publishEvent "projectready", @getProjectName()
+
+    _onIterationChange: (model, value, options) ->
+      iterationRef = value?.get('_ref')
+      @setIterationCookie iterationRef

@@ -42,6 +42,7 @@ define ->
     getTemplateData: ->
       createRoute: @createRoute
       tabs: @_getTabs()
+      iteration: app.session.get('iteration')?.toJSON()
 
     onPillClick: (event) ->
       url = event.currentTarget.id.replace /\-tab$/, ''

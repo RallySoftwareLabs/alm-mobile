@@ -1,4 +1,10 @@
 <div id="home-view">
+  {{#if iteration}}
+  <div class="iteration-header">
+      Iteration: <span class="name">{{iteration.Name}}</span>
+      <span class="dates">{{date iteration.StartDate}} - {{date iteration.EndDate}}</span>
+  </div>
+  {{/if}}
   <div id="home-view-navigation">
     <ul class="nav btn-group">
       {{#each tabs}}
