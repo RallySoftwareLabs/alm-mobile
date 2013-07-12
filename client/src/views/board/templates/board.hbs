@@ -1,8 +1,11 @@
 {{#if iteration}}
-<div class="iteration-header">
-    Iteration: <span class="name">{{iteration.Name}}</span>
-    <span class="dates">{{date iteration.StartDate}} - {{date iteration.EndDate}}</span>
-</div>
+  <div class="iteration-header">
+    <dl class="dl-horizontal">
+      <dt>Iteration:</dt>
+      <dd class="name">{{iteration.Name}}</dd>
+      <dd class="dates">{{date iteration.StartDate}} - {{date iteration.EndDate}}</dd>
+    </dl>
+  </div>
 {{/if}}
 <div class="column-container">
 {{#each columns}}
