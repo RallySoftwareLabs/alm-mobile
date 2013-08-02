@@ -4,5 +4,5 @@ define ->
   UserStory = require 'models/user_story'
 
   class UserStories extends Collection
-    url: appConfig.almWebServiceBaseUrl + '/webservice/v2.x/hierarchicalrequirement'
+    url: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/hierarchicalrequirement'
     model: UserStory

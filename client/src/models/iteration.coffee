@@ -4,4 +4,4 @@ define ->
 
   class Iteration extends Model
     typePath: 'iteration'
-    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/v2.x/iteration'
+    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/iteration'

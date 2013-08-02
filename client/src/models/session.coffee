@@ -37,7 +37,7 @@ define ->
 
     authenticate: (username, password, cb) ->
       $.ajax(
-        url: "#{appConfig.almWebServiceBaseUrl}/webservice/v2.x/security/authorize"
+        url: "#{appConfig.almWebServiceBaseUrl}/webservice/@@WSAPI_VERSION/security/authorize"
         type: 'GET'
         dataType: 'json'
         xhrFields:
@@ -212,7 +212,7 @@ define ->
       projectSchema = project.get('SchemaVersion')
 
       schema = new Schema()
-      schema.url = "#{appConfig.almWebServiceBaseUrl}/schema/v2.x/project/#{projectOid}/#{projectSchema}"
+      schema.url = "#{appConfig.almWebServiceBaseUrl}/schema/@@WSAPI_VERSION/project/#{projectOid}/#{projectSchema}"
       schema.fetch(accepts: json: 'text/plain').then =>
         $.when.apply($, _.map [Defect, Task, UserStory], (model) -> model.updateFromSchema(schema))
 

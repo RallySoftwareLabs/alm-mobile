@@ -4,4 +4,4 @@ define ->
 
   class AttributeDefinition extends Model
     typePath: 'attributedefinition'
-    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/v2.x/attributedefinition'
+    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/attributedefinition'

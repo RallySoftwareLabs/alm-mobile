@@ -11,13 +11,14 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-simple-mocha'
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-compile-handlebars'
+  grunt.loadNpmTasks 'grunt-replace'
   grunt.loadNpmTasks 'grunt-s3'
 
-  grunt.registerTask 'default', ['clean','coffee','less','handlebars','compile-handlebars','requirejs','copy','concat','uglify']
+  grunt.registerTask 'default', ['clean','coffee','less','handlebars','compile-handlebars','requirejs','replace','copy','concat','uglify']
 
   grunt.registerTask 'test', ['clean', 'coffee', 'simplemocha']
 
-  grunt.registerTask 'heroku', ['clean','coffee','less','handlebars','compile-handlebars','requirejs','copy','concat','uglify']
+  grunt.registerTask 'heroku', ['clean','coffee','less','handlebars','compile-handlebars','requirejs','replace','copy','concat','uglify']
 
   grunt.initConfig
 
@@ -27,7 +28,7 @@ module.exports = (grunt) ->
     watch:
       clientSrc:
         files: 'client/src/**/*.coffee'
-        tasks: ['coffee:clientSrc', 'requirejs:compile', 'copy:js', 'uglify:js']
+        tasks: ['coffee:clientSrc', 'requirejs:compile', 'replace:js', 'copy:js', 'uglify:js']
 
       clientStyles:
         files: 'client/styles/**/*.less'
@@ -48,6 +49,17 @@ module.exports = (grunt) ->
       serverSrc:
         files: 'server/src/**/*.coffee'
         tasks: ['coffee:serverSrc']
+
+    replace:
+      js:
+        options:
+          variables:
+            'WSAPI_VERSION': 'v2.0'
+          prefix: '@@'
+          force: true
+        files: [
+         expand: true, flatten: true, src: ['client/gen/js/app.js'], dest: 'client/dist/js'
+        ]
 
     coffee:
       clientSrc:
@@ -93,7 +105,7 @@ module.exports = (grunt) ->
               deps: ["backbone"]
             appConfig:
               exports: "AppConfig"
-          out: 'client/dist/js/app.js'
+          out: 'client/gen/js/app.js'
           baseUrl: 'client/gen/js/src'
           optimize: "none"
           preserveLicenseComments: false

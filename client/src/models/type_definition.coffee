@@ -8,7 +8,7 @@ define ->
 
   class TypeDefinition extends Model
     typePath: 'typedefinition'
-    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/v2.x/typedefinition'
+    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/typedefinition'
 
     initialize: ->
       super

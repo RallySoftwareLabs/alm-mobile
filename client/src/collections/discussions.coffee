@@ -4,5 +4,5 @@ define ->
   Discussion = require 'models/discussion'
 
   class Discussions extends Collection
-    url: appConfig.almWebServiceBaseUrl + '/webservice/v2.x/conversationpost'
+    url: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/conversationpost'
     model: Discussion

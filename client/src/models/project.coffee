@@ -4,4 +4,4 @@ define ->
 
   class Project extends Model
     typePath: 'project'
-    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/v2.x/project'
+    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/project'

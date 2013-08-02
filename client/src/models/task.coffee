@@ -6,7 +6,7 @@ define ->
 
   class Task extends Model
     typePath: 'task'
-    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/v2.x/task'
+    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/task'
 
     _.extend this, SchemaMixin.static
     _.extend @prototype, SchemaMixin.prototype

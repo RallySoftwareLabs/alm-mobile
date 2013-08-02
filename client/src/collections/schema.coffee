@@ -5,5 +5,5 @@ define ->
 
   class Schema extends Collection
     typePath: '__schema__'
-    url: appConfig.almWebServiceBaseUrl + '/schema/v2.x/project'
+    url: appConfig.almWebServiceBaseUrl + '/schema/@@WSAPI_VERSION/project'
     model: TypeDefinition

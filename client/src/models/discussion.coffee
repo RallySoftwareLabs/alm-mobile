@@ -4,4 +4,4 @@ define ->
 
   class Discussion extends Model
     typePath: 'conversationpost'
-    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/v2.x/conversationpost'
+    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/conversationpost'

@@ -4,5 +4,5 @@ define ->
 
   class AllowedValue extends Model
     typePath: 'allowedvalue'
-    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/v2.x/attributedefinition'
+    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/attributedefinition'
     

@@ -3,5 +3,5 @@ define ->
   Collection = require 'collections/collection'
 
   class AllowedValues extends Collection
-    url: appConfig.almWebServiceBaseUrl + '/webservice/v2.x/attributedefinition'
+    url: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/attributedefinition'
     

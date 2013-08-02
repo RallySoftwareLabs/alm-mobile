@@ -4,5 +4,5 @@ define ->
   Iteration = require 'models/iteration'
 
   class Iterations extends Collection
-    url: appConfig.almWebServiceBaseUrl + '/webservice/v2.x/iteration'
+    url: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/iteration'
     model: Iteration

@@ -4,4 +4,4 @@ define ->
 
   class UserProfile extends Model
     typePath: 'userprofile'
-    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/v2.x/userprofile'
+    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/userprofile'

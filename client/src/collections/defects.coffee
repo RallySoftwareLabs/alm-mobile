@@ -4,5 +4,5 @@ define ->
   Defect = require 'models/defect'
 
   class Defects extends Collection
-    url: appConfig.almWebServiceBaseUrl + '/webservice/v2.x/defect'
+    url: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/defect'
     model: Defect

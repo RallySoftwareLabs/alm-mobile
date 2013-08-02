@@ -6,7 +6,7 @@ define ->
 
   class Defect extends Model
     typePath: 'defect'
-    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/v2.x/defect'
+    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/defect'
 
     _.extend this, SchemaMixin.static
     _.extend @prototype, SchemaMixin.prototype

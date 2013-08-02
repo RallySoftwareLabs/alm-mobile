@@ -6,7 +6,7 @@ define ->
 
   class UserStory extends Model
     typePath: 'hierarchicalrequirement'
-    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/v2.x/hierarchicalrequirement'
+    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/hierarchicalrequirement'
     
     _.extend this, SchemaMixin.static
     _.extend @prototype, SchemaMixin.prototype

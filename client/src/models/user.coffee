@@ -4,4 +4,4 @@ define ->
 
   class User extends Model
     typePath: 'user'
-    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/v2.x/user'
+    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/user'

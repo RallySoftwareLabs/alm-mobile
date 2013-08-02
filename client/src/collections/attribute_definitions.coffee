@@ -4,5 +4,5 @@ define ->
   AttributeDefinition = require 'models/attributedefinition'
 
   class AttributeDefinitions extends Collection
-    url: appConfig.almWebServiceBaseUrl + '/webservice/v2.x/attributedefinition'
+    url: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/attributedefinition'
     model: AttributeDefinition

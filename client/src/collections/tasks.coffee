@@ -4,5 +4,5 @@ define ->
   Task = require 'models/task'
 
   class Tasks extends Collection
-    url: appConfig.almWebServiceBaseUrl + '/webservice/v2.x/task'
+    url: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/task'
     model: Task
