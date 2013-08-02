@@ -12,6 +12,7 @@ define ->
   Schema = require 'collections/schema'
   Iterations = require 'collections/iterations'
   Projects = require 'collections/projects'
+  Users = require 'collections/users'
 
   class Session extends Model
     initialize: ->
@@ -50,6 +51,7 @@ define ->
           if data.OperationResult.Errors.length > 0
             return cb? false
 
+          @setUsername username
           @setSecurityToken data.OperationResult.SecurityToken
 
           @fetchUserInfo (err, model) =>
@@ -90,8 +92,15 @@ define ->
     getSecurityToken: ->
       @get 'securityToken'
 
+    setUsername: (username) ->
+      window.sessionStorage.setItem 'username', if username then username else ''
+
+    getUsername: ->
+      window.sessionStorage.getItem 'username'
+
     logout: (options = {}) ->
       @setSecurityToken null
+      @setUsername null
 
       $.ajax(
         url: "#{appConfig.almWebServiceBaseUrl}/resources/jsp/security/clear.jsp"
@@ -105,7 +114,6 @@ define ->
     fetchUserInfo: (cb) ->
       u = new User()
       u.fetch
-        url: "#{u.urlRoot}:current"
         headers:
           "X-Requested-By": "Rally"
           "X-RallyIntegrationName": appConfig.appName
