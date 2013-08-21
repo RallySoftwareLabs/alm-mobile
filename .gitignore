@@ -9,5 +9,6 @@ Gemfile.lock
 tmtags
 tmtagsHistory
 .tm_properties
+.authors
 *.log
 *.DS_Store
