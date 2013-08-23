@@ -124,7 +124,6 @@ module.exports = (grunt) ->
             path.replace(/\.hbs$/, '')
         files:
           "client/dist/js/hbs.js": ["client/src/views/**/*.hbs"]
-          "server/gen/templates/hbs.js": ["server/src/views/**/*.hbs"]
 
     'compile-handlebars':
       allStatic:
