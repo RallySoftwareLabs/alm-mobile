@@ -15,6 +15,9 @@ define [
       'touchstart .sign-in': 'signIn'
       'submit form': 'signIn'
 
+    getTemplateData: ->
+      currentYear: new Date().getFullYear()
+
     afterRender: ->
       $('body').addClass('login-body')
       if window.loginError
