@@ -1,4 +1,4 @@
-<button class="btn btn-block discussion-item">
+<div class="discussion-item">
     {{#if showItemArtifact}}
     <div class="artifact">
         <a class="artifact-link" href="/{{typeForDetailLink Artifact._type}}/{{objectIDFromRef Artifact._ref}}">{{Artifact.FormattedID}}</a>
@@ -15,4 +15,4 @@
     	</div>
     	<div class="detail-text">{{{Text}}}</div>
     </div>
-</button>
+</div>

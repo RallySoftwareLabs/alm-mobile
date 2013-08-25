@@ -1,6 +1,6 @@
 #mask {
   position: absolute;
-  z-index: @zindexFixedNavbar + 1;
+  z-index: @zindex-navbar-fixed + 1;
   opacity: 0.8;
   height: 100%;
   width: 100%;
@@ -12,7 +12,7 @@
   width: 80%;
   height: 100%;
   overflow: hidden;
-  z-index: @zindexFixedNavbar + 2;
+  z-index: @zindex-navbar-fixed + 2;
 
   background-color: @darkGrey;
   top: 0;
@@ -43,11 +43,13 @@
     margin-top: 20px;
     margin-left: 0px;
 
-    .btn {
+    .btn-inverse {
       padding-left: 10px;
       padding-right: 10px;
       margin-bottom: 4px;
       color: @nearWhite;
+      background-color: @nearBlack;
+      border-color: @black;
     }
 
     .displayName {
@@ -59,9 +61,21 @@
       text-align: right;
     }
   }
+
+  .navbar {
+    min-height: 40px;
+
+    .search-query {
+      background-color: @darkGrey;
+      border-color: @nearBlack;
+      border-radius: 15px;
+      padding: 5px;
+      margin-top: 3px;
+    }
+  }
 }
 
 .search-no-results {
   position: absolute;
-  z-index: @zindexFixedNavbar + 3;
+  z-index: @zindex-navbar-fixed + 3;
 }

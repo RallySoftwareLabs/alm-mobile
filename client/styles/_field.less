@@ -69,16 +69,18 @@
 	.well {
 		text-align: center;
 
-		&.titled-well-small {
-			height: 20px;
+		&.titled-well-sm {
+			// height: 20px;
 		}
 	}
 
     .owner-field {
         cursor: pointer;
+        margin-top: 20px;
+
         .profile-image {
             width: 100%;
-            height: 40px;
+            height: 80px;
             background-position: center center;
             background-repeat: no-repeat;
             background-size: contain;
@@ -107,7 +109,7 @@
 	        background-repeat: no-repeat;
 	        background-size: contain;
 	        color: @white;
-	        width: 35px;
+	        width: 47px;
 	        height: 40px;
 	        line-height: 35px;
 	        text-align: center;
@@ -134,10 +136,10 @@
 		width: 15%;
 
 		.well {
-		    .border-radius(0);
+		    border-radius: 0;
 		    text-align: center;
             color: @cyan;
-            height: 20px;
+            line-height: 20px;
             font-size: 20px;
 
             &.disabled {
@@ -148,12 +150,13 @@
 	}
 
 	.arrows-left .well {
-		.border-left-radius(@baseBorderRadius);
+        border-radius: 0;
+        border-left-radius: @border-radius-base;
         border-right: 0;
 	}
 
 	.arrows-right .well {
-		.border-right-radius(@baseBorderRadius);
+		border-right-radius: @border-radius-base;
         border-left: 0;
 	}
 
@@ -173,10 +176,10 @@
 		width: 70%;
 
 		.well {
-			height: 20px;
+			line-height: 20px;
 		    text-align: center;
 		    font-weight: bold;
-		    .border-radius(0);
+		    border-radius: 0;
 		}
 	}
 }

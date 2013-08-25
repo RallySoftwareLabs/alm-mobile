@@ -26,11 +26,6 @@ define ->
 
       @_getInputField().focus()
 
-    onKeyDown: (event) ->
-      switch event.which
-        when @keyCodes.ENTER_KEY then @_addComment()
-      event.preventDefault()
-
     clearInputField: ->
       @_getInputField().focus()
       @_getInputField().val('')

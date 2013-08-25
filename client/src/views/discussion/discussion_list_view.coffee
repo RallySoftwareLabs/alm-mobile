@@ -3,7 +3,8 @@ define ->
   DiscussionView = require 'views/discussion/discussion_view'
 
   class DiscussionListView extends CollectionView
-    className: "btn-group btn-group-vertical"
+    className: "list-group"
+    tagName: 'ul'
     itemView: DiscussionView
     loadingIndicator: true
 

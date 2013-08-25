@@ -2,32 +2,36 @@
     font-size: @largeFont;
     color: @darkGrey;
   
-    .row-fluid {
-    	padding: 10px 0;
-
-    	[class*="span"] {
-    		min-height: 0;
-    	}
-    }
-
     label {
         font-weight: bold;
         line-height: 44px;
         text-align: right;
     }
 
+    .project > div, .iteration > div {
+        padding-left: 0;
+    }
+
+    .form-group {
+        padding-bottom: 0;
+    }
+
     .project-select {
         margin-top: 7px;
     }
     
-    .btn.btn-block {
-        padding-bottom: 5px;
+    .logout {
+        padding-left: 0;
+        margin-bottom: 10px;
     }
 
-    .logout {
-        margin-left: auto;
-        margin-right: auto;
-        display: block;
+    .list-group-item {
+        cursor: pointer;
+    }
+
+    .list-group-item .selection-icon, .list-group-item .chevron {
+        padding-left: 5px;
+        padding-right: 5px;
     }
 }
 
@@ -39,4 +43,5 @@
     dl {
         margin: 5px 0 10px 0;
     }
+
 }

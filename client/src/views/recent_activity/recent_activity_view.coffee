@@ -6,7 +6,7 @@ define ->
 
   class RecentActivityView extends PageView
     template: hbs['recent_activity/templates/recent_activity']
-    className: "row-fluid listing"
+    className: "row listing"
 
     afterRender: ->
       @updateTitle "Recent Activity for #{app.session.getProjectName()}"

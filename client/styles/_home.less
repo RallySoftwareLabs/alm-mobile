@@ -6,33 +6,31 @@
 
   #home-view-navigation {
     width: 230px;
-    height: 42px;
-    margin: 0px auto 10px auto;
+    margin: 10px auto;
 
-    .nav.btn-group {
+    .type {
 
       li {
-        padding: 10px 15px;
-      }
-
-      li.active.btn {
-        background-color: @cyan;
-
         a {
-          background-color: @cyan;
-          color: @white;
-          text-shadow: none;
+          // background-color: @nearerWhite;
+          color: @darkGrey;
+          font-weight:bold;
         }
-      }
 
-      a {
-        color: @darkGrey;
-        font-weight:bold;
+        &.active {
+          a {
+            // background-color: @cyan;
+            color: @white;
+          }
+        }        
       }
     }
   }
 
   .listing {
+    .list-group-item {
+      cursor: pointer;
+    }
     .item {
       position: relative;
     }

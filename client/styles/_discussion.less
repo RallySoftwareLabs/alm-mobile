@@ -1,22 +1,19 @@
+.discussion-page {
+    margin-left: 10px;
+    margin-right: 10px;
+}
 .discussion-reply {
 	margin-bottom: 20px;
-	
-	button {
-		vertical-align: top;
-	}
+
+    button {
+        width: 100%;
+    }
 }
 
 .discussion-item {
-    padding: 8px 8px 4px 8px;
     color: @darkGrey;
-    border-top: 1px solid #c6c6c6;
-    border-bottom-width: 0;
     clear: left;
     cursor: default;
-
-    &:last-child {
-    	border-bottom-width: 1px;
-    }
 
     .profile-link, .artifact-link {
     	color: @cyan;
@@ -35,6 +32,10 @@
 	    margin-bottom: 10px;
 	    float: left;
 
+        img {
+            height: 40px;
+            width: 40px;
+        }
 	}
 
 	.status {

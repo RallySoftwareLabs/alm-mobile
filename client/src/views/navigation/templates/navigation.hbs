@@ -1,8 +1,8 @@
 <div class="navbar navbar-inverse navbar-fixed-top">
   <div class="navbar-inner">
-    <div class="container-fluid">
-      <div class="row-fluid">
-          <div class="span12">
+    <div class="container">
+      <div class="row">
+          <div class="col-xs-12">
             <form class="navbar-search pull-left">
               <input type="text" class="search-query" placeholder="Search Stories">
             </form>
@@ -11,27 +11,27 @@
     </div>
   </div>
 </div>
-<div class="body row-fluid">
-  {{! <div class="span4 summary time-remaining-summary">
+<div class="body row">
+  {{! <div class="col-xs-4 summary time-remaining-summary">
     <span class="lead">{{ this.timeRemaining } }</span> <br>
     {{ this.timeRemainingUnits } } <br>
     Remaining
   </div>
-  <div class="span4 summary percent-accepted-summary">
+  <div class="col-xs-4 summary percent-accepted-summary">
     <span class="lead">{{ this.percentAccepted } }%</span> <br>
     Accepted <br>
     ({{ this.pointsAccepted } } of {{ this.totalPoints } } Points)
   </div>
-  <div class="span4 summary active-defects-summary">
+  <div class="col-xs-4 summary active-defects-summary">
     <span class="lead">{{ this.activeDefects } }</span> <br>
     Active <br>
     Defects
   </div> }}
-  <div class="span12 buttons">
+  <div class="col-xs-12 buttons">
     {{#each buttons}}
-      <button class="btn btn-inverse btn-block" type="button" data-target="{{ viewHash }}">
-        <span class="span10 display-name">{{ displayName }}</span>
-        <span class="span2 icon"><i class="icon-chevron-right icon-white"></i></span>
+      <button class="btn btn-default btn-inverse btn-block" type="button" data-target="{{ viewHash }}">
+        <span class="col-xs-10 display-name">{{ displayName }}</span>
+        <span class="col-xs-2 icon"><i class="icon-chevron-right icon-white"></i></span>
       </button>
     {{/each}}
   </div>

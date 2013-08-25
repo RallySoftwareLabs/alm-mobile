@@ -10,17 +10,30 @@
     text-align: right;
   }
 
-  .btn {
-    font-size: 16px;
-    background-image: none;
-    // color: @nearWhite;
-    .buttonBackground(@darkGrey, @darkGrey, @nearWhite, 0 1px 1px rgba(255,255,255,.75));
-    text-shadow: none;
+  .navbar {
+    min-height: 40px;
+    margin-bottom: 15px;
 
-    &.cyan {
-      .buttonBackground(@cyan, @cyan, @nearWhite, 0 1px 1px rgba(255,255,255,.75));
+    a {
+      font-size: 26px;
+      background-image: none;
+      color: @nearWhite;
       text-shadow: none;
-      // color: @white;
+      text-decoration: none;
+
+      &.left {
+        margin-left: 15px;
+      }
+      &.right {
+        margin-right: 15px;
+      }
+
+      &.cyan {
+        background-color: @cyan;
+        color: @nearWhite;
+        text-shadow: none;
+        // color: @white;
+      }
     }
   }
 }

@@ -6,7 +6,7 @@ define ->
 
   class ColumnPageView extends PageView
     region: 'main'
-    className: 'board row-fluid'
+    className: 'board row'
     template: hbs['board/templates/column']
     abbreviateHeader: false
     showFields: true

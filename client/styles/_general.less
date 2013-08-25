@@ -13,10 +13,7 @@ body {
 }
 #content {
   margin: 0 auto;
-
-  &.container-fluid {
-    padding: 50px 10px 0px 10px;
-  }
+  padding: 50px 10px 0px 10px;
 }
 
 .ellipsis {
@@ -42,14 +39,23 @@ body {
   }
 }
 
-.iteration-header {
-  dt {
-    width: 70px;
-  }
+dl {
+  margin-top: 0;
+  margin-bottom: 0;
+}
 
-  dd {
-    margin-left: 90px;
-  }
+dt {
+  clear: left;
+  float: left;
+  width: 70px;
+  text-align: right;
+}
+
+dd {
+  margin-left: 90px;
+}
+  
+.iteration-header {
 
   .name {
     font-weight: bold;

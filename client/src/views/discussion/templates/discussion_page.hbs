@@ -1,7 +1,14 @@
-<form class="reply-form">
-    <div class="row-fluid discussion-reply">
-    	<input type="text" class="span9" placeholder="Enter comments"/>
-    	<button type="submit" class="btn active">Reply</button>
+<form class="reply-form" role="form">
+    <div class="row discussion-reply">
+    	<div class="col-xs-10">
+	    	<div class="form-group">
+	    	    <label class="sr-only" for="comment-input">Email address</label>
+	    	    <input type="text" id="comment-input" class="form-control" placeholder="Enter comments"/>
+	    	</div>
+	    </div>
+	    <div class="col-xs-2">
+			<button type="submit" class="btn btn-primary">Reply</button>
+		</div>
     </div>
 </form>
-<div class="row-fluid listing"></div>
+<div class="listing"></div>

@@ -5,15 +5,15 @@
     <dt>Project</dt>
     <dd>{{projectName}}</dd>
 </dl>
-<div class="row-fluid board-columns">
-    <div class="span12 listing">
-        <div class="btn-group btn-group-vertical">
+<div class="row board-columns">
+    <div class="col-xs-12 listing">
+        <div class="list-group">
             {{#each columns}}
-            <div>
-                <button class="btn btn-block board-column" data-target="{{this.StringValue}}">
-                    <div class="span1 selection-icon">{{#if this.showing}} <i class="icon-ok"/>{{else}}&nbsp;{{/if}}</div>
-                    <div class="span11">{{this.StringValue}}</div>
-                </button>
+            <div class="list-group-item">
+                <div class="row board-column" data-target="{{this.StringValue}}">
+                    <div class="col-xs-1 selection-icon">{{#if this.showing}} <i class="icon-ok"/>{{else}}&nbsp;{{/if}}</div>
+                    <div class="col-xs-11">{{this.StringValue}}</div>
+                </div>
             </div>
             {{/each}}
             </div>

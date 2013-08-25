@@ -4,21 +4,21 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
-  grunt.loadNpmTasks 'grunt-contrib-less'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-contrib-handlebars'
   grunt.loadNpmTasks 'grunt-contrib-requirejs'
   grunt.loadNpmTasks 'grunt-simple-mocha'
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-compile-handlebars'
+  grunt.loadNpmTasks 'grunt-recess'
   grunt.loadNpmTasks 'grunt-replace'
   grunt.loadNpmTasks 'grunt-s3'
 
-  grunt.registerTask 'default', ['clean','coffee','less','handlebars','compile-handlebars','requirejs','replace','copy','concat','uglify']
+  grunt.registerTask 'default', ['clean','coffee','recess','handlebars','compile-handlebars','requirejs','replace','copy','concat','uglify']
 
   grunt.registerTask 'test', ['clean', 'coffee', 'simplemocha']
 
-  grunt.registerTask 'heroku', ['clean','coffee','less','handlebars','compile-handlebars','requirejs','replace','copy','concat','uglify']
+  grunt.registerTask 'heroku', ['clean','coffee','recess','handlebars','compile-handlebars','requirejs','replace','copy','concat','uglify']
 
   grunt.initConfig
 
@@ -32,11 +32,11 @@ module.exports = (grunt) ->
 
       clientStyles:
         files: 'client/styles/**/*.less'
-        tasks: ['less:client', 'concat:css']
+        tasks: ['recess:client', 'concat:css']
 
       clientTemplates:
         files: 'client/src/views/**/templates/**/*.hbs'
-        tasks: ['handlebars', 'requirejs:compile', 'uglify:hbs']
+        tasks: ['handlebars', 'requirejs:compile', 'uglify:hbs', 'requirejs:compile', 'replace:js', 'copy:js', 'uglify:js']
 
       clientIndexHtml:
         files: ['config.json', 'client/src/*.hbs']
@@ -131,11 +131,10 @@ module.exports = (grunt) ->
         templateData: 'config.json'
         output: 'client/dist/index.html'
 
-    less:
+    recess:
       client:
         options:
-          yuicompress: false
-
+          compile: true
         files:
           "client/gen/styles/app.css": ["client/styles/main.less"]
 

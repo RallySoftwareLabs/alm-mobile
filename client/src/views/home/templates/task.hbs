@@ -1,16 +1,16 @@
-<button class="btn btn-block" id="task/{{task.ObjectID}}">
-    <div class="span9 item">
-        <div class={{state task.Blocked task.Ready}}></div>
+<div class="row" id="{{ObjectID}}">
+    <div class="col-xs-9 item">
+        <div class="{{state Blocked Ready}}"></div>
         <div class="item-id-name">
-            <div class="formatted-id">{{task.FormattedID}}</div>
-            <div class="workitem-name">{{task.Name}}</div>
+            <div class="formatted-id">{{FormattedID}}</div>
+            <div class="workitem-name">{{Name}}</div>
         </div>
     </div>
-    <div class="span2">
-        <div>
-            <div class="span5 task-clock"></div>
-            <div class="span7 task-to-do">{{task.ToDo}}</div>
+    <div class="col-xs-2">
+        <div class="row">
+            <div class="col-xs-5 task-clock"></div>
+            <div class="col-xs-7 task-to-do">{{ToDo}}</div>
         </div>
     </div>
-    <div class="span1 chevron"><i class="icon-chevron-right"></i></div>
-</button>
+    <div class="col-xs-1 chevron"><i class="icon-chevron-right"></i></div>
+</div>

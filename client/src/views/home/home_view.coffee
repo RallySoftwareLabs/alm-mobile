@@ -2,6 +2,7 @@ define ->
   hbs = require 'hbsTemplate'
   app = require 'application'
   PageView = require 'views/base/page_view'
+  ListView = require 'views/home/list_view'
 
   class HomeView extends PageView
     listView: null
@@ -14,8 +15,7 @@ define ->
       'projectready mediator': 'updateTitle'
 
     events:
-      'click .nav .btn': 'onPillClick'
-      'click .btn-block': 'onRowClick'
+      'click .list-group-item': 'onRowClick'
 
     initialize: (options) ->
       super
@@ -24,32 +24,27 @@ define ->
 
       @currentTab = options.tab || "userstories"
 
-      unless @listView?
-        throw new Error("You must define the list view class in the HomeView subclass")
-      unless @createRoute?
-        throw new Error("You must define the create route in the HomeView subclass")
+      unless @listType?
+        throw new Error("You must define the list type in the HomeView subclass")
 
       @listenTo @collection, 'sync', @onFetch
       @updateTitle [_.find(@_getTabs(), active: true).value, app.session.getProjectName()].join ' in '
 
     onFetch: ->
       @stopListening @collection, 'sync', @onFetch
-      @view = new @listView
+      @view = new ListView
         autoRender: true
         container: @$(".listing")
         collection: @collection
+        listType: @listType
 
     getTemplateData: ->
-      createRoute: @createRoute
+      createRoute: "new/#{@listType}"
       tabs: @_getTabs()
       iteration: app.session.get('iteration')?.toJSON()
 
-    onPillClick: (event) ->
-      url = event.currentTarget.id.replace /\-tab$/, ''
-      @publishEvent '!router:route', "/#{url}"
-
     onRowClick: (event) ->
-      url = event.currentTarget.id
+      url = @listType + '/' + $(event.currentTarget).find('.row')[0].id
       @publishEvent '!router:route', url
 
     _getTabs: ->

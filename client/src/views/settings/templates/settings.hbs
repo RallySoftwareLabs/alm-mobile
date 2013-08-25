@@ -1,22 +1,19 @@
-<div class="settings">
-    <div class="row-fluid project">
-        <div class="span4">
-            <label class="choose-project">Project:</label>
-        </div>
-        <div class="span8 btn-group btn-group-vertical">
-            <select class="project-select btn btn-block">
+<div class="container">
+<form class="form-horizontal settings" role="form">
+    <div class="form-group project">
+        <label class="col-xs-4 choose-project">Project:</label>
+        <div class="col-xs-8">
+            <select class="form-control project-select">
                 {{#each projects}}
                     {{{selectOption attributes._ref attributes._refObjectName ../currentProject}}}
                 {{/each}}
             </select>
         </div>
     </div>
-    <div class="row-fluid iteration">
-        <div class="span4">
-            <label class="choose-iteration">Iteration:</label>
-        </div>
-        <div class="span8 btn-group btn-group-vertical">
-            <select class="iteration-select btn btn-block">
+    <div class="form-group iteration">
+        <label class="col-xs-4 choose-iteration">Iteration:</label>
+        <div class="col-xs-8">
+            <select class="form-control iteration-select">
                 <option value="null"{{#if noCurrentIteration}} selected="selected"{{/if}}>None</option>
                 {{#each iterations}}
                     {{{selectOption attributes._ref attributes._refObjectName ../currentIteration}}}
@@ -24,53 +21,47 @@
             </select>
         </div>
     </div>
-    <div class="row-fluid scope">
-        <div class="span4">
-            <label class="show-work">Show:</label>
-        </div>
-        <div class="span8 listing">
-            <div class="btn-group btn-group-vertical">
-                <div>
-                    <button class="btn btn-block self">
-                        <div class="span1 selection-icon">{{#if isSelf}} <i class="icon-ok"/>{{else}}&nbsp;{{/if}}</div>
-                        <div class="span11">My Work</div>
-                    </button>
+    <div class="form-group scope">
+        <label class="col-xs-4 show-work">Show:</label>
+        <div class="col-xs-8 list-group">
+            <div class="list-group-item self">
+                <div class="row">
+                    <div class="col-xs-1 selection-icon">{{#if isSelf}} <i class="icon-ok"/>{{else}}&nbsp;{{/if}}</div>
+                    <div class="col-xs-11">My Work</div>
                 </div>
-                <div>
-                    <button class="btn btn-block team">
-                        <div class="span1 selection-icon">{{#if isTeam}} <i class="icon-ok"/>{{else}}&nbsp;{{/if}}</div>
-                        <div class="span11">My Team</div>
-                    </button>
+            </div>
+            <div class="list-group-item team">
+                <div class="row">
+                    <div class="col-xs-1 selection-icon">{{#if isTeam}} <i class="icon-ok"/>{{else}}&nbsp;{{/if}}</div>
+                    <div class="col-xs-11">My Team</div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row-fluid board-column">
-        <div class="span4">
-            <label class="board-field">Board Column:</label>
-        </div>
-        <div class="span8 listing">
-            <div class="btn-group btn-group-vertical">
-                <div>
-                    <button class="btn btn-block schedule-state">
-                        <div class="span1 selection-icon">{{#if isScheduleState}} <i class="icon-ok"/>{{else}}&nbsp;{{/if}}</div>
-                        <div class="span10">Schedule State</div>
-                        <div class="span1 chevron"><i class="icon-chevron-right"></i></div>
-                    </button>
+    <div class="form-group board-column">
+        <label class="col-xs-4 board-field">Board Column:</label>
+        <div class="col-xs-8 list-group">
+            <div class="list-group-item schedule-state">
+                <div class="row">
+                    <div class="col-xs-1 selection-icon">{{#if isScheduleState}} <i class="icon-ok"/>{{else}}&nbsp;{{/if}}</div>
+                    <div class="col-xs-10">Schedule State</div>
+                    <div class="col-xs-1 chevron"><i class="icon-chevron-right"></i></div>
                 </div>
-                <div>
-                    <button class="btn btn-block kanban-state">
-                        <div class="span1 selection-icon">{{#if isKanbanState}} <i class="icon-ok"/>{{else}}&nbsp;{{/if}}</div>
-                        <div class="span10">Kanban State</div>
-                        <div class="span1 chevron"><i class="icon-chevron-right"></i></div>
-                    </button>
+            </div>
+            <div class="list-group-item kanban-state">
+                <div class="row">
+                    <div class="col-xs-1 selection-icon">{{#if isKanbanState}} <i class="icon-ok"/>{{else}}&nbsp;{{/if}}</div>
+                    <div class="col-xs-10">Kanban State</div>
+                    <div class="col-xs-1 chevron"><i class="icon-chevron-right"></i></div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row-fluid">
-        <div class="span12">
-            <button class="btn active logout">Logout</button>
+    <div class="form-group">
+        <div class="col-xs-4"></div>
+        <div class="col-xs-8 logout">
+            <button class="btn btn-primary">Logout</button>
         </div>
     </div>
+</form>
 </div>

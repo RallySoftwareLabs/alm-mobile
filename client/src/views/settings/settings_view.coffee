@@ -8,7 +8,7 @@ define ->
     template: hbs['settings/templates/settings']
 
     events:
-      'click button.logout': 'triggerLogout'
+      'click .logout button': 'triggerLogout'
       'change select.project-select': 'updateSelectedProject'
       'change select.iteration-select': 'updateSelectedIteration'
 

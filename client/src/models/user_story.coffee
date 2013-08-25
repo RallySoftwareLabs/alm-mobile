@@ -12,7 +12,7 @@ define ->
     _.extend @prototype, SchemaMixin.prototype
 
     defaults:
-      "ScheduleState" : "Defined"
+      "ScheduleState" : "Idea"
     
     allowedValueFields: ['ScheduleState', 'c_KanbanState']
       

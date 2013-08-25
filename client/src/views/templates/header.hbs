@@ -1,13 +1,9 @@
 {{#unless onLoginScreen}}
-<div class="navbar navbar-inverse navbar-fixed-top">
-  <div class="navbar-inner">
-    <div class="container-fluid">
-      <div class="row-fluid">
-        <div class="span2">{{{ this.left_button }}}</div>
-        <div class="span8 title"><p class="ellipsis">{{ this.title }}</p></div>
-        <div class="span2 right-button">{{{ this.right_button }}}</div>
-      </div>
-    </div>
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <div class="row">
+    <div class="col-xs-2">{{{ this.left_button }}}</div>
+    <div class="col-xs-8 title"><p class="ellipsis">{{ this.title }}</p></div>
+    <div class="col-xs-2 right-button">{{{ this.right_button }}}</div>
   </div>
 </div>
 {{/unless}}

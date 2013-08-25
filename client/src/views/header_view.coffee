@@ -16,7 +16,7 @@ define ->
       'navigation:hide mediator': 'onNavigationHide'
 
     events:
-      'click div[data-target]': 'doNavigate'
+      'click a[data-target]': 'doNavigate'
       'swipe': 'gotSwiped'
 
     doNavigate: (e) ->
@@ -39,7 +39,7 @@ define ->
     hide: -> @$el.hide() if @$el.is ':visible'
 
     makeButton: (target, icon, cls = "") ->
-      """<div class="btn navbar-inverse #{cls}" data-target="#{target}"><i class="#{icon}"></i></div>"""
+      """<a href="#" class="#{cls}" data-target="#{target}"><i class="icon-#{icon}"></i></a>"""
 
     getTemplateData: ->
       current_page = @_getCurrentPage()
@@ -49,13 +49,13 @@ define ->
         onNavigateScreen: @onNavigateScreen
 
       if current_page in ['/userstories', '/defects', '/tasks', '/board', '/recentActivity']
-        data.left_button =  @makeButton 'navigation', 'icon-reorder', 'cyan'
-        data.right_button = @makeButton 'settings', 'icon-cog'
+        data.left_button =  @makeButton 'navigation', 'reorder', 'left'
+        data.right_button = @makeButton 'settings', 'cog', 'right'
       else if current_page is '/settings'
-        data.left_button = @makeButton 'back', 'icon-arrow-left'
+        data.left_button = @makeButton 'back', 'arrow-left', 'left'
       else # if current_page in ['detail', 'column']
-        data.left_button =  @makeButton 'back', 'icon-arrow-left'
-        data.right_button = @makeButton 'settings', 'icon-cog'
+        data.left_button =  @makeButton 'back', 'arrow-left', 'left'
+        data.right_button = @makeButton 'settings', 'cog', 'right'
 
       data
 

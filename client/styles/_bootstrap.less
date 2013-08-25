@@ -1,29 +1,44 @@
 // Boostrap overrides
 
-@bodyBackground:        @grayLighter;
-@textColor:             @black;
-@sansFontFamily:        "Droid Sans","Helvetica Neue", Helvetica, Arial, sans-serif;
-@wellBackground:        #fff;
-@paddingMini:           0 6px;   // 22px
-@dropdownLinkColorActive:       @white;
+@brand-primary:              @cyan;
+@body-bg:                    @nearerWhite;
+@text-color:                 @black;
+@font-family-sans-serif:     'Noto Sans', sans-serif;
+@well-bg:                    #fff;
+@padding-small-vertical:     0;
+@padding-small-horizontal:   6px;
+@dropdown-link-active-color: @white;
+
+@link-hover-color: @cyan;
+
+@btn-primary-color:              @white;
+@btn-primary-bg:                 @cyan;
+@btn-primary-border:             @cyan;
+
+@btn-default-bg:                 @nearerWhite;
 
 // Inverted navbar
-@navbarInverseBackground:                @nearBlack;
+@navbar-inverse-bg:                @nearBlack;
 @navbarInverseBackgroundHighlight:       @nearBlack;
-@navbarInverseBorder:                    @nearBlack;
+@navbar-inverse-border:                    @nearBlack;
 
 .btn, .btn:active, .btn.active {
     .box-shadow(none);
 }
 
-.btn, .btn:hover {
-  font-weight: bold;
-  background-image: none;
-  text-shadow: none;
-  color: @darkGrey;
+// .btn, .btn:hover {
+//   font-weight: bold;
+//   background-image: none;
+//   text-shadow: none;
+//   color: @darkGrey;
 
-  &.active {
-    color: @white;
-    background-color: @cyan;
-  }
+//   &.active {
+//     color: @white;
+//     background-color: @cyan;
+//   }
+// }
+
+.nav-justified > li > {
+    display: table-cell;
+    width: 1%;
 }

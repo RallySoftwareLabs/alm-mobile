@@ -5,6 +5,8 @@ define ->
   class DiscussionView extends View
 
     template: hbs['discussion/templates/discussion']
+    className: 'list-group-item'
+    tagName: 'li'
 
     initialize: (options = {}) ->
     	@showItemArtifact = options.showItemArtifact

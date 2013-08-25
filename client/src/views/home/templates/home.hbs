@@ -3,16 +3,16 @@
   <div class="iteration-header">
     <dl class="dl-horizontal">
       <dt>Iteration:</dt>
-      <dd class="name">{{iteration.Name}}</dd>
-      <dd class="dates">{{date iteration.StartDate}} - {{date iteration.EndDate}}</dd>
+      <dd class="">{{iteration.Name}}</dd>
+      <dd class="">{{date iteration.StartDate}} - {{date iteration.EndDate}}</dd>
     </dl>
   </div>
   {{/if}}
   <div id="home-view-navigation">
-    <ul class="nav btn-group">
+    <ul class="type nav nav-pills nav-justified">
       {{#each tabs}}
-      <li class="btn{{#if this.active}} active{{/if}}" id="{{this.key}}-tab">
-        <a href="/{{this.key}}" id="{{this.key}}">
+      <li{{#if this.active}} class="active"{{/if}}>
+        <a href="/{{this.key}}" id="{{this.key}}-tab">
           {{this.value}}
         </a>
       </li>
@@ -20,9 +20,11 @@
     </ul>
   </div>
 
-  <div class="row-fluid listing"/>
+  <div class="listing"/>
 
-  <div class='bottom-centered'>
-    <a href="{{createRoute}}" class='btn active' id='add-artifact'><i class="icon-plus"/></a>
-  </div>
+  <ul class="type nav nav-pills nav-justified">
+    <li class="active">
+      <a href="{{createRoute}}" id="add-artifact"><i class="icon-plus"/></a>
+    </li>
+  </ul>
 </div>
