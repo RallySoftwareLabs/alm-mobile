@@ -133,6 +133,35 @@ Set up port forwarding for TCP connections from your hostmachine to your emulato
 
     platform-tools/adb -s <serialId> forward tcp:8080 tcp:8080
 
+## For Internet Explorer (Windows Phone)
+
+On a Windows box:
+
+* install [msysgit](https://code.google.com/p/msysgit/downloads/list)
+* install NodeJS via the [provided MSI](http://nodejs.org/download/)
+* install Python [2.7.x](http://www.python.org/getit/releases/2.7.5/) (newer versions will not work, you can have more than one Python happily on your machine if needed)
+* install [Visual Studio Express 2012 for Windows Phone](http://www.microsoft.com/visualstudio/eng/downloads)
+* install grunt-cli: `npm install -g grunt-cli`
+* Setup your bash path
+  * In your home directory (your starting location when launcing an msysgit bash shell) add a `.profile` file
+  * In this file, add:  
+```
+export PATH=$PATH:/c/Program\ Files/nodejs:/c/python27;
+export PATH=$PATH:`npm config get prefix`  
+```
+    
+    * Note that the npm command is minus the `/bin` subdirectory required for OSX
+
+I also had to install nodemon and less, although that doesn't seem right: `npm install nodemon` and `npm install --save-dev less`
+
+### Launching alm-mobile in the Windows Phone Emulator
+
+Start up VS Express for Windows Phone, and create a new Visual C# Windows Phone App project. Name it anything you want and save it anywhere you want. Once the project has loaded, press F5 or the debug button to start the emulator. It will launch the skeleton app, just press the Windows button to return to the OS then launch Internet Explorer. You will need to load the site using your IP address instead of localhost, as the emulator has its own IP address.  
+  
+To use your computer's keyboard inside the emulator:
+* On a standard Windows keyboard: `page up` see [this page](http://msdn.microsoft.com/en-us/library/windowsphone/develop/ff754352\(v=vs.105\).aspx) for details
+* On a fullsize Mac keyboard: `fn-page down` works for me, although the magic combo seems to vary a lot for people across the web. `fn-escape` has been reported to work as well.
+
 ## Conventions
 
 All CoffeeScript should be indented with 2 spaces (soft tabs)
