@@ -8,7 +8,7 @@ define ->
 
   class BoardPageView extends PageView
     region: 'main'
-    className: 'board row'
+    className: 'board'
     template: hbs['board/templates/board']
 
     initialize: (options = {}) ->

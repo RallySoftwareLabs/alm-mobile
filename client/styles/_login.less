@@ -5,10 +5,8 @@
     margin-top: 0;
 
     #login {
-        margin: 0;
-      
-        &.container {
-            padding: 0;
+        .row {
+            margin: 0;
         }
 
         .login-header {
@@ -25,15 +23,18 @@
             }
         }
 
-        .login-form {
-            color: @white;
-            margin-left: 35px;
-            margin-right: auto;
-            margin-bottom: 0;
-            height: 320px;
+        .login-body {
             background: #5E6165 top right;
             background-repeat: no-repeat;
             .hidpi-background-image('/img/login', 'gif');
+        }
+
+        .login-form {
+            color: @white;
+            margin-left: 15px;
+            margin-right: auto;
+            margin-bottom: 0;
+            height: 320px;
 
             h2 {
                 margin: 20px 0 0 0;
@@ -42,8 +43,12 @@
                 color: @lightGrey;
             }
 
-            .form-group div {
-                padding-right: 30px;
+            .form-group {
+                margin-left: 0;
+
+                div {
+                    padding-right: 30px;
+                }
             }
 
             .row {
