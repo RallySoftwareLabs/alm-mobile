@@ -129,8 +129,9 @@ define ->
       projectOid = utils.getOidFromRef @get('project').get('_ref')
       columnProp = "#{boardField}-columns-#{projectOid}"
       columns = $.cookie(columnProp)
+      visibleColumns = if columns then columns.split ',' else this._getDefaultBoardColumns(boardField)
 
-      @setBoardColumns boardField, if columns then columns.split ',' else []
+      @setBoardColumns boardField, visibleColumns
       columns
 
     getBoardColumns: (boardField = @get('boardField')) ->
@@ -160,6 +161,11 @@ define ->
       columnProp = "#{boardField}-columns-#{projectOid}"
       $.cookie(columnProp, columns.join(','), path: '/')
       @set columnProp, columns
+
+    _getDefaultBoardColumns: (boardField) ->
+      switch boardField
+        when 'ScheduleState' then ['Defined', 'In-Progress', 'Completed', 'Accepted']
+        else []
 
     _onUserChange: (model, value, options) ->
       projects = new Projects()
