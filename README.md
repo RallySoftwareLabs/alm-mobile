@@ -133,6 +133,15 @@ Set up port forwarding for TCP connections from your hostmachine to your emulato
 
     platform-tools/adb -s <serialId> forward tcp:8080 tcp:8080
 
+## Launching alm-mobile in the Windows Phone 8 Emulator
+
+Start up [Visual Studio Express 2012 for Windows Phone](http://www.microsoft.com/visualstudio/eng/downloads), and create a new Visual C# Windows Phone App project. Name it anything you want and save it anywhere you want. Once the project has loaded, press F5 or the debug button to start the emulator. It will launch the skeleton app, just press the Windows button on the phone to return to the OS then launch Internet Explorer. You will need to load the site using your IP address instead of localhost, as the emulator has its own IP address.  
+  
+To use your computer's keyboard inside the emulator:
+
+* **On a standard Windows keyboard:** `page up` see [this page](http://msdn.microsoft.com/en-us/library/windowsphone/develop/ff754352\(v=vs.105\).aspx) for details
+* **On a fullsize Mac keyboard:** `fn-page down` works for me, although the magic combo seems to vary a lot for people across the web. `fn-escape` has been reported to work as well.
+
 ## Conventions
 
 All CoffeeScript should be indented with 2 spaces (soft tabs)
