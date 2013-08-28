@@ -23,5 +23,11 @@ require [
 ], ($, Backbone, Bootstrap, app) ->
 
   $(->
+    fixIE10($)
     app.initialize()
   )
+
+
+fixIE10 = ($) ->
+  if navigator.userAgent.match /IEMobile\/10\.0/
+    $('head').append '<style>@-ms-viewport{width:auto!important}</style>'
