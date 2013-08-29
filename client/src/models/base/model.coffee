@@ -11,3 +11,6 @@ define [
       return resp.OperationResult.Object if resp.OperationResult?
       return resp.CreateResult.Object if resp.CreateResult?
       return (value for key, value of resp)[0] # Get value for only key
+
+    isNew: ->
+      !@id? && !@_ref

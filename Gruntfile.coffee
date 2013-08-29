@@ -91,7 +91,6 @@ module.exports = (grunt) ->
             jquery: "empty:"
             bootstrap: "empty:"
             spin: "empty:"
-            jqueryCookie: "empty:"
             jqueryBase64: "empty:"
             underscore: "../../../../vendor/scripts/lodash-1.3.1"
             backbone: "empty:"

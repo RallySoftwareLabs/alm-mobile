@@ -1,16 +1,17 @@
 define ->
-  jqueryCookie = require 'jqueryCookie'
   jqueryBase64 = require 'jqueryBase64'
   appConfig = require 'appConfig'
   utils = require 'lib/utils'
   Model = require 'models/base/model'
   User = require 'models/user'
   Defect = require 'models/defect'
+  Preference = require 'models/preference'
   Task = require 'models/task'
   UserStory = require 'models/user_story'
   UserProfile = require 'models/user_profile'
   Schema = require 'collections/schema'
   Iterations = require 'collections/iterations'
+  Preferences = require 'collections/preferences'
   Projects = require 'collections/projects'
   Users = require 'collections/users'
 
@@ -20,8 +21,6 @@ define ->
       @pagesize = 200
       @set
         user: new User()
-        mode: $.cookie('mode') || 'team'
-        boardField: $.cookie('boardField') || 'ScheduleState'
         securityToken: window.sessionStorage.getItem 'token'
       @listenTo this, 'change:user', @_onUserChange
       @listenTo this, 'change:mode', @_onModeChange
@@ -60,21 +59,11 @@ define ->
           cb? false
       )
 
-    hasProjectCookie: ->
-      !!$.cookie('project')
+    setIterationPreference: (value) ->
+      projectRef = @get('project').get('_ref')
+      prefs = @get('prefs')
 
-    getIterationCookie: ->
-      projectOid = utils.getOidFromRef @get('project').get('_ref')
-      iterationProp = "iteration-#{projectOid}"
-      $.cookie(iterationProp)
-
-    setIterationCookie: (value) ->
-      projectOid = utils.getOidFromRef @get('project').get('_ref')
-      iterationProp = "iteration-#{projectOid}"
-      if value
-        $.cookie(iterationProp, value, path: '/')
-      else
-        $.removeCookie(iterationProp, path: '/')
+      prefs.updateProjectPreference projectRef, Preference::defaultIteration, value
 
     getProjectName: ->
       try
@@ -113,37 +102,32 @@ define ->
           
     fetchUserInfo: (cb) ->
       u = new User()
-      u.fetch
-        headers:
-          "X-Requested-By": "Rally"
-          "X-RallyIntegrationName": appConfig.appName
-        params:
-          fetch: 'ObjectID,DisplayName,UserProfile'
-        success: (model, resp, opts) =>
-          @set 'user', model
-          cb?(null, model)
-        error: (model, resp, options) =>
-          cb?('auth', model)
+      u.fetchSelf (err, u) =>
+        unless err?
+          @set 'user', u 
+        cb(err, u)
 
     initColumnsFor: (boardField) ->
-      projectOid = utils.getOidFromRef @get('project').get('_ref')
-      columnProp = "#{boardField}-columns-#{projectOid}"
-      columns = $.cookie(columnProp)
-      visibleColumns = if columns then columns.split ',' else this._getDefaultBoardColumns(boardField)
+      pref = "#{Preference::defaultBoardColumnsPrefix}.#{boardField}"
+      savedColumns = @get('prefs').findProjectPreference(@get('project').get('_ref'), pref)
+      if savedColumns
+        columns = savedColumns.get 'Value'
 
+      visibleColumns = if columns then columns.split ',' else @_getDefaultBoardColumns(boardField)
       @setBoardColumns boardField, visibleColumns
-      columns
+      visibleColumns
 
     getBoardColumns: (boardField = @get('boardField')) ->
+      pref = "#{Preference::defaultBoardColumnsPrefix}.#{boardField}"
       projectOid = utils.getOidFromRef @get('project').get('_ref')
-      columns = @get "#{boardField}-columns-#{projectOid}"
+      columns = @get "#{pref}.#{projectOid}"
+
       unless columns
         columns = @initColumnsFor boardField
 
       columns
 
     toggleBoardColumn: (column, boardField = @get('boardField')) ->
-      columnProp = "#{boardField}-columns"
       shownColumns = @getBoardColumns boardField
 
       newColumns = if _.contains(shownColumns, column)
@@ -157,10 +141,11 @@ define ->
       @setBoardColumns boardField, newColumns
 
     setBoardColumns: (boardField, columns) ->
+      pref = "#{Preference::defaultBoardColumnsPrefix}.#{boardField}"
       projectOid = utils.getOidFromRef @get('project').get('_ref')
-      columnProp = "#{boardField}-columns-#{projectOid}"
-      $.cookie(columnProp, columns.join(','), path: '/')
-      @set columnProp, columns
+
+      @set "#{pref}.#{projectOid}", columns
+      @get('prefs').updateProjectPreference @get('project').get('_ref'), pref, columns.join(',')
 
     _getDefaultBoardColumns: (boardField) ->
       switch boardField
@@ -171,8 +156,13 @@ define ->
       projects = new Projects()
       @set 'projects', projects
 
+      preferences = new Preferences()
+      @set 'prefs', preferences
+
+      user = @get('user')
+
       userProfile = new UserProfile
-        ObjectID: utils.getOidFromRef(@get('user').get('UserProfile')._ref)
+        ObjectID: utils.getOidFromRef(user.get('UserProfile')._ref)
 
       $.when(
         projects.fetch(
@@ -182,7 +172,9 @@ define ->
             order: 'Name'
         ),
         userProfile.fetch()
-      ).then (p, u, i) =>
+        preferences.fetchMobilePrefs()
+      ).then (p, u, prefs) =>
+        @_setModeFromPreference()
         totalProjectResults = p[0].QueryResult.TotalResultCount
         @_fetchRestOfProjects(projects, totalProjectResults).then =>
           @_setDefaultProject projects, userProfile
@@ -204,21 +196,37 @@ define ->
       $.when.apply($, projectFetches)
 
     _setDefaultProject: (projects, userProfile) ->
-      if @hasProjectCookie()
-        savedProjRef = $.cookie('project')
-        savedProject = _.find projects.models, _.isAttributeEqual('_ref', savedProjRef)
+      defaultProject = @get('prefs').findPreference(Preference::defaultProject)
+      if defaultProject
+        savedProject = projects.find _.isAttributeEqual('_ref', defaultProject.get('Value'))
         @set('project', savedProject) if savedProject
 
       if !@get 'project'
         defaultProject = userProfile.get('DefaultProject')?._ref
-        proj = projects.find (proj) -> proj.get('_ref') == defaultProject
+        proj = projects.find _.isAttributeEqual('_ref', defaultProject)
         @set 'project', proj || projects.first()
 
-    _setIteration: ->
-      savedIterationRef = @getIterationCookie()
-      if savedIterationRef
-        savedIteration = _.find @get('iterations').models, _.isAttributeEqual('_ref', savedIterationRef)
-        @set('iteration', savedIteration) if savedIteration
+    _setIterationFromPreference: ->
+      savedIteration = @get('prefs').findProjectPreference(@get('project').get('_ref'), Preference::defaultIteration)
+      if savedIteration
+        iteration = @get('iterations').find _.isAttributeEqual('_ref', savedIteration.get('Value'))
+        @set('iteration', iteration) if iteration
+
+    _setModeFromPreference: ->
+      mode = 'team'
+      savedMode = @get('prefs').findPreference Preference::defaultMode
+      if savedMode
+        mode = savedMode.get 'Value'
+
+      @set 'mode', mode
+
+    _setBoardFieldFromPreference: ->
+      boardField = 'ScheduleState'
+      savedBoardField = @get('prefs').findProjectPreference @get('project').get('_ref'), Preference::defaultBoardField
+      if savedBoardField
+        boardField = savedBoardField.get 'Value'
+
+      @set 'boardField', boardField
 
     _loadSchema: (project) ->
       projectRef = project.get('_ref')
@@ -231,15 +239,18 @@ define ->
         $.when.apply($, _.map [Defect, Task, UserStory], (model) -> model.updateFromSchema(schema))
 
     _onModeChange: (model, value, options) ->
-      $.cookie('mode', value, path: '/')
+      @get('prefs').updatePreference @get('user'), Preference::defaultMode, value
 
     _onBoardFieldChange: (model, value, options) ->
-      $.cookie('boardField', value, path: '/')
+      @get('prefs').updateProjectPreference @get('project').get('_ref'), Preference::defaultBoardField, value
 
     _onProjectChange: (model, value, options) ->
       projectRef = value.get('_ref')
+      prefs = @get('prefs')
 
-      $.cookie('project', projectRef, path: '/')
+      @_setBoardFieldFromPreference()
+
+      prefs.updatePreference @get('user'), Preference::defaultProject, projectRef
 
       iterations = new Iterations()
       @set 'iterations', iterations
@@ -255,9 +266,9 @@ define ->
         )
       ).then (s, i) =>
         @initColumnsFor @get('boardField')
-        @_setIteration()
+        @_setIterationFromPreference()
         @publishEvent "projectready", @getProjectName()
 
     _onIterationChange: (model, value, options) ->
       iterationRef = value?.get('_ref')
-      @setIterationCookie iterationRef
+      @setIterationPreference iterationRef

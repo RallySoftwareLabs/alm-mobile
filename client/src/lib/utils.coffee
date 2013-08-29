@@ -18,6 +18,10 @@ define ->
       return -> @get(attr)
     isAttributeEqual: (attr, value) ->
       return (model) -> model.get(attr) == value
+    areAttributesEqual: (attrs) ->
+      return (model) ->
+        _.every attrs, (value, attr) ->
+          model.get(attr) == value 
 
   return {
     getDetailHash: (model) ->

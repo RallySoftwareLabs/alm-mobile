@@ -14,7 +14,7 @@ define ->
       @afterProjectLoaded ->
         mode = app.session.get('mode')
         boardField = app.session.get('boardField')
-        @view = new SettingsView region: 'main', autoRender: true, mode: mode, boardField: boardField
+        @view = new SettingsView region: 'main', autoRender: true
         @listenTo @view, 'changeMode', @onChangeMode
         @listenTo @view, 'changeBoardField', @onChangeBoardField
         @listenTo @view, 'changeProject', @onChangeProject

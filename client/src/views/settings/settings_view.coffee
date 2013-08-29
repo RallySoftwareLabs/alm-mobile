@@ -13,8 +13,6 @@ define ->
       'change select.iteration-select': 'updateSelectedIteration'
 
     initialize: (options) ->
-      @mode = options.mode
-      @boardField = options.boardField
       super
       @updateTitle "Settings"
       @delegate 'click', '.self', => @changeMode 'self'
@@ -23,26 +21,29 @@ define ->
       @delegate 'click', '.kanban-state', => @changeBoardField 'c_KanbanState'
 
     getTemplateData: ->
-      projects: app.session.get('projects')?.models
-      currentProject: app.session.get('project').get('_ref')
-      iterations: app.session.get('iterations')?.models
-      currentIteration: app.session.get('iteration')?.get('_ref')
-      noCurrentIteration: !app.session.get('iteration')?
-      isTeam: @mode == 'team'
-      isSelf: @mode == 'self'
-      isScheduleState: @boardField == 'ScheduleState'
-      isKanbanState: @boardField == 'c_KanbanState'
+      iteration = app.session.get('iteration')
+      mode = app.session.get('mode')
+      boardField = app.session.get('boardField')
+      return {
+        projects: app.session.get('projects')?.models
+        currentProject: app.session.get('project').get('_ref')
+        iterations: app.session.get('iterations')?.models
+        currentIteration: iteration?.get('_ref')
+        noCurrentIteration: !iteration?
+        isTeam: mode == 'team'
+        isSelf: mode == 'self'
+        isScheduleState: boardField == 'ScheduleState'
+        isKanbanState: boardField == 'c_KanbanState'
+      }
 
     triggerLogout: ->
       @publishEvent '!router:routeByName', 'auth#logout'
 
     changeMode: (mode) ->
-      @mode = mode
       @trigger 'changeMode', mode
       @render()
 
     changeBoardField: (boardField) ->
-      @boardField = boardField
       @trigger 'changeBoardField', boardField
       @render()
 
