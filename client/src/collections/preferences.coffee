@@ -32,7 +32,7 @@ define ->
       
       if existingPref
         if existingPref.get('Value') != value
-          changedAttrs.Value = value
+          changedAttrs.Value = value || ''
       else
         changedAttrs =
           User: user
@@ -51,7 +51,7 @@ define ->
       
       if existingPref
         if existingPref.get('Value') != value
-          changedAttrs.Value = value
+          changedAttrs.Value = value || ''
       else
         changedAttrs =
           Project: project
