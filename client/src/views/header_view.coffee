@@ -39,7 +39,7 @@ define ->
     hide: -> @$el.hide() if @$el.is ':visible'
 
     makeButton: (target, icon, cls = "") ->
-      """<a href="#" class="#{cls}" data-target="#{target}"><i class="icon-#{icon}"></i></a>"""
+      """<a href="#" class="#{cls}" data-target="#{target}"><i class="picto icon-#{icon}"></i></a>"""
 
     getTemplateData: ->
       current_page = @_getCurrentPage()
@@ -49,13 +49,13 @@ define ->
         onNavigateScreen: @onNavigateScreen
 
       if current_page in ['/userstories', '/defects', '/tasks', '/board', '/recentActivity']
-        data.left_button =  @makeButton 'navigation', 'reorder', 'left'
-        data.right_button = @makeButton 'settings', 'cog', 'right'
+        data.left_button =  @makeButton 'navigation', 'grid', 'left'
+        data.right_button = @makeButton 'settings', 'gear', 'right'
       else if current_page is '/settings'
-        data.left_button = @makeButton 'back', 'arrow-left', 'left'
+        data.left_button = @makeButton 'back', 'back', 'left'
       else # if current_page in ['detail', 'column']
-        data.left_button =  @makeButton 'back', 'arrow-left', 'left'
-        data.right_button = @makeButton 'settings', 'cog', 'right'
+        data.left_button =  @makeButton 'back', 'back', 'left'
+        data.right_button = @makeButton 'settings', 'gear', 'right'
 
       data
 

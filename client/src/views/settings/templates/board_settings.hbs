@@ -1,8 +1,8 @@
 <h4 class="text-center">Choose columns to display</h4>
 <dl class="dl-horizontal">
-    <dt>Field</dt>
+    <dt>Field:</dt>
     <dd>{{fieldName}}</dd>
-    <dt>Project</dt>
+    <dt>Project:</dt>
     <dd>{{projectName}}</dd>
 </dl>
 <div class="row board-columns">
@@ -11,7 +11,7 @@
             {{#each columns}}
             <div class="list-group-item">
                 <div class="row board-column" data-target="{{this.StringValue}}">
-                    <div class="col-xs-1 selection-icon">{{#if this.showing}} <i class="icon-ok"/>{{else}}&nbsp;{{/if}}</div>
+                    <div class="col-xs-1 selection-icon">{{#if this.showing}} <i class="picto icon-ok"/>{{else}}&nbsp;{{/if}}</div>
                     <div class="col-xs-11">{{this.StringValue}}</div>
                 </div>
             </div>

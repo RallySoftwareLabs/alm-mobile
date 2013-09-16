@@ -52,6 +52,7 @@ define ->
 
       # Rally Override!
       params.url += "?key=#{app.session.getSecurityToken()}"
+      params.url += "&fetch=#{options.fetch}" if options.fetch?
 
     # For older servers, emulate JSON by encoding the request into an HTML-form.
     if options.emulateJSON

@@ -12,14 +12,12 @@
 
       li {
         a {
-          // background-color: @nearerWhite;
           color: @darkGrey;
           font-weight:bold;
         }
 
         &.active {
           a {
-            // background-color: @cyan;
             color: @white;
           }
         }        
@@ -40,37 +38,27 @@
       overflow: hidden;
     }
 
-    .ready {
+    .ready, .blocked {
       width: 22px;
       height: 22px;
-      background-image: url('/img/ready_icon_2x.png');
-      background-size: 100%;
-      background-repeat: no-repeat;
       position: absolute;
       left: -11px;
       top: -3px;
+      font-size: 1.5em;
+    }
+
+    .ready {
+      color: @lime;
     }
 
     .blocked {
-      width: 22px;
-      height: 22px;
-      background-image: url('/img/blocked_icon_2x.png');
-      background-size: 100%;
-      background-repeat: no-repeat;
-      position: absolute;
-      left: -11px;
-      top: -3px;
+      color: @brick;
     }
 
     .formatted-id {
-      color: @cyan;
-      font-weight:bold;
+      font-family: @noto-sans-bold;
       display: inline;
       padding-left: 12px;
-    }
-
-    .chevron {
-      padding-left: 0;
     }
 
     .workitem-name {
@@ -78,17 +66,9 @@
       display: inline;
     }
 
-    .task-clock {
-      width: 16px;
-      height: 16px;
-      padding: 0px 10px 0px 0px;
-      background-image: url('/img/todo_icon_2x.png');
-      background-size: 100%;
-      background-repeat: no-repeat;
-    }
-
-    .task-to-do {
-
+    .icon-to-do {
+      font-size: 1.5em;
+      color: @darkGrey;
     }
   }
 

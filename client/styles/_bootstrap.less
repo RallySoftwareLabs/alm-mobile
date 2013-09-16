@@ -3,13 +3,18 @@
 @brand-primary:              @cyan;
 @body-bg:                    @nearerWhite;
 @text-color:                 @black;
-@font-family-sans-serif:     'Noto Sans', sans-serif;
+@font-family-sans-serif:     @noto-sans;
 @well-bg:                    #fff;
 @padding-small-vertical:     0;
 @padding-small-horizontal:   6px;
 @dropdown-link-active-color: @white;
 
-@link-hover-color: @cyan;
+@link-color: @blue-link;
+@link-hover-color: @blue-link;
+
+@btn-default-color:              @darkGrey;
+@btn-default-bg:                 @grey6;
+@btn-default-border:             @grey6;
 
 @btn-primary-color:              @white;
 @btn-primary-bg:                 @cyan;
@@ -21,6 +26,18 @@
 @navbar-inverse-bg:                @nearBlack;
 @navbarInverseBackgroundHighlight:       @nearBlack;
 @navbar-inverse-border:                    @nearBlack;
+
+@border-radius-base:             2px;
+@border-radius-large:            3px;
+@border-radius-small:            1px;
+@list-group-border-radius:       @border-radius-large;
+
+@headings-font-family: @proxima-nova-semi-bold;
+@headings-font-weight: normal;
+
+.btn {
+    font-family: @noto-sans;
+}
 
 .btn, .btn:active, .btn.active {
     .box-shadow(none);

@@ -22,7 +22,7 @@ define ->
           'ToDo':
             view: 'titled_well'
             label: 'Task To Do (H)'
-            icon: 'task-todo'
+            icon: 'to-do'
             inputType: 'number'
         },
         {'Discussion': 'discussion'},

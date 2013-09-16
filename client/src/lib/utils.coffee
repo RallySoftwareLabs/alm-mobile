@@ -35,7 +35,7 @@ define ->
       ref.substr (ref.lastIndexOf("/") + 1)
 
     getProfileImageUrl: (ref, size = 25) ->
-      return "/img/noOwner_2x.png" unless ref
+      return "" unless ref
       baseUrl = appConfig.almWebServiceBaseUrl
       "#{baseUrl}/profile/image/#{@getOidFromRef(ref)}/#{size}.sp"
 

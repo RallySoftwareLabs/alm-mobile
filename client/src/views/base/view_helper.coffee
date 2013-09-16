@@ -24,9 +24,9 @@ define ->
 
   Handlebars.registerHelper 'state', (blocked, ready) ->
     if blocked
-      'blocked'
+      'blocked picto icon-blocked'
     else if ready
-      'ready'
+      'ready picto icon-ready'
     else
       ''
 
@@ -55,3 +55,7 @@ define ->
     str = (value || '').toLowerCase()
     str = 'userstory' if str == 'hierarchicalrequirement'
     str
+
+  Handlebars.registerHelper 'nonBreakingSpace', (value) ->
+    return value if value
+    new Handlebars.SafeString '&nbsp;'

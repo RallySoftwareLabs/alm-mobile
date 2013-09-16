@@ -28,14 +28,22 @@ body {
   margin: 25px auto 0px auto;
 }
 
+.listing {
+  .chevron {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
 .chevron {
-  width: 13px !important;
+  line-height: 1em;
+  height: 1em;
 
   i {
     color: @cyan;
-    font-size: 18px;
+    font-size: 2em;
     display: inline-block;
-    height: 18px;
+    margin-top: -.15em;
   }
 }
 
@@ -49,6 +57,7 @@ dt {
   float: left;
   width: 70px;
   text-align: right;
+  font-weight: normal;
 }
 
 dd {
@@ -58,7 +67,7 @@ dd {
 .iteration-header {
 
   .name {
-    font-weight: bold;
+    font-family: @noto-sans-bold;
   }
 
 }

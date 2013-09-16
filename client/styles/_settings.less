@@ -1,13 +1,6 @@
 .settings {
-    font-size: @largeFont;
     color: @darkGrey;
   
-    label {
-        font-weight: bold;
-        line-height: 44px;
-        text-align: right;
-    }
-
     .project > div, .iteration > div {
         padding-left: 0;
     }
@@ -16,10 +9,6 @@
         padding-bottom: 0;
     }
 
-    .project-select {
-        margin-top: 7px;
-    }
-    
     .logout {
         padding-left: 0;
         margin-bottom: 10px;
@@ -35,6 +24,12 @@
     }
 }
 
+.list-group-item .selection-icon {
+    font-size: 1.4em;
+    margin-top: -.2em;
+    margin-bottom: -.2em;
+}
+
 .board-settings {
     h4 {
         margin: 5px 0;
@@ -42,6 +37,10 @@
 
     dl {
         margin: 5px 0 10px 0;
+    }
+
+    .list-group-item {
+        cursor: pointer;
     }
 
 }

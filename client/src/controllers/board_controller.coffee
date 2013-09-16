@@ -9,8 +9,8 @@ define ->
 
   class BoardController extends SiteController
     index: (params) ->
-      field = app.session.get('boardField')
       @afterProjectLoaded =>
+        field = app.session.get('boardField')
         columns = @getColumnModels field
 
         col.fetch(@getFetchData(field, col.get('value'))) for col in columns
@@ -20,10 +20,10 @@ define ->
         @listenTo @view, 'cardclick', @onCardClick
 
     column: (params) ->
-      field = app.session.get('boardField')
       colValue = decodeURI(params.column)
       
       @afterProjectLoaded =>
+        field = app.session.get('boardField')
         col = new Column(field: field, value: colValue)
         col.fetch @getFetchData(field, colValue, ['Name', 'Owner'])
 

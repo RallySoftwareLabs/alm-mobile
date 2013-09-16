@@ -11,64 +11,67 @@
 
         .login-header {
             height: 100px;
+            padding-left: 15px;
             background-color: @nearerWhite;
 
             .logo {
-                margin: 20px 0 0 20px;
+                display: inline-block;
+                margin: 20px 0 0 0;
                 width: 100px;
                 height: 60px;
                 background: @nearerWhite 0 0;
                 background-repeat: no-repeat;
                 .hidpi-background-image('/img/rallyLogo', 'png');
             }
+
+            .slogan {
+                display: inline-block;
+                color: @logo-red;
+                font-size: 2em;
+                font-family: @proxima-nova-light;
+                margin-left: 20px;
+            }
         }
 
         .login-body {
-            background: #5E6165 top right;
-            background-repeat: no-repeat;
-            .hidpi-background-image('/img/login', 'gif');
         }
 
         .login-form {
+            background: #5E6165 top right;
+            background-repeat: no-repeat;
+            .hidpi-background-image('/img/login', 'gif');
             color: @white;
             margin-left: 15px;
             margin-right: auto;
             margin-bottom: 0;
+            padding-top: 20px;
             height: 320px;
 
             h2 {
-                margin: 20px 0 0 0;
-                font-size: 28px;
-                font-weight: bold;
+                margin-top: 0;
+                font-size: 2.9em;
+                font-family: @proxima-nova-light;
                 color: @lightGrey;
+            }
+
+            .control-label {
+                padding-left: 0;
+                color: @white;
             }
 
             .form-group {
                 margin-left: 0;
+                margin-right: 0;
 
                 div {
                     padding-right: 30px;
                 }
             }
 
-            .row {
-                margin-bottom: 5px;
-
-                &.copyright {
-                    margin-top: 40px;
-                    margin-bottom: 0;
-                    line-height: 16px;
-
-                    p {
-                        margin-bottom: 0;
-                    }
-                }
-            }
-
-            label {
-                font-size: 20px;
-                // width: 150px;
-                // display: inline-block;
+            &.copyright {
+                margin-top: 40px;
+                margin-bottom: 0;
+                line-height: 16px;
             }
 
             .alert {

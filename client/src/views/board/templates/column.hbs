@@ -16,7 +16,7 @@
     <div class="body">
         {{#each cards}}
         	<div class="card{{#if this.Blocked}} blocked{{/if}}{{#if this.Ready}} ready{{/if}}{{#if this.DisplayColor}} colored{{/if}}{{#if ../showFields}} full{{/if}}" id="{{this.ObjectID}}-{{this._type}}"{{#if this.DisplayColor}} style="background-color: {{this.DisplayColor}}; color: white;"{{/if}}>
-        		<div class="field formatted-id">{{this.FormattedID}}</div>
+        		<a class="field formatted-id">{{this.FormattedID}}</a>
         		{{#if ../showFields}}
         		<div class="field owner">
         			{{#if this.Owner}}
@@ -28,7 +28,7 @@
         				<div class="owner-name">
         					No owner
         				</div>
-        				<div class="profile-image no-owner"/>
+        				<div class="profile-image"><div class="picto icon-user-add"/></div>
         			{{/if}}
         		</div>
         		<div class="clear"/>

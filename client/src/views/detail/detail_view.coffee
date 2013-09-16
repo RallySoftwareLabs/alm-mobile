@@ -32,7 +32,7 @@ define ->
       unless @newArtifact
         @model.fetch
           data:
-            fetch: ['ObjectID'].concat(@_getFieldNames()).join ','
+            fetch: ['ObjectID'].concat(@getFieldNames()).join ','
           success: (model, response, opts) =>
             @modelLoaded = true
             @updateTitle "#{model.get('FormattedID')}: #{model.get('_refObjectName')}"
@@ -50,7 +50,7 @@ define ->
       @renderField field for field in @getFields()
 
     fieldIsEditable: (field) ->
-      _.contains(@_getFieldNames(), field) && !_.contains(['FormattedID'], field)
+      _.contains(@getFieldNames(), field) && !_.contains(['FormattedID'], field)
 
     renderField: (field) ->
       fieldConfig = @_getFieldInfo(field)
@@ -79,6 +79,7 @@ define ->
     onSave: ->
       @model.set Project: app.session.get('project').get('_ref')
       @model.sync 'create', @model,
+        fetch: ['ObjectID'].concat(@getFieldNames()).join ','
         wait: true
         patch: true
         success: (model, resp, options) =>
@@ -124,5 +125,5 @@ define ->
           label: field
       fieldInfo
 
-    _getFieldNames: ->
+    getFieldNames: ->
       (@_getFieldInfo(field).fieldName for field in @getFields())

@@ -1,36 +1,35 @@
-<div class="row login-header">
-  <div class="col-xs-12">
+<div class="login-header">
+  <div>
     <div class="logo"/>
+    <div class="slogan">Go Agile. Go Rally.</div>
   </div>
 </div>
-<div class="login-body">
-  <form class="login-form form-horizontal" role="form">
-      <div class="form-group">
-        <h2 class="control-label col-xs-4">LOGIN</h2>
-      </div>
-      <div class="alert alert-danger"/>
-      <div class="form-group">
-        <label class="control-label col-xs-4" for="username">Username</label>
-        <div class="col-xs-8">
-          <input class="form-control" type="email" id="username" placeholder="Username" value="{{username}}">
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="control-label col-xs-4" for="password">Password</label>
-        <div class="col-xs-8">
-          <input class="form-control" type="password" id="password" placeholder="Password" value="">
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="control-label col-xs-4">
-          <button type="submit" class="btn btn-primary active sign-in">Login</button>
-        </div>
-      </div>
-      {{! <div class="row">
-        <div class="forgot-password"><a href="#">Forgot your password?</a></div>
-      </div> }}
-    <div class="form-group copyright">
-      <p><small>&copy; 2003-{{currentYear}} Rally Software Development Corp.</small></p>
+<form class="login-form" role="form">
+    <div class="form-group">
+      <h2 class="control-label">LOGIN</h2>
     </div>
-  </form>
-</div>
+    <div class="alert alert-danger"/>
+    <div class="form-group">
+      <label class="control-label" for="username">Username</label>
+      <div>
+        <input class="form-control" type="email" id="username" placeholder="Username" value="{{username}}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label" for="password">Password</label>
+      <div>
+        <input class="form-control" type="password" id="password" placeholder="Password" value="">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="control-label">
+        <button type="submit" class="btn btn-lg btn-primary sign-in">Sign in</button>
+      </div>
+    </div>
+    {{! <div class="row">
+      <div class="forgot-password"><a href="#">Forgot your password?</a></div>
+    </div> }}
+  <div class="form-group copyright">
+    <small>&copy; 2003-{{currentYear}} Rally Software Development Corp.</small>
+  </div>
+</form>

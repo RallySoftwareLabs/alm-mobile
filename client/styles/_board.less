@@ -16,10 +16,6 @@
             border-color: @medGrey;
             text-align: justify;
 
-            a {
-                color: @cyan;
-            }
-
             a:hover {
                 text-decoration: none;
             }
@@ -36,6 +32,7 @@
             background-color: @medGrey;
             text-align: center;
             line-height: 2.5em;
+            font-family: @proxima-nova-semi-bold;
             margin-bottom: 10px;
 
             .go-left, .go-right {
@@ -72,18 +69,17 @@
             }
 
             &.blocked {
-                border-left: 4px solid @red;
+                border-left: 4px solid @brick;
             }
 
             &.ready {
-                border-left: 4px solid @green;
+                border-left: 4px solid @lime;
             }
 
             .field {
                 line-height: 2.5em;
             }
             .formatted-id {
-                color: @cyan;
                 overflow: hidden;
             }
 
@@ -101,10 +97,7 @@
                     background-position: center center;
                     background-repeat: no-repeat;
                     background-size: contain;
-
-                    &.no-owner {
-                        background-image: url(/img/noOwner_2x.png);
-                    }
+                    font-size: 1.3em;
                 }
             }
 

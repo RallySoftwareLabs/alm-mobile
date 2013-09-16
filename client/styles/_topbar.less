@@ -1,21 +1,40 @@
 #header {
-  .title {
-    padding-top: 10px;
-    text-align: center;
-    color: @nearWhite;
-    font-weight: bold;
+  .row {
+    margin-right: 0;
+    padding-top: 0;
   }
 
-  .right-button {
-    text-align: right;
+  .title {
+    text-align: center;
+    color: @nearWhite;
+    font-family: @proxima-nova-semi-bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
   }
 
   .navbar {
     min-height: 40px;
     margin-bottom: 15px;
 
+    .left-button, .right-button {
+      margin-top: 5px;
+      margin-bottom: 5px;
+      font-size: 1.3em;
+      line-height: 1em;
+    }
+    
+    .left-button {
+      padding-left: 10px;
+      padding-right: 0;
+    }
+    .right-button {
+      margin-left: 0;
+      padding-left: 0;
+      text-align: right;
+    }
+
     a {
-      font-size: 26px;
+      font-size: 1.5em;
       background-image: none;
       color: @nearWhite;
       text-shadow: none;
@@ -23,16 +42,6 @@
 
       &.left {
         margin-left: 15px;
-      }
-      &.right {
-        margin-right: 15px;
-      }
-
-      &.cyan {
-        background-color: @cyan;
-        color: @nearWhite;
-        text-shadow: none;
-        // color: @white;
       }
     }
   }

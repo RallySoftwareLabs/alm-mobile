@@ -36,11 +36,13 @@ define ->
           'Blocked':
             view: 'toggle'
             value: 'Blocked'
+            icon: 'blocked'
         },
         {
           'Ready':
             view: 'toggle'
             value: 'Ready'
+            icon: 'ready'
         },
         @getScheduleStateField()
       ]

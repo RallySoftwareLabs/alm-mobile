@@ -14,7 +14,8 @@ define ->
       @setEditMode = if @setEditMode? then @setEditMode else true
       @viewMode = if (options.newArtifact? and options.newArtifact and @setEditMode) then ViewMode.EDIT else ViewMode.DISPLAY
       @_setDisplayTemplate()
-      @listenTo options.detailView, 'fieldSave', @_otherFieldSave
+      @detailView = options.detailView
+      @listenTo @detailView, 'fieldSave', @_otherFieldSave
 
       if options.editable
         @delegate "click", @startEdit
@@ -87,6 +88,7 @@ define ->
 
     _saveRemote: (updates, opts) ->
       @model.save updates,
+        fetch: ['ObjectID'].concat(@detailView.getFieldNames()).join ','
         wait: true
         patch: true
         success: (model, resp, options) =>
