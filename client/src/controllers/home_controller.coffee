@@ -32,7 +32,7 @@ define ->
 
       @afterProjectLoaded =>
         @view = new DefectsPageView autoRender: true, tab: 'defects', collection: defects
-        defects.fetch data: @getFetchData(['ObjectID', 'FormattedID', 'Name'], """(((ScheduleState != "Completed") AND (ScheduleState != "Accepted")) AND (ScheduleState != "Released"))""")
+        defects.fetch data: @getFetchData(['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked'], """(((ScheduleState != "Completed") AND (ScheduleState != "Accepted")) AND (ScheduleState != "Released"))""")
 
     getFetchData: (fetch, query) ->
       data =
