@@ -25,7 +25,7 @@ define ->
         prefProj = pref.get('Project')
         (prefProj == project || prefProj?._ref == project) && pref.get('Name') == name
 
-    updatePreference: (name, value) ->
+    updatePreference: (user, name, value) ->
       existingPref = newPref = @findPreference name
 
       changedAttrs = {}
@@ -35,6 +35,7 @@ define ->
           changedAttrs.Value = value
       else
         changedAttrs =
+          User: user
           Name: name
           Value: value
 
