@@ -207,10 +207,12 @@ define ->
         @set 'project', proj || projects.first()
 
     _setIterationFromPreference: ->
+      iteration = null
       savedIteration = @get('prefs').findProjectPreference(@get('project').get('_ref'), Preference::defaultIteration)
       if savedIteration
         iteration = @get('iterations').find _.isAttributeEqual('_ref', savedIteration.get('Value'))
-        @set('iteration', iteration) if iteration
+
+      @set('iteration', iteration)
 
     _setModeFromPreference: ->
       mode = 'team'
