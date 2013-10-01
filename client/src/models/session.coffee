@@ -180,7 +180,7 @@ define ->
             order: 'Name'
         ),
         userProfile.fetch()
-        preferences.fetchMobilePrefs()
+        preferences.fetchMobilePrefs user
       ).then (p, u, prefs) =>
         @_setModeFromPreference()
         totalProjectResults = p[0].QueryResult.TotalResultCount

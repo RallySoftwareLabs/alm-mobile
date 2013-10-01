@@ -7,11 +7,11 @@ define ->
     url: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/preference'
     model: Preference
 
-    fetchMobilePrefs: (cb) ->
+    fetchMobilePrefs: (user, cb) ->
       @fetch
         data:
           fetch: 'ObjectID,Name,Project,Value'
-          query: "(Name CONTAINS \"mobile.\")"
+          query: "((Name CONTAINS \"mobile.\") AND (User = \"#{user.get('_ref')}\"))"
         success: (collection, resp, options) =>
           cb?(null, collection)
         error: (collection, resp, options) =>
