@@ -48,12 +48,12 @@ define ->
         title: @title
         onNavigateScreen: @onNavigateScreen
 
-      if current_page in ['/userstories', '/defects', '/tasks', '/board', '/recentActivity']
+      if current_page in ['/', '/userstories', '/defects', '/tasks', '/board', '/recentActivity']
         data.left_button =  @makeButton 'navigation', 'grid', 'left'
         data.right_button = @makeButton 'settings', 'gear', 'right'
       else if current_page is '/settings'
         data.left_button = @makeButton 'back', 'back', 'left'
-      else # if current_page in ['detail', 'column']
+      else
         data.left_button =  @makeButton 'back', 'back', 'left'
         data.right_button = @makeButton 'settings', 'gear', 'right'
 

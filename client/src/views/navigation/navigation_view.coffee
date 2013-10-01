@@ -45,12 +45,12 @@ define ->
       activeDefects: 3
       buttons: [
         {
-          displayName: if app.session.isSelfMode() then 'My Work' else 'My Team'
-          viewHash: ''
-        }
-        {
           displayName: 'Tracking Board'
           viewHash: 'board'
+        }
+        {
+          displayName: if app.session.isSelfMode() then 'My Work' else 'My Team'
+          viewHash: 'userstories'
         }
         # {
         #   displayName: 'Burndown Chart'

@@ -4,7 +4,7 @@
       <div class="row">
           <div class="col-xs-12">
             <form class="navbar-search pull-left">
-              <input type="text" class="search-query" placeholder="Search Stories">
+              <input type="text" class="search-query" placeholder="Search">
             </form>
           </div>
       </div>
@@ -12,21 +12,6 @@
   </div>
 </div>
 <div class="body row">
-  {{! <div class="col-xs-4 summary time-remaining-summary">
-    <span class="lead">{{ this.timeRemaining } }</span> <br>
-    {{ this.timeRemainingUnits } } <br>
-    Remaining
-  </div>
-  <div class="col-xs-4 summary percent-accepted-summary">
-    <span class="lead">{{ this.percentAccepted } }%</span> <br>
-    Accepted <br>
-    ({{ this.pointsAccepted } } of {{ this.totalPoints } } Points)
-  </div>
-  <div class="col-xs-4 summary active-defects-summary">
-    <span class="lead">{{ this.activeDefects } }</span> <br>
-    Active <br>
-    Defects
-  </div> }}
   <div class="col-xs-12 buttons">
     {{#each buttons}}
       <button class="btn btn-default btn-inverse btn-block" type="button" data-target="{{ viewHash }}">
