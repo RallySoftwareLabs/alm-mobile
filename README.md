@@ -1,3 +1,7 @@
+![Rally Labs](client/assets/img/labs.png)
+
+Use of this mobile application is on an as-is, as-available basis and it not subject to Rally’s Service Level Agreement.  Support of this mobile application, evolution of this application and even ongoing existence of this Rally Labs mobile application is not guaranteed.
+
 ALM Mobile [![Stories in Ready](https://badge.waffle.io/RallySoftwareLabs/alm-mobile.png?label=ready)](http://waffle.io/RallySoftwareLabs/alm-mobile)
 =========
 
