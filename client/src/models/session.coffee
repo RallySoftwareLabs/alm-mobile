@@ -87,6 +87,14 @@ define ->
     getUsername: ->
       window.sessionStorage.getItem 'username'
 
+    hasAcceptedLabsNotice: ->
+      @get('prefs').findPreference(Preference::acceptedLabsNotice)?
+
+    acceptLabsNotice: ->
+      $.when(
+        @get('prefs').updatePreference @get('user'), Preference::acceptedLabsNotice, true
+      )
+
     logout: (options = {}) ->
       @setSecurityToken null
       @setUsername null

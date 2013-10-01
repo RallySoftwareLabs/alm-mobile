@@ -5,9 +5,9 @@ define ->
 
   class TaskDetailController extends SiteController
     show: (params) ->
-      @afterProjectLoaded ->
+      @whenLoggedIn ->
         @view = new ShowView oid: params.id
 
     create: (params) ->
-      @afterProjectLoaded ->
+      @whenLoggedIn ->
         @view = new CreateView autoRender: true

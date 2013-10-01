@@ -9,7 +9,7 @@ define ->
 
   class BoardController extends SiteController
     index: (params) ->
-      @afterProjectLoaded =>
+      @whenLoggedIn =>
         field = app.session.get('boardField')
         columns = @getColumnModels field
 
@@ -22,7 +22,7 @@ define ->
     column: (params) ->
       colValue = decodeURI(params.column)
       
-      @afterProjectLoaded =>
+      @whenLoggedIn =>
         field = app.session.get('boardField')
         col = new Column(field: field, value: colValue)
         col.fetch @getFetchData(field, colValue, ['Name', 'Owner'])

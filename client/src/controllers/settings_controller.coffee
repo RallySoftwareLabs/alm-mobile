@@ -11,7 +11,7 @@ define ->
   class SettingsController extends SiteController
 
     show: (params) ->
-      @afterProjectLoaded ->
+      @whenLoggedIn ->
         mode = app.session.get('mode')
         boardField = app.session.get('boardField')
         @view = new SettingsView region: 'main', autoRender: true
@@ -22,7 +22,7 @@ define ->
         @subscribeEvent 'projectready', => @view.render()
 
     board: (params) ->
-      @afterProjectLoaded ->
+      @whenLoggedIn ->
         fieldName = UserStory.getFieldDisplayName app.session.get('boardField')
         @view = new BoardSettingsView region: 'main', autoRender: true, fieldName: fieldName, columns: @_getColumnsForView()
         @listenTo @view, 'columnClick', @onColumnClick

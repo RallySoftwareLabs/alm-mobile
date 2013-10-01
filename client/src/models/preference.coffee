@@ -9,3 +9,4 @@ define ->
     defaultMode: 'mobile.mode.default'
     defaultBoardField: 'mobile.boardField.default'
     defaultBoardColumnsPrefix: 'mobile.boardColumns'
+    acceptedLabsNotice: 'mobile.acceptedLabsNotice'

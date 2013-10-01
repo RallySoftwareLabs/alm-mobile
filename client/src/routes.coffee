@@ -4,8 +4,11 @@ define ->
     match 'userstories', 'home#userstories'
     match 'defects', 'home#defects'
     match 'tasks', 'home#tasks'
+
     match 'login', 'auth#login'
     match 'logout', 'auth#logout'
+    match 'labsNotice', 'auth#labsNotice'
+
     match 'navigation', 'navigation#show'
     match 'settings', 'settings#show'
     match 'settings/board', 'settings#board'

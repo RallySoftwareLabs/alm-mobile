@@ -16,21 +16,21 @@ define ->
     userstories: (params) ->
       userStories = new UserStories()
       
-      @afterProjectLoaded ->
+      @whenLoggedIn ->
         @view = new UserStoriesPageView autoRender: true, tab: 'userstories', collection: userStories
         userStories.fetch data: @getFetchData(['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked'], """(((ScheduleState != "Completed") AND (ScheduleState != "Accepted")) AND (ScheduleState != "Released"))""")
       
     tasks: (params) ->
       tasks = new Tasks()
 
-      @afterProjectLoaded =>
+      @whenLoggedIn =>
         @view = new TasksPageView autoRender: true, tab: 'tasks', collection: tasks
         tasks.fetch data: @getFetchData(['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked', 'ToDo'], """(State != "Completed")""")
 
     defects: (params) ->
       defects = new Defects()
 
-      @afterProjectLoaded =>
+      @whenLoggedIn =>
         @view = new DefectsPageView autoRender: true, tab: 'defects', collection: defects
         defects.fetch data: @getFetchData(['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked'], """(((ScheduleState != "Completed") AND (ScheduleState != "Accepted")) AND (ScheduleState != "Released"))""")
 

@@ -7,7 +7,7 @@ define ->
   class RecentActivityController extends SiteController
 
     show: (params) ->
-      @afterProjectLoaded ->
+      @whenLoggedIn ->
         discussions = new Discussions()
         discussions.fetch
           data:

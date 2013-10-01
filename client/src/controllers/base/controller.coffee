@@ -4,13 +4,21 @@ define ->
 
   class Controller extends Chaplin.Controller
       
-    afterProjectLoaded: (callback) ->
+    whenLoggedIn: (callback) ->
       if app.session.get('project')?
-        callback?.apply this
+        @goToPage callback
       else
         @subscribeEvent 'projectready', @onProjectReady(callback)
 
     onProjectReady: (callback) ->
       func = => 
         @unsubscribeEvent 'projectready', func
+        @goToPage callback
+
+    goToPage: (callback) ->
+      if app.session.hasAcceptedLabsNotice()
         callback?.apply this
+      else
+        setTimeout =>
+          @redirectToRoute 'auth#labsNotice'
+        , 0

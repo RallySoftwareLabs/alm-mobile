@@ -1,5 +1,6 @@
 define ->
   $ = require 'jquery'
+  _ = require 'underscore'
   Chaplin = require 'chaplin'
   User = require 'models/user'
   Session = require 'models/session'
@@ -38,7 +39,7 @@ define ->
           if hash == 'login'
             @publishEvent '!router:route', ''
         else
-          @afterLogin = hash unless hash == 'login'
+          @afterLogin = hash unless _.contains(['login', 'labsNotice'], hash)
           @publishEvent '!router:route', 'logout'
 
         # Freeze the application instance to prevent further changes.
