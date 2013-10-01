@@ -10,7 +10,7 @@ define ->
 
     initialize: (options) ->
       super
-      @listType = options.listType
+      @listType = options.listType || 'userstory'
       @delegate 'click', "#add-#{@listType}", @addItem
 
     initItemView: (model) ->

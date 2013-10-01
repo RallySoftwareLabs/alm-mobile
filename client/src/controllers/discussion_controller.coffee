@@ -8,24 +8,23 @@ define ->
 
   class DiscussionController extends SiteController
     show: (params) ->
-      @discussions = new Discussions()
+      @whenLoggedIn ->
+        @discussions = new Discussions()
 
-      @artifactRef = utils.getRef(params.type, params.id)
+        @artifactRef = utils.getRef(params.type, params.id)
 
-      @view = new DiscussionPageView
-        region: 'main'
-        autoRender: true
-        collection: @discussions
+        @view = new DiscussionPageView
+          region: 'main'
+          autoRender: true
+          collection: @discussions
 
-      @listenTo @view, 'reply', @onReplyClick
+        @listenTo @view, 'reply', @onReplyClick
 
-      @discussions.fetch
-        data:
-          fetch: "Text,User,Artifact,CreationDate"
-          query: "(Artifact = #{@artifactRef})"
-          order: "CreationDate DESC,ObjectID"
-        # success: (collection, response, options) =>
-        #   @render()
+        @discussions.fetch
+          data:
+            fetch: "Text,User,Artifact,CreationDate"
+            query: "(Artifact = #{@artifactRef})"
+            order: "CreationDate DESC,ObjectID"
 
     onReplyClick: (text) ->
       @_addComment(text)

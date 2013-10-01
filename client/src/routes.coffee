@@ -26,3 +26,5 @@ define ->
     match ':type/:id/discussion', 'discussion#show'
 
     match 'recentActivity', 'recent_activity#show'
+
+    match 'search/:keywords', 'search#search'

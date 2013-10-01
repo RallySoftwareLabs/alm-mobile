@@ -61,21 +61,3 @@ define ->
           viewHash: 'recentActivity'
         }
       ]
-
-    displayNoSearchResults: ->
-      alert = $('body').append([
-        '<div class="search-no-results alert alert-error">',
-        '<button type="button" class="close" data-dismiss="alert">&times;</button>',
-        'No results matched your search.</div>'
-      ].join '')
-      noResults = $('.search-no-results')
-      @_center(noResults)
-      setTimeout(->
-        noResults = $('.search-no-results')
-        noResults.fadeOut(400, -> noResults.remove())
-      , 1500)
-
-    _center: (el) ->
-      container = $(window)
-      boundingRec = $('.search-query')[0].getBoundingClientRect()
-      el.css('top': "#{boundingRec.top + boundingRec.height}px", 'left': "#{boundingRec.left}px")

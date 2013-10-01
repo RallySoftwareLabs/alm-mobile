@@ -44,7 +44,7 @@ define ->
       iteration: app.session.get('iteration')?.toJSON()
 
     onRowClick: (event) ->
-      url = @listType + '/' + $(event.currentTarget).find('.row')[0].id
+      url = $(event.currentTarget).find('.row')[0].dataset.url
       @publishEvent '!router:route', url
 
     _getTabs: ->
