@@ -32,9 +32,6 @@ define ->
 
         # Actually start routing.
         @startRouting()
-
-        # Freeze the application instance to prevent further changes.
-        Object.freeze? this
         
         hash = Backbone.history.fragment
         if authenticated
@@ -43,6 +40,9 @@ define ->
         else
           @afterLogin = hash unless hash == 'login'
           @publishEvent '!router:route', 'logout'
+
+        # Freeze the application instance to prevent further changes.
+        Object.freeze? this
 
     initLayout: ->
       @layout = new Chaplin.Layout {@title}
