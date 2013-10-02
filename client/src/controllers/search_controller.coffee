@@ -24,11 +24,11 @@ define ->
 
     onItemClick: (url) ->
       @redirectTo url
-      
+
     _fetchResults: (keywords) ->
       @view.collection.fetch
         data:
-          fetch: 'ObjectID,FormattedID,Name,Ready,Blocked'
+          fetch: 'ObjectID,FormattedID,Name,Ready,Blocked,ToDo'
           search: keywords
           project: app.session.get('project').get('_ref')
           projectScopeUp: false

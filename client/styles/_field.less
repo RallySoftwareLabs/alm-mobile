@@ -69,6 +69,15 @@
 
 #WorkProductView > .display, #RequirementView > .display {
     margin-bottom: 10px;
+    overflow: hidden;
+    width: 100%;
+
+    > .well {
+        display: table;
+        width: 100%;
+        text-align: left;
+        overflow: hidden;
+    }
 }
 
 .display {
@@ -125,11 +134,15 @@
 
     .work-product-id, .work-product-name {
     	cursor: pointer;
+        display: table-cell;
     }
 
     .work-product-id {
-    	font-family: @noto-sans-bold;
-    	color: @cyan;
+        font-family: @noto-sans-bold;
+        color: @cyan;
+        display: table-cell;
+        padding-right: 5px;
+        width: 1px;
     }
 
 	.arrows-left, .arrows-right {

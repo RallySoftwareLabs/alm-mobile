@@ -6,11 +6,10 @@
             <div class="workitem-name">{{Name}}</div>
         </div>
     </div>
-    <div class="col-xs-2">
-        <div class="row">
-            <div class="col-xs-5 picto icon-to-do"></div>
-            <div class="col-xs-7 task-to-do">{{ToDo}}</div>
-        </div>
+    <div class="col-xs-2 task-to-do">
+        {{#if ToDo}}
+        <span class="picto icon-to-do"></span>{{ToDo}}h
+        {{/if}}
     </div>
     <div class="col-xs-1 chevron"><i class="picto icon-chevron-right"></i></div>
 </div>
