@@ -27,4 +27,5 @@ define ->
 
     match 'recentActivity', 'recent_activity#show'
 
+    match 'search', 'search#search'
     match 'search/:keywords', 'search#search'

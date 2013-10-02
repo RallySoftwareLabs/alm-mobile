@@ -11,17 +11,9 @@ define ->
 
     events:
       'click button[data-target]': 'doNavigate'
-      'keydown .search-query': 'searchKeyDown'
 
     doNavigate: (e) ->
       @trigger 'navigate', e.currentTarget.getAttribute('data-target')
-
-    searchKeyDown: (event) ->
-      switch event.which
-        when @keyCodes.ENTER_KEY
-          event.preventDefault()
-          $('.search-no-results').remove()
-          @trigger 'search', event.target.value
 
     show: ->
       $('#page-container').attr('class', $('#page-container').attr('class').replace(/(\spage\stransition\scenter)?$/, ' page transition right'))

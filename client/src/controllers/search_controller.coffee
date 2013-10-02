@@ -7,17 +7,19 @@ define ->
 
   class SearchController extends SiteController
     search: (params) ->
+      keywords = params.keywords || ''
       @whenLoggedIn ->
         @view = new SearchView
           region: 'main'
           autoRender: true
           collection: new Artifacts()
-          keywords: params.keywords
+          keywords: keywords
+          showLoadingIndicator: !!keywords
 
         @listenTo @view, 'search', @onSearch
         @listenTo @view, 'itemclick', @onItemClick
 
-        @_fetchResults params.keywords
+        @_fetchResults keywords if keywords
 
     onSearch: (keywords) ->
       @redirectTo "/search/#{encodeURIComponent(keywords)}"

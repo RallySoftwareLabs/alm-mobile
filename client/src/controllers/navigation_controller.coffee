@@ -10,7 +10,6 @@ define ->
       super
       @view = new NavigationView region: 'navigation', autoRender: true
       @listenTo @view, 'navigate', @onNavigate
-      @listenTo @view, 'search', @onSearch
 
     onNavigate: (newRoute) ->
       @view.hide()
@@ -18,7 +17,3 @@ define ->
 
       unless newRoute == currentRoute || (newRoute == '' && _.contains(['/userstories', '/tasks', '/defects'], currentRoute))
         @redirectTo newRoute
-
-    onSearch: (keywords) ->
-      @view.hide()
-      @redirectTo "/search/#{encodeURIComponent(keywords)}"

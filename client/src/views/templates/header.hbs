@@ -2,8 +2,11 @@
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="row">
     <div class="col-xs-2 left-button">{{{ this.left_button }}}</div>
-    <div class="col-xs-8 title"><div class="ellipsis">{{ this.title }}</div></div>
-    <div class="col-xs-2 right-button">{{{ this.right_button }}}</div>
+    <div class="col-xs-7 title"><div class="ellipsis">{{ this.title }}</div></div>
+    <div class="col-xs-3 right-button">
+    	<a href="#" class="right" data-target="search"><i class="picto icon-search"></i></a>
+    	{{{ this.right_button }}}
+    </div>
   </div>
 </div>
 {{/unless}}
