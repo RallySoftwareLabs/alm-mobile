@@ -18,6 +18,7 @@ define ->
       
       @whenLoggedIn ->
         @view = new UserStoriesPageView autoRender: true, tab: 'userstories', collection: userStories
+        @listenTo @view, 'itemclick', @onItemClick
         userStories.fetch data: @getFetchData(['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked'], """(((ScheduleState != "Completed") AND (ScheduleState != "Accepted")) AND (ScheduleState != "Released"))""")
       
     tasks: (params) ->
@@ -25,6 +26,7 @@ define ->
 
       @whenLoggedIn =>
         @view = new TasksPageView autoRender: true, tab: 'tasks', collection: tasks
+        @listenTo @view, 'itemclick', @onItemClick
         tasks.fetch data: @getFetchData(['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked', 'ToDo'], """(State != "Completed")""")
 
     defects: (params) ->
@@ -32,7 +34,11 @@ define ->
 
       @whenLoggedIn =>
         @view = new DefectsPageView autoRender: true, tab: 'defects', collection: defects
+        @listenTo @view, 'itemclick', @onItemClick
         defects.fetch data: @getFetchData(['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked'], """(((ScheduleState != "Completed") AND (ScheduleState != "Accepted")) AND (ScheduleState != "Released"))""")
+
+    onItemClick: (url) ->
+      @redirectTo url
 
     getFetchData: (fetch, query) ->
       data =

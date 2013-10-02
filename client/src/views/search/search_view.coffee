@@ -1,18 +1,10 @@
 define ->
   hbs = require 'hbsTemplate'
   app = require 'application'
-  PageView = require 'views/base/page_view'
-  ListView = require 'views/home/list_view'
+  ListPageView = require 'views/listing/list_page_view'
 
-  class SearchView extends PageView
-    listView: null
-    tabPane: null
-    region: 'main'
+  class SearchView extends ListPageView
     template: hbs['search/templates/search']
-    loadingIndicator: true
-
-    listen:
-      'projectready mediator': 'updateTitle'
 
     events:
       'click .discussion-reply button': 'onSearch'
@@ -22,22 +14,10 @@ define ->
     initialize: (options) ->
       super
       @keywords = options.keywords
-
-      @listenTo @collection, 'sync', @onFetch
-      @updateTitle "Searching \"#{@keywords}\""
+      @updateTitle "Searching \"#{@keywords}\" in #{app.session.getProjectName()}"
 
     getTemplateData: ->
-      data = super
-      data.keywords = @keywords
-
-      data
-
-    onFetch: ->
-      @stopListening @collection, 'sync', @onFetch
-      @view = new ListView
-        autoRender: true
-        container: @$(".listing")
-        collection: @collection
+      keywords: @keywords
 
     displayNoSearchResults: ->
       @$('.no-results').show()
@@ -46,10 +26,6 @@ define ->
       text = @_getInputField().val()
       @trigger 'search', text
       event.preventDefault()
-
-    onRowClick: (event) ->
-      url = $(event.currentTarget).find('.row')[0].dataset.url
-      @publishEvent '!router:route', url
 
     _getInputField: ->
       @.$('.search-form input')

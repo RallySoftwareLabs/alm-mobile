@@ -10,8 +10,6 @@ define ->
 
     initialize: (options) ->
       super
-      @listType = options.listType || 'userstory'
-      @delegate 'click', "#add-#{@listType}", @addItem
 
     initItemView: (model) ->
       view = new View {
@@ -20,8 +18,6 @@ define ->
         tagName: 'li'
         className: 'list-group-item'
       }
-      view.template = hbs["home/templates/#{@listType}"]
+      type = Handlebars.helpers.typeForDetailLink(model.get('_type'))
+      view.template = hbs["listing/templates/#{type}"]
       view
-
-    addItem: ->
-      @publishEvent '!router:routeByName', "#{@listType}_detail#create", replace: true

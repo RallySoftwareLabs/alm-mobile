@@ -15,12 +15,16 @@ define ->
           keywords: params.keywords
 
         @listenTo @view, 'search', @onSearch
+        @listenTo @view, 'itemclick', @onItemClick
 
         @_fetchResults params.keywords
 
     onSearch: (keywords) ->
       @redirectTo "/search/#{encodeURIComponent(keywords)}"
 
+    onItemClick: (url) ->
+      @redirectTo url
+      
     _fetchResults: (keywords) ->
       @view.collection.fetch
         data:
