@@ -39,8 +39,9 @@ define ->
           if hash == 'login'
             @publishEvent '!router:route', ''
         else
-          @afterLogin = hash unless _.contains(['login', 'labsNotice'], hash)
-          @publishEvent '!router:route', 'logout'
+          unless _.contains(['login', 'logout', 'labsNotice'], hash)
+            @afterLogin = hash
+            @publishEvent '!router:route', 'logout'
 
         # Freeze the application instance to prevent further changes.
         Object.freeze? this

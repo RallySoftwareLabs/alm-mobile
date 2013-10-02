@@ -98,6 +98,7 @@ define ->
     logout: (options = {}) ->
       @setSecurityToken null
       @setUsername null
+      @clear silent: true
 
       $.ajax(
         url: "#{appConfig.almWebServiceBaseUrl}/resources/jsp/security/clear.jsp"
