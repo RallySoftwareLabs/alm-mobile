@@ -37,5 +37,6 @@ define ->
           projectScopeDown: true
           order: 'ObjectID DESC'
         success: (collection, response, options) =>
+          collection.remove collection.reject (model) -> _.contains(['HierarchicalRequirement', 'Task', 'Defect'], model.get('_type'))
           if collection.length == 0
             @view.displayNoSearchResults()
