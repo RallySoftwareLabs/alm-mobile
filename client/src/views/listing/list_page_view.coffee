@@ -6,6 +6,9 @@ define ->
     region: 'main'
     loadingIndicator: true
 
+    events:
+      'click .list-group-item': 'onRowClick'
+
     initialize: (options) ->
       super
       @listenToOnce @collection, 'sync', @onFetch

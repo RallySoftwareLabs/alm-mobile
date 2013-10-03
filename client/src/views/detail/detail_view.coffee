@@ -5,12 +5,14 @@ define ->
   FieldView = require 'views/field/field_view'
 
   # importing for Require.js optimization
+  FieldDefectsView = require 'views/field/field_defects_view'
   FieldDiscussionView = require 'views/field/field_discussion_view'
   FieldHeaderView = require 'views/field/field_header_view'
   FieldHtmlView = require 'views/field/field_html_view'
   FieldInputView = require 'views/field/field_input_view'
   FieldOwnerView = require 'views/field/field_owner_view'
   FieldStringWithArrowsView = require 'views/field/field_string_with_arrows_view'
+  FieldTasksView = require 'views/field/field_tasks_view'
   FieldTitledWellView = require 'views/field/field_titled_well_view'
   FieldToggleView = require 'views/field/field_toggle_view'
   FieldWorkProductView = require 'views/field/field_work_product_view'

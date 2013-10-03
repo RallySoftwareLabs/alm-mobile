@@ -22,3 +22,6 @@ define ->
         setTimeout =>
           @redirectToRoute 'auth#labsNotice'
         , 0
+
+    updateTitle: (title) ->
+      @publishEvent "updatetitle", title

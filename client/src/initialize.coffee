@@ -10,6 +10,7 @@ require [
 
   # required controllers
   'controllers/auth_controller'
+  'controllers/associations_controller'
   'controllers/board_controller'
   'controllers/defect_detail_controller'
   'controllers/discussion_controller'

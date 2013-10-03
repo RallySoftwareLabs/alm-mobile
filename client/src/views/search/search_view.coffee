@@ -7,10 +7,8 @@ define ->
     template: hbs['search/templates/search']
 
     events:
-      'click .discussion-reply button': 'onSearch'
       'submit form': 'onSearch'
       'keydown .search-form input': 'searchKeyDown'
-      'click .list-group-item': 'onRowClick'
 
     initialize: (options = {}) ->
       super
