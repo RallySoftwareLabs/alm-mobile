@@ -1,5 +1,6 @@
 define ->
   FieldInputView = require 'views/field/field_input_view'
+  Markdown = require 'pagedown'
 
   class FieldHtmlView extends FieldInputView
 
@@ -11,3 +12,6 @@ define ->
     onKeyDown: (event) ->
       switch event.which
         when FieldInputView::ESCAPE_KEY then @_switchToViewMode()
+
+    parseValue: (value) ->
+      new Markdown.Converter().makeHtml(value).replace(/(\r\n|\n|\r)/gm,"")

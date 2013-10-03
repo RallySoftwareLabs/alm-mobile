@@ -55,7 +55,7 @@ define ->
       this.$(".editor").focus()
 
     endEdit: (event) ->
-      value = event.target.value
+      value = @parseValue(event.target.value)
       field = event.target.id
       event.preventDefault()
       if @model.get(field) isnt value
@@ -65,6 +65,9 @@ define ->
       else
         @_switchToViewMode()
 
+    parseValue: (value) ->
+      value
+      
     saveModel: (updates, opts) ->
       if @options.newArtifact
         @_saveLocal(updates, opts)

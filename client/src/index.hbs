@@ -22,7 +22,8 @@
         "backbone": "//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min",
         "handlebars": "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0/handlebars.runtime.min",
         "spin": "//cdnjs.cloudflare.com/ajax/libs/spin.js/1.2.7/spin.min",
-        "moment": "//cdnjs.cloudflare.com/ajax/libs/moment.js/2.2.1/moment.min"
+        "moment": "//cdnjs.cloudflare.com/ajax/libs/moment.js/2.2.1/moment.min",
+        "pagedown": "//cdnjs.cloudflare.com/ajax/libs/pagedown/1.0/Markdown.Converter.min"
       },
       shim: {
         jquery: {
@@ -50,6 +51,9 @@
         },
         md: {
           exports: "md"
+        },
+        pagedown: {
+          exports: "Markdown"
         }
       }
     });

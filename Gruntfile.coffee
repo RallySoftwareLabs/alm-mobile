@@ -14,11 +14,11 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-replace'
   grunt.loadNpmTasks 'grunt-s3'
 
-  grunt.registerTask 'default', ['clean','coffee','recess','handlebars','compile-handlebars','requirejs','replace','copy','concat','uglify']
+  grunt.registerTask 'default', ['clean','coffee','recess','handlebars','compile-handlebars', 'copy:md','requirejs','replace','copy','concat','uglify']
 
   grunt.registerTask 'test', ['clean', 'coffee', 'simplemocha']
 
-  grunt.registerTask 'heroku', ['clean','coffee','recess','handlebars','compile-handlebars','requirejs','replace','copy','concat','uglify']
+  grunt.registerTask 'heroku', ['clean','coffee','recess','handlebars','compile-handlebars', 'copy:md','requirejs','replace','copy','concat','uglify']
 
   grunt.initConfig
 
@@ -99,6 +99,8 @@ module.exports = (grunt) ->
             moment: "empty:"
             hbsTemplate: "../../../dist/js/hbs"
             appConfig: "empty:"
+            md: "../../../dist/js/md.min"
+            pagedown: "empty:"
           shim:
             hbsTemplate:
               deps: ["backbone"]
@@ -147,6 +149,9 @@ module.exports = (grunt) ->
       js:
         files:
           'client/dist/js/jquery.base64.min.js': 'vendor/scripts/jquery.base64.min.js'
+      md:
+        files:
+          'client/dist/js/md.min.js': 'node_modules/html-md/dist/md.min.js'
       assets:
         files: [
           {expand: true, dest: 'client/dist/', cwd: 'client/assets/', src: '**', filter: 'isFile'}

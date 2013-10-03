@@ -2,6 +2,7 @@ define ->
   moment = require 'moment'
   Handlebars = require 'handlebars'
   utils = require 'lib/utils'
+  md = require 'md'
 
   # Put your handlebars.js helpers here.
   Handlebars.registerHelper 'date', (d) ->
@@ -59,3 +60,6 @@ define ->
   Handlebars.registerHelper 'nonBreakingSpace', (value) ->
     return value if value
     new Handlebars.SafeString '&nbsp;'
+
+  Handlebars.registerHelper 'md', (str) ->
+    md str
