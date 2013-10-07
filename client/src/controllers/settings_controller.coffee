@@ -19,6 +19,7 @@ define ->
         @listenTo @view, 'changeBoardField', @onChangeBoardField
         @listenTo @view, 'changeProject', @onChangeProject
         @listenTo @view, 'changeIteration', @onChangeIteration
+        @listenTo @view, 'logout', @onLogout
         @subscribeEvent 'projectready', => @view.render()
 
     board: (params) ->
@@ -46,6 +47,9 @@ define ->
       app.session.toggleBoardColumn column
       @view.setColumns @_getColumnsForView()
       @view.render()
+
+    onLogout: ->
+      @redirectToRoute 'auth#logout'
 
     _getColumnsForView: ->
       boardField = app.session.get('boardField')

@@ -36,8 +36,9 @@ define ->
         isKanbanState: boardField == 'c_KanbanState'
       }
 
-    triggerLogout: ->
-      @publishEvent '!router:routeByName', 'auth#logout'
+    triggerLogout: (event) ->
+      @trigger 'logout'
+      event.preventDefault()
 
     changeMode: (mode) ->
       @trigger 'changeMode', mode

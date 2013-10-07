@@ -10,7 +10,7 @@ define ->
 
     logout: (params) ->
       app.session.logout()
-      @redirectToRoute 'auth#login'
+      @login()
 
     login: (params) ->
       @view = new LoginView
