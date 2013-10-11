@@ -10,26 +10,20 @@
         }
 
         .login-header {
-            height: 100px;
             padding-left: 15px;
             background-color: @nearerWhite;
 
-            .logo {
+            .labs-icon {
                 display: inline-block;
-                margin: 20px 0 0 0;
-                width: 100px;
-                height: 60px;
-                background: @nearerWhite 0 0;
-                background-repeat: no-repeat;
-                .hidpi-background-image('/img/rallyLogo', 'png');
+                margin-left: -4px;
             }
 
             .slogan {
                 display: inline-block;
                 color: @logo-red;
-                font-size: 1.6em;
+                font-size: 1.4em;
                 font-family: @proxima-nova-light;
-                margin-left: 10px;
+                vertical-align: text-bottom;
             }
         }
 
@@ -47,7 +41,7 @@
             h2 {
                 margin-top: 0;
                 margin-bottom: 0;
-                font-size: 2.9em;
+                font-size: 2.5em;
                 font-family: @proxima-nova-light;
                 color: @lightGrey;
             }
@@ -89,14 +83,19 @@
     }
 }
 
+.labs-icon {
+    width: 256px;
+    height: 90px;
+    background-image: url('/img/labs.png');
+    background-size: 100%;
+}
+
 #labs-notice {
     margin-top: 20px;
 
     .labs-icon {
         margin-top: -10px;
         margin-bottom: 10px;
-        width: 256px;
-        height: 90px;
     }
 
     .jumbotron {
