@@ -14,11 +14,11 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-replace'
   grunt.loadNpmTasks 'grunt-s3'
 
-  grunt.registerTask 'default', ['clean','coffee','recess','handlebars','compile-handlebars', 'copy:md','requirejs','replace','copy','concat','uglify']
+  grunt.registerTask 'default', ['clean','coffee','recess','handlebars','compile-handlebars', 'copy:js','requirejs','replace','copy','concat','uglify']
 
   grunt.registerTask 'test', ['clean', 'coffee', 'simplemocha']
 
-  grunt.registerTask 'heroku', ['clean','coffee','recess','handlebars','compile-handlebars', 'copy:md','requirejs','replace','copy','concat','uglify']
+  grunt.registerTask 'heroku', ['clean','coffee','recess','handlebars','compile-handlebars', 'copy:js','requirejs','replace','copy','concat','uglify']
 
   grunt.initConfig
 
@@ -92,14 +92,14 @@ module.exports = (grunt) ->
             bootstrap: "empty:"
             spin: "empty:"
             jqueryBase64: "empty:"
-            underscore: "../../../../vendor/scripts/lodash-1.3.1"
+            underscore: "../../../../node_modules/lodash/dist/lodash"
             backbone: "empty:"
             chaplin: "../../../../vendor/scripts/chaplin-0.9.0"
             handlebars: "empty:"
             moment: "empty:"
             hbsTemplate: "../../../dist/js/hbs"
             appConfig: "empty:"
-            md: "../../../dist/js/md.min"
+            md: "../../../../node_modules/html-md/dist/md.min"
             pagedown: "empty:"
           shim:
             hbsTemplate:
@@ -149,9 +149,6 @@ module.exports = (grunt) ->
       js:
         files:
           'client/dist/js/jquery.base64.min.js': 'vendor/scripts/jquery.base64.min.js'
-      md:
-        files:
-          'client/dist/js/md.min.js': 'node_modules/html-md/dist/md.min.js'
       assets:
         files: [
           {expand: true, dest: 'client/dist/', cwd: 'client/assets/', src: '**', filter: 'isFile'}
@@ -160,9 +157,6 @@ module.exports = (grunt) ->
       js:
         files:
           'client/dist/js/app.min.js' : 'client/dist/js/app.js'
-      hbs:
-        files:
-          'client/dist/js/hbs.min.js' : 'client/dist/js/hbs.js'
 
     simplemocha:
       options:
