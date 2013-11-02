@@ -19,12 +19,9 @@
   "dependencies": {
     "ejs": "0.8.4",
     "express": "3.4.3",
-    "handlebars": "1.0.12",
-    "hbs": "2.4.0",
     "html-md": "3.0.2",
     "lodash": "2.2.1",
-    "request": "2.27.0",
-    "socket.io": "0.9.16"
+    "request": "2.27.0"
   },
   "devDependencies": {
     "grunt-compile-handlebars": "0.6.1",
@@ -42,8 +39,6 @@
     "grunt-replace": "0.5.1",
     "grunt-simple-mocha": "0.4.0",
     "grunt-s3": "~0.2.0-alpha.3",
-    "mocha": "1.13.0",
-    "expect.js": "0.2.0",
     "jsdom": "0.8.3"
   }
 }
