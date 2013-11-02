@@ -1,11 +1,12 @@
 define ->
   _ = require 'underscore'
+  React = require 'react'
   app = require 'application'
   SiteController = require 'controllers/base/site_controller'
   Column = require 'models/column'
   UserStory = require 'models/user_story'
-  BoardPageView = require 'views/board/board_page_view'
-  ColumnPageView = require 'views/board/column_page_view'
+  BoardView = require 'views/board/board'
+  ColumnView = require 'views/board/column'
 
   class BoardController extends SiteController
     index: (params) ->
@@ -14,7 +15,7 @@ define ->
         columns = @getColumnModels field
 
         col.fetch(@getFetchData(field, col.get('value'))) for col in columns
-        @view = new BoardPageView autoRender: true, columns: columns, field: field
+        @view = React.renderComponent(BoardView(columns: columns), document.getElementById('content'))
 
         @listenTo @view, 'headerclick', @onColumnClick
         @listenTo @view, 'cardclick', @onCardClick
@@ -23,11 +24,14 @@ define ->
       colValue = decodeURI(params.column)
       
       @whenLoggedIn =>
+        @updateTitle app.session.getProjectName()
+
         field = app.session.get('boardField')
         col = new Column(field: field, value: colValue)
         col.fetch @getFetchData(field, colValue, ['Name', 'Owner'])
 
-        @view = new ColumnPageView autoRender: true, model: col, columns: @getColumnModels(field)
+        @view = React.renderComponent(ColumnView(model: col, columns: @getColumnModels(field), showFields: true, abbreviateHeader: false, showIteration: true), document.getElementById('content'))
+
         @listenTo @view, 'headerclick', @onColumnClick
         @listenTo @view, 'cardclick', @onCardClick
         @listenTo @view, 'goleft', @goLeft

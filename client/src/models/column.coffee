@@ -25,6 +25,7 @@ define ->
       ).done (s, d) =>
         # Set the machine into `synced` state
         @finishSync()
+        @trigger 'change', this
 
     artifacts: ->
       new Artifacts @stories.models.concat(@defects.models)

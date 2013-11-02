@@ -1,6 +1,7 @@
 define ->
   app = require 'application'
   utils = require 'lib/utils'
+  React = require 'react'
   Controller = require 'controllers/base/controller'
   NavigationView = require 'views/navigation/navigation_view'
 
@@ -8,6 +9,7 @@ define ->
 
     constructor: ->
       super
+      # @view = React.renderComponent(NavigationView({}), document.getElementById('navigation'))
       @view = new NavigationView region: 'navigation', autoRender: true
       @listenTo @view, 'navigate', @onNavigate
 

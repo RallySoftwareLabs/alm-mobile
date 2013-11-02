@@ -10,11 +10,12 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-simple-mocha'
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-compile-handlebars'
+  grunt.loadNpmTasks 'grunt-react'
   grunt.loadNpmTasks 'grunt-recess'
   grunt.loadNpmTasks 'grunt-replace'
   grunt.loadNpmTasks 'grunt-s3'
 
-  grunt.registerTask 'default', ['clean','coffee','recess','handlebars','compile-handlebars', 'copy:js','requirejs','replace','copy','concat','uglify']
+  grunt.registerTask 'default', ['clean','coffee','react','recess','handlebars','compile-handlebars', 'copy:js','requirejs','replace','copy','concat','uglify']
 
   grunt.registerTask 'test', ['clean', 'coffee', 'simplemocha']
 
@@ -29,6 +30,10 @@ module.exports = (grunt) ->
       clientSrc:
         files: 'client/src/**/*.coffee'
         tasks: ['coffee:clientSrc', 'requirejs:compile', 'replace:js', 'copy:js', 'uglify:js']
+
+      reactSrc:
+        files: 'client/src/views/**/*.jsx'
+        tasks: ['react:clientSrc', 'requirejs:compile', 'replace:js', 'copy:js', 'uglify:js']
 
       clientStyles:
         files: 'client/styles/**/*.less'
@@ -83,6 +88,13 @@ module.exports = (grunt) ->
         dest: 'server/gen/js/src'
         ext: '.js'
 
+    react:
+      clientSrc:
+        options:
+          extension: 'jsx'
+        files:
+          'client/gen/js/src/views': 'client/src/views'
+
     requirejs:
       compile:
         options:
@@ -101,6 +113,7 @@ module.exports = (grunt) ->
             appConfig: "empty:"
             md: "../../../../node_modules/html-md/dist/md.min"
             pagedown: "empty:"
+            react: "empty:"
           shim:
             hbsTemplate:
               deps: ["backbone"]
