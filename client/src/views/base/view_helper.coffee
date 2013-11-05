@@ -53,9 +53,7 @@ define ->
     return if _.isString(value) then value.toLowerCase() else ''
 
   Handlebars.registerHelper 'typeForDetailLink', (value) ->
-    str = (value || '').toLowerCase()
-    str = 'userstory' if str == 'hierarchicalrequirement'
-    str
+    utils.getTypeForDetailLink value
 
   Handlebars.registerHelper 'nonBreakingSpace', (value) ->
     return value if value

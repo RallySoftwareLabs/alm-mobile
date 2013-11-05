@@ -48,6 +48,11 @@ define ->
       str = str.replace(/[^\w\-]/g, '-');
       str
 
+    getTypeForDetailLink: (value) ->
+      str = (value || '').toLowerCase()
+      str = 'userstory' if str == 'hierarchicalrequirement'
+      str
+
     _getNavigationType: (type) ->
       type = type.toLowerCase()
       NAVIGATION_MODEL_TYPES[type] || type

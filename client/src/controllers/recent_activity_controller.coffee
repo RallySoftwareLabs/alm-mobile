@@ -1,8 +1,9 @@
 define ->
+  React = require 'react'
   app = require 'application'
   Discussions = require 'collections/discussions'
   SiteController = require 'controllers/base/site_controller'
-  RecentActivityView = require 'views/recent_activity/recent_activity_view'
+  DiscussionPageView = require 'views/discussion/discussion_page'
 
   class RecentActivityController extends SiteController
 
@@ -16,4 +17,5 @@ define ->
             projectScopeUp: false
             projectScopeDown: true
             order: "CreationDate DESC,ObjectID"
-        @view = new RecentActivityView autoRender: true, region: 'main', collection: discussions
+        @view = React.renderComponent(DiscussionPageView(model: discussions, showInput: false, showItemArtifact: true), document.getElementById('content'))
+        @updateTitle "Recent Activity for #{app.session.getProjectName()}"
