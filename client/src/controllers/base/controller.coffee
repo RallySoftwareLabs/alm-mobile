@@ -10,7 +10,7 @@ define ->
       if app.session.get('project')?
         @goToPage callback
       else
-        @view = React.renderComponent(InitializingView(), document.getElementById('content'))
+        @view = @renderReactComponent InitializingView({region: 'main'})
         @subscribeEvent 'projectready', @onProjectReady(callback)
 
     onProjectReady: (callback) ->
@@ -29,3 +29,9 @@ define ->
 
     updateTitle: (title) ->
       @publishEvent "updatetitle", title
+
+    renderReactComponent: (component, id) ->
+      if component.props.region
+        @publishEvent '!region:show', component.props.region, component
+      React.renderComponent component, (if component.container then component.container[0] else document.body)
+      component.trigger "addedToDOM"

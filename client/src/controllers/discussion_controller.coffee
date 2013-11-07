@@ -1,5 +1,4 @@
 define ->
-  React = require 'react'
   app = require 'application'
   utils = require 'lib/utils'
   Discussion = require 'models/discussion'
@@ -14,7 +13,7 @@ define ->
 
         @artifactRef = utils.getRef(params.type, params.id)
 
-        @view = React.renderComponent(DiscussionPageView(model: @discussions), document.getElementById('content'))
+        @view = @renderReactComponent DiscussionPageView(model: @discussions, region: 'main')
 
         @listenTo @view, 'reply', @onReplyClick
 

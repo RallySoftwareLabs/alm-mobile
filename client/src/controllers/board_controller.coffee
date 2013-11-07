@@ -1,6 +1,5 @@
 define ->
   _ = require 'underscore'
-  React = require 'react'
   app = require 'application'
   SiteController = require 'controllers/base/site_controller'
   Column = require 'models/column'
@@ -15,7 +14,7 @@ define ->
         columns = @getColumnModels field
 
         col.fetch(@getFetchData(field, col.get('value'))) for col in columns
-        @view = React.renderComponent(BoardView(columns: columns), document.getElementById('content'))
+        @view = @renderReactComponent BoardView(columns: columns, region: 'main'), 'content'
 
         @listenTo @view, 'headerclick', @onColumnClick
         @listenTo @view, 'cardclick', @onCardClick
@@ -30,7 +29,14 @@ define ->
         col = new Column(field: field, value: colValue)
         col.fetch @getFetchData(field, colValue, ['Name', 'Owner'])
 
-        @view = React.renderComponent(ColumnView(model: col, columns: @getColumnModels(field), showFields: true, abbreviateHeader: false, showIteration: true), document.getElementById('content'))
+        @view = @renderReactComponent ColumnView(
+          region: 'main'
+          model: col
+          columns: @getColumnModels(field)
+          showFields: true
+          abbreviateHeader: false
+          showIteration: true
+        )
 
         @listenTo @view, 'headerclick', @onColumnClick
         @listenTo @view, 'cardclick', @onCardClick

@@ -59,7 +59,11 @@ define ->
       @_unsubscribe(@props.model)
 
     dispose: ->
-      React.unmountComponentAtNode(@getDOMNode().parentElement)
+      return unless @isMounted()
+      dn = @getDOMNode()
+      parent = dn.parentElement
+      @unmountComponent()
+      parent.removeChild dn
 
   return {
     createChaplinClass: (spec) ->
