@@ -11,11 +11,11 @@ define ->
       return unless model?
       # Detect if it's a collection
       if model instanceof Collection
-        model.on('add remove reset sort', ->
+        model.on(@props.changeOptions || 'add remove reset sort', ->
           @forceUpdate()
         , this)
       else if model
-        changeOptions = @changeOptions || 'change'
+        changeOptions = @props.changeOptions || 'change'
         model.on(changeOptions, ->
           model
           (@onModelChange || @forceUpdate).call(this)

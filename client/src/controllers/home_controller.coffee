@@ -5,7 +5,7 @@ define ->
   Defects = require 'collections/defects'
   SiteController = require 'controllers/base/site_controller'
   HomeView = require 'views/home/home_view'
-  UserStoriesPageView = require 'views/home/user_stories_page_view'
+  ListingView = require 'views/home/listing'
   TasksPageView = require 'views/home/tasks_page_view'
   DefectsPageView = require 'views/home/defects_page_view'
 
@@ -17,25 +17,53 @@ define ->
       userStories = new UserStories()
       
       @whenLoggedIn ->
-        @view = new UserStoriesPageView autoRender: true, tab: 'userstories', collection: userStories
+        userStories.fetch
+          data: @getFetchData(
+            ['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked'],
+            """(((ScheduleState != "Completed") AND (ScheduleState != "Accepted")) AND (ScheduleState != "Released"))"""
+          )
+        @view = @renderReactComponent ListingView(
+          tab: 'userstories'
+          collection: userStories
+          listType: 'userstory'
+          changeOptions: 'synced'
+          region: 'main'
+        )
         @listenTo @view, 'itemclick', @onItemClick
-        userStories.fetch data: @getFetchData(['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked'], """(((ScheduleState != "Completed") AND (ScheduleState != "Accepted")) AND (ScheduleState != "Released"))""")
       
     tasks: (params) ->
       tasks = new Tasks()
 
       @whenLoggedIn =>
-        @view = new TasksPageView autoRender: true, tab: 'tasks', collection: tasks
+        tasks.fetch data: @getFetchData(
+          ['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked', 'ToDo'],
+          """(State != "Completed")"""
+        )
+        @view = @renderReactComponent ListingView(
+          tab: 'tasks'
+          collection: tasks
+          listType: 'task'
+          changeOptions: 'synced'
+          region: 'main'
+        )
         @listenTo @view, 'itemclick', @onItemClick
-        tasks.fetch data: @getFetchData(['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked', 'ToDo'], """(State != "Completed")""")
 
     defects: (params) ->
       defects = new Defects()
 
       @whenLoggedIn =>
-        @view = new DefectsPageView autoRender: true, tab: 'defects', collection: defects
+        defects.fetch data: @getFetchData(
+          ['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked'],
+          """(((ScheduleState != "Completed") AND (ScheduleState != "Accepted")) AND (ScheduleState != "Released"))"""
+        )
+        @view = @renderReactComponent ListingView(
+          tab: 'defects'
+          collection: defects
+          listType: 'defect'
+          changeOptions: 'synced'
+          region: 'main'
+        )
         @listenTo @view, 'itemclick', @onItemClick
-        defects.fetch data: @getFetchData(['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked'], """(((ScheduleState != "Completed") AND (ScheduleState != "Accepted")) AND (ScheduleState != "Released"))""")
 
     onItemClick: (url) ->
       @redirectTo url

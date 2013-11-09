@@ -2,7 +2,6 @@
 define(function() {
   var React = require('react'),
       _ = require('underscore'),
-      app = require('application'),
       ReactView = require('views/base/react_view'),
       Card = require('views/board/card'),
       IterationHeader = require('views/iteration_header');
@@ -12,8 +11,7 @@ define(function() {
       return {showLoadingIndicator: true};
     },
     render: function() {
-      var iteration = app.session.get('iteration') && app.session.get('iteration').toJSON(),
-          model = this.props.model,
+      var model = this.props.model,
           showFields = this.props.showFields,
           goLeft = '',
           goRight = '',
@@ -26,7 +24,7 @@ define(function() {
       }
       return (
         <div className="board">
-          <IterationHeader iteration={iteration} visible={this.props.showIteration} />
+          <IterationHeader visible={this.props.showIteration} />
           <div className="column">
               <div className="header" onClick={this.onHeaderClick}>
                   {goLeft}

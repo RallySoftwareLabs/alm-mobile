@@ -13,10 +13,9 @@ define(function() {
       this.updateTitle(app.session.getProjectName());
     },
     render: function() {
-    	var iteration = app.session.get('iteration') && app.session.get('iteration').toJSON();
     	return (
     		<div className="board">
-    		  <IterationHeader iteration={iteration} visible={true} />
+    		  <IterationHeader visible={true} />
 	    		<div class="column-container">{this.getColumns()}</div>
 	    	</div>
   		);

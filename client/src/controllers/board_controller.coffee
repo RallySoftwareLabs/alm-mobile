@@ -14,7 +14,7 @@ define ->
         columns = @getColumnModels field
 
         col.fetch(@getFetchData(field, col.get('value'))) for col in columns
-        @view = @renderReactComponent BoardView(columns: columns, region: 'main'), 'content'
+        @view = @renderReactComponent BoardView(columns: columns, region: 'main')
 
         @listenTo @view, 'headerclick', @onColumnClick
         @listenTo @view, 'cardclick', @onCardClick
