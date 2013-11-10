@@ -11,7 +11,7 @@ define ->
       @whenLoggedIn ->
         artifacts = new Artifacts()
         @_fetchResults(artifacts, keywords) if keywords
-        @view = @renderReactComponent SearchView(
+        @view = @renderReactComponent(SearchView,
           collection: artifacts
           keywords: keywords
           region: 'main'

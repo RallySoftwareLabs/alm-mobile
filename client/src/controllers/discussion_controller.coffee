@@ -13,7 +13,7 @@ define ->
 
         @artifactRef = utils.getRef(params.type, params.id)
 
-        @view = @renderReactComponent DiscussionView(model: @discussions, region: 'main')
+        @view = @renderReactComponent DiscussionView, model: @discussions, region: 'main'
 
         @listenTo @view, 'reply', @onReplyClick
 

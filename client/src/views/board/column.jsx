@@ -67,10 +67,12 @@ define(function() {
     goLeft: function(e) {
       this.trigger('goleft', this.props.model);
       e.preventDefault();
+      e.stopPropagation();
     },
     goRight: function(e) {
       this.trigger('goright', this.props.model);
       e.preventDefault();
+      e.stopPropagation();
     }
   });
 });

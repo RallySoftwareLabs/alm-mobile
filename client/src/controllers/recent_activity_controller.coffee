@@ -16,7 +16,7 @@ define ->
             projectScopeUp: false
             projectScopeDown: true
             order: "CreationDate DESC,ObjectID"
-        @view = @renderReactComponent DiscussionView(
+        @view = @renderReactComponent(DiscussionView,
           region: 'main'
           model: discussions
           showInput: false

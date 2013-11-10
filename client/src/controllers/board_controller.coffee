@@ -14,7 +14,7 @@ define ->
         columns = @getColumnModels field
 
         col.fetch(@getFetchData(field, col.get('value'))) for col in columns
-        @view = @renderReactComponent BoardView(columns: columns, region: 'main')
+        @view = @renderReactComponent BoardView, columns: columns, region: 'main'
 
         @listenTo @view, 'headerclick', @onColumnClick
         @listenTo @view, 'cardclick', @onCardClick
@@ -29,14 +29,14 @@ define ->
         col = new Column(field: field, value: colValue)
         col.fetch @getFetchData(field, colValue, ['Name', 'Owner'])
 
-        @view = @renderReactComponent ColumnView(
+        @view = @renderReactComponent ColumnView,
           region: 'main'
           model: col
           columns: @getColumnModels(field)
           showFields: true
           abbreviateHeader: false
           showIteration: true
-        )
+        
 
         @listenTo @view, 'headerclick', @onColumnClick
         @listenTo @view, 'cardclick', @onCardClick
@@ -56,14 +56,22 @@ define ->
       columns = @getColumnModels field
       colIndex = _.findIndex columns, (c) -> c.get('value') == col.get('value')
       if colIndex > 0
-        @redirectToRoute 'board#column', column: columns[colIndex - 1].get('value')
+        newColumn = columns[colIndex - 1]
+        @publishEvent '!router:changeURL', "/board/#{newColumn.get('value')}"
+        @view.setProps model: newColumn
+        newColumn.fetch @getFetchData(field, newColumn.get('value'), ['Name', 'Owner'])
+        # @redirectToRoute 'board#column', column: columns[colIndex - 1].get('value')
 
     goRight: (col) ->
       field = app.session.get('boardField')
       columns = @getColumnModels field
       colIndex = _.findIndex columns, (c) -> c.get('value') == col.get('value')
       if colIndex < columns.length - 1
-        @redirectToRoute 'board#column', column: columns[colIndex + 1].get('value')
+        newColumn = columns[colIndex + 1]
+        @publishEvent '!router:changeURL', "/board/#{newColumn.get('value')}"
+        @view.setProps model: newColumn
+        newColumn.fetch @getFetchData(field, newColumn.get('value'), ['Name', 'Owner'])
+        # @redirectToRoute 'board#column', column: columns[colIndex + 1].get('value')
 
     getColumnModels: (field) ->
       _.map app.session.getBoardColumns(), (value) -> new Column(field: field, value: value)

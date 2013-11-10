@@ -13,6 +13,7 @@ define(function() {
     },
     componentWillMount: function() {
       this.subscribeEvent('updatetitle', this._onTitleUpdate);
+      this.subscribeEvent('dispatcher:dispatch', this._onDispatch);
     },
     render: function() {
       var currentPage = this.getCurrentPage();
@@ -53,6 +54,11 @@ define(function() {
     },
     _onTitleUpdate: function(title) {
       this.setState({title: title});
+    },
+    _onDispatch: function() {
+      if (this.isMounted()) {
+        this.forceUpdate();
+      }
     },
     getCurrentPage: function() {
       return window.location.pathname;

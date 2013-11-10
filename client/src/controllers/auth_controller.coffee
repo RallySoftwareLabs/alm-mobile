@@ -13,11 +13,11 @@ define ->
       @login()
 
     login: (params) ->
-      @view = @renderReactComponent LoginView({})
+      @view = @renderReactComponent LoginView
       @listenTo @view, 'submit', @onSubmit
 
     labsNotice: (params) ->
-      @view = @renderReactComponent LabsNoticeView({})
+      @view = @renderReactComponent LabsNoticeView
       @listenTo @view, 'accept', @onAccept
       @listenTo @view, 'reject', @onReject
 

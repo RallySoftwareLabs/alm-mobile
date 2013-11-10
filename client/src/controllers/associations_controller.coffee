@@ -24,7 +24,7 @@ define ->
         
         @_fetchAssociation model, associatedItems, association, reverseAssociation
 
-        @view = @renderReactComponent AssociationsView
+        @view = @renderReactComponent AssociationsView,
           region: 'main'
           associatedItems: associatedItems
           association: association

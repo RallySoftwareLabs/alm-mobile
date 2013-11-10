@@ -17,7 +17,6 @@ define ->
       else if model
         changeOptions = @props.changeOptions || 'change'
         model.on(changeOptions, ->
-          model
           (@onModelChange || @forceUpdate).call(this)
         , this)
 

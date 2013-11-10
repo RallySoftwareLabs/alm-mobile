@@ -38,16 +38,13 @@ define ->
     _fetchCollectionAndRender: (collection, fetch, query, tab) ->
       @whenLoggedIn =>
         collection.fetch data: @_getFetchData(fetch, query)
-        @view = @_renderView(
+        @renderReactComponent(HomeView,
           tab: tab
           collection: collection
           listType: 'defect'
           changeOptions: 'synced'
           region: 'main'
         )
-
-    _renderView: (props) ->
-      @renderReactComponent HomeView(props)
 
     _getFetchData: (fetch, query) ->
       data =
@@ -65,3 +62,7 @@ define ->
       if iterationRef
         data.query = "(#{data.query} AND (Iteration = \"#{iterationRef}\"))"
       data
+
+  HomeController.reuseViewAcrossControllerActions()
+
+  HomeController
