@@ -7,59 +7,49 @@ define ->
   HomeView = require 'views/home/home'
 
   class HomeController extends SiteController
+
     show: (params) ->
       @redirectToRoute 'home#userstories', replace: true
 
     userstories: (params) ->
-      userStories = new UserStories()
+      collection = new UserStories()
       
-      @whenLoggedIn ->
-        userStories.fetch
-          data: @getFetchData(
-            ['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked'],
-            """(((ScheduleState != "Completed") AND (ScheduleState != "Accepted")) AND (ScheduleState != "Released"))"""
-          )
-        @view = @renderReactComponent HomeView(
-          tab: 'userstories'
-          collection: userStories
-          listType: 'userstory'
-          changeOptions: 'synced'
-          region: 'main'
-        )
+      @_fetchCollectionAndRender collection, 
+          ['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked'],
+          """(((ScheduleState != "Completed") AND (ScheduleState != "Accepted")) AND (ScheduleState != "Released"))""",
+          'userstories'
       
     tasks: (params) ->
-      tasks = new Tasks()
+      collection = new Tasks()
 
-      @whenLoggedIn =>
-        tasks.fetch data: @getFetchData(
-          ['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked', 'ToDo'],
-          """(State != "Completed")"""
-        )
-        @view = @renderReactComponent HomeView(
-          tab: 'tasks'
-          collection: tasks
-          listType: 'task'
-          changeOptions: 'synced'
-          region: 'main'
-        )
+      @_fetchCollectionAndRender collection,
+        ['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked', 'ToDo'],
+        """(State != "Completed")""",
+        'tasks'
 
     defects: (params) ->
-      defects = new Defects()
+      collection = new Defects()
 
+      @_fetchCollectionAndRender collection,
+        ['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked'],
+        """(((ScheduleState != "Completed") AND (ScheduleState != "Accepted")) AND (ScheduleState != "Released"))""",
+        'defects'
+
+    _fetchCollectionAndRender: (collection, fetch, query, tab) ->
       @whenLoggedIn =>
-        defects.fetch data: @getFetchData(
-          ['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked'],
-          """(((ScheduleState != "Completed") AND (ScheduleState != "Accepted")) AND (ScheduleState != "Released"))"""
-        )
-        @view = @renderReactComponent HomeView(
-          tab: 'defects'
-          collection: defects
+        collection.fetch data: @_getFetchData(fetch, query)
+        @view = @_renderView(
+          tab: tab
+          collection: collection
           listType: 'defect'
           changeOptions: 'synced'
           region: 'main'
         )
 
-    getFetchData: (fetch, query) ->
+    _renderView: (props) ->
+      @renderReactComponent HomeView(props)
+
+    _getFetchData: (fetch, query) ->
       data =
         fetch: fetch.join ','
         project: app.session.get('project').get('_ref')
