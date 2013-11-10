@@ -38,7 +38,7 @@ define(function() {
     },
     getCardsMarkup: function(storiesAndDefects, showFields) {
       return _.map(storiesAndDefects, function(model) {
-        var card = <Card key={model.get('_ref')} model={model} showFields={showFields} />;
+        var card = <Card key={model.get('_ref')} model={model} showFields={showFields} key={model.get('_ref')} />;
         this.bubbleEvent(card, 'cardclick', 'cardclick');
         return card;
       }, this);

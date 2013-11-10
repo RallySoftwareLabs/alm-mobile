@@ -7,6 +7,12 @@ define(function() {
   		ReactView = require('views/base/react_view');
 
   return ReactView.createChaplinClass({
+    componentDidMount: function() {
+      this.subscribeEvent('navigation:show', this.show);
+    },
+    componentWillUnmount: function() {
+      debugger;
+    },
     render: function() {
     	return (
         <div class="body row">
@@ -37,24 +43,33 @@ define(function() {
       ];
       return _.map(buttons, function(button) {
         return (
-          <button class="btn btn-default btn-inverse btn-block" type="button" onClick="{ this.onClick(button.viewHash) }">
+          <button class="btn btn-default btn-inverse btn-block" type="button" onClick={ this.onClick(button.viewHash) } key={ button.viewHash }>
             <span class="col-xs-10 display-name">{ button.displayName }</span>
             <span class="col-xs-2 icon"><i class="icon-chevron-right icon-white"></i></span>
           </button>
         );
-      });
+      }, this);
     },
     onClick: function(viewHash) {
-      return _.bind(this.trigger, this, 'navigate', viewHash);
+      return _.bind(function() {
+        this.hide();
+        currentRoute = window.location.pathname;
+
+        if (viewHash !== currentRoute && !(viewHash === '' && _.contains(['/userstories', '/tasks', '/defects'], currentRoute))) {
+          this.publishEvent('!router:route', viewHash);
+        }
+      }, this);
     },
     show: function() {
+      var thisEl = $(this.getDOMNode());
       $('#page-container').attr('class', $('#page-container').attr('class').replace(/(\spage\stransition\scenter)?$/, ' page transition right'));
-      this.getDOMNode().parent().attr('class', this.getDOMNode().parent().attr('class').replace(/(transition\s)?left/, 'transition center'));
+      thisEl.parent().attr('class', thisEl.parent().attr('class').replace(/(transition\s)?left/, 'transition center'));
       $('#mask').show();
       $('#mask').on('click', _.bind(this.hide, this));
     },
     hide: function() {
-      this.getDOMNode().parent().attr('class', this.getDOMNode().parent().attr('class').replace(/center/, 'left'));
+      var thisEl = $(this.getDOMNode());
+      thisEl.parent().attr('class', thisEl.parent().attr('class').replace(/center/, 'left'));
       $('#page-container').attr('class', $('#page-container').attr('class').replace(/right/, 'center'));
       $('#mask').off('click', _.bind(this.hide, this));
       $('#mask').hide();

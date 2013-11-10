@@ -78,10 +78,10 @@ define(function() {
 
     _goToItemPageFn: function(model) {
       var url = utils.getTypeForDetailLink(model.get('_type')) + '/' + model.get('ObjectID');
-      return function(event) {
-        this.trigger('itemclick', url);
+      return _.bind(function(event) {
+        this.publishEvent('!router:route', url);
         event.preventDefault();
-      };
+      }, this);
     },
 
     _getStateClassName: function(model) {

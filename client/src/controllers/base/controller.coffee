@@ -31,7 +31,4 @@ define ->
       @publishEvent "updatetitle", title
 
     renderReactComponent: (component, id) ->
-      if component.props.region
-        @publishEvent '!region:show', component.props.region, component
-      React.renderComponent component, (if component.container then component.container[0] else document.body)
-      component.trigger "addedToDOM"
+      component.renderForChaplin id

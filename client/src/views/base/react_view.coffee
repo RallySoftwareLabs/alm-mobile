@@ -77,6 +77,14 @@ define ->
 
       spec.el = -> @isMounted() && @getDOMNode()
 
+      spec.$ = (selector) -> $(@getDOMNode()).find selector
+
+      spec.renderForChaplin = (id) ->
+        if this.props.region
+          @publishEvent '!region:show', this.props.region, this
+        React.renderComponent this, (if this.container then this.container[0] else document.body)
+        this.trigger "addedToDOM"
+
       spec.updateTitle = (title) ->
         @publishEvent "updatetitle", title
 

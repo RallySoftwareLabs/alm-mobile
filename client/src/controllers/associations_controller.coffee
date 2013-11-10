@@ -30,11 +30,6 @@ define ->
           association: association
           fromModel: model
 
-        @listenTo @view, 'itemclick', @onItemClick
-
-    onItemClick: (url) ->
-      @redirectTo url
-
     _fetchAssociation: (model, associatedItems, association, reverseAssociation) ->
       model.fetch
         data:

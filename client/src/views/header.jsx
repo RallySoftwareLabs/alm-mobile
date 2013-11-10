@@ -12,7 +12,7 @@ define(function() {
       }
     },
     componentWillMount: function() {
-      this.subscribeEvent(Chaplin.mediator, 'updatetitle', this.onTitleUpdate);
+      this.subscribeEvent('updatetitle', this._onTitleUpdate);
     },
     render: function() {
       var currentPage = this.getCurrentPage();
@@ -31,10 +31,7 @@ define(function() {
     },
     getLeftButton: function(currentPage) {
       if (_.contains(['/', '/userstories', '/defects', '/tasks', '/board', '/recentActivity'], currentPage)) {
-        return <div/>;
-      // } else if (currentPage === '/settings') {
-        //return this.makeButton('navigation', 'grid', 'left');
-      //}
+        return this.makeButton('navigation', 'grid', 'left');;
       } else {
         return this.makeButton('back', 'back', 'left');
       }
@@ -49,16 +46,26 @@ define(function() {
     makeButton: function(target, icon, cls) {
       cls = cls || '';
       return (
-        <a href="#" class="#{cls}" data-target="#{target}">
-          <i class="picto icon-#{icon}"/>
+        <a href="#" class={ cls } onClick={ _.bind(function(e) { this._navigateTo(target, e); }, this) }>
+          <i class={ "picto icon-" + icon }/>
         </a>
       );
     },
-    onTitleUpdate: function(title) {
+    _onTitleUpdate: function(title) {
       this.setState({title: title});
     },
     getCurrentPage: function() {
       return window.location.pathname;
+    },
+    _navigateTo: function(page, e) {
+      if (page === 'back') {
+        window.history.back();
+      } else if (page === 'navigation') {
+        this.publishEvent('navigation:show');
+      } else {
+        this.publishEvent('!router:route', page);
+      }
+      e.preventDefault();
     }
   });
 

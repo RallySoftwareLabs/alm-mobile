@@ -29,7 +29,6 @@ define ->
           changeOptions: 'synced'
           region: 'main'
         )
-        @listenTo @view, 'itemclick', @onItemClick
       
     tasks: (params) ->
       tasks = new Tasks()
@@ -46,7 +45,6 @@ define ->
           changeOptions: 'synced'
           region: 'main'
         )
-        @listenTo @view, 'itemclick', @onItemClick
 
     defects: (params) ->
       defects = new Defects()
@@ -63,10 +61,6 @@ define ->
           changeOptions: 'synced'
           region: 'main'
         )
-        @listenTo @view, 'itemclick', @onItemClick
-
-    onItemClick: (url) ->
-      @redirectTo url
 
     getFetchData: (fetch, query) ->
       data =

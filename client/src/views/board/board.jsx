@@ -33,7 +33,7 @@ define(function() {
 		  	  	});
 	  		this.bubbleEvent(colView, 'headerclick', 'headerclick');
 	  		this.bubbleEvent(colView, 'cardclick', 'cardclick');
-  	  	return <div className={"column-cell"} id={"col-" + utils.toCssClass(colValue)}>{colView}</div>;
+  	  	return <div className={"column-cell"} id={"col-" + utils.toCssClass(colValue)} key={ colValue }>{colView}</div>;
     	}, this);
     	if (!this.props.columns.length) {
     		colMarkup = (
