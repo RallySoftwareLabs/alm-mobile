@@ -22,7 +22,7 @@ define(function() {
             <div class="col-xs-2 left-button">{ this.getLeftButton(currentPage) }</div>
             <div class="col-xs-7 title"><div class="ellipsis">{ this.state.title }</div></div>
             <div class="col-xs-3 right-button">
-              <a href="#" class="right" data-target="search"><i class="picto icon-search"></i></a>
+              <a href="#" class="right" onClick={ this._navigateToFn('search') }><i class="picto icon-search"></i></a>
               { this.getRightButton(currentPage) }
             </div>
           </div>
@@ -46,7 +46,7 @@ define(function() {
     makeButton: function(target, icon, cls) {
       cls = cls || '';
       return (
-        <a href="#" class={ cls } onClick={ _.bind(function(e) { this._navigateTo(target, e); }, this) }>
+        <a href="#" class={ cls } onClick={ this._navigateToFn(target) }>
           <i class={ "picto icon-" + icon }/>
         </a>
       );
@@ -56,6 +56,9 @@ define(function() {
     },
     getCurrentPage: function() {
       return window.location.pathname;
+    },
+    _navigateToFn: function(target) {
+      return _.bind(function(e) { this._navigateTo(target, e); }, this);
     },
     _navigateTo: function(page, e) {
       if (page === 'back') {

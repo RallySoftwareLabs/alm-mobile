@@ -3,7 +3,7 @@ define(function() {
   var $ = require('jquery'),
 			React = require('react'),
   		ReactView = require('views/base/react_view'),
-  		DiscussionList = require('views/discussion/discussion_list');
+  		ListView = require('views/listing/list');
 
   return ReactView.createChaplinClass({
   	getDefaultProps: function() {
@@ -16,7 +16,12 @@ define(function() {
     		<div className="discussion-page">
     			{this._getInputMarkup()}
 	        <div className="listing">
-        		<DiscussionList model={this.props.model} showItemArtifact={this.props.showItemArtifact}/>
+            <ListView
+              model={this.props.model}
+              noDataMsg="There is no discussion for this item"
+              showLoadingIndicator={true}
+              showItemArtifact={this.props.showItemArtifact}
+              changeOptions="synced"/>
 	        </div>
 	      </div>
       );

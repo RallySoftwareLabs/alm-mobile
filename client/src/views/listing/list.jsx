@@ -11,7 +11,7 @@ define(function() {
         if (model.length) {
           var listItems = model.map(function(item) {
             return (
-              <li className="list-group-item" key={item.get('ObjectID')}>
+              <li className="list-group-item" key={item.get('_ref')}>
                 {this._getItemMarkup(item)}
               </li>
             );
@@ -76,6 +76,24 @@ define(function() {
       );
     },
 
+    _conversationpostItemMarkup: function(model) {
+      return (
+        <div className="discussion-item">
+            {this._getDiscussionArtifactMarkup(model)}
+            <div className="profile-image">
+              <img src={utils.getProfileImageUrl(model.get('User')._ref, 80)}/>
+            </div>
+            <div className="details">
+              <div className="status">
+                <span className="profile-link"><span>{model.get('User')._refObjectName}</span></span>
+                <span className="recency">{_(model.get('_CreatedAt')).capitalize()}</span>
+              </div>
+              <div className="detail-text" dangerouslySetInnerHTML={{__html: model.get('Text')}} />
+            </div>
+        </div>
+      );
+    },
+
     _goToItemPageFn: function(model) {
       var url = utils.getTypeForDetailLink(model.get('_type')) + '/' + model.get('ObjectID');
       return _.bind(function(event) {
@@ -89,6 +107,19 @@ define(function() {
         return 'blocked picto icon-blocked';
       } else if (model.get('Ready')) {
         return 'ready picto icon-ready';
+      }
+      return '';
+    },
+
+    _getDiscussionArtifactMarkup: function(model) {
+      if (this.props.showItemArtifact) {
+        var artifact = model.get('Artifact');
+        return (
+          <div className="artifact">
+              <a className="artifact-link" href={"/" + utils.getTypeForDetailLink(artifact._type) + "/" + utils.getOidFromRef(artifact._ref)}>{artifact.FormattedID}</a>
+              <span className="artifact-name">{artifact._refObjectName}</span>
+          </div>
+        );
       }
       return '';
     }

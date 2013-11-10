@@ -15,7 +15,6 @@ require [
   'controllers/defect_detail_controller'
   'controllers/discussion_controller'
   'controllers/home_controller'
-  'controllers/navigation_controller'
   'controllers/recent_activity_controller'
   'controllers/search_controller'
   'controllers/settings_controller'

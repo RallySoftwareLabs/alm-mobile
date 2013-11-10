@@ -2,7 +2,7 @@ define ->
   app = require 'application'
   Discussions = require 'collections/discussions'
   SiteController = require 'controllers/base/site_controller'
-  DiscussionPageView = require 'views/discussion/discussion_page'
+  DiscussionView = require 'views/discussion/discussion'
 
   class RecentActivityController extends SiteController
 
@@ -16,7 +16,7 @@ define ->
             projectScopeUp: false
             projectScopeDown: true
             order: "CreationDate DESC,ObjectID"
-        @view = @renderReactComponent DiscussionPageView(
+        @view = @renderReactComponent DiscussionView(
           region: 'main'
           model: discussions
           showInput: false

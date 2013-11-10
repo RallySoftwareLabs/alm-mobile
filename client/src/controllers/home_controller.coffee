@@ -4,10 +4,7 @@ define ->
   Tasks = require 'collections/tasks'
   Defects = require 'collections/defects'
   SiteController = require 'controllers/base/site_controller'
-  HomeView = require 'views/home/home_view'
-  ListingView = require 'views/home/listing'
-  TasksPageView = require 'views/home/tasks_page_view'
-  DefectsPageView = require 'views/home/defects_page_view'
+  HomeView = require 'views/home/home'
 
   class HomeController extends SiteController
     show: (params) ->
@@ -22,7 +19,7 @@ define ->
             ['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked'],
             """(((ScheduleState != "Completed") AND (ScheduleState != "Accepted")) AND (ScheduleState != "Released"))"""
           )
-        @view = @renderReactComponent ListingView(
+        @view = @renderReactComponent HomeView(
           tab: 'userstories'
           collection: userStories
           listType: 'userstory'
@@ -38,7 +35,7 @@ define ->
           ['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked', 'ToDo'],
           """(State != "Completed")"""
         )
-        @view = @renderReactComponent ListingView(
+        @view = @renderReactComponent HomeView(
           tab: 'tasks'
           collection: tasks
           listType: 'task'
@@ -54,7 +51,7 @@ define ->
           ['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked'],
           """(((ScheduleState != "Completed") AND (ScheduleState != "Accepted")) AND (ScheduleState != "Released"))"""
         )
-        @view = @renderReactComponent ListingView(
+        @view = @renderReactComponent HomeView(
           tab: 'defects'
           collection: defects
           listType: 'defect'
