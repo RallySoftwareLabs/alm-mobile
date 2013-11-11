@@ -1,9 +1,9 @@
 /** @jsx React.DOM */
 define(function() {
-  var Chaplin = require('chaplin');
-  var React = require('react');
-  var moment = require('moment');
-  var ReactView = require('views/base/react_view');
+  var Chaplin = require('chaplin'),
+      React = require('react'),
+      moment = require('moment'),
+      ReactView = require('views/base/react_view');
 
   return ReactView.createChaplinClass({
     getInitialState: function() {
