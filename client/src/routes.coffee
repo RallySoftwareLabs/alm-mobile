@@ -12,6 +12,7 @@ define ->
     match 'userstory/:id/defects', 'associations#defectsForStory'
     match 'userstory/:id/tasks', 'associations#tasksForStory'
     match 'defect/:id', 'defect_detail#show'
+    match 'defect/:id/tasks', 'associations#tasksForDefect'
     match 'task/:id', 'task_detail#show'
 
     match 'new/userstory', 'user_story_detail#create'

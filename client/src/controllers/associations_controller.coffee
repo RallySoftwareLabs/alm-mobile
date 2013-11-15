@@ -1,6 +1,7 @@
 define ->
   app = require 'application'
   utils = require 'lib/utils'
+  Defect = require 'models/defect'
   UserStory = require 'models/user_story'
   SiteController = require 'controllers/base/site_controller'
   AssociationsView = require 'views/associations/associations'
@@ -11,13 +12,15 @@ define ->
 
   class AssociationsController extends SiteController
     defectsForStory: (params) ->
-      @_createAssociationView(params.id, 'Defects', 'Requirement')
+      @_createAssociationView(new UserStory(ObjectID: params.id, _type: 'hierarchicalrequirement'), 'Defects', 'Requirement')
 
     tasksForStory: (params) ->
-      @_createAssociationView(params.id, 'Tasks', 'WorkProduct')
+      @_createAssociationView(new UserStory(ObjectID: params.id, _type: 'hierarchicalrequirement'), 'Tasks', 'WorkProduct')
 
-    _createAssociationView: (id, association, reverseAssociation) ->
-      model = new UserStory(ObjectID: id, _type: 'hierarchicalrequirement')
+    tasksForDefect: (params) ->
+      @_createAssociationView(new Defect(ObjectID: params.id, _type: 'defect'), 'Tasks', 'WorkProduct')
+
+    _createAssociationView: (model, association, reverseAssociation) ->
       associatedItems = new associationClasses[association]()
 
       @whenLoggedIn ->

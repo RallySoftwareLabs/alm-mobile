@@ -15,11 +15,11 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-replace'
   grunt.loadNpmTasks 'grunt-s3'
 
-  grunt.registerTask 'default', ['clean','coffee','react','recess','handlebars','compile-handlebars', 'copy:js','requirejs','replace','copy','concat','uglify']
+  grunt.registerTask 'default', ['clean','coffee','react','recess','handlebars','compile-handlebars', 'copy:js','requirejs','replace','copy','concat']
 
   grunt.registerTask 'test', ['clean', 'coffee', 'simplemocha']
 
-  grunt.registerTask 'heroku', ['clean','coffee','recess','handlebars','compile-handlebars', 'copy:js','requirejs','replace','copy','concat','uglify']
+  grunt.registerTask 'heroku', ['clean','coffee','recess','handlebars','compile-handlebars', 'copy:js','requirejs','replace','copy','concat']
 
   grunt.initConfig
 
@@ -29,11 +29,11 @@ module.exports = (grunt) ->
     watch:
       clientSrc:
         files: 'client/src/**/*.coffee'
-        tasks: ['coffee:clientSrc', 'requirejs:compile', 'replace:js', 'copy:js', 'uglify:js']
+        tasks: ['coffee:clientSrc', 'requirejs:compile', 'replace:js', 'copy:js']
 
       reactSrc:
         files: 'client/src/views/**/*.jsx'
-        tasks: ['react:clientSrc', 'requirejs:compile', 'replace:js', 'copy:js', 'uglify:js']
+        tasks: ['react:clientSrc', 'requirejs:compile', 'replace:js', 'copy:js']
 
       clientStyles:
         files: 'client/styles/**/*.less'
@@ -41,7 +41,7 @@ module.exports = (grunt) ->
 
       clientTemplates:
         files: 'client/src/views/**/templates/**/*.hbs'
-        tasks: ['handlebars', 'requirejs:compile', 'uglify:hbs', 'requirejs:compile', 'replace:js', 'copy:js', 'uglify:js']
+        tasks: ['handlebars', 'requirejs:compile', 'uglify:hbs', 'requirejs:compile', 'replace:js', 'copy:js']
 
       clientIndexHtml:
         files: ['config.json', 'client/src/*.hbs']

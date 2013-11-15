@@ -89,7 +89,11 @@ define ->
 
       # listens to an event on the object and refires is as its own
       spec.bubbleEvent = (obj, event, mappedAs = event) ->
-        @listenTo obj, event, (args...) => @trigger.apply this, [mappedAs].concat(args) 
+        @listenTo obj, event, (args...) => @trigger.apply this, [mappedAs].concat(args)
+
+      spec.keyCodes =
+        ENTER_KEY: 13
+        ESCAPE_KEY: 27
 
       React.createClass(spec)
   }

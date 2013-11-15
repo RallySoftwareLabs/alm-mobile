@@ -38,12 +38,12 @@
         display: inline;
     }
 
-	&#BlockedView .on .well {
+	&.BlockedView .on .well {
 		background-color: @brick;
 		color: @white;
 	}
 
-	&#ReadyView {
+	&.ReadyView {
 		margin-left: 0;
 
 		.on .well {
@@ -58,7 +58,7 @@
 	.header {
         font-family: @proxima-nova-semi-bold;
 		font-size: 1.5em;
-		line-height: 1.5em;
+		line-height: 1.2em;
         margin-bottom: 10px;
         overflow: hidden;
 
@@ -69,7 +69,7 @@
 	}
 }
 
-#WorkProductView > .display, #RequirementView > .display {
+.WorkProductView > .display, .RequirementView > .display {
     margin-bottom: 10px;
     overflow: hidden;
     width: 100%;
@@ -82,7 +82,7 @@
     }
 }
 
-#DefectsView, #TasksView {
+.DefectsView, .TasksView {
     cursor: pointer;
 }
 
@@ -118,9 +118,10 @@
     .html-field {
         min-height: 150px;
         text-align: left;
+        overflow: hidden;
     }
 
-    .discussion-field {
+    &.discussion-field {
 
     	.icon {
 	    	background-image: url(/img/discussion_icon_2x.png);
@@ -203,25 +204,25 @@
 }
 
 .edit {
-	#Name {
+	.Name {
 		width: 95%;
 	}
-	#PlanEstimate {
+	.PlanEstimate {
 		width: 85%;
 	}
-	#Description {
+	.Description {
 		width: 97%;
 	}
-	#Estimate {
+	.Estimate {
 		width: 92%;
 	}
-	#ToDo {
+	.ToDo {
 		width: 92%;
 	}
-	#Severity {
+	.Severity {
 		width: 100%;
 	}
-	#Priority {
+	.Priority {
 		width: 100%;
 	}
 }
