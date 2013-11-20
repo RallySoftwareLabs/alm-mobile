@@ -1,4 +1,6 @@
 define ->
+  Markdown = require 'pagedown'
+  md = require 'md'
   appConfig = require 'appConfig'
   
   NAVIGATION_MODEL_TYPES =
@@ -34,6 +36,11 @@ define ->
     getOidFromRef: (ref) ->
       ref.substr (ref.lastIndexOf("/") + 1)
 
+    getTypeFromRef: (ref) ->
+      return '' unless ref
+      parts = ref.split '/'
+      @getTypeForDetailLink parts[parts.length - 2]
+
     getProfileImageUrl: (ref, size = 25) ->
       return "" unless ref
       baseUrl = appConfig.almWebServiceBaseUrl
@@ -47,6 +54,19 @@ define ->
       str = str.replace(/&nbsp;/g, '-');
       str = str.replace(/[^\w\-]/g, '-');
       str
+
+    getTypeForDetailLink: (value) ->
+      str = (value || '').toLowerCase()
+      str = 'userstory' if str == 'hierarchicalrequirement'
+      str
+
+    fixImageSrcs: (html) ->
+      html && html.replace /src=\"\/slm/g, "src=\"#{appConfig.almWebServiceBaseUrl}"
+
+    toMarkdown: (html = '') ->
+      new Markdown.Converter().makeHtml(html).replace(/(\r\n|\n|\r)/gm,"");
+
+    md: (str = '') -> md str
 
     _getNavigationType: (type) ->
       type = type.toLowerCase()

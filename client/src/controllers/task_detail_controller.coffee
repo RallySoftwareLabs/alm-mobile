@@ -1,13 +1,32 @@
 define ->
   SiteController = require 'controllers/base/site_controller'
-  ShowView = require 'views/detail/task_show_view'
-  CreateView = require 'views/detail/task_create_view'
+  Task = require 'models/task'
+  DetailControllerMixin = require 'controllers/detail_controller_mixin'
+  View = require 'views/detail/task'
 
   class TaskDetailController extends SiteController
+
+    _.extend @prototype, DetailControllerMixin
+
     show: (params) ->
       @whenLoggedIn ->
-        @view = new ShowView oid: params.id
+        @fetchModelAndShowView Task, View, params.id
 
     create: (params) ->
       @whenLoggedIn ->
-        @view = new CreateView autoRender: true
+        @showCreateView Task, View
+
+    getFieldNames: ->
+      [
+        'FormattedID',
+        'Name',
+        'Owner',
+        'Estimate',
+        'ToDo',
+        'State',
+        'Discussion',
+        'Description',
+        'Blocked',
+        'Ready',
+        'WorkProduct'
+      ]

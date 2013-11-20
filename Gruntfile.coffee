@@ -5,20 +5,20 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-watch'
-  grunt.loadNpmTasks 'grunt-contrib-handlebars'
   grunt.loadNpmTasks 'grunt-contrib-requirejs'
   grunt.loadNpmTasks 'grunt-simple-mocha'
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-compile-handlebars'
+  grunt.loadNpmTasks 'grunt-react'
   grunt.loadNpmTasks 'grunt-recess'
   grunt.loadNpmTasks 'grunt-replace'
   grunt.loadNpmTasks 'grunt-s3'
 
-  grunt.registerTask 'default', ['clean','coffee','recess','handlebars','compile-handlebars', 'copy:js','requirejs','replace','copy','concat','uglify']
+  grunt.registerTask 'default', ['clean','coffee','react','recess','compile-handlebars', 'copy:js','requirejs','replace','copy','concat']
 
   grunt.registerTask 'test', ['clean', 'coffee', 'simplemocha']
 
-  grunt.registerTask 'heroku', ['clean','coffee','recess','handlebars','compile-handlebars', 'copy:js','requirejs','replace','copy','concat','uglify']
+  grunt.registerTask 'heroku', ['clean','coffee','recess','compile-handlebars', 'copy:js','requirejs','replace','copy','concat']
 
   grunt.initConfig
 
@@ -28,15 +28,15 @@ module.exports = (grunt) ->
     watch:
       clientSrc:
         files: 'client/src/**/*.coffee'
-        tasks: ['coffee:clientSrc', 'requirejs:compile', 'replace:js', 'copy:js', 'uglify:js']
+        tasks: ['coffee:clientSrc', 'requirejs:compile', 'replace:js', 'copy:js']
+
+      reactSrc:
+        files: 'client/src/views/**/*.jsx'
+        tasks: ['react:clientSrc', 'requirejs:compile', 'replace:js', 'copy:js']
 
       clientStyles:
         files: 'client/styles/**/*.less'
         tasks: ['recess:client', 'concat:css']
-
-      clientTemplates:
-        files: 'client/src/views/**/templates/**/*.hbs'
-        tasks: ['handlebars', 'requirejs:compile', 'uglify:hbs', 'requirejs:compile', 'replace:js', 'copy:js', 'uglify:js']
 
       clientIndexHtml:
         files: ['config.json', 'client/src/*.hbs']
@@ -83,6 +83,13 @@ module.exports = (grunt) ->
         dest: 'server/gen/js/src'
         ext: '.js'
 
+    react:
+      clientSrc:
+        options:
+          extension: 'jsx'
+        files:
+          'client/gen/js/src/views': 'client/src/views'
+
     requirejs:
       compile:
         options:
@@ -97,13 +104,11 @@ module.exports = (grunt) ->
             chaplin: "../../../../vendor/scripts/chaplin-0.9.0"
             handlebars: "empty:"
             moment: "empty:"
-            hbsTemplate: "../../../dist/js/hbs"
             appConfig: "empty:"
             md: "../../../../node_modules/html-md/dist/md.min"
             pagedown: "empty:"
+            react: "empty:"
           shim:
-            hbsTemplate:
-              deps: ["backbone"]
             appConfig:
               exports: "AppConfig"
           out: 'client/gen/js/app.js'
@@ -113,18 +118,6 @@ module.exports = (grunt) ->
           findNestedDependencies: true
           useStrict: true
           wrap: true
-
-    handlebars:
-      compile:
-        options:
-          amd: true
-          processName: (filePath, x) ->
-            filePath
-            pieces = filePath.split("/")
-            path = pieces.splice(3).join("/")
-            path.replace(/\.hbs$/, '')
-        files:
-          "client/dist/js/hbs.js": ["client/src/views/**/*.hbs"]
 
     'compile-handlebars':
       allStatic:

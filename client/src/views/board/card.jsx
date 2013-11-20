@@ -1,0 +1,45 @@
+/** @jsx React.DOM */
+define(function() {
+  var React = require('react');
+  var ReactView = require('views/base/react_view');
+  var Owner = require('views/board/owner')
+
+  return ReactView.createChaplinClass({
+    render: function() {
+      var m = this.props.model,
+      		cardStyle = {},
+      		name = this.props.showFields ? <div className="field name">{m.get('Name')}</div> : '',
+      		owner = this.props.showFields ? <Owner model={m}/> : '';
+      if (m.get('DisplayColor')) {
+      	cardStyle.backgroundColor = m.get('DisplayColor');
+      	cardStyle.color = 'white';
+      }
+      return (
+        <div className={this.getCardClass(m)} style={cardStyle} onClick={this.onClick}>
+          <a className="field formatted-id">{m.get('FormattedID')}</a>
+          {owner}
+          <div className="clear"/>
+          {name}
+        </div>
+      );
+    },
+    getCardClass: function(m) {
+    	var cardClass = "card full";
+      if (m.get('Blocked')) {
+      	cardClass += ' blocked';
+      }
+      if (m.get('Ready')) {
+      	cardClass += ' ready';
+      }
+      if (m.get('DisplayColor')) {
+      	cardClass += ' colored';
+      }
+      return cardClass;
+    },
+    onClick: function(e) {
+    	var m = this.props.model;
+    	this.trigger('cardclick', m.get('ObjectID'), m.get('_type'));
+    	e.preventDefault();
+    }
+  });
+});

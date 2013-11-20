@@ -2,6 +2,7 @@ define ->
   $ = require 'jquery'
   _ = require 'underscore'
   Chaplin = require 'chaplin'
+  React = require 'react'
   User = require 'models/user'
   Session = require 'models/session'
   routes = require 'routes'
@@ -11,6 +12,8 @@ define ->
 
     initialize: ->
       super
+
+      React.initializeTouchEvents true
 
       @session = new Session()
       @afterLogin = ''

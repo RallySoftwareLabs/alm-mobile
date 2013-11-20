@@ -1,13 +1,33 @@
 define ->
+  app = require 'application'
   SiteController = require 'controllers/base/site_controller'
-  ShowView = require 'views/detail/user_story_show_view'
-  CreateView = require 'views/detail/user_story_create_view'
+  DetailControllerMixin = require 'controllers/detail_controller_mixin'
+  UserStory = require 'models/user_story'
+  View = require 'views/detail/user_story'
 
   class UserStoryDetailController extends SiteController
+
+    _.extend @prototype, DetailControllerMixin
+
     show: (params) ->
       @whenLoggedIn ->
-        @view = new ShowView oid: params.id
+        @fetchModelAndShowView UserStory, View, params.id
 
     create: (params) ->
       @whenLoggedIn ->
-        @view = new CreateView autoRender: true
+        @showCreateView UserStory, View
+
+    getFieldNames: ->
+      [
+        'FormattedID',
+        'Name',
+        'Owner',
+        'PlanEstimate',
+        'Tasks',
+        'Defects',
+        'Discussion',
+        'Description',
+        'Blocked',
+        'Ready',
+        app.session.get('boardField')
+      ]

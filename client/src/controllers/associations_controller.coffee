@@ -1,49 +1,46 @@
 define ->
   app = require 'application'
   utils = require 'lib/utils'
+  Defect = require 'models/defect'
   UserStory = require 'models/user_story'
   SiteController = require 'controllers/base/site_controller'
-  AssociationsView = require 'views/associations/associations_view'
+  AssociationsView = require 'views/associations/associations'
   
-  associationClasses = {}
-  associationClasses.Defects = require 'collections/defects'
-  associationClasses.Tasks = require 'collections/tasks'
+  associationClasses =
+    Defects: require 'collections/defects'
+    Tasks: require 'collections/tasks'
 
   class AssociationsController extends SiteController
     defectsForStory: (params) ->
-      @_createAssociationView(params.id, 'Defects', 'Requirement')
+      @_createAssociationView(new UserStory(ObjectID: params.id, _type: 'hierarchicalrequirement'), 'Defects', 'Requirement')
 
     tasksForStory: (params) ->
-      @_createAssociationView(params.id, 'Tasks', 'WorkProduct')
+      @_createAssociationView(new UserStory(ObjectID: params.id, _type: 'hierarchicalrequirement'), 'Tasks', 'WorkProduct')
 
-    _createAssociationView: (id, association, reverseAssociation) ->
-      model = new UserStory(ObjectID: id)
+    tasksForDefect: (params) ->
+      @_createAssociationView(new Defect(ObjectID: params.id, _type: 'defect'), 'Tasks', 'WorkProduct')
+
+    _createAssociationView: (model, association, reverseAssociation) ->
+      associatedItems = new associationClasses[association]()
+
       @whenLoggedIn ->
-        @view = new AssociationsView
+        
+        @_fetchAssociation model, associatedItems, association, reverseAssociation
+
+        @view = @renderReactComponent AssociationsView,
           region: 'main'
-          autoRender: true
-          collection: new associationClasses[association]()
+          associatedItems: associatedItems
           association: association
           fromModel: model
 
-        @listenTo @view, 'itemclick', @onItemClick
-
-        @_fetchAssociation model, association, reverseAssociation
-
-    onItemClick: (url) ->
-      @redirectTo url
-
-    _fetchAssociation: (model, association, reverseAssociation) ->
+    _fetchAssociation: (model, associatedItems, association, reverseAssociation) ->
       model.fetch
         data:
           fetch: 'ObjectID,FormattedID'
         success: (model, response, opts) =>
           @updateTitle "#{association} for #{model.get('FormattedID')}: #{model.get('_refObjectName')}"
-          @view.collection.fetch
+          associatedItems.fetch
             data:
               fetch: 'ObjectID,FormattedID,Name,Ready,Blocked,ToDo,ScheduleState,State'
               query: "(#{reverseAssociation} = \"#{model.get('_ref')}\")"
               order: 'ObjectID ASC'
-            success: (collection, response, options) =>
-              if collection.length == 0
-                @view.displayNoData()

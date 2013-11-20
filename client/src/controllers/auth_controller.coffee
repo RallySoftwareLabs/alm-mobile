@@ -3,8 +3,8 @@ define ->
   app = require 'application'
   Controller = require 'controllers/base/controller'
   Preference = require 'models/preference'
-  LabsNoticeView = require 'views/auth/labs_notice_view'
-  LoginView = require 'views/auth/login_view'
+  LabsNoticeView = require 'views/auth/labs_notice'
+  LoginView = require 'views/auth/login'
 
   class AuthController extends Controller
 
@@ -13,11 +13,11 @@ define ->
       @login()
 
     login: (params) ->
-      @view = new LoginView
+      @view = @renderReactComponent LoginView
       @listenTo @view, 'submit', @onSubmit
 
     labsNotice: (params) ->
-      @view = new LabsNoticeView
+      @view = @renderReactComponent LabsNoticeView
       @listenTo @view, 'accept', @onAccept
       @listenTo @view, 'reject', @onReject
 

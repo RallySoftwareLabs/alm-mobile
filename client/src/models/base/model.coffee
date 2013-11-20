@@ -6,6 +6,8 @@ define [
   class Model extends Chaplin.Model
     idAttribute: 'ObjectID'
 
+    _.extend @prototype, Chaplin.SyncMachine
+
     parse: (resp) ->
       return resp if resp._ref?
       return resp.OperationResult.Object if resp.OperationResult?
@@ -14,3 +16,11 @@ define [
 
     isNew: ->
       !@id? && !@_ref
+
+    fetch: (options) ->
+      @beginSync()
+
+      $.when(
+        super
+      ).done (c) =>
+        @finishSync()

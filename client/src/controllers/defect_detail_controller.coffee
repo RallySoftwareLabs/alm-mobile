@@ -1,13 +1,36 @@
 define ->
+  app = require 'application'
   SiteController = require 'controllers/base/site_controller'
-  ShowView = require 'views/detail/defect_show_view'
-  CreateView = require 'views/detail/defect_create_view'
+  DetailControllerMixin = require 'controllers/detail_controller_mixin'
+  Defect = require 'models/defect'
+  View = require 'views/detail/defect'
 
   class DefectDetailController extends SiteController
+
+    _.extend @prototype, DetailControllerMixin
+
     show: (params) ->
       @whenLoggedIn ->
-        @view = new ShowView oid: params.id
+        @fetchModelAndShowView Defect, View, params.id
 
     create: (params) ->
       @whenLoggedIn ->
-        @view = new CreateView autoRender: true
+        @showCreateView Defect, View
+
+    getFieldNames: ->
+      [
+        'FormattedID',
+        'Name',
+        'Owner',
+        'Priority',
+        'Severity',
+        'State',
+        'Discussion',
+        'Description',
+        'Blocked',
+        'PlanEstimate',
+        'Ready',
+        'Requirement',
+        'Tasks',
+        app.session.get('boardField')
+      ]

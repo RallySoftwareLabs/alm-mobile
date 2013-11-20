@@ -5,27 +5,28 @@ define ->
   utils = require 'lib/utils'
   UserStory = require 'models/user_story'
   SiteController = require 'controllers/base/site_controller'
-  SettingsView = require 'views/settings/settings_view'
-  BoardSettingsView = require 'views/settings/board_settings_view'
+  SettingsView = require 'views/settings/settings'
+  BoardSettingsView = require 'views/settings/board_settings'
 
   class SettingsController extends SiteController
 
     show: (params) ->
       @whenLoggedIn ->
-        mode = app.session.get('mode')
-        boardField = app.session.get('boardField')
-        @view = new SettingsView region: 'main', autoRender: true
+        @view = @renderReactComponent SettingsView, region: 'main', model: app.session
         @listenTo @view, 'changeMode', @onChangeMode
         @listenTo @view, 'changeBoardField', @onChangeBoardField
         @listenTo @view, 'changeProject', @onChangeProject
         @listenTo @view, 'changeIteration', @onChangeIteration
         @listenTo @view, 'logout', @onLogout
-        @subscribeEvent 'projectready', => @view.render()
+        @subscribeEvent 'projectready', => @view.forceUpdate()
 
     board: (params) ->
       @whenLoggedIn ->
         fieldName = UserStory.getFieldDisplayName app.session.get('boardField')
-        @view = new BoardSettingsView region: 'main', autoRender: true, fieldName: fieldName, columns: @_getColumnsForView()
+        @view = @renderReactComponent BoardSettingsView,
+          region: 'main'
+          fieldName: fieldName
+          model: app.session
         @listenTo @view, 'columnClick', @onColumnClick
 
     onChangeMode: (mode) ->
@@ -45,19 +46,6 @@ define ->
 
     onColumnClick: (column) ->
       app.session.toggleBoardColumn column
-      @view.setColumns @_getColumnsForView()
-      @view.render()
 
     onLogout: ->
       @redirectToRoute 'auth#logout'
-
-    _getColumnsForView: ->
-      boardField = app.session.get('boardField')
-      shownColumns = app.session.getBoardColumns()
-      allColumns = UserStory.getAllowedValues boardField
-
-      columns = _.map allColumns, (col) ->
-        {
-          StringValue: col.StringValue
-          showing: _.contains shownColumns, col.StringValue
-        }

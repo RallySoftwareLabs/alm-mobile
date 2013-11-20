@@ -4,7 +4,7 @@ define ->
   Discussion = require 'models/discussion'
   Discussions = require 'collections/discussions'
   SiteController = require 'controllers/base/site_controller'
-  DiscussionPageView = require 'views/discussion/discussion_page_view'
+  DiscussionView = require 'views/discussion/discussion'
 
   class DiscussionController extends SiteController
     show: (params) ->
@@ -13,10 +13,7 @@ define ->
 
         @artifactRef = utils.getRef(params.type, params.id)
 
-        @view = new DiscussionPageView
-          region: 'main'
-          autoRender: true
-          collection: @discussions
+        @view = @renderReactComponent DiscussionView, model: @discussions, region: 'main'
 
         @listenTo @view, 'reply', @onReplyClick
 
