@@ -3,31 +3,18 @@ define(function() {
   var $ = require('jquery'),
 			React = require('react'),
   		ReactView = require('views/base/react_view'),
-  		FieldMixin = require('views/field/field_mixin'),
-      focusEditor = function() {
-        if (this.state.editMode) {
-          this.$('.editor').focus();
-        }
-      };
+  		FieldMixin = require('views/field/field_mixin');
 
   return ReactView.createChaplinClass({
   	mixins: [FieldMixin],
     getDefaultProps: function() {
       return {
-        editable: true,
-        editMode: false
+        editable: true
       };
     },
-    getInitialState: function() {
-      return {
-        editMode: this.props.editMode
-      };
-    },
-    componentDidMount: focusEditor,
-    componentDidUpdate: focusEditor,
   	render: function() {
       return (
-        <div className={ this.state.editMode ? 'edit' : 'display' }>
+        <div className={ this.isEditMode() ? 'edit' : 'display' }>
           <div className="well-title control-label">{ (this.props.icon) ? <div className={ "picto icon-" + this.props.icon}/> : '' }{ this.props.label }</div>
           <div className="well well-sm titled-well-sm" onClick={ this._onClick }>{ this._getValueMarkup() }</div>
         </div>
@@ -35,7 +22,7 @@ define(function() {
   	},
 
     _onClick: function() {
-      if (this.state.editMode) {
+      if (this.isEditMode()) {
         return;
       }
       if (this.props.routeTo) {
@@ -49,7 +36,7 @@ define(function() {
       if (this.props.valueMarkup) {
         return this.props.valueMarkup;
       }
-      if (this.state.editMode) {
+      if (this.isEditMode()) {
         if (this.props.item.allowedValues[this.props.field]) {
           return this._getSelectMarkup();
         } else {

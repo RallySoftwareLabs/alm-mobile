@@ -2,8 +2,13 @@ define ->
   _ = require 'underscore'
   React = require 'react'
   app = require 'application'
+  focusEditor = ->
+    if @isEditMode() && @props.item.get('ObjectID')
+      @$('.editor').focus();
 
   return {
+    componentDidMount: focusEditor,
+    componentDidUpdate: focusEditor,
     getAllowedValues: ->
       if app.session.get('boardField') == @props.field
         boardColumns = app.session.getBoardColumns()
@@ -17,10 +22,12 @@ define ->
       
     saveModel: (updates, opts) ->
       @publishEvent 'saveField', updates, opts
-      @props.item.set updates
+
+    isEditMode: ->
+      @props.editMode || @state?.editMode
 
     startEdit: ->
-      @setState editMode: true
+      @publishEvent 'startEdit', this, @props.field
 
     endEdit: (event) ->
       try
@@ -32,7 +39,7 @@ define ->
           modelUpdates[field] = value
           @saveModel modelUpdates
 
-        @setState editMode: false if @props.item.get('ObjectID')
+        @publishEvent 'endEdit', this, @props.field
       catch e
 
     routeTo: (route) ->

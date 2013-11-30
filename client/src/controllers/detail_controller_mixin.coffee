@@ -1,5 +1,6 @@
 define ->
   app = require 'application'
+  utils = require 'lib/utils'
 
   return {
     homeRoute: '/board'
@@ -9,14 +10,14 @@ define ->
       model = new Model(ObjectID: id)
       model.fetch
         data:
-          fetch: ['ObjectID'].concat(fieldNames).join ','
+          fetch: fieldNames.join ','
         success: (model, response, opts) =>
           @updateTitle "#{model.get('FormattedID')}: #{model.get('_refObjectName')}"
       @view = @renderReactComponent View, model: model, region: 'main', fieldNames: fieldNames
       @subscribeEvent 'saveField', @saveField
 
-    showCreateView: (Model, View) ->
-      model = new Model()
+    showCreateView: (Model, View, defaultValues = {}) ->
+      model = new Model defaultValues
       @view = @renderReactComponent View, model: model, region: 'main', newArtifact: true
       @subscribeEvent 'saveField', @saveField
       @listenTo @view, 'save', @saveNew
@@ -28,18 +29,20 @@ define ->
       else
         @_saveRemote(updates, opts)
 
+      @view.props.model.set updates
+
     saveNew: (model) ->
       model.set Project: app.session.get('project').get('_ref')
       model.sync 'create', model,
         fetch: ['ObjectID'].concat(@getFieldNames()).join ','
         wait: true
         patch: true
-        success: (model, resp, options) =>
-          opts?.success?(model, resp, options)
-          @trigger('save', model)
-          @publishEvent '!router:route', @homeRoute, replace: false
-        error: =>
-          opts?.error?(model, resp, options)
+        success: (resp, status, xhr) =>
+          opts?.success?(model, resp)
+          @publishEvent '!router:route', utils.getDetailHash(model), replace: true
+          @view.setProps newArtifact: false
+        error: (resp, status, xhr) =>
+          @view.showError(model, resp)
 
     cancelNew: ->
       @publishEvent '!router:route', @homeRoute, replace: false

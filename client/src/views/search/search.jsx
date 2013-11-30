@@ -11,19 +11,13 @@ define(function() {
       this._getInputField().focus();
     },
 
-    getInitialState: function() {
-      return {
-        keywords: this.props.keywords
-      };
-    },
-
     render: function() {
     	return (
         <div id="search-view">
           <form className="form-inline search-form" role="form" onSubmit={ this.onSearch }>
               <div className="input-row">
                 <label className="sr-only" htmlFor="search-input">Search keywords</label>
-                <span><input type="text" id="search-input" className="form-control" placeholder="Search keywords" value={ this.state.keywords } onChange={ this.handleChange }/></span>
+                <span><input type="text" id="search-input" className="form-control" placeholder="Search keywords" value={ this.props.keywords } onChange={ this.handleChange }/></span>
               <button type="submit" className="btn btn-primary">Search</button>
               </div>
           </form>
@@ -31,7 +25,7 @@ define(function() {
             <ListView
               model={this.props.collection}
               noDataMsg="No results matched your search."
-              showLoadingIndicator={!!this.state.keywords}
+              showLoadingIndicator={!!this.props.keywords}
               showItemArtifact={this.props.showItemArtifact}
               changeOptions="synced"/>
           </div>
@@ -40,7 +34,7 @@ define(function() {
     },
 
     handleChange: function(event) {
-      this.setState({keywords: event.target.value});
+      this.setProps({keywords: event.target.value});
     },
 
     onSearch: function(event) {

@@ -78,6 +78,8 @@ define ->
 
       spec.$ = (selector) -> $(@getDOMNode()).find selector
 
+      spec.$el = $(@el)
+
       spec.renderForChaplin = (id) ->
         if this.props.region
           @publishEvent '!region:show', this.props.region, this

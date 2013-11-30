@@ -15,7 +15,7 @@ define(function() {
       };
     },
     render: function() {
-      if (this.props.editMode) {
+      if (this.isEditMode()) {
         return <div/>;
       };
       return <TitledWell

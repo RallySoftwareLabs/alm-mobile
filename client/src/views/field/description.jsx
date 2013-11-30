@@ -12,31 +12,26 @@ define(function() {
     getDefaultProps: function() {
       return {
         field: 'Description',
-        label: 'Description',
-        editMode: false
-      };
-    },
-    getInitialState: function() {
-      return {
-        editMode: this.props.editMode
+        label: 'Description'
       };
     },
     render: function() {
-      var fieldValue = utils.fixImageSrcs(this.getFieldValue());
+      var fieldValue = utils.fixImageSrcs(this.getFieldValue()),
+          editMode = this.isEditMode();
       return (
-        <div className={ this.state.editMode ? "edit" : "display" }>
+        <div className={ editMode ? "edit" : "display" }>
           <div className="well-title control-label">
             { this.props.label} (Edit using <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown</a>)
           </div>
           <div className="well well-sm">
-            { this.state.editMode ?
+            { editMode ?
               <textarea class={ "editor " + this.props.field }
                         placeholder={ this.props.field }
                         defaultValue={ utils.md(fieldValue) }
                         onBlur={ this.endEdit }
                         onKeyDown={ this._onKeyDown }/>
               :
-              <div className="html-field" dangerouslySetInnerHTML={{__html: fieldValue + '&nbsp;'}} onClick={ this.startEdit }/>
+              <div className="html-field" dangerouslySetInnerHTML={{__html: (fieldValue || '') + '&nbsp;'}} onClick={ this.startEdit }/>
             }
           </div>
         </div>

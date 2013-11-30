@@ -14,8 +14,10 @@ define ->
 
 
   _.mixin
-    capitalize: (string) ->
+    capitalize: (string = '') ->
       string.charAt(0).toUpperCase() + string.substring(1).toLowerCase()
+    singularize: (string = '') ->
+      string.slice(0, -1)
     getAttribute: (attr) ->
       return -> @get(attr)
     isAttributeEqual: (attr, value) ->
