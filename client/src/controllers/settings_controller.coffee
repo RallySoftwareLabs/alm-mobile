@@ -19,6 +19,7 @@ define ->
         @listenTo @view, 'changeIteration', @onChangeIteration
         @listenTo @view, 'logout', @onLogout
         @subscribeEvent 'projectready', => @view.forceUpdate()
+        @updateTitle "Settings: #{app.session.getProjectName()}"
 
     board: (params) ->
       @whenLoggedIn ->
@@ -38,6 +39,7 @@ define ->
 
     onChangeProject: (project) ->
       app.session.set 'project', _.find app.session.get('projects').models, _.isAttributeEqual '_ref', project
+      @updateTitle "Settings: #{app.session.getProjectName()}"
 
     onChangeIteration: (iteration) ->
       if iteration == 'null'

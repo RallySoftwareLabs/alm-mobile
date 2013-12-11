@@ -63,7 +63,7 @@ define ->
       projectRef = @get('project').get('_ref')
       prefs = @get('prefs')
 
-      prefs.updateProjectPreference projectRef, Preference::defaultIteration, value
+      prefs.updateProjectPreference @get('user').get('_ref'), projectRef, Preference::defaultIteration, value
 
     getProjectName: ->
       try
@@ -154,7 +154,7 @@ define ->
       projectOid = utils.getOidFromRef @get('project').get('_ref')
 
       @set "#{pref}.#{projectOid}", columns
-      @get('prefs').updateProjectPreference @get('project').get('_ref'), pref, columns.join(',')
+      @get('prefs').updateProjectPreference @get('user').get('_ref'), @get('project').get('_ref'), pref, columns.join(',')
 
     _getDefaultBoardColumns: (boardField) ->
       switch boardField
@@ -253,7 +253,7 @@ define ->
       @get('prefs').updatePreference @get('user'), Preference::defaultMode, value
 
     _onBoardFieldChange: (model, value, options) ->
-      @get('prefs').updateProjectPreference @get('project').get('_ref'), Preference::defaultBoardField, value
+      @get('prefs').updateProjectPreference @get('user').get('_ref'), @get('project').get('_ref'), Preference::defaultBoardField, value
 
     _onProjectChange: (model, value, options) ->
       projectRef = value.get('_ref')

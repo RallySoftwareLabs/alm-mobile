@@ -23,11 +23,11 @@ define(function() {
           <form className="settings" role="form">
             <div className="form-group project">
               <label htmlFor="project" className="control-label choose-project">Project</label>
-              <select name="project" className="form-control project-select" defaultValue={ currentProject.get('_ref') } onChange={ this.updateSelectedProject }>{ projects }</select>
+              <select name="project" className="form-control project-select" value={ currentProject.get('_ref') } onChange={ this.updateSelectedProject }>{ projects }</select>
             </div>
             <div className="form-group iteration">
               <label htmlFor="iteration" className="control-label choose-iteration">Iteration</label>
-              <select name="iteration" className="form-control iteration-select" defaultValue={ currentIteration && currentIteration.get('_ref') || 'null' } onChange={ this.updateSelectedIteration }>
+              <select name="iteration" className="form-control iteration-select" value={ currentIteration && currentIteration.get('_ref') || 'null' } onChange={ this.updateSelectedIteration }>
                 <option value="null">None</option>
                 { iterations }
               </select>

@@ -1,5 +1,6 @@
 define ->
   appConfig = require 'appConfig'
+  utils = require 'lib/utils'
   Collection = require 'collections/collection'
   Preference = require 'models/preference'
 
@@ -21,9 +22,7 @@ define ->
       @find _.isAttributeEqual('Name', name)
 
     findProjectPreference: (project, name) ->
-      @find (pref) ->
-        prefProj = pref.get('Project')
-        (prefProj == project || prefProj?._ref == project) && pref.get('Name') == name
+      @findPreference @_getProjectPreferenceName project, name
 
     updatePreference: (user, name, value) ->
       existingPref = newPref = @findPreference name
@@ -44,7 +43,7 @@ define ->
       unless _.isEmpty(changedAttrs)
         newPref.save changedAttrs, patch: true, success: (model) => @add newPref unless existingPref
 
-    updateProjectPreference: (project, name, value) ->
+    updateProjectPreference: (user, project, name, value) ->
       existingPref = newPref = @findProjectPreference project, name
 
       changedAttrs = {}
@@ -54,11 +53,15 @@ define ->
           changedAttrs.Value = value || ''
       else
         changedAttrs =
-          Project: project
-          Name: name
+          User: user
+          Name: @_getProjectPreferenceName(project, name)
           Value: value
 
         newPref = new Preference changedAttrs
 
       unless _.isEmpty(changedAttrs)
         newPref.save changedAttrs, patch: true, success: (model) => @add newPref unless existingPref
+
+    _getProjectPreferenceName: (project, name) ->
+      projectOid = utils.getOidFromRef(project)
+      "#{name}.#{projectOid}"

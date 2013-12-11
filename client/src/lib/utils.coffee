@@ -36,6 +36,7 @@ define ->
       "/#{@_getWsapiType(type)}/#{oid}"
 
     getOidFromRef: (ref) ->
+      ref = ref._ref || ref
       ref.substr (ref.lastIndexOf("/") + 1)
 
     getTypeFromRef: (ref) ->
