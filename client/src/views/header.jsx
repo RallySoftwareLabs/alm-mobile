@@ -33,7 +33,7 @@ define(function() {
     },
     getLeftButton: function(currentPage) {
       if (_.contains(['/', '/userstories', '/defects', '/tasks', '/board', '/recentActivity'], currentPage)) {
-        return this.makeButton('navigation', 'grid', 'left');;
+        return <span/>;//this.makeButton('navigation', 'grid', 'left');
       } else {
         return this.makeButton('back', 'back', 'left');
       }
