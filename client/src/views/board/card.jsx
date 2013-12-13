@@ -8,8 +8,8 @@ define(function() {
     render: function() {
       var m = this.props.model,
       		cardStyle = {},
-      		name = this.props.showFields ? <div className="field name">{m.get('Name')}</div> : '',
-      		owner = this.props.showFields ? <Owner model={m}/> : '';
+      		name = <div className="field name">{m.get('Name')}</div>,
+      		owner = <Owner model={m}/>;
       if (m.get('DisplayColor')) {
       	cardStyle.backgroundColor = m.get('DisplayColor');
       	cardStyle.color = 'white';

@@ -12,33 +12,33 @@ define(function() {
     },
     render: function() {
       var model = this.props.model,
-          showFields = this.props.showFields,
+          singleColumn = this.props.singleColumn,
           goLeft = '',
           goRight = '',
           storiesAndDefects = model.artifacts().sortBy(function(m) { return m.get('DragAndDropRank') });
-      if (showFields && !this.isColumnAtIndex(0)) {
+      if (singleColumn && !this.isColumnAtIndex(0)) {
         goLeft = <i className="go-left icon-chevron-left" onClick={this.goLeft}></i>;
       }
-      if (showFields && !this.isColumnAtIndex(this.props.columns.length - 1)) {
+      if (singleColumn && !this.isColumnAtIndex(this.props.columns.length - 1)) {
         goRight = <i className="go-right icon-chevron-right" onClick={this.goRight}></i>;
       }
       return (
         <div className="board">
           <IterationHeader visible={this.props.showIteration} />
-          <div className="column">
+          <div className={ "column" + (singleColumn ? ' single-column' : ' multi-column') }>
               <div className="header" onClick={this.onHeaderClick}>
                   {goLeft}
                   {this.getColumnHeaderStr(storiesAndDefects)}
                   {goRight}
               </div>
-              <div className="body">{this.getCardsMarkup(storiesAndDefects, showFields)}</div>
+              <div className="body">{this.getCardsMarkup(storiesAndDefects)}</div>
           </div>
         </div>
       );
     },
-    getCardsMarkup: function(storiesAndDefects, showFields) {
+    getCardsMarkup: function(storiesAndDefects) {
       return _.map(storiesAndDefects, function(model) {
-        var card = <Card key={model.get('_ref')} model={model} showFields={showFields} key={model.get('_ref')} />;
+        var card = <Card key={model.get('_ref')} model={model} key={model.get('_ref')} />;
         this.bubbleEvent(card, 'cardclick', 'cardclick');
         return card;
       }, this);

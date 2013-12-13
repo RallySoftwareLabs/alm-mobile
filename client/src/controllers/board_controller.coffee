@@ -27,13 +27,13 @@ define ->
 
         field = app.session.get('boardField')
         col = new Column(field: field, value: colValue)
-        col.fetch @getFetchData(field, colValue, ['Name', 'Owner'])
+        col.fetch @getFetchData(field, colValue)
 
         @view = @renderReactComponent ColumnView,
           region: 'main'
           model: col
           columns: @getColumnModels(field)
-          showFields: true
+          singleColumn: true
           abbreviateHeader: false
           showIteration: true
         
@@ -59,7 +59,7 @@ define ->
         newColumn = columns[colIndex - 1]
         @publishEvent '!router:changeURL', "/board/#{newColumn.get('value')}"
         @view.setProps model: newColumn
-        newColumn.fetch @getFetchData(field, newColumn.get('value'), ['Name', 'Owner'])
+        newColumn.fetch @getFetchData(field, newColumn.get('value'))
         # @redirectToRoute 'board#column', column: columns[colIndex - 1].get('value')
 
     goRight: (col) ->
@@ -70,15 +70,15 @@ define ->
         newColumn = columns[colIndex + 1]
         @publishEvent '!router:changeURL', "/board/#{newColumn.get('value')}"
         @view.setProps model: newColumn
-        newColumn.fetch @getFetchData(field, newColumn.get('value'), ['Name', 'Owner'])
+        newColumn.fetch @getFetchData(field, newColumn.get('value'))
         # @redirectToRoute 'board#column', column: columns[colIndex + 1].get('value')
 
     getColumnModels: (field) ->
       _.map app.session.getBoardColumns(), (value) -> new Column(field: field, value: value)
 
-    getFetchData: (field, value, extraFetch = []) ->
+    getFetchData: (field, value) ->
       data =
-        fetch: ['ObjectID', 'FormattedID', 'Rank', 'DisplayColor', 'Blocked', 'Ready'].concat(extraFetch).join ','
+        fetch: ['ObjectID', 'FormattedID', 'Rank', 'DisplayColor', 'Blocked', 'Ready', 'Name', 'Owner'].join ','
         query: "(#{field} = \"#{value}\")"
         order: "Rank ASC,ObjectID"
         project: app.session.get('project').get('_ref')

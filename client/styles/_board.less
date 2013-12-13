@@ -82,17 +82,20 @@
             .formatted-id {
                 overflow: hidden;
             }
+            .name {
+                display: none; // responsive below
+            }
 
             .owner {
                 float: right;
 
                 .owner-name {
-                    display: inline-block;
+                    display: none;
                     padding-right: 4px;
                 }
 
                 .profile-image {
-                    display: inline-block;
+                    display: none;
                     width: 25px;
                     height: 25px;
                     background-position: center center;
@@ -109,6 +112,37 @@
             &.colored {
                 .field {
                     color: @white;
+                }
+            }
+        }
+
+        &.multi-column {
+            @media (min-width: @screen-xs) {
+                .card .owner .profile-image {
+                    display: inline-block;
+                }
+            }
+            @media (min-width: @screen-sm) {
+                .card .owner .owner-name {
+                    display: inline-block;
+                }
+            }
+            @media (min-width: @screen-md) {
+                .card .name {
+                    display: block;
+                }
+            }
+        }
+
+        &.single-column {
+            .card {
+                .name {
+                    display: block;
+                }
+                .owner {
+                    .profile-image, .owner-name {
+                        display: inline-block;
+                    }
                 }
             }
         }

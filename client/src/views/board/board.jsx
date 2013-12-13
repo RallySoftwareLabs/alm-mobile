@@ -26,7 +26,7 @@ define(function() {
     	  		colView = ColumnView({
 		  	  		model: col,
 		  	  		columns: this.props.columns,
-		  	  		showFields: false,
+		  	  		singleColumn: false,
 		  	  		abbreviateHeader: true,
 		  	  		showIteration: false,
 		  	  		key: colValue
