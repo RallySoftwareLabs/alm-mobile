@@ -20,7 +20,7 @@
     "ejs": "0.8.4",
     "express": "3.4.3",
     "html-md": "3.0.2",
-    "lodash": "2.2.1",
+    "lodash": "2.4.1",
     "request": "2.27.0"
   },
   "devDependencies": {
