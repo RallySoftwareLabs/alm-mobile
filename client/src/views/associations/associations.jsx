@@ -14,7 +14,7 @@ define(function() {
           <h4>
             <span class={this._getIconCls()}/>
             {association}
-            <button className="btn btn-primary add-button" onClick={ this._onAddClick }>+ Add { _.singularize(association) }</button>
+            <button className="btn btn-primary add-button" onClick={ this._onAddClick }>+ Add { this._singularize(association) }</button>
           </h4>
           <div class="listing">
             <ListView
@@ -30,6 +30,13 @@ define(function() {
     _getIconCls: function() {
       var association = this.props.association;
       return 'picto icon-' + association.toLowerCase().slice(0, association.length - 1);
+    },
+
+    _singularize: function(association) {
+      if (association === 'Children') {
+        return 'Child';
+      }
+      return _.singularize(association);
     },
 
     _onAddClick: function() {

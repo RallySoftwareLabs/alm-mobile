@@ -9,6 +9,8 @@ define ->
     match 'tasks', 'home#tasks'
 
     match 'userstory/:id', 'user_story_detail#show'
+    match 'userstory/:id/children', 'associations#childrenForStory'
+    match 'userstory/:id/children/new', 'user_story_detail#childForStory'
     match 'userstory/:id/defects', 'associations#defectsForStory'
     match 'userstory/:id/defects/new', 'defect_detail#defectForStory'
     match 'userstory/:id/tasks', 'associations#tasksForStory'

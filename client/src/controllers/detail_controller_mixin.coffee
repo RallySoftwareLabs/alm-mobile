@@ -1,19 +1,22 @@
 define ->
   app = require 'application'
   utils = require 'lib/utils'
+  InitializingView = require 'views/initializing'
 
   return {
     homeRoute: '/board'
 
     fetchModelAndShowView: (Model, View, id) ->
+      @view = @renderReactComponent InitializingView, region: 'main', shared: false
       fieldNames = @getFieldNames()
       model = new Model(ObjectID: id)
       model.fetch
         data:
           fetch: fieldNames.join ','
         success: (model, response, opts) =>
+          @view.dispose()
           @updateTitle "#{model.get('FormattedID')}: #{model.get('_refObjectName')}"
-      @view = @renderReactComponent View, model: model, region: 'main', fieldNames: fieldNames
+          @view = @renderReactComponent View, model: model, region: 'main', fieldNames: fieldNames
       @subscribeEvent 'saveField', @saveField
 
     showCreateView: (Model, View, defaultValues = {}) ->

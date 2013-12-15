@@ -30,7 +30,7 @@ define ->
   return {
     getDetailHash: (model) ->
       attributes = model.attributes || model
-      "#{@_getNavigationType(attributes._type)}/#{attributes.ObjectID}"
+      "#{@_getNavigationType(@getTypeFromRef(attributes._ref))}/#{@getOidFromRef(attributes._ref)}"
 
     getRef: (type, oid) ->
       "/#{@_getWsapiType(type)}/#{oid}"

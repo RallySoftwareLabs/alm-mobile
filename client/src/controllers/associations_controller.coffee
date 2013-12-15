@@ -9,8 +9,12 @@ define ->
   associationClasses =
     Defects: require 'collections/defects'
     Tasks: require 'collections/tasks'
+    Children: require 'collections/user_stories'
 
   class AssociationsController extends SiteController
+    childrenForStory: (params) ->
+      @_createAssociationView(new UserStory(ObjectID: params.id, _type: 'hierarchicalrequirement'), 'Children', 'Parent')
+
     defectsForStory: (params) ->
       @_createAssociationView(new UserStory(ObjectID: params.id, _type: 'hierarchicalrequirement'), 'Defects', 'Requirement')
 
@@ -41,6 +45,6 @@ define ->
           @updateTitle "#{association} for #{model.get('FormattedID')}: #{model.get('_refObjectName')}"
           associatedItems.fetch
             data:
-              fetch: 'ObjectID,FormattedID,Name,Ready,Blocked,ToDo,ScheduleState,State'
+              fetch: 'Blocked,FormattedID,Name,ObjectID,Parent,Ready,ScheduleState,State,ToDo'
               query: "(#{reverseAssociation} = \"#{model.get('_ref')}\")"
               order: 'ObjectID ASC'

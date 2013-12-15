@@ -17,17 +17,29 @@ define ->
       @whenLoggedIn ->
         @showCreateView UserStory, View
 
+    childForStory: (params) ->
+      @whenLoggedIn ->
+        model = new UserStory(ObjectID: params.id)
+        model.fetch
+          data:
+            fetch: 'FormattedID'
+          success: (model, response, opts) =>
+            @updateTitle "New Child for #{model.get('FormattedID')}: #{model.get('_refObjectName')}"
+            @showCreateView UserStory, View, Parent: model.attributes
+
     getFieldNames: ->
       [
+        'Blocked',
+        'Children'
+        'Defects',
+        'Description',
+        'Discussion',
         'FormattedID',
         'Name',
         'Owner',
+        'Parent',
         'PlanEstimate',
-        'Tasks',
-        'Defects',
-        'Discussion',
-        'Description',
-        'Blocked',
         'Ready',
+        'Tasks',
         app.session.get('boardField')
       ]

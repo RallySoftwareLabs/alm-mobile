@@ -7,6 +7,7 @@ define(function() {
   		ReactView = require('views/base/react_view'),
       DetailMixin = require('views/detail/detail_mixin'),
   		Defects = require('views/field/defects'),
+      Children = require('views/field/children'),
   		Description = require('views/field/description'),
   		Discussion = require('views/field/discussion'),
   		Name = require('views/field/name'),
@@ -14,54 +15,72 @@ define(function() {
   		Tasks = require('views/field/tasks'),
   		TitledWell = require('views/field/titled_well'),
   		Toggle = require('views/field/toggle'),
-  		StringWithArrows = require('views/field/string_with_arrows');
+  		StringWithArrows = require('views/field/string_with_arrows'),
+      WorkProduct = require('views/field/work_product');
 
   return ReactView.createChaplinClass({
     mixins: [DetailMixin],
   	render: function() {
+      var model = this.props.model,
+          newArtifact = this.props.newArtifact,
+          childrenOrTasks = model.get('Children') && model.get('Children').Count ?
+            (
+              <div className="col-xs-3 ChildrenView">
+                <Children item={ model } editMode={ newArtifact }/>
+              </div>
+            )
+            :
+            (
+              <div className="col-xs-3 TasksView">
+                <Tasks item={ model } editMode={ newArtifact }/>
+              </div>
+            );
   		return (
   			<div className="detail-view">
   			  <div className="row">
   			    <div className="col-xs-12 NameView">
-  			  		<Name item={ this.props.model } editMode={ this.props.newArtifact }/>
+  			  		<Name item={ model } editMode={ newArtifact }/>
   			    </div>
   			  </div>
+          <div className="row">
+            <div className="col-xs-12 ellipsis ParentView">
+              <WorkProduct item={ model } editMode={ newArtifact } field="Parent" label="Parent"/>
+            </div>
+          </div>
   			  <div className="row">
   			    <div className="col-xs-8 ScheduleStateView">
-  			    	<StringWithArrows item={ this.props.model } editMode={ this.props.newArtifact } field={ app.session.get('boardField') } label={ this.getScheduleStateLabel() }/>
+  			    	<StringWithArrows item={ model } editMode={ newArtifact } field={ app.session.get('boardField') } label={ this.getScheduleStateLabel() }/>
   			    </div>
   			    <div className="col-xs-4 OwnerView">
-  			    	<Owner item={ this.props.model } editMode={ this.props.newArtifact }/>
+  			    	<Owner item={ model } editMode={ newArtifact }/>
   			    </div>
   			  </div>
   			  <div className="row">
   			    <div className="col-xs-3 PlanEstimateView">
-  			    	<TitledWell item={ this.props.model } editMode={ this.props.newArtifact } field='PlanEstimate' label='Plan Est' inputType='number'/>
+  			    	<TitledWell item={ model } editMode={ newArtifact } field='PlanEstimate' label='Plan Est' inputType='number'/>
   			    </div>
-  			    <div className="col-xs-3 TasksView">
-  			    	<Tasks item={ this.props.model } editMode={ this.props.newArtifact }/>
-  			    </div>
+            { childrenOrTasks }
   			    <div className="col-xs-3 DefectsView">
-  			    	<Defects item={ this.props.model } editMode={ this.props.newArtifact }/>
+  			    	<Defects item={ model } editMode={ newArtifact }/>
   			    </div>
   			    <div className="col-xs-3 DiscussionView">
-  			    	<Discussion item={ this.props.model } editMode={ this.props.newArtifact }/>
+  			    	<Discussion item={ model } editMode={ newArtifact }/>
   			    </div>
   			  </div>
   			  <div className="row">
   			    <div className="col-xs-12 DescriptionView">
-  			    	<Description item={ this.props.model } editMode={ this.props.newArtifact }/>
+  			    	<Description item={ model } editMode={ newArtifact }/>
   			    </div>
   			  </div>
           {
-            !this.props.newArtifact ?
+            !newArtifact ?
     			  <div className="row">
     			    <div className="col-xs-1"/>
     			    <div className="col-xs-5 toggle BlockedView">
-    			    	<Toggle item={ this.props.model } editMode={ this.props.newArtifact } field='Blocked' label='Blocked'/>
+    			    	<Toggle item={ model } editMode={ newArtifact } field='Blocked' label='Blocked'/>
     			    </div>
     			    <div className="col-xs-5 toggle ReadyView">
-    			    	<Toggle item={ this.props.model } editMode={ this.props.newArtifact } field='Ready' label='Ready'/>
+    			    	<Toggle item={ model } editMode={ newArtifact } field='Ready' label='Ready'/>
     			    </div>
     			    <div className="col-xs-1"/>
     			  </div> : ''

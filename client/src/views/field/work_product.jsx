@@ -8,11 +8,14 @@ define(function() {
 
   return ReactView.createChaplinClass({
   	mixins: [FieldMixin],
+    getDefaultProps: function() {
+      return { label: 'Work Product' };
+    },
   	render: function() {
       var fieldValue = this.getFieldValue();
   		return fieldValue ? (
         <div className="display">
-          <div className="well-title control-label">Work Product</div>
+          <div className="well-title control-label">{ this.props.label }</div>
           <div className="well well-sm titled-well-sm" onClick={ this._onClick }>
             <span className="work-product-id">{ fieldValue.FormattedID }</span>
             <span className="work-product-name ellipsis">{ fieldValue._refObjectName }</span>

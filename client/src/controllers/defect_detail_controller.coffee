@@ -28,7 +28,6 @@ define ->
             @updateTitle "New Defect for #{model.get('FormattedID')}: #{model.get('_refObjectName')}"
             @showCreateView Defect, View, Requirement: model.attributes
 
-
     getFieldNames: ->
       [
         'FormattedID',
