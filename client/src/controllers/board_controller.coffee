@@ -79,7 +79,8 @@ define ->
     getFetchData: (field, value) ->
       data =
         fetch: ['ObjectID', 'FormattedID', 'Rank', 'DisplayColor', 'Blocked', 'Ready', 'Name', 'Owner'].join ','
-        query: "(#{field} = \"#{value}\")"
+        query: "((#{field} = \"#{value}\") AND ((Requirement = null) OR (DirectChildrenCount = 0)))"
+        types: 'hierarchicalrequirement,defect'
         order: "Rank ASC,ObjectID"
         project: app.session.get('project').get('_ref')
         projectScopeUp: false

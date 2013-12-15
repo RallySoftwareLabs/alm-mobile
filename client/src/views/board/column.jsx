@@ -15,7 +15,7 @@ define(function() {
           singleColumn = this.props.singleColumn,
           goLeft = '',
           goRight = '',
-          storiesAndDefects = model.artifacts().sortBy(function(m) { return m.get('DragAndDropRank') });
+          storiesAndDefects = model.artifacts.sortBy(function(m) { return m.get('DragAndDropRank') });
       if (singleColumn && !this.isColumnAtIndex(0)) {
         goLeft = <i className="go-left icon-chevron-left" onClick={this.goLeft}></i>;
       }
