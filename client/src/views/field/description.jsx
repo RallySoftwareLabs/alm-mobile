@@ -25,7 +25,7 @@ define(function() {
           </div>
           <div className="well well-sm">
             { editMode ?
-              <textarea class={ "editor " + this.props.field }
+              <textarea className={ "editor " + this.props.field }
                         placeholder={ this.props.field }
                         defaultValue={ utils.md(fieldValue) }
                         onBlur={ this.endEdit }

@@ -7,7 +7,7 @@ define(function() {
 
   return ReactView.createChaplinClass({
     render: function() {
-    	return <div class="jumbotron"><p class="text-center">Initializing...</p></div>;
+    	return <div className="jumbotron"><p className="text-center">Initializing...</p></div>;
     },
     componentDidMount: function() {
       $(this.getDOMNode()).find('p').append(new Spinner().spin().el);

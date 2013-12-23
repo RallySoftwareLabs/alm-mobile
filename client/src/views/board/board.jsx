@@ -16,7 +16,7 @@ define(function() {
     	return (
     		<div className="board">
     		  <IterationHeader visible={true} />
-	    		<div class="column-container">{this.getColumns()}</div>
+	    		<div className="column-container">{this.getColumns()}</div>
 	    	</div>
   		);
     },
@@ -37,10 +37,10 @@ define(function() {
     	}, this);
     	if (!this.props.columns.length) {
     		colMarkup = (
-    			<div class="row">
-    				<div class="col-xs-offset-2 col-xs-8 well no-columns">
+    			<div className="row">
+    				<div className="col-xs-offset-2 col-xs-8 well no-columns">
     					<p>Your board for this project does not have any columns.</p>
-    					<p>Click the <a href="/settings"><i class="icon-cog"/></a> icon to configure your board.</p>
+    					<p>Click the <a href="/settings"><i className="icon-cog"/></a> icon to configure your board.</p>
     				</div>
     			</div>
   			);

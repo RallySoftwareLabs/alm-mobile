@@ -19,38 +19,38 @@ define(function() {
     mixins: [DetailMixin],
   	render: function() {
   		return (
-        <div class="detail-view">
-          <div class="row">
+        <div className="detail-view">
+          <div className="row">
             <div className="col-xs-12 NameView">
               <Name item={ this.props.model } editMode={ this.props.newArtifact }/>
             </div>
           </div>
-          <div class="row">
-            <div class="col-xs-12 ellipsis WorkProductView">
+          <div className="row">
+            <div className="col-xs-12 ellipsis WorkProductView">
               <WorkProduct item={ this.props.model } editMode={ this.props.newArtifact } field="WorkProduct"/>
             </div>
           </div>
-          <div class="row">
-            <div class="col-xs-8 StateView">
+          <div className="row">
+            <div className="col-xs-8 StateView">
               <StringWithArrows item={ this.props.model } editMode={ this.props.newArtifact } field="State" label="State"/>
             </div>
-            <div class="col-xs-4 OwnerView">
+            <div className="col-xs-4 OwnerView">
               <Owner item={ this.props.model } editMode={ this.props.newArtifact }/>
             </div>
           </div>
-          <div class="row">
-            <div class="col-xs-5 EstimateView">
+          <div className="row">
+            <div className="col-xs-5 EstimateView">
               <TitledWell item={ this.props.model } editMode={ this.props.newArtifact } field='Estimate' label='Task Est (H)' inputType='number'/>
             </div>
-            <div class="col-xs-5 ToDoView">
+            <div className="col-xs-5 ToDoView">
               <TitledWell item={ this.props.model } editMode={ this.props.newArtifact } field='ToDo' label='Task To Do (H)' inputType='number'/>
             </div>
-            <div class="col-xs-2 DiscussionView">
+            <div className="col-xs-2 DiscussionView">
               <Discussion item={ this.props.model } editMode={ this.props.newArtifact }/>
             </div>
           </div>
-          <div class="row">
-            <div class="col-xs-12 DescriptionView">
+          <div className="row">
+            <div className="col-xs-12 DescriptionView">
               <Description item={ this.props.model } editMode={ this.props.newArtifact }/>
             </div>
           </div>

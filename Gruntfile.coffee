@@ -85,10 +85,13 @@ module.exports = (grunt) ->
 
     react:
       clientSrc:
-        options:
-          extension: 'jsx'
-        files:
-          'client/gen/js/src/views': 'client/src/views'
+        files: [
+          expand: true
+          ext: '.js'
+          cwd: 'client/src/views'
+          src: ['**/*.jsx']
+          dest: 'client/gen/js/src/views'
+        ]
 
     requirejs:
       compile:

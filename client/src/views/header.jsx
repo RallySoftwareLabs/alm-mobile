@@ -19,12 +19,12 @@ define(function() {
     render: function() {
       var currentPage = this.getCurrentPage();
       return (
-        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-          <div class="row">
-            <div class="col-xs-2 left-button">{ this.getLeftButton(currentPage) }</div>
-            <div class="col-xs-7 title"><div class="ellipsis">{ this.state.title }</div></div>
-            <div class="col-xs-3 right-button">
-              <a href="#" class="right" onClick={ this._navigateToFn('search') }><i class="picto icon-search"></i></a>
+        <div className="navbar navbar-inverse navbar-fixed-top" role="navigation">
+          <div className="row">
+            <div className="col-xs-2 left-button">{ this.getLeftButton(currentPage) }</div>
+            <div className="col-xs-7 title"><div className="ellipsis">{ this.state.title }</div></div>
+            <div className="col-xs-3 right-button">
+              <a href="#" className="right" onClick={ this._navigateToFn('search') }><i className="picto icon-search"></i></a>
               { this.getRightButton(currentPage) }
             </div>
           </div>
@@ -48,8 +48,8 @@ define(function() {
     makeButton: function(target, icon, cls) {
       cls = cls || '';
       return (
-        <a href="#" class={ cls } onClick={ this._navigateToFn(target) }>
-          <i class={ "picto icon-" + icon }/>
+        <a href="#" className={ cls } onClick={ this._navigateToFn(target) }>
+          <i className={ "picto icon-" + icon }/>
         </a>
       );
     },

@@ -14,7 +14,7 @@ define(function() {
     },
   	render: function() {
       if (this.isEditMode()) {
-        return <div className="edit"><div class="header">{ this.getInputMarkup() }</div></div>;
+        return <div className="edit"><div className="header">{ this.getInputMarkup() }</div></div>;
       }
   		return <div className="display"><div className="header" onClick={ this._onClick }>{ this.getFieldValue() }</div></div>;
   	},

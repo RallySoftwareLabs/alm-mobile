@@ -12,11 +12,11 @@ define(function() {
       return (
         <div className="artifact-association">
           <h4>
-            <span class={this._getIconCls()}/>
+            <span className={this._getIconCls()}/>
             {association}
             <button className="btn btn-primary add-button" onClick={ this._onAddClick }>+ Add { this._singularize(association) }</button>
           </h4>
-          <div class="listing">
+          <div className="listing">
             <ListView
               model={this.props.associatedItems}
               noDataMsg={"This " + utils.getTypeForDetailLink(this.props.fromModel.get('_type')) + " has no " + association.toLowerCase()}

@@ -15,8 +15,8 @@ define(function() {
     },
     render: function() {
     	return (
-        <div class="body row">
-          <div class="col-xs-12 buttons">
+        <div className="body row">
+          <div className="col-xs-12 buttons">
             {this.getButtons()}
           </div>
         </div>
@@ -43,9 +43,9 @@ define(function() {
       ];
       return _.map(buttons, function(button) {
         return (
-          <button class="btn btn-default btn-inverse btn-block" type="button" onClick={ this.onClick(button.viewHash) } key={ button.viewHash }>
-            <span class="col-xs-10 display-name">{ button.displayName }</span>
-            <span class="col-xs-2 icon"><i class="icon-chevron-right icon-white"></i></span>
+          <button className="btn btn-default btn-inverse btn-block" type="button" onClick={ this.onClick(button.viewHash) } key={ button.viewHash }>
+            <span className="col-xs-10 display-name">{ button.displayName }</span>
+            <span className="col-xs-2 icon"><i className="icon-chevron-right icon-white"></i></span>
           </button>
         );
       }, this);
