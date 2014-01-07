@@ -14,6 +14,7 @@ define ->
         data:
           fetch: fieldNames.join ','
         success: (model, response, opts) =>
+          console.log(model)
           @view.dispose()
           @updateTitle "#{model.get('FormattedID')}: #{model.get('_refObjectName')}"
           @view = @renderReactComponent View, model: model, region: 'main', fieldNames: fieldNames

@@ -26,7 +26,21 @@
         }
     }
     .column {
-
+        .body {
+            position: relative;
+            .dropzone {
+                top: 0;
+                left: 0;
+                height: 5px;
+                width: 100%;
+                background: rgba(50,50, 255, 0.7);
+            }
+        }
+        .body.over {
+            border: 1px dashed;
+            padding-bottom: 25px;
+            background-color: rgba(255, 255, 155, 0.5);
+        }
         .header {
             cursor: pointer;
             background-color: @medGrey;
@@ -53,6 +67,7 @@
         }
 
         .card {
+            position: relative;
             cursor: pointer;
             background-color: @white;
             padding: 5px;

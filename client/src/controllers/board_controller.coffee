@@ -78,7 +78,7 @@ define ->
 
     getFetchData: (field, value) ->
       data =
-        fetch: ['ObjectID', 'FormattedID', 'Rank', 'DisplayColor', 'Blocked', 'Ready', 'Name', 'Owner'].join ','
+        fetch: ['ObjectID', 'FormattedID', 'Rank', 'DisplayColor', 'Blocked', 'Ready', 'Name', 'Owner', 'State'].join ','
         query: "((#{field} = \"#{value}\") AND ((Requirement = null) OR (DirectChildrenCount = 0)))"
         types: 'hierarchicalrequirement,defect'
         order: "Rank ASC,ObjectID"
