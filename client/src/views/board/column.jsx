@@ -31,7 +31,10 @@ define(function() {
                   {this.getColumnHeaderStr(storiesAndDefects)}
                   {goRight}
               </div>
-              <div className="body">{this.getCardsMarkup(storiesAndDefects)}</div>
+              <div className="body">
+                <button className="btn btn-primary add-button" onClick={this.onAddClick}>+ Add</button>
+                {this.getCardsMarkup(storiesAndDefects)}
+              </div>
           </div>
         </div>
       );
@@ -73,6 +76,10 @@ define(function() {
       this.trigger('goright', this.props.model);
       e.preventDefault();
       e.stopPropagation();
+    },	
+	//Why no underscore here when there is one in associations.jsx?  Which convention is right?
+	onAddClick: function() {
+      this.publishEvent('!router:route', 'new/userstory');
     }
   });
 });
