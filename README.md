@@ -81,6 +81,7 @@ They're in original [LESS](http://lesscss.org/) format in order to be easily cus
 ## Application Configuration
 
 You will need to create a config.json file to configure the ALM url. You should copy from config.json.example as a template.
+The sequence here is a bit funky - I think this, or the apache stuff, needs to be done before npm start.
 
 #### Properties
 
