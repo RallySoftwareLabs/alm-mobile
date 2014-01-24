@@ -77,9 +77,8 @@ define(function() {
       e.preventDefault();
       e.stopPropagation();
     },	
-	//Why no underscore here when there is one in associations.jsx?  Which convention is right?
 	onAddClick: function() {
-      this.publishEvent('!router:route', 'new/userstory');
+      this.publishEvent('!router:route', 'board/' + this.props.model.get('value') + '/userstory/new');
     }
   });
 });
