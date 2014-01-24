@@ -1,0 +1,6 @@
+@showCreateView UserStory, View, Parent: model.attributes
+{
+    "key": "",
+    "secret": "",
+    "bucket": ""
+}
