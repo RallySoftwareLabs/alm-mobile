@@ -31,6 +31,9 @@ define ->
       @whenLoggedIn ->
         props = {}
         props[app.session.get('boardField')] = params.column
+        iterationRef = app.session.get('iteration')?.get('_ref')
+        if iterationRef
+          props.Iteration = iterationRef
         @updateTitle "New Story"
         @showCreateView UserStory, View, props
 
