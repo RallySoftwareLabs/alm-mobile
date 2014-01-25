@@ -3,6 +3,7 @@ define ->
     match '', 'board#index'
     match 'board', 'board#index'
     match 'board/:column', 'board#column'
+    match 'board/:column/userstory/new', 'user_story_detail#storyForColumn'
 
     match 'userstories', 'home#userstories'
     match 'defects', 'home#defects'

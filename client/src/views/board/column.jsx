@@ -31,7 +31,10 @@ define(function() {
                   {this.getColumnHeaderStr(storiesAndDefects)}
                   {goRight}
               </div>
-              <div className="body">{this.getCardsMarkup(storiesAndDefects)}</div>
+              <div className="body">
+                <button className="btn btn-primary add-button" onClick={this.onAddClick}>+ Add</button>
+                {this.getCardsMarkup(storiesAndDefects)}
+              </div>
           </div>
         </div>
       );
@@ -73,6 +76,9 @@ define(function() {
       this.trigger('goright', this.props.model);
       e.preventDefault();
       e.stopPropagation();
+    },	
+	onAddClick: function() {
+      this.publishEvent('!router:route', 'board/' + this.props.model.get('value') + '/userstory/new');
     }
   });
 });

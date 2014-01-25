@@ -27,6 +27,13 @@ define ->
             @updateTitle "New Child for #{model.get('FormattedID')}: #{model.get('_refObjectName')}"
             @showCreateView UserStory, View, Parent: model.attributes
 
+    storyForColumn: (params) ->
+      @whenLoggedIn ->
+        props = {}
+        props[app.session.get('boardField')] = params.column
+        @updateTitle "New Story"
+        @showCreateView UserStory, View, props
+
     getFieldNames: ->
       [
         'Blocked',
