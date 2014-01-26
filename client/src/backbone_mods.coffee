@@ -91,7 +91,7 @@ define ->
     error = options.error
     options.error = (xhr, status, thrown) ->
       error?(xhr, status, thrown)
-      model.trigger('error', model, xhr, options)
+      model.trigger('error', model, xhr, options) unless options.silent
       if xhr.status is 401 or xhr.status is 0 or status.indexOf('Not authorized') > -1
         app.session.logout()
         window.loginError = "Your session has expired. Please login again."
@@ -104,7 +104,7 @@ define ->
       if errors?.length > 0
         options.error(xhr, errors[0], null)
       else
-        model.set updateResultObj.Object if updateResultObj
+        model.set updateResultObj.Object, options if updateResultObj
         success?(resp, status, xhr)
 
     # Make the request, allowing the user to override any Ajax options.

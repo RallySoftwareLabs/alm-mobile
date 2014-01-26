@@ -15,7 +15,7 @@ define ->
           fetch: fieldNames.join ','
         success: (model, response, opts) =>
           @view.dispose()
-          @updateTitle "#{model.get('FormattedID')}: #{model.get('_refObjectName')}"
+          @_setTitle model
           @view = @renderReactComponent View, model: model, region: 'main', fieldNames: fieldNames
       @subscribeEvent 'saveField', @saveField
 
@@ -35,22 +35,24 @@ define ->
       @view.props.model.set updates
 
     saveNew: (model) ->
-      model.set Project: app.session.get('project').get('_ref')
+      model.set { Project: app.session.get('project').get('_ref') }, { silent: true }
       model.sync 'create', model,
         fetch: ['ObjectID'].concat(@getFieldNames()).join ','
         wait: true
         patch: true
+        silent: true
         success: (resp, status, xhr) =>
           opts?.success?(model, resp)
-          @publishEvent '!router:route', utils.getDetailHash(model), replace: true
+          @publishEvent '!router:changeURL', utils.getDetailHash(model), replace: true
           @view.setProps newArtifact: false
+          @_setTitle model
         error: (resp, status, xhr) =>
           @view.showError(model, resp)
 
     cancelNew: ->
       @publishEvent '!router:route', @homeRoute, replace: false
 
-    _saveLocal: (updates, opts) ->
+    _saveLocal: (updates) ->
       @view.props.model.set(updates)
 
     _saveRemote: (updates, opts) ->
@@ -62,4 +64,7 @@ define ->
           opts?.success?(model, resp, options)
         error: (model, xhr, options) =>
           opts?.error?(model, xhr, options)
+
+    _setTitle: (model) ->
+      @updateTitle "#{model.get('FormattedID')}: #{model.get('_refObjectName')}"
   }
