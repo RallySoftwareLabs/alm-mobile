@@ -83,7 +83,7 @@ define ->
       spec.renderForChaplin = (id) ->
         if this.props.region
           @publishEvent '!region:show', this.props.region, this
-        React.renderComponent this, (if this.container then this.container[0] else document.body)
+        React.renderComponent this, (if this.container then this.container[0] else if id then document.getElementById(id) else document.body)
         this.trigger "addedToDOM"
 
       spec.updateTitle = (title) ->

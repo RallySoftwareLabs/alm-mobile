@@ -1,9 +1,6 @@
 /** @jsx React.DOM */
 define(function() {
-  var $ = require('jquery'),
-      _ = require('underscore'),
-      React = require('react'),
-      app = require('application'),
+  var React = require('react'),
       ReactView = require('views/base/react_view'),
       DetailMixin = require('views/detail/detail_mixin'),
       Defects = require('views/field/defects'),
@@ -14,7 +11,6 @@ define(function() {
       Owner = require('views/field/owner'),
       Tasks = require('views/field/tasks'),
       TitledWell = require('views/field/titled_well'),
-      Toggle = require('views/field/toggle'),
       StringWithArrows = require('views/field/string_with_arrows'),
       WorkProduct = require('views/field/work_product');
 
@@ -49,7 +45,7 @@ define(function() {
           </div>
           <div className="row">
             <div className="col-xs-8 ScheduleStateView">
-              <StringWithArrows item={ model } editMode={ newArtifact } field={ app.session.get('boardField') } label={ this.getScheduleStateLabel() }/>
+              <StringWithArrows item={ model } editMode={ newArtifact } field={ this.getBoardField() } label={ this.getScheduleStateLabel() }/>
             </div>
             <div className="col-xs-4 OwnerView">
               <Owner item={ model } editMode={ newArtifact }/>
@@ -72,37 +68,9 @@ define(function() {
               <Description item={ model } editMode={ newArtifact }/>
             </div>
           </div>
-          {
-            !newArtifact ?
-            <div className="row">
-              <div className="col-xs-1"/>
-              <div className="col-xs-5 toggle BlockedView">
-                <Toggle item={ model } editMode={ newArtifact } field='Blocked' label='Blocked'/>
-              </div>
-              <div className="col-xs-5 toggle ReadyView">
-                <Toggle item={ model } editMode={ newArtifact } field='Ready' label='Ready'/>
-              </div>
-              <div className="col-xs-1"/>
-            </div> : ''
-          }
-          {
-            this.props.newArtifact ?
-            <div className="row">
-              <div className="col-xs-2"/>
-              <div className="col-xs-4 toggle display save">
-                <button className="btn btn-lg btn-primary" onClick={ this.onSave }>Save</button>
-              </div>
-              <div className="col-xs-4 toggle display cancel">
-                <button className="btn btn-lg btn-default" onClick={ this.onCancel }>Cancel</button>
-              </div>
-            </div> : ''
-          }
+          { newArtifact ? this.getButtonsMarkup() : this.getTogglesMarkup() }
         </div>
       );
-    },
-
-    getScheduleStateLabel: function() {
-      return (app.session.get('boardField') == 'ScheduleState') ? 'Schedule State' : 'Kanban State';
     }
   });
 });

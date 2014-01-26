@@ -3,8 +3,9 @@ define(function() {
   var $ = require('jquery'),
       _ = require('underscore'),
       React = require('react'),
-      app = require('application')
-  		ReactView = require('views/base/react_view');
+      app = require('application'),
+  		ReactView = require('views/base/react_view'),
+      ErrorDialog = require('views/error_dialog');
 
   return ReactView.createChaplinClass({
     componentDidMount: function() {
@@ -27,6 +28,7 @@ define(function() {
           <div className="page-container page transition center" id="page-container">
               <div className="content-container" id="content"/>
           </div>
+          <ErrorDialog/>
           <div id="mask" style={ {display: "none"} }/>
         </div>
       );

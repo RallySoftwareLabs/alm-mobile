@@ -102,7 +102,7 @@ define ->
       updateResultObj = (resp.OperationResult || resp.CreateResult)
       errors = updateResultObj?.Errors
       if errors?.length > 0
-        options.error(xhr, errors[0], null)
+        options.error(xhr, errors[0], resp)
       else
         model.set updateResultObj.Object, options if updateResultObj
         success?(resp, status, xhr)
