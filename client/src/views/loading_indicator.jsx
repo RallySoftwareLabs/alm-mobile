@@ -8,7 +8,7 @@ define(function() {
   return ReactView.createBackboneClass({
     getDefaultProps: function() {
       return {
-        text: 'Initializing'
+        text: 'Loading'
       };
     },
     render: function() {

@@ -1,13 +1,13 @@
 define ->
   app = require 'application'
   utils = require 'lib/utils'
-  InitializingView = require 'views/initializing'
+  LoadingIndicatorView = require 'views/loading_indicator'
 
   return {
     homeRoute: '/board'
 
     fetchModelAndShowView: (Model, View, id) ->
-      @view = @renderReactComponent InitializingView, region: 'main', shared: false
+      @view = @renderReactComponent LoadingIndicatorView, region: 'main', shared: false
       fieldNames = @getFieldNames()
       model = new Model(ObjectID: id)
       model.fetch

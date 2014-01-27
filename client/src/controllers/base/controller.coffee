@@ -3,7 +3,7 @@ define ->
   React = require 'react'
   app = require 'application'
   Messageable = require 'lib/messageable'
-  InitializingView = require 'views/initializing'
+  LoadingIndicatorView = require 'views/loading_indicator'
 
   class Controller
 
@@ -14,7 +14,7 @@ define ->
       if app.session.get('project')?
         @goToPage callback
       else
-        @view = @renderReactComponent InitializingView, region: 'main'
+        @view = @renderReactComponent LoadingIndicatorView, region: 'main', text: 'Initializing'
         @subscribeEvent 'projectready', @onProjectReady(callback)
 
     onProjectReady: (callback) ->
