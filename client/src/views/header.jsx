@@ -1,11 +1,10 @@
 /** @jsx React.DOM */
 define(function() {
-  var Chaplin = require('chaplin'),
-      React = require('react'),
+  var React = require('react'),
       moment = require('moment'),
       ReactView = require('views/base/react_view');
 
-  return ReactView.createChaplinClass({
+  return ReactView.createBackboneClass({
     getInitialState: function() {
       return {
         title: 'ALM Mobile'
@@ -54,7 +53,7 @@ define(function() {
       );
     },
     _onTitleUpdate: function(title) {
-      this.setState({title: title});
+      this.setState({ title: title });
     },
     _onDispatch: function() {
       if (this.isMounted()) {
@@ -73,7 +72,7 @@ define(function() {
       } else if (page === 'navigation') {
         this.publishEvent('navigation:show');
       } else {
-        this.publishEvent('!router:route', page);
+        this.publishEvent('router:route', page);
       }
       e.preventDefault();
     }

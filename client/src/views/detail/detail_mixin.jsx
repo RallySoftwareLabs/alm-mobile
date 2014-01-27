@@ -18,10 +18,10 @@ define(function() {
       }
     },
     onSave: function() {
-      this.trigger('save', this.props.model);
+      this.publishEvent('save', this.props.model);
     },
     onCancel: function() {
-      this.trigger('cancel');
+      this.publishEvent('cancel');
     },
     showError: function(model, resp) {
       respObj = resp.responseJSON;

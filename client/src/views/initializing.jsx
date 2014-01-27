@@ -5,7 +5,7 @@ define(function() {
   		ReactView = require('views/base/react_view'),
   		Spinner = require('spin');
 
-  return ReactView.createChaplinClass({
+  return ReactView.createBackboneClass({
     render: function() {
     	return <div className="jumbotron"><p className="text-center">Initializing...</p></div>;
     },

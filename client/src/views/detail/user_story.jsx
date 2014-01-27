@@ -14,7 +14,7 @@ define(function() {
       StringWithArrows = require('views/field/string_with_arrows'),
       WorkProduct = require('views/field/work_product');
 
-  return ReactView.createChaplinClass({
+  return ReactView.createBackboneClass({
     mixins: [DetailMixin],
     render: function() {
       var model = this.props.model,

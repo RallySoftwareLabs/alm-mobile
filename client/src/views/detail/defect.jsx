@@ -14,7 +14,7 @@ define(function() {
   		Toggle = require('views/field/toggle'),
   		StringWithArrows = require('views/field/string_with_arrows');
 
-  return ReactView.createChaplinClass({
+  return ReactView.createBackboneClass({
     mixins: [DetailMixin],
   	render: function() {
       var model = this.props.model,

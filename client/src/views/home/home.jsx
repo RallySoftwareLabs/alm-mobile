@@ -6,7 +6,7 @@ define(function() {
   var ListView = require('views/listing/list');
   var IterationHeader = require('views/iteration_header');
 
-  return ReactView.createChaplinClass({
+  return ReactView.createBackboneClass({
     render: function() {
       return (
         <div id="home-view">
@@ -22,7 +22,7 @@ define(function() {
           	  model={this.props.collection}
           	  noDataMsg={"There are no " + this.props.tab}
           	  showLoadingIndicator={true}
-          	  changeOptions="synced"/>
+          	  changeOptions="sync"/>
           </div>
 
           <ul className="type nav nav-pills nav-justified">

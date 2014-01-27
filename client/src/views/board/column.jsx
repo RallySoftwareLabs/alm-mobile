@@ -6,7 +6,7 @@ define(function() {
       Card = require('views/board/card'),
       IterationHeader = require('views/iteration_header');
 
-  return ReactView.createChaplinClass({
+  return ReactView.createBackboneClass({
     getDefaultProps: function() {
       return {showLoadingIndicator: true};
     },
@@ -41,9 +41,7 @@ define(function() {
     },
     getCardsMarkup: function(storiesAndDefects) {
       return _.map(storiesAndDefects, function(model) {
-        var card = <Card key={model.get('_ref')} model={model} key={model.get('_ref')} />;
-        this.bubbleEvent(card, 'cardclick', 'cardclick');
-        return card;
+        return <Card key={model.get('_ref')} model={model} key={model.get('_ref')} />;
       }, this);
     },
     isColumnAtIndex: function(index) {
@@ -64,21 +62,21 @@ define(function() {
       return str + (model.isSynced() ? " (" + storiesAndDefects.length + ")" : " ...");
     },
     onHeaderClick: function(e) {
-      this.trigger('headerclick', this.props.model);
+      this.publishEvent('headerclick', this.props.model);
       e.preventDefault();
     },
     goLeft: function(e) {
-      this.trigger('goleft', this.props.model);
+      this.publishEvent('goleft', this.props.model);
       e.preventDefault();
       e.stopPropagation();
     },
     goRight: function(e) {
-      this.trigger('goright', this.props.model);
+      this.publishEvent('goright', this.props.model);
       e.preventDefault();
       e.stopPropagation();
     },	
 	onAddClick: function() {
-      this.publishEvent('!router:route', 'board/' + this.props.model.get('value') + '/userstory/new');
+      this.publishEvent('router:route', 'board/' + this.props.model.get('value') + '/userstory/new');
     }
   });
 });

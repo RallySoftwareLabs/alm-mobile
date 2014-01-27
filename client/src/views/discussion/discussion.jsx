@@ -5,7 +5,7 @@ define(function() {
   		ReactView = require('views/base/react_view'),
   		ListView = require('views/listing/list');
 
-  return ReactView.createChaplinClass({
+  return ReactView.createBackboneClass({
   	getDefaultProps: function() {
   		return {
   			showInput: true
@@ -21,7 +21,7 @@ define(function() {
               noDataMsg="There is no discussion for this item"
               showLoadingIndicator={true}
               showItemArtifact={this.props.showItemArtifact}
-              changeOptions="synced"/>
+              changeOptions="sync"/>
 	        </div>
 	      </div>
       );
@@ -50,7 +50,7 @@ define(function() {
     },
     _onSubmit: function(event) {
       text = this._getInputField().val();
-      this.trigger('reply', text);
+      this.publishEvent('reply', text);
       event.preventDefault();
     },
     _getInputField: function() {

@@ -16,11 +16,10 @@ define ->
         col.fetch(@getFetchData(field, col.get('value'))) for col in columns
         @view = @renderReactComponent BoardView, columns: columns, region: 'main'
 
-        @listenTo @view, 'headerclick', @onColumnClick
-        @listenTo @view, 'cardclick', @onCardClick
+        @subscribeEvent 'headerclick', @onColumnClick
+        @subscribeEvent 'cardclick', @onCardClick
 
-    column: (params) ->
-      colValue = decodeURI(params.column)
+    column: (colValue) ->
       
       @whenLoggedIn =>
         @updateTitle app.session.getProjectName()
@@ -38,18 +37,18 @@ define ->
           showIteration: true
         
 
-        @listenTo @view, 'headerclick', @onColumnClick
-        @listenTo @view, 'cardclick', @onCardClick
-        @listenTo @view, 'goleft', @goLeft
-        @listenTo @view, 'goright', @goRight
+        @subscribeEvent 'headerclick', @onColumnClick
+        @subscribeEvent 'cardclick', @onCardClick
+        @subscribeEvent 'goleft', @goLeft
+        @subscribeEvent 'goright', @goRight
 
     onColumnClick: (col) ->
       colValue = col.get('value')
-      @redirectToRoute 'board#column', column: colValue
+      @redirectTo "board/#{colValue}"
 
     onCardClick: (oid, type) ->
       mappedType = @getRouteTypeFromModelType(type)
-      @redirectToRoute "#{mappedType}#show", id: oid
+      @redirectTo "#{mappedType}/#{oid}"
 
     goLeft: (col) ->
       field = app.session.get('boardField')
@@ -57,10 +56,8 @@ define ->
       colIndex = _.findIndex columns, (c) -> c.get('value') == col.get('value')
       if colIndex > 0
         newColumn = columns[colIndex - 1]
-        @publishEvent '!router:changeURL', "/board/#{newColumn.get('value')}"
+        @redirectTo "/board/#{newColumn.get('value')}"
         @view.setProps model: newColumn
-        newColumn.fetch @getFetchData(field, newColumn.get('value'))
-        # @redirectToRoute 'board#column', column: columns[colIndex - 1].get('value')
 
     goRight: (col) ->
       field = app.session.get('boardField')
@@ -68,10 +65,7 @@ define ->
       colIndex = _.findIndex columns, (c) -> c.get('value') == col.get('value')
       if colIndex < columns.length - 1
         newColumn = columns[colIndex + 1]
-        @publishEvent '!router:changeURL', "/board/#{newColumn.get('value')}"
-        @view.setProps model: newColumn
-        newColumn.fetch @getFetchData(field, newColumn.get('value'))
-        # @redirectToRoute 'board#column', column: columns[colIndex + 1].get('value')
+        @redirectTo "/board/#{newColumn.get('value')}"
 
     getColumnModels: (field) ->
       _.map app.session.getBoardColumns(), (value) -> new Column(field: field, value: value)
@@ -97,7 +91,7 @@ define ->
 
     getRouteTypeFromModelType: (type = 'hierarchicalrequirement') ->
       routeTypes =
-        hierarchicalrequirement: 'user_story_detail'
-        defect: 'defect_detail'
+        hierarchicalrequirement: 'userstory'
+        defect: 'defect'
 
       routeTypes[type.toLowerCase()]

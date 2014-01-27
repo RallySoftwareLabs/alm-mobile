@@ -12,17 +12,17 @@ define ->
     Children: require 'collections/user_stories'
 
   class AssociationsController extends SiteController
-    childrenForStory: (params) ->
-      @_createAssociationView(new UserStory(ObjectID: params.id, _type: 'hierarchicalrequirement'), 'Children', 'Parent')
+    childrenForStory: (id) ->
+      @_createAssociationView(new UserStory(ObjectID: id, _type: 'hierarchicalrequirement'), 'Children', 'Parent')
 
-    defectsForStory: (params) ->
-      @_createAssociationView(new UserStory(ObjectID: params.id, _type: 'hierarchicalrequirement'), 'Defects', 'Requirement')
+    defectsForStory: (id) ->
+      @_createAssociationView(new UserStory(ObjectID: id, _type: 'hierarchicalrequirement'), 'Defects', 'Requirement')
 
-    tasksForStory: (params) ->
-      @_createAssociationView(new UserStory(ObjectID: params.id, _type: 'hierarchicalrequirement'), 'Tasks', 'WorkProduct')
+    tasksForStory: (id) ->
+      @_createAssociationView(new UserStory(ObjectID: id, _type: 'hierarchicalrequirement'), 'Tasks', 'WorkProduct')
 
-    tasksForDefect: (params) ->
-      @_createAssociationView(new Defect(ObjectID: params.id, _type: 'defect'), 'Tasks', 'WorkProduct')
+    tasksForDefect: (id) ->
+      @_createAssociationView(new Defect(ObjectID: id, _type: 'defect'), 'Tasks', 'WorkProduct')
 
     _createAssociationView: (model, association, reverseAssociation) ->
       associatedItems = new associationClasses[association]()

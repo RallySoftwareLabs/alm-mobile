@@ -14,7 +14,6 @@ define ->
         data:
           fetch: fieldNames.join ','
         success: (model, response, opts) =>
-          @view.dispose()
           @_setTitle model
           @view = @renderReactComponent View, model: model, region: 'main', fieldNames: fieldNames
       @subscribeEvent 'saveField', @saveField
@@ -23,8 +22,8 @@ define ->
       model = new Model defaultValues
       @view = @renderReactComponent View, model: model, region: 'main', newArtifact: true
       @subscribeEvent 'saveField', @saveField
-      @listenTo @view, 'save', @saveNew
-      @listenTo @view, 'cancel', @cancelNew
+      @subscribeEvent 'save', @saveNew
+      @subscribeEvent 'cancel', @cancelNew
 
     saveField: (updates, opts) ->
       if @view.props.newArtifact
@@ -50,7 +49,7 @@ define ->
           @view.showError(model, resp)
 
     cancelNew: ->
-      @publishEvent '!router:route', @homeRoute, replace: false
+      @publishEvent 'router:route', @homeRoute, replace: false
 
     _saveLocal: (updates) ->
       @view.props.model.set(updates)
@@ -62,8 +61,9 @@ define ->
         patch: true
         success: (model, resp, options) =>
           opts?.success?(model, resp, options)
-        error: (model, xhr, options) =>
-          opts?.error?(model, xhr, options)
+        error: (model, resp, options) =>
+          opts?.error?(model, resp, options)
+          @view.showError(model, resp)
 
     _setTitle: (model) ->
       @updateTitle "#{model.get('FormattedID')}: #{model.get('_refObjectName')}"

@@ -4,7 +4,7 @@ define(function() {
   var utils = require('lib/utils');
   var ReactView = require('views/base/react_view');
 
-  return ReactView.createChaplinClass({
+  return ReactView.createBackboneClass({
     render: function() {
       var model = this.props.model;
       if (model.isSynced()) {
@@ -97,7 +97,7 @@ define(function() {
     _goToItemPageFn: function(model) {
       var url = utils.getTypeForDetailLink(model.get('_type')) + '/' + model.get('ObjectID');
       return _.bind(function(event) {
-        this.publishEvent('!router:route', url);
+        this.publishEvent('router:route', url);
         event.preventDefault();
       }, this);
     },

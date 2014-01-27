@@ -5,7 +5,7 @@ define(function() {
   var app = require('application');
   var ReactView = require('views/base/react_view');
 
-  return ReactView.createChaplinClass({
+  return ReactView.createBackboneClass({
     render: function() {
       var iteration = app.session.get('iteration') && app.session.get('iteration').toJSON(),
           iterationHeader = <div/>;

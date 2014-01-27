@@ -1,14 +1,30 @@
 define ->
   Controller = require 'controllers/base/controller'
   SiteView = require 'views/site'
-  HeaderView = require 'views/header'
-  NavigationView = require 'views/navigation/navigation'
 
-  composeReactView = (@view) ->
-    @view.renderForChaplin()
+  siteView = null
 
   class SiteController extends Controller
-    beforeAction: (params, route) ->
-      @compose 'site', -> composeReactView SiteView()
-      @compose 'header', -> composeReactView HeaderView(region: 'header')
-      @compose 'navigation', -> composeReactView NavigationView(region: 'navigation')
+
+    _getView: (props) ->
+      if siteView && siteView.isMounted()
+        siteView.setProps props
+      else
+        siteView = SiteView(props)
+
+      siteView
+
+    _setSubView: (name, view) ->
+      props ={}
+      props[name] = view
+      @_getView(props)
+
+    renderReactComponent: (componentClass, props = {}, id) ->
+      component = componentClass(_.omit(props, 'region'))
+
+      siteView = @_setSubView props.region, component
+
+      unless siteView.isMounted()
+        siteView.renderForBackbone id
+
+      component

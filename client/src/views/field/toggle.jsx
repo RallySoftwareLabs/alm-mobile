@@ -6,7 +6,7 @@ define(function() {
       FieldMixin = require('views/field/field_mixin'),
       ToggleFields = ['Blocked', 'Ready'];
 
-  return ReactView.createChaplinClass({
+  return ReactView.createBackboneClass({
     mixins: [FieldMixin],
     render: function() {
       var fieldValue = this.getFieldValue();

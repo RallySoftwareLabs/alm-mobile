@@ -6,8 +6,7 @@ define ->
   SearchView = require 'views/search/search'
 
   class SearchController extends SiteController
-    search: (params) ->
-      keywords = decodeURIComponent(params.keywords || '')
+    search: (keywords = '') ->
       @whenLoggedIn ->
         artifacts = new Artifacts()
         @_fetchResults(artifacts, keywords) if keywords
@@ -17,7 +16,7 @@ define ->
           region: 'main'
         )
 
-        @listenTo @view, 'search', @onSearch
+        @subscribeEvent 'search', @onSearch
 
     onSearch: (keywords) ->
       @redirectTo "/search/#{encodeURIComponent(keywords)}"

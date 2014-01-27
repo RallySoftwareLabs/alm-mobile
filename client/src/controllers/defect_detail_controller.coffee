@@ -10,17 +10,17 @@ define ->
 
     _.extend @prototype, DetailControllerMixin
 
-    show: (params) ->
+    show: (id) ->
       @whenLoggedIn ->
-        @fetchModelAndShowView Defect, View, params.id
+        @fetchModelAndShowView Defect, View, id
 
-    create: (params) ->
+    create: ->
       @whenLoggedIn ->
         @showCreateView Defect, View
 
-    defectForStory: (params) ->
+    defectForStory: (id) ->
       @whenLoggedIn ->
-        model = new UserStory(ObjectID: params.id)
+        model = new UserStory(ObjectID: id)
         model.fetch
           data:
             fetch: 'FormattedID'

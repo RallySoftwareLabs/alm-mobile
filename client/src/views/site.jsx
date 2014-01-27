@@ -5,9 +5,11 @@ define(function() {
       React = require('react'),
       app = require('application'),
   		ReactView = require('views/base/react_view'),
+      HeaderView = require('views/header'),
+      NavigationView = require('views/navigation/navigation'),
       ErrorDialog = require('views/error_dialog');
 
-  return ReactView.createChaplinClass({
+  return ReactView.createBackboneClass({
     componentDidMount: function() {
       this.publishEvent('!region:register', this, 'header', '#header');
       this.publishEvent('!region:register', this, 'navigation', '#navigation');
@@ -21,17 +23,25 @@ define(function() {
     render: function() {
     	return (
         <div>
-          <div className="header-container" id="header"/>
+          <div className="header-container" id="header">
+            <HeaderView/>
+          </div>
 
-          <div className="navigation-container page left" id="navigation"/>
+          <div className="navigation-container page left" id="navigation">
+            <NavigationView/>
+          </div>
 
           <div className="page-container page transition center" id="page-container">
-              <div className="content-container" id="content"/>
+              <div className="content-container" id="content">{ this._getContent() }</div>
           </div>
           <ErrorDialog/>
           <div id="mask" style={ {display: "none"} }/>
         </div>
       );
+    },
+
+    _getContent: function() {
+      return this.props.main;
     }
   });
 });
