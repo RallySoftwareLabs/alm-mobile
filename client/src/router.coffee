@@ -68,9 +68,13 @@ define ->
         onRoute: (path, options = {}) ->
           @navigate path, _.defaults(options, trigger: true)
 
+        onChangeURL: (path, options = {}) ->
+          @navigate path, _.defaults(options, trigger: false)
+
         initialize: ->
           _.extend this, Messageable
           @subscribeEvent 'router:route', @onRoute
+          @subscribeEvent 'router:changeURL', @onChangeURL
 
       router = new Router()
 

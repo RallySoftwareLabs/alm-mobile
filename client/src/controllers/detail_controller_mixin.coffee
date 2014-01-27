@@ -42,7 +42,7 @@ define ->
         silent: true
         success: (resp, status, xhr) =>
           opts?.success?(model, resp)
-          @publishEvent '!router:changeURL', utils.getDetailHash(model), replace: true
+          @publishEvent 'router:changeURL', utils.getDetailHash(model), replace: true
           @view.setProps newArtifact: false
           @_setTitle model
         error: (resp, status, xhr) =>
