@@ -5,6 +5,8 @@ define ->
     match 'board/:column', 'board#column'
     match 'board/:column/userstory/new', 'user_story_detail#storyForColumn'
 
+    match 'wall', 'wall#index'
+    
     match 'userstories', 'home#userstories'
     match 'defects', 'home#defects'
     match 'tasks', 'home#tasks'
