@@ -14,14 +14,16 @@ define(function() {
                     <span className="formattedID">{this.props.formattedID}</span><br />
                     {this.props.children}
                </div>
-               <Grandchild status="on" />
-               <Grandchild status="on" />
-               <Grandchild status="on" />
-               <Grandchild />
-               <Grandchild />
-               <Grandchild />
-               <Grandchild />
-               <Grandchild />
+               <div className="grandchildren">
+                 <Grandchild status="on" />
+                 <Grandchild status="on" />
+                 <Grandchild status="on" />
+                 <Grandchild />
+                 <Grandchild />
+                 <Grandchild />
+                 <Grandchild />
+                 <Grandchild />
+               </div>
           </div>
       );
     },

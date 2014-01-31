@@ -3,19 +3,20 @@
   color: black;
   background: white;
   margin: 2px;
+  padding: 5px;
   width: 200px;
   display: inline-block;
   vertical-align: top;
   overflow: hidden;
-  font-family: Helvetica;
+  font-family: "ProximaNova";
   height: 300px;
   
     .header {
   	  font-size: 16px;
-  	  margin: 8px;
+  	  margin: 2px;
   	    	    	  
   	  .formattedID {
-    	  font-weight: bold;
+        font-family: "ProximaNovaBold";
     	  color: #333333;
 
     	}
@@ -35,28 +36,32 @@
   	  height: 75px;
       color: #333333;
       background: #cccccc;
-    
+      line-height: 1;
+      
     	.header {
     	  margin: 2px;
     	  font-size: 9px;
     	}
     	&.on {
     	  border: solid #333333 1px;
-    	  border: solid Green 2px;
+    	  border: solid @cyan 2px;
     	  background: white;
     	  color: black;
+    	}
+    	.grandchildren {
+    	  line-height: .4;
     	}
   	}
   	
   	.grandchild {
   	  display: inline-block;
   	  background: gray;
-  	  width: 8px;
-  	  height: 8px;
+  	  width: 9px;
+  	  height: 9px;
   	  margin: 1px;
   	  background: gray;
   	  &.on {
-  	    background: PaleGreen;
+  	    background: @cyan-med;
   	  }
   	}
 }
