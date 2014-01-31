@@ -15,20 +15,43 @@ define(function() {
                     {this.props.children}
                </div>
                <div className="grandchildren">
-                 <Grandchild status="on" />
-                 <Grandchild status="on" />
-                 <Grandchild status="on" />
-                 <Grandchild />
-                 <Grandchild />
-                 <Grandchild />
-                 <Grandchild />
-                 <Grandchild />
+                  {this.getFakeGrandchildren()}
                </div>
           </div>
       );
     },
     getChildClass: function() {
       return (this.props.status == "on") ? "child on" : "child";
+    },
+    getFakeGrandchildren: function() {
+      if (this.props.status == "on") { 
+        return (
+          <div> 
+            <Grandchild status="on" />
+            <Grandchild status="on" />
+            <Grandchild status="on" />
+            <Grandchild status="on" />
+            <Grandchild status="on" />
+            <Grandchild status="on" />
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            <Grandchild status="on" />
+            <Grandchild status="on" />
+            <Grandchild />
+            <Grandchild />
+            <Grandchild />
+            <Grandchild />
+            <Grandchild />
+            <Grandchild status="on" />
+            <Grandchild />
+            <Grandchild />
+            <Grandchild status="on" />
+          </div>
+        );
+      }
     }
   });
 });
