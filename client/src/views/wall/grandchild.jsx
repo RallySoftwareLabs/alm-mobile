@@ -7,17 +7,12 @@ define(function() {
   	
   return ReactView.createChaplinClass({
     render: function() {
-
-      //This is so wrong, both from a less perspective and with React. 
-      var style;
-      if (this.props.status == "on") {
-        style = "grandchild-on";
-      } else {
-        style = "grandchild";
-      }
       return (
-        <div className={style} />      
+        <div className={this.getClass()} />      
       );
-     }
+    },
+    getClass: function() {      
+      return (this.props.status == "on") ? "grandchild on" : "grandchild";
+    }
   });
 });

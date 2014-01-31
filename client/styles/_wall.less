@@ -26,42 +26,37 @@
   	  width: 100%;
   	}
   	
-  	.child, .child-on{
-  	  margin: 2px;
+  	.child {
   	  display: inline-block;
   	  vertical-align: top;
   	  overflow: hidden;
+  	  margin: 2px;
   	  width: 28%;
   	  height: 75px;
       color: #333333;
+      background: #cccccc;
     
     	.header {
     	  margin: 2px;
     	  font-size: 9px;
     	}
+    	&.on {
+    	  border: solid #333333 1px;
+    	  border: solid Green 2px;
+    	  background: white;
+    	  color: black;
+    	}
   	}
   	
-  	.child {
-  	  background: #cccccc
-  	}
-  	.child-on {
-  	  border: solid #333333 1px;
-  	  border: solid Green 2px;
-  	  background: white;
-  	  color: black;
-  	}
-  	
-  	.grandchild, .grandchild-on {
+  	.grandchild {
   	  display: inline-block;
   	  background: gray;
   	  width: 8px;
   	  height: 8px;
   	  margin: 1px;
-  	}
-  	.grandchild {
   	  background: gray;
-  	}
-  	.grandchild-on {
-  	  background: PaleGreen;
+  	  &.on {
+  	    background: PaleGreen;
+  	  }
   	}
 }

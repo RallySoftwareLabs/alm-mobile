@@ -8,15 +8,8 @@ define(function() {
   	
   return ReactView.createChaplinClass({
     render: function() {
-         //This is so wrong, both from a less perspective and with React. And copy/paste with grandchild.
-        var style;
-        if (this.props.status == "on") {
-          style = "child-on";
-        } else {
-          style = "child";
-        }
         return (  
-          <div className={style}>
+          <div className={this.getChildClass()}>
                <div className="header">
                     <span className="formattedID">{this.props.formattedID}</span><br />
                     {this.props.children}
@@ -31,6 +24,9 @@ define(function() {
                <Grandchild />
           </div>
       );
-     }
+    },
+    getChildClass: function() {
+      return (this.props.status == "on") ? "child on" : "child";
+    }
   });
 });
