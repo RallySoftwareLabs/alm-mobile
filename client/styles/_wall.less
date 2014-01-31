@@ -1,0 +1,67 @@
+.flipchart {
+  border: solid black 2px;
+  color: black;
+  background: white;
+  margin: 2px;
+  width: 200px;
+  display: inline-block;
+  vertical-align: top;
+  overflow: hidden;
+  font-family: Helvetica;
+  height: 300px;
+  
+    .header {
+  	  font-size: 16px;
+  	  margin: 8px;
+  	    	    	  
+  	  .formattedID {
+    	  font-weight: bold;
+    	  color: #333333;
+
+    	}
+  	}
+    .title {
+      display: inline-block;
+  	  font-weight: normal;
+  	  width: 100%;
+  	}
+  	
+  	.child, .child-on{
+  	  margin: 2px;
+  	  display: inline-block;
+  	  vertical-align: top;
+  	  overflow: hidden;
+  	  width: 28%;
+  	  height: 75px;
+      color: #333333;
+    
+    	.header {
+    	  margin: 2px;
+    	  font-size: 9px;
+    	}
+  	}
+  	
+  	.child {
+  	  background: #cccccc
+  	}
+  	.child-on {
+  	  border: solid #333333 1px;
+  	  border: solid Green 2px;
+  	  background: white;
+  	  color: black;
+  	}
+  	
+  	.grandchild, .grandchild-on {
+  	  display: inline-block;
+  	  background: gray;
+  	  width: 8px;
+  	  height: 8px;
+  	  margin: 1px;
+  	}
+  	.grandchild {
+  	  background: gray;
+  	}
+  	.grandchild-on {
+  	  background: PaleGreen;
+  	}
+}
