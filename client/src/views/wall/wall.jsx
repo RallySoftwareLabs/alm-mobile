@@ -8,9 +8,13 @@ define(function() {
   	
   return ReactView.createChaplinClass({
     render: function() {
-      var flipchartNodes = this.props.flipcharts.map(function (flipchart) {
-        return <Flipchart formattedID={flipchart.formattedID}>{flipchart.name}</Flipchart>;
-      });
+      var flipchartNodes = _.map(this.props.model.models, function(initiative) {
+        return <Flipchart 
+                formattedID={initiative.attributes.FormattedID} 
+                ref={initiative.attributes.Owner._ref}>
+                  {initiative.attributes.Name}
+                </Flipchart>;     
+      }, this);
       return (   
         <div className="itemList">
           {flipchartNodes}
