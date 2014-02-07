@@ -7,10 +7,12 @@ define ->
   Initiatives = require 'collections/initiatives'
   Initiative = require 'models/initiative'
   Features = require 'collections/features'
+  UserStories = require 'collections/user_stories'
 
   class WallController extends SiteController
     index: (params) ->
       @whenLoggedIn =>
+        @updateTitle "Enterprise Backlog Wall"
         initiatives = new Initiatives()
         @fetchInitiatives initiatives
         @view = @renderReactComponent WallView, model: initiatives, region: 'main'
@@ -34,6 +36,17 @@ define ->
           fetch: 'FormattedID,Name,ObjectID,Owner,LeafStoryCount',
           query: "(Parent = " + parentRef + ")",
           order: 'Rank ASC'
-        success: (initiative, features) =>
+        success: (features) =>
           this.view.forceUpdate()
-  
+          @fetchUserStories userStory for userStory in features.models;
+    fetchUserStories: (feature) ->
+      feature.userStories = new UserStories()
+      parentRef = feature.attributes._ref
+      feature.userStories.fetch
+        data: 
+          fetch: 'FormattedID,Name,Release,Iteration',
+          query: "(PortfolioItem = " + parentRef + ")",
+          order: 'Rank ASC'
+        success:  =>
+          this.view.forceUpdate()
+    

@@ -3,6 +3,7 @@ define ->
   appConfig = require 'appConfig'
   Model = require 'models/base/model'
   SchemaMixin = require 'models/base/schema_mixin'
+  UserStory = require 'models/user_story'
 
   class Feature extends Model
     typePath: 'portfolioitem/feature'
@@ -11,4 +12,4 @@ define ->
     _.extend this, SchemaMixin.static
     _.extend @prototype, SchemaMixin.prototype
 
-      
+   

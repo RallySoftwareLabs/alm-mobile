@@ -4,20 +4,20 @@ define(function() {
   		_ = require('underscore'),
   		app = require('application'),
   		utils = require('lib/utils'),
-  		Child = require ('views/wall/child'),
-      Features = require('collections/features');
-
+  		FeatureCard = require ('views/wall/feature_card');
+   
   return ReactView.createChaplinClass({
     render: function() {
       var model = this.props.model;
       var features = model.features;
-      console.log(features);
       if (features != null) {
-        var childNodes = _.map(features.models, function(feature) {
+        var featureCards = _.map(features.models, function(feature) {
           return (
-              <Child formattedID={feature.attributes.FormattedID}>
+              <FeatureCard
+               model={feature}
+               formattedID={feature.attributes.FormattedID}>
                 {feature.attributes.Name}
-              </Child>
+              </FeatureCard>
           );     
         }, this);
       }
@@ -28,7 +28,7 @@ define(function() {
             <span className="title">{model.attributes.Name}</span><br />
           </div> 
           <div>
-            {childNodes}
+            {featureCards}
           </div>
         </div>
       );

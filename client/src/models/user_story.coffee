@@ -15,4 +15,7 @@ define ->
       "ScheduleState" : "Idea"
     
     allowedValueFields: ['ScheduleState', 'c_KanbanState']
+
+    isScheduled: ->
+      this.attributes.Release or this.attributes.Iteration 
       

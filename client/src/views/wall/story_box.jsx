@@ -11,8 +11,12 @@ define(function() {
         <div className={this.getClass()} />      
       );
     },
-    getClass: function() {      
-      return (this.props.status == "on") ? "grandchild on" : "grandchild";
+    getClass: function() {   
+      if (this.props.model.isScheduled()) {
+        return "grandchild on";
+      } else {
+        return "grandchild"; 
+      }
     }
   });
 });
