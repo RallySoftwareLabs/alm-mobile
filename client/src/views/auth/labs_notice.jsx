@@ -4,7 +4,7 @@ define(function() {
 			React = require('react'),
   		ReactView = require('views/base/react_view');
 
-  return ReactView.createChaplinClass({
+  return ReactView.createBackboneClass({
     render: function() {
     	return (
         <div id="labs-notice" className="container">
@@ -21,12 +21,12 @@ define(function() {
     },
 
     accept: function(event) {
-      this.trigger('accept');
+      this.publishEvent('accept');
       event.preventDefault();
     },
 
     reject: function(event) {
-      this.trigger('reject');
+      this.publishEvent('reject');
       event.preventDefault();
     }
   });

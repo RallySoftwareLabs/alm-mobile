@@ -6,7 +6,7 @@ define(function() {
       ReactView = require('views/base/react_view'),
       ListView = require('views/listing/list');
 
-  return ReactView.createChaplinClass({
+  return ReactView.createBackboneClass({
     render: function() {
       var association = this.props.association;
       return (
@@ -21,7 +21,7 @@ define(function() {
               model={this.props.associatedItems}
               noDataMsg={"This " + utils.getTypeForDetailLink(this.props.fromModel.get('_type')) + " has no " + association.toLowerCase()}
               showLoadingIndicator={true}
-              changeOptions="synced"/>
+              changeOptions="sync"/>
           </div>
         </div>
       );
@@ -40,7 +40,7 @@ define(function() {
     },
 
     _onAddClick: function() {
-      this.publishEvent('!router:route', Backbone.history.fragment + '/new');
+      this.publishEvent('router:route', Backbone.history.fragment + '/new');
     }
   });
 });

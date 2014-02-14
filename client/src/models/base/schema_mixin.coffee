@@ -40,6 +40,6 @@ define ->
         else
           av = new AllowedValues
           av.url = attr.AllowedValues._ref
-          av.fetch().then -> [attr.ElementName, av.serialize()]
+          av.fetch().then -> [attr.ElementName, av.invoke('toJSON')]
 
   }

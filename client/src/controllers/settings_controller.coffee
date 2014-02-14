@@ -13,11 +13,11 @@ define ->
     show: (params) ->
       @whenLoggedIn ->
         @view = @renderReactComponent SettingsView, region: 'main', model: app.session
-        @listenTo @view, 'changeMode', @onChangeMode
-        @listenTo @view, 'changeBoardField', @onChangeBoardField
-        @listenTo @view, 'changeProject', @onChangeProject
-        @listenTo @view, 'changeIteration', @onChangeIteration
-        @listenTo @view, 'logout', @onLogout
+        @subscribeEvent 'changeMode', @onChangeMode
+        @subscribeEvent 'changeBoardField', @onChangeBoardField
+        @subscribeEvent 'changeProject', @onChangeProject
+        @subscribeEvent 'changeIteration', @onChangeIteration
+        @subscribeEvent 'logout', @onLogout
         @subscribeEvent 'projectready', => @view.forceUpdate()
         @updateTitle "Settings: #{app.session.getProjectName()}"
 
@@ -28,14 +28,14 @@ define ->
           region: 'main'
           fieldName: fieldName
           model: app.session
-        @listenTo @view, 'columnClick', @onColumnClick
+        @subscribeEvent 'columnClick', @onColumnClick
 
     onChangeMode: (mode) ->
       app.session.set 'mode', mode
 
     onChangeBoardField: (boardField) ->
       app.session.set 'boardField', boardField
-      @redirectToRoute 'settings#board'
+      @redirectTo 'settings/board'
 
     onChangeProject: (project) ->
       app.session.set 'project', _.find app.session.get('projects').models, _.isAttributeEqual '_ref', project
@@ -50,4 +50,4 @@ define ->
       app.session.toggleBoardColumn column
 
     onLogout: ->
-      @redirectToRoute 'auth#logout'
+      @redirectTo 'logout'

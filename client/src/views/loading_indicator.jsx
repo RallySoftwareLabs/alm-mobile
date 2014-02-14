@@ -5,9 +5,14 @@ define(function() {
   		ReactView = require('views/base/react_view'),
   		Spinner = require('spin');
 
-  return ReactView.createChaplinClass({
+  return ReactView.createBackboneClass({
+    getDefaultProps: function() {
+      return {
+        text: 'Loading'
+      };
+    },
     render: function() {
-    	return <div className="jumbotron"><p className="text-center">Initializing...</p></div>;
+    	return <div className="jumbotron"><p className="text-center">{ this.props.text }...</p></div>;
     },
     componentDidMount: function() {
       $(this.getDOMNode()).find('p').append(new Spinner().spin().el);

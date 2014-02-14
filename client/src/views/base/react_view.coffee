@@ -2,7 +2,7 @@ define ->
   $ = require 'jquery'
   _ = require 'underscore'
   React = require 'react'
-  Chaplin = require 'chaplin'
+  Messageable = require 'lib/messageable'
   Spinner = require 'spin'
   Collection = require 'collections/collection'
 
@@ -15,7 +15,7 @@ define ->
           @forceUpdate()
         , this)
       else if model
-        changeOptions = @props.changeOptions || 'change'
+        changeOptions = @props.changeOptions || 'sync change'
         model.on(changeOptions, ->
           (@onModelChange || @forceUpdate).call(this)
         , this)
@@ -28,16 +28,13 @@ define ->
       model = @getModel()
       return unless model
 
-      syncEvent = if _.isFunction(model.isSyncing) then 'syncStateChange' else 'sync'
-      @listenTo model, syncEvent, _.bind(@__toggleLoadingIndicator__, this, false)
+      model.once 'sync', _.bind(@__toggleLoadingIndicator__, this, false)
       @__toggleLoadingIndicator__ true
 
     __toggleLoadingIndicator__: (show = false) ->
       model = @getModel()
 
-      visible = if _.isFunction(model.isSyncing) then model.isSyncing() else show
-
-      if visible
+      if show
         $(@getDOMNode()).append(new Spinner().spin().el)
       else
         $(@getDOMNode()).find('.spinner').remove()
@@ -56,19 +53,13 @@ define ->
     componentWillUnmount: ->
       # Ensure that we clean up any dangling references when the component is destroyed.
       @_unsubscribe(@props.model)
-
-    dispose: ->
-      return unless @isMounted()
-      dn = @getDOMNode()
-      parent = dn.parentElement
-      @unmountComponent()
-      parent.removeChild dn
+      @unsubscribeAllEvents()
 
   return {
-    createChaplinClass: (spec) ->
+    createBackboneClass: (spec) ->
       currentMixins = spec.mixins || []
 
-      spec.mixins = currentMixins.concat [React.BackboneMixin, Backbone.Events, Chaplin.EventBroker]
+      spec.mixins = currentMixins.concat [React.BackboneMixin, Messageable]
 
       spec.getModel = -> @props.model || @props.collection
 
@@ -80,18 +71,11 @@ define ->
 
       spec.$el = $(@el)
 
-      spec.renderForChaplin = (id) ->
-        if this.props.region
-          @publishEvent '!region:show', this.props.region, this
-        React.renderComponent this, (if this.container then this.container[0] else document.body)
-        this.trigger "addedToDOM"
+      spec.renderForBackbone = (id) ->
+        React.renderComponent this, (if id then document.getElementById(id) else document.body)
 
       spec.updateTitle = (title) ->
         @publishEvent "updatetitle", title
-
-      # listens to an event on the object and refires is as its own
-      spec.bubbleEvent = (obj, event, mappedAs = event) ->
-        @listenTo obj, event, (args...) => @trigger.apply this, [mappedAs].concat(args)
 
       spec.keyCodes =
         ENTER_KEY: 13

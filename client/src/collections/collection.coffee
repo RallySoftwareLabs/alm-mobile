@@ -1,19 +1,21 @@
 define ->
   _ = require 'underscore'
-  Chaplin = require 'chaplin'
+  Backbone = require 'backbone'
+  Messageable = require 'lib/messageable'
 
   # Base class for all collections.
-  class Collection extends Chaplin.Collection
+  class Collection extends Backbone.Collection
 
-    _.extend @prototype, Chaplin.SyncMachine
+    _.extend @prototype, Messageable
+
+    constructor: ->
+      super
+      @synced = false
+      this.once('sync', => @synced = true)
 
     parse: (resp) ->
       resp.QueryResult.Results
 
-    fetch: (options) ->
-      @beginSync()
+    isSynced: -> @synced
 
-      $.when(
-        super
-      ).done (c) =>
-        @finishSync()
+    setSynced: (@synced) ->

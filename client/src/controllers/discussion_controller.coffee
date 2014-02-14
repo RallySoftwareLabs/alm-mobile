@@ -7,15 +7,15 @@ define ->
   DiscussionView = require 'views/discussion/discussion'
 
   class DiscussionController extends SiteController
-    show: (params) ->
+    show: (type, id) ->
       @whenLoggedIn ->
         @discussions = new Discussions()
 
-        @artifactRef = utils.getRef(params.type, params.id)
+        @artifactRef = utils.getRef(type, id)
 
         @view = @renderReactComponent DiscussionView, model: @discussions, region: 'main'
 
-        @listenTo @view, 'reply', @onReplyClick
+        @subscribeEvent 'reply', @onReplyClick
 
         @discussions.fetch
           data:

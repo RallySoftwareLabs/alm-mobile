@@ -5,7 +5,7 @@ define(function() {
       UserStory = require('models/user_story'),
       ReactView = require('views/base/react_view');
 
-  return ReactView.createChaplinClass({
+  return ReactView.createBackboneClass({
 
     render: function() {
     	return (
@@ -43,7 +43,7 @@ define(function() {
 
     onColumnClickFn: function(col) {
       return _.bind(function(event) {
-        this.trigger('columnClick', col.StringValue);
+        this.publishEvent('columnClick', col.StringValue);
       }, this);
     },
 

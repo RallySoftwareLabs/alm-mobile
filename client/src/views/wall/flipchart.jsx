@@ -1,12 +1,13 @@
 /** @jsx React.DOM */
 define(function() {
   var React = require('react'),
+      ReactView = require('views/base/react_view'),
   		_ = require('underscore'),
   		app = require('application'),
   		utils = require('lib/utils'),
   		FeatureCard = require ('views/wall/feature_card');
    
-  return ReactView.createChaplinClass({
+  return ReactView.createBackboneClass({
     render: function() {
       var model = this.props.model;
       var features = model.features;

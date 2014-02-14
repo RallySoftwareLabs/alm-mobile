@@ -9,17 +9,17 @@ define ->
 
     _.extend @prototype, DetailControllerMixin
 
-    show: (params) ->
+    show: (id) ->
       @whenLoggedIn ->
-        @fetchModelAndShowView UserStory, View, params.id
+        @fetchModelAndShowView UserStory, View, id
 
-    create: (params) ->
+    create: ->
       @whenLoggedIn ->
         @showCreateView UserStory, View
 
-    childForStory: (params) ->
+    childForStory: (id) ->
       @whenLoggedIn ->
-        model = new UserStory(ObjectID: params.id)
+        model = new UserStory(ObjectID: id)
         model.fetch
           data:
             fetch: 'FormattedID'
@@ -27,10 +27,13 @@ define ->
             @updateTitle "New Child for #{model.get('FormattedID')}: #{model.get('_refObjectName')}"
             @showCreateView UserStory, View, Parent: model.attributes
 
-    storyForColumn: (params) ->
+    storyForColumn: (column) ->
       @whenLoggedIn ->
         props = {}
-        props[app.session.get('boardField')] = params.column
+        props[app.session.get('boardField')] = column
+        iterationRef = app.session.get('iteration')?.get('_ref')
+        if iterationRef
+          props.Iteration = iterationRef
         @updateTitle "New Story"
         @showCreateView UserStory, View, props
 

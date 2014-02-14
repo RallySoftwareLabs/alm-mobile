@@ -10,17 +10,17 @@ define ->
 
     _.extend @prototype, DetailControllerMixin
 
-    show: (params) ->
+    show: (id) ->
       @whenLoggedIn ->
-        @fetchModelAndShowView Task, View, params.id
+        @fetchModelAndShowView Task, View, id
 
-    create: (params) ->
+    create: ->
       @whenLoggedIn ->
         @showCreateView Task, View
 
-    taskForDefect: (params) ->
+    taskForDefect: (id) ->
       @whenLoggedIn ->
-        model = new Defect(ObjectID: params.id)
+        model = new Defect(ObjectID: id)
         model.fetch
           data:
             fetch: 'FormattedID'
@@ -28,9 +28,9 @@ define ->
             @updateTitle "New Task for #{model.get('FormattedID')}: #{model.get('_refObjectName')}"
             @showCreateView Task, View, WorkProduct: model.attributes
 
-    taskForStory: (params) ->
+    taskForStory: (id) ->
       @whenLoggedIn ->
-        model = new UserStory(ObjectID: params.id)
+        model = new UserStory(ObjectID: id)
         model.fetch
           data:
             fetch: 'FormattedID'

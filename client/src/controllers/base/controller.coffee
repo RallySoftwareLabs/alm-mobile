@@ -1,22 +1,26 @@
 define ->
-  Chaplin = require 'chaplin'
+  Backbone = require 'backbone'
   React = require 'react'
   app = require 'application'
-  InitializingView = require 'views/initializing'
+  Messageable = require 'lib/messageable'
+  LoadingIndicatorView = require 'views/loading_indicator'
 
-  class Controller extends Chaplin.Controller
+  class Controller
+
+    _.extend @prototype, Backbone.Events
+    _.extend @prototype, Messageable
       
     whenLoggedIn: (callback) ->
       if app.session.get('project')?
         @goToPage callback
       else
-        @view = @renderReactComponent InitializingView, region: 'main', shared: false
+        @view = @renderReactComponent LoadingIndicatorView, region: 'main', text: 'Initializing'
         @subscribeEvent 'projectready', @onProjectReady(callback)
 
     onProjectReady: (callback) ->
       func = => 
         @unsubscribeEvent 'projectready', func
-        @view.dispose()
+        # @view.dispose()
         @goToPage callback
 
     goToPage: (callback) ->
@@ -24,32 +28,22 @@ define ->
         callback?.apply this
       else
         setTimeout =>
-          @redirectToRoute 'auth#labsNotice'
+          @redirectTo 'labsNotice'
         , 0
 
     updateTitle: (title) ->
       @publishEvent "updatetitle", title
 
+    redirectTo: (path, params) ->
+      @publishEvent "router:route", path
+
     renderReactComponent: (componentClass, props = {}, id) ->
-      if this.constructor.sharedView && props.shared != false
+      component = componentClass(_.omit(props, 'region'))
 
-        if this.constructor.sharedView.instance?
-          this.constructor.sharedView.instance.setProps props
-          return
+      component.renderForBackbone id
 
-        component = this.constructor.sharedView.instance = componentClass(props)
-      else
-        component = componentClass(props)
+      component
 
-      component.renderForChaplin id
-
-  Controller._maybeDisposeView = (currentController, params, route, options) ->
-    if this.sharedView?.instance? && currentController.constructor != this
-      this.sharedView.instance.dispose()
-      this.sharedView.instance = null
-
-  Controller.reuseViewAcrossControllerActions = ->
-    Chaplin.mediator.subscribe 'dispatcher:dispatch', this._maybeDisposeView, this
-    this.sharedView = { instance: null }
-
-  Controller
+    dispose: ->
+      @stopListening()
+      @unsubscribeAllEvents()

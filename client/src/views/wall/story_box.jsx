@@ -1,11 +1,12 @@
 /** @jsx React.DOM */
 define(function() {
   var React = require('react'),
+      ReactView = require('views/base/react_view'),
   		_ = require('underscore'),
   		app = require('application'),
   		utils = require('lib/utils');
   	
-  return ReactView.createChaplinClass({
+  return ReactView.createBackboneClass({
     render: function() {
       return (
         <div className={this.getClass()} />      

@@ -1,12 +1,13 @@
 /** @jsx React.DOM */
 define(function() {
   var React = require('react'),
+      ReactView = require('views/base/react_view'),
   		_ = require('underscore'),
   		app = require('application'),
   		utils = require('lib/utils');
   		StoryBox = require ('views/wall/story_box');
   	
-  return ReactView.createChaplinClass({
+  return ReactView.createBackboneClass({
     render: function() {
         model = this.props.model
         var userStories = model.userStories;

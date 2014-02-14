@@ -6,12 +6,9 @@ define(function() {
       app = require('application')
   		ReactView = require('views/base/react_view');
 
-  return ReactView.createChaplinClass({
+  return ReactView.createBackboneClass({
     componentDidMount: function() {
       this.subscribeEvent('navigation:show', this.show);
-    },
-    componentWillUnmount: function() {
-      debugger;
     },
     render: function() {
     	return (
@@ -56,7 +53,7 @@ define(function() {
         currentRoute = window.location.pathname;
 
         if (viewHash !== currentRoute && !(viewHash === '' && _.contains(['/userstories', '/tasks', '/defects'], currentRoute))) {
-          this.publishEvent('!router:route', viewHash);
+          this.publishEvent('router:route', viewHash);
         }
       }, this);
     },

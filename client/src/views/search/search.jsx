@@ -5,7 +5,7 @@ define(function() {
   		ReactView = require('views/base/react_view'),
   		ListView = require('views/listing/list');
 
-  return ReactView.createChaplinClass({
+  return ReactView.createBackboneClass({
 
     componentDidMount: function() {
       this._getInputField().focus();
@@ -27,7 +27,7 @@ define(function() {
               noDataMsg="No results matched your search."
               showLoadingIndicator={!!this.props.keywords}
               showItemArtifact={this.props.showItemArtifact}
-              changeOptions="synced"/>
+              changeOptions="sync"/>
           </div>
         </div>
       );
@@ -38,7 +38,7 @@ define(function() {
     },
 
     onSearch: function(event) {
-      this.trigger('search', this._getInputField().val());
+      this.publishEvent('search', this._getInputField().val());
       event.preventDefault();
     },
 

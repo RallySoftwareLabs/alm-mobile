@@ -104,7 +104,6 @@ module.exports = (grunt) ->
             jqueryBase64: "empty:"
             underscore: "../../../../node_modules/lodash/dist/lodash"
             backbone: "empty:"
-            chaplin: "../../../../vendor/scripts/chaplin-0.9.0"
             handlebars: "empty:"
             moment: "empty:"
             appConfig: "empty:"

@@ -43,7 +43,7 @@ define ->
       catch e
 
     routeTo: (route) ->
-      @publishEvent('!router:route', route);
+      @publishEvent('router:route', route);
 
     _parseValue: (value) ->
       val = value

@@ -1,5 +1,4 @@
 define ->
-  Chaplin = require 'chaplin'
   app = require 'application'
   Controller = require 'controllers/base/controller'
   Preference = require 'models/preference'
@@ -14,12 +13,12 @@ define ->
 
     login: (params) ->
       @view = @renderReactComponent LoginView
-      @listenTo @view, 'submit', @onSubmit
+      @subscribeEvent 'submit', @onSubmit
 
     labsNotice: (params) ->
       @view = @renderReactComponent LabsNoticeView
-      @listenTo @view, 'accept', @onAccept
-      @listenTo @view, 'reject', @onReject
+      @subscribeEvent 'accept', @onAccept
+      @subscribeEvent 'reject', @onReject
 
     onSubmit: (username, password, rememberme) ->
       app.session.authenticate username, password, (authenticated) =>
@@ -38,4 +37,4 @@ define ->
         @redirectTo app.afterLogin, replace: true
 
     onReject: ->
-      @redirectToRoute 'auth#login'
+      @redirectTo 'login'

@@ -1,12 +1,17 @@
-define [
-  'chaplin'
-], (Chaplin) ->
+define ->
+  Backbone = require 'backbone'
+  Messageable = require 'lib/messageable'
 
   # Base class for all models.
-  class Model extends Chaplin.Model
+  class Model extends Backbone.Model
     idAttribute: 'ObjectID'
 
-    _.extend @prototype, Chaplin.SyncMachine
+    _.extend @prototype, Messageable
+
+    constructor: ->
+      super
+      @synced = false
+      this.once('sync', => @synced = true)
 
     parse: (resp) ->
       return resp if resp._ref?
@@ -17,10 +22,6 @@ define [
     isNew: ->
       !@id? && !@_ref
 
-    fetch: (options) ->
-      @beginSync()
+    isSynced: -> @synced
 
-      $.when(
-        super
-      ).done (c) =>
-        @finishSync()
+    setSynced: (@synced) ->

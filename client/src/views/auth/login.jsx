@@ -4,7 +4,7 @@ define(function() {
 			React = require('react'),
   		ReactView = require('views/base/react_view');
 
-  return ReactView.createChaplinClass({
+  return ReactView.createBackboneClass({
     render: function() {
     	return (
         <div id="login">
@@ -60,7 +60,7 @@ define(function() {
       $('.alert').hide();
       username = $('#username').val();
       password = $('#password').val();
-      this.trigger('submit', username, password);
+      this.publishEvent('submit', username, password);
       event.preventDefault();
     },
 

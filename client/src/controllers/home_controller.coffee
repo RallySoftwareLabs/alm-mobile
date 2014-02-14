@@ -9,7 +9,7 @@ define ->
   class HomeController extends SiteController
 
     show: (params) ->
-      @redirectToRoute 'home#userstories', replace: true
+      @redirectTo 'userstories', replace: true
 
     userstories: (params) ->
       collection = new UserStories()
@@ -42,7 +42,7 @@ define ->
           tab: tab
           collection: collection
           listType: 'defect'
-          changeOptions: 'synced'
+          changeOptions: 'sync'
           region: 'main'
         )
 
@@ -62,7 +62,5 @@ define ->
       if iterationRef
         data.query = "(#{data.query} AND (Iteration = \"#{iterationRef}\"))"
       data
-
-  HomeController.reuseViewAcrossControllerActions()
 
   HomeController

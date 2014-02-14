@@ -7,7 +7,7 @@ define(function() {
       FieldMixin = require('views/field/field_mixin'),
       TitledWell = require('views/field/titled_well');
 
-  return ReactView.createChaplinClass({
+  return ReactView.createBackboneClass({
     mixins: [FieldMixin],
     getDefaultProps: function() {
       return {

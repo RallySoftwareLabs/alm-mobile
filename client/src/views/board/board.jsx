@@ -8,7 +8,7 @@ define(function() {
   		ColumnView = require('views/board/column'),
   		IterationHeader = require('views/iteration_header');
 
-  return ReactView.createChaplinClass({
+  return ReactView.createBackboneClass({
     componentWillMount: function() {
       this.updateTitle(app.session.getProjectName());
     },
@@ -31,8 +31,6 @@ define(function() {
 		  	  		showIteration: false,
 		  	  		key: colValue
 		  	  	});
-	  		this.bubbleEvent(colView, 'headerclick', 'headerclick');
-	  		this.bubbleEvent(colView, 'cardclick', 'cardclick');
   	  	return <div className={"column-cell"} id={"col-" + utils.toCssClass(colValue)} key={ colValue }>{colView}</div>;
     	}, this);
     	if (!this.props.columns.length) {

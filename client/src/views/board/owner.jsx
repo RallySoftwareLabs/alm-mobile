@@ -4,7 +4,7 @@ define(function() {
   var utils = require('lib/utils');
   var ReactView = require('views/base/react_view');
 
-  return ReactView.createChaplinClass({
+  return ReactView.createBackboneClass({
     render: function() {
       var m = this.props.model,
           ownerName,

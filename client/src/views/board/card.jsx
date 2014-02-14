@@ -4,7 +4,7 @@ define(function() {
   var ReactView = require('views/base/react_view');
   var Owner = require('views/board/owner')
 
-  return ReactView.createChaplinClass({
+  return ReactView.createBackboneClass({
     render: function() {
       var m = this.props.model,
       		cardStyle = {},
@@ -38,7 +38,7 @@ define(function() {
     },
     onClick: function(e) {
     	var m = this.props.model;
-    	this.trigger('cardclick', m.get('ObjectID'), m.get('_type'));
+    	this.publishEvent('cardclick', m.get('ObjectID'), m.get('_type'));
     	e.preventDefault();
     }
   });

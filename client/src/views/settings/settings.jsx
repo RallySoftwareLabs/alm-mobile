@@ -5,7 +5,7 @@ define(function() {
       React = require('react'),
       ReactView = require('views/base/react_view');
 
-  return ReactView.createChaplinClass({
+  return ReactView.createBackboneClass({
 
     render: function() {
       var session = this.props.model,
@@ -41,7 +41,7 @@ define(function() {
               <div className="list-group">{ this._getBoardFieldItems() }</div>
             </div>
             <div className="logout">
-              <button className="btn btn-default" onClick={ this.triggerLogout }>Logout</button>
+              <button className="btn btn-default" onClick={ this.publishEventLogout }>Logout</button>
             </div>
           </form>
         </div>
@@ -99,30 +99,30 @@ define(function() {
     },
 
     triggerLogout: function(event) {
-      this.trigger('logout');
+      this.publishEvent('logout');
       event.preventDefault();
     },
 
     changeModeFn: function(mode) {
       return _.bind(function() {
         var newMode = mode.mode;
-        this.trigger('changeMode', newMode);
+        this.publishEvent('changeMode', newMode);
       }, this);
     },
 
     changeBoardFieldFn: function(field) {
       return _.bind(function() {
         var newField = field.field;
-        this.trigger('changeBoardField', newField);
+        this.publishEvent('changeBoardField', newField);
       }, this);
     },
 
     updateSelectedProject: function(event) {
-      this.trigger('changeProject', this.$('.project-select option:selected').val());
+      this.publishEvent('changeProject', this.$('.project-select option:selected').val());
     },
 
     updateSelectedIteration: function(event) {
-      this.trigger('changeIteration', this.$('.iteration-select option:selected').val());
+      this.publishEvent('changeIteration', this.$('.iteration-select option:selected').val());
     }
   });
 });

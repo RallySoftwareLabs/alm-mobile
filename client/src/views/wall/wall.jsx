@@ -1,12 +1,13 @@
 /** @jsx React.DOM */
 define(function() {
   var React = require('react'),
+      ReactView = require('views/base/react_view'),
   		_ = require('underscore'),
   		app = require('application'),
   		utils = require('lib/utils'),
   		Flipchart = require ('views/wall/flipchart');
   	
-  return ReactView.createChaplinClass({
+  return ReactView.createBackboneClass({
     render: function() {
       var flipchartNodes = _.map(this.props.model.models, function(initiative) {
         return <Flipchart model={initiative}></Flipchart>;     
