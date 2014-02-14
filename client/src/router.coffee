@@ -27,6 +27,8 @@ define ->
       addRoute 'board', 'board#index'
       addRoute 'board/:column', 'board#column'
       addRoute 'board/:column/userstory/new', 'user_story_detail#storyForColumn'
+      addRoute 'wall', 'wall#index'
+
 
       addRoute 'userstories', 'home#userstories'
       addRoute 'defects', 'home#defects'
@@ -43,6 +45,7 @@ define ->
       addRoute 'defect/:id/tasks', 'associations#tasksForDefect'
       addRoute 'defect/:id/tasks/new', 'task_detail#taskForDefect'
       addRoute 'task/:id', 'task_detail#show'
+      addRoute 'portfolioitem/:id', 'portfolio_item_detail#show'
 
       addRoute 'new/userstory', 'user_story_detail#create'
       addRoute 'new/task', 'task_detail#create'

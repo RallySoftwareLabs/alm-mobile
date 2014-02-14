@@ -46,5 +46,5 @@ define ->
           associatedItems.fetch
             data:
               fetch: 'Blocked,FormattedID,Name,ObjectID,Parent,Ready,ScheduleState,State,ToDo'
-              query: "(#{reverseAssociation} = \"#{model.get('_ref')}\")"
+              query: "(Parent = \"#{model.get('_ref')}\")"
               order: 'ObjectID ASC'

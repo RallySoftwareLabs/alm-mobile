@@ -1,0 +1,79 @@
+.wall{
+  h1 {
+    font-family: "ProximaNovaBold";
+  }
+}
+.flipchart {
+  border: solid #999999 1px;
+  color: black;
+  background: white;
+  margin: 2px;
+  padding: 5px;
+  width: 300px;
+  display: inline-block;
+  vertical-align: top;
+  overflow: auto;
+  font-family: "ProximaNova";
+  height: 500px;
+  
+    .header {
+  	  font-size: 24px;
+      line-height: 26px;
+  	  margin: 2px;
+  	    	    	  
+  	  .formattedID {
+        font-family: "ProximaNovaBold";
+    	  color: #333333;
+
+    	}
+  	}
+    .title {
+      display: inline-block;
+  	  font-weight: normal;
+  	  width: 100%;
+  	}
+  	
+  	.child {
+  	  display: inline-block;
+  	  vertical-align: top;
+  	  overflow: hidden;
+  	  margin: 2px;
+  	  width: 30%;
+  	  height: 70px;
+      color: #333333;
+      background: #cccccc;
+      
+    	.header {
+    	  margin: 2px;
+    	  font-size: 9px;
+        line-height: 10px;
+        font-family: "NotoSans";
+    	}
+    	&.on {
+    	  border: solid #333333 1px;
+    	  border: solid @cyan 2px;
+    	  background: @cyan-med;
+    	  color: black;
+    	  .animated;
+  	    .pulse;
+    	}
+    	.grandchildren {
+    	  line-height: .4;
+    	}
+  	}
+  	
+  	.grandchild {
+  	  display: inline-block;
+  	  background: Silver;
+  	  width: 12px;
+  	  height: 12px;
+  	  margin: 2px;
+      border: solid #666 1px;
+  	  &.on {
+  	    background: @cyan-med;
+  	    border: solid @cyan 1px;
+        .animated;
+        .pulse;
+  	  }
+  	}
+}

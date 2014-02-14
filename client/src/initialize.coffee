@@ -20,6 +20,8 @@ require [
   'controllers/settings_controller'
   'controllers/task_detail_controller'
   'controllers/user_story_detail_controller'
+  'controllers/wall_controller'
+  'controllers/portfolio_item_detail_controller'
 
 ], ($, Backbone, Bootstrap, app) ->
 
