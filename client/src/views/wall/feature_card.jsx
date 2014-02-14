@@ -19,7 +19,7 @@ define(function() {
           }, this);
         }
         return (  
-          <div className={this.getChildClass(model)}>
+          <div className={this.getChildClass(model)} onClick={this.onClick}>
                <div className="grandchildren">
                   {storyBoxes}
                </div>

@@ -5,6 +5,7 @@ define(function() {
 			React = require('react'),
 			app = require('application'),
   		ReactView = require('views/base/react_view'),
+      DetailMixin = require('views/detail/detail_mixin'),
       Children = require('views/field/children'),
   		Description = require('views/field/description'),
   		Discussion = require('views/field/discussion'),
@@ -19,19 +20,7 @@ define(function() {
     mixins: [DetailMixin],
   	render: function() {
       var model = this.props.model,
-          newArtifact = this.props.newArtifact,
-          childrenOrTasks = model.get('Children') && model.get('Children').Count ?
-            (
-              <div className="col-xs-3 ChildrenView">
-                <Children item={ model } editMode={ newArtifact }/>
-              </div>
-            )
-            :
-            (
-              <div className="col-xs-3 TasksView">
-                <Tasks item={ model } editMode={ newArtifact }/>
-              </div>
-            );
+          newArtifact = this.props.newArtifact;
   		return (
   			<div className="detail-view">
   			  <div className="row">
@@ -45,21 +34,14 @@ define(function() {
             </div>
           </div>
   			  <div className="row">
-  			    <div className="col-xs-8 ScheduleStateView">
-  			    	<StringWithArrows item={ model } editMode={ newArtifact } field={ app.session.get('boardField') } label={ this.getScheduleStateLabel() }/>
-  			    </div>
   			    <div className="col-xs-4 OwnerView">
   			    	<Owner item={ model } editMode={ newArtifact }/>
   			    </div>
   			  </div>
   			  <div className="row">
-  			    <div className="col-xs-3 PlanEstimateView">
-  			    	<TitledWell item={ model } editMode={ newArtifact } field='PlanEstimate' label='Plan Est' inputType='number'/>
-  			    </div>
-            { childrenOrTasks }
-  			    <div className="col-xs-3 DefectsView">
-  			    	<Defects item={ model } editMode={ newArtifact }/>
-  			    </div>
+             <div className="col-xs-3 ChildrenView">
+                <Children item={ model } editMode={ newArtifact }/>
+              </div>
   			    <div className="col-xs-3 DiscussionView">
   			    	<Discussion item={ model } editMode={ newArtifact }/>
   			    </div>
@@ -96,10 +78,6 @@ define(function() {
           }
   			</div>
   		);
-  	},
-
-  	getScheduleStateLabel: function() {
-  		return (app.session.get('boardField') == 'ScheduleState') ? 'Schedule State' : 'Kanban State';
   	}
   });
 });

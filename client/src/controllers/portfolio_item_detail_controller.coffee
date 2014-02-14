@@ -2,54 +2,30 @@ define ->
   app = require 'application'
   SiteController = require 'controllers/base/site_controller'
   DetailControllerMixin = require 'controllers/detail_controller_mixin'
-  UserStory = require 'models/user_story'
-  View = require 'views/detail/user_story'
+  View = require 'views/detail/portfolio_item'
+  PortfolioItem = require 'models/portfolio_item'
 
-  class UserStoryDetailController extends SiteController
+  class PortfolioItemDetailController extends SiteController
 
     _.extend @prototype, DetailControllerMixin
 
     show: (id) ->
       @whenLoggedIn ->
-        @fetchModelAndShowView UserStory, View, id
+        @fetchModelAndShowView PortfolioItem, View, id
 
     create: ->
       @whenLoggedIn ->
-        @showCreateView UserStory, View
-
-    childForStory: (id) ->
-      @whenLoggedIn ->
-        model = new UserStory(ObjectID: id)
-        model.fetch
-          data:
-            fetch: 'FormattedID'
-          success: (model, response, opts) =>
-            @updateTitle "New Child for #{model.get('FormattedID')}: #{model.get('_refObjectName')}"
-            @showCreateView UserStory, View, Parent: model.attributes
-
-    storyForColumn: (column) ->
-      @whenLoggedIn ->
-        props = {}
-        props[app.session.get('boardField')] = column
-        iterationRef = app.session.get('iteration')?.get('_ref')
-        if iterationRef
-          props.Iteration = iterationRef
-        @updateTitle "New Story"
-        @showCreateView UserStory, View, props
+        @showCreateView PortfolioItem, View
 
     getFieldNames: ->
       [
         'Blocked',
         'Children'
-        'Defects',
         'Description',
         'Discussion',
         'FormattedID',
         'Name',
         'Owner',
         'Parent',
-        'PlanEstimate',
-        'Ready',
-        'Tasks',
-        app.session.get('boardField')
+        'Ready'
       ]
