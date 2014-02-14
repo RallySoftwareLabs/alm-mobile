@@ -1,3 +1,8 @@
+.wall{
+  h1 {
+    font-family: "ProximaNovaBold";
+  }
+}
 .flipchart {
   border: solid #999999 1px;
   color: black;
@@ -12,8 +17,8 @@
   height: 500px;
   
     .header {
-  	  font-size: 14px;
-      line-height: 16px;
+  	  font-size: 24px;
+      line-height: 26px;
   	  margin: 2px;
   	    	    	  
   	  .formattedID {
@@ -34,7 +39,7 @@
   	  overflow: hidden;
   	  margin: 2px;
   	  width: 30%;
-  	  height: 100px;
+  	  height: 70px;
       color: #333333;
       background: #cccccc;
       
@@ -47,7 +52,7 @@
     	&.on {
     	  border: solid #333333 1px;
     	  border: solid @cyan 2px;
-    	  background: white;
+    	  background: @cyan-med;
     	  color: black;
     	  .animated;
   	    .pulse;
@@ -59,14 +64,16 @@
   	
   	.grandchild {
   	  display: inline-block;
-  	  background: gray;
-  	  width: 9px;
-  	  height: 9px;
-  	  margin: 1px;
-  	  background: gray;
+  	  background: Silver;
+  	  width: 12px;
+  	  height: 12px;
+  	  margin: 2px;
+      border: solid #666 1px;
   	  &.on {
   	    background: @cyan-med;
   	    border: solid @cyan 1px;
+        .animated;
+        .pulse;
   	  }
   	}
 }

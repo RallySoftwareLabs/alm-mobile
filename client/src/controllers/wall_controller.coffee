@@ -12,7 +12,7 @@ define ->
   class WallController extends SiteController
     index: (params) ->
       @whenLoggedIn =>
-        @updateTitle "Enterprise Backlog Wall"
+        @updateTitle "Enterprise Backlog"
         initiatives = new Initiatives()
         @fetchInitiatives initiatives
         @view = @renderReactComponent WallView, model: initiatives, region: 'main'

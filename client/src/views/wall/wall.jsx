@@ -11,9 +11,15 @@ define(function() {
       var flipchartNodes = _.map(this.props.model.models, function(initiative) {
         return <Flipchart model={initiative}></Flipchart>;     
       }, this);
-      return (   
-        <div className="itemList">
-          {flipchartNodes}
+      return (  
+        <div className="wall"> 
+          <h1>
+            Which items have been planned?<br />
+            <small>Features and Stories turn blue when scheduled in an iteration or release</small>
+          </h1>
+          <div className="itemList">
+            {flipchartNodes}
+          </div>
         </div>
       );
      }

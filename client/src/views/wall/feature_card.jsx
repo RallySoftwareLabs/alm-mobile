@@ -19,10 +19,6 @@ define(function() {
         }
         return (  
           <div className={this.getChildClass(model)}>
-               <div className="header">
-                    <span className="formattedID">{model.attributes.FormattedID}</span><br />
-                    {model.attributes.Name}
-               </div>
                <div className="grandchildren">
                   {storyBoxes}
                </div>

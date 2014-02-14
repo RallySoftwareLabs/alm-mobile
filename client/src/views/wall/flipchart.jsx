@@ -13,11 +13,7 @@ define(function() {
       if (features != null) {
         var featureCards = _.map(features.models, function(feature) {
           return (
-              <FeatureCard
-               model={feature}
-               formattedID={feature.attributes.FormattedID}>
-                {feature.attributes.Name}
-              </FeatureCard>
+              <FeatureCard model={feature} />
           );     
         }, this);
       }
