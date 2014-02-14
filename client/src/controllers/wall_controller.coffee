@@ -16,6 +16,7 @@ define ->
         initiatives = new Initiatives()
         @fetchInitiatives initiatives
         @view = @renderReactComponent WallView, model: initiatives, region: 'main'
+        @subscribeEvent 'cardclick', @onCardClick
     fetchInitiatives: (initiatives) ->
       hardcodedRandDProjectRef = appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/project/334329159'
       initiatives.fetch
@@ -49,4 +50,6 @@ define ->
           order: 'Rank ASC'
         success:  =>
           this.view.forceUpdate()
-    
+    onCardClick: (oid, type) ->
+      mappedType = 'portfolioitem'
+      @redirectTo "#{mappedType}/#{oid}"

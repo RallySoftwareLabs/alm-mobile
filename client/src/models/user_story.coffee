@@ -17,5 +17,5 @@ define ->
     allowedValueFields: ['ScheduleState', 'c_KanbanState']
 
     isScheduled: ->
-      this.attributes.Release or this.attributes.Iteration 
+      this.get('Release') or this.get('Iteration')
       

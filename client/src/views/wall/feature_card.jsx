@@ -30,21 +30,17 @@ define(function() {
       return (this.allStoriesAreScheduled(model)) ? "child on" : "child";
     },
     allStoriesAreScheduled: function(model) {
-      //If there is 1 unscheduled, return false;
-      //Otherwise return true.
-      //
-      // There has to be a better way! Why the nested ifs?
-      //
-      if (model.userStories) {
-        if (model.userStories.length > 0) {
-          return _.every(model.userStories.models, function(userStory) {
-            return userStory.isScheduled();
-          });
-        }
+      if (!model.userStories || model.userStories.length == 0) {
+        return false;
       }
-      return false;
+      return _.every(model.userStories.models, function(userStory) {
+        return userStory.isScheduled();
+      });
+    },
+    onClick: function(e) {
+      var m = this.props.model;
+      this.publishEvent('cardclick', m.get('ObjectID'), m.get('_type'));
+      e.preventDefault();
     }
-
-
   });
 });
