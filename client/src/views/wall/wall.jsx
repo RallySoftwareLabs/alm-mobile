@@ -2,16 +2,13 @@
 define(function() {
   var React = require('react'),
       ReactView = require('views/base/react_view'),
-  		_ = require('underscore'),
-  		app = require('application'),
-  		utils = require('lib/utils'),
   		Flipchart = require ('views/wall/flipchart');
   	
   return ReactView.createBackboneClass({
     render: function() {
-      var flipchartNodes = _.map(this.props.model.models, function(initiative) {
+      var flipchartNodes = this.props.model.map(function(initiative) {
         return <Flipchart model={initiative}></Flipchart>;     
-      }, this);
+      });
       return (  
         <div className="wall"> 
           <h1>

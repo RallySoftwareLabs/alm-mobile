@@ -6,3 +6,9 @@ define ->
   class UserStories extends Collection
     url: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/hierarchicalrequirement'
     model: UserStory
+
+    areAllStoriesScheduled: ->
+      return false if @isEmpty()
+      
+      this.every (userStory) ->
+        userStory.isScheduled()
