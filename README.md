@@ -86,6 +86,7 @@ You will need to create a config.json file to configure the ALM url. You should 
 
 - almWebServiceBaseUrl: You should change this value if you want to point to a different Rally ALM Server URL
 - appName: You should change this value so that it is a unique name that represents your application and who your are.
+- mode: Which mode do you want to run the site in? Acceptable values are "board" and "wall"
 
 # Deploying to S3
 

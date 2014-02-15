@@ -2,6 +2,7 @@ define ->
   _ = require 'underscore'
   Backbone = require 'backbone'
   Messageable = require 'lib/messageable'
+  appConfig = require 'appConfig'
 
   controllerSuffix = '_controller'
   routes = {}
@@ -23,7 +24,12 @@ define ->
   return {
     initialize: ->
 
-      addRoute '', 'board#index'
+      defaultRoutes =
+        board: 'board#index'
+        wall: 'wall#index'
+
+      addRoute '', defaultRoutes[appConfig.mode]
+
       addRoute 'board', 'board#index'
       addRoute 'board/:column', 'board#column'
       addRoute 'board/:column/userstory/new', 'user_story_detail#storyForColumn'
