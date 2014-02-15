@@ -7,6 +7,7 @@ define ->
   controllerSuffix = '_controller'
   routes = {}
   currentController = null
+  aggregator = null
 
   addRoute = (path, handler) ->
     [controllerName, fnName] = handler.split '#'
@@ -17,12 +18,19 @@ define ->
       throw new Error "Cannot create route for unknown controller function #{path}, #{handler}"
 
     routes[path] = ->
+      slug = Backbone.history.location.pathname
+      aggregator.startSession('Navigation', slug: slug)
       currentController?.dispose()
       currentController = new controllerClass()
-      view = currentController[fnName].apply(currentController, arguments)
+      aggregator.recordAction
+        component: currentController
+        description: "visited #{slug}"
+      currentController[fnName].apply(currentController, arguments)
 
   return {
-    initialize: ->
+    initialize: (config) ->
+
+      aggregator = config.aggregator
 
       defaultRoutes =
         board: 'board#index'

@@ -16,11 +16,10 @@ define ->
   Users = require 'collections/users'
 
   class Session extends Model
-    initialize: ->
+    initialize: (@aggregator) ->
       super
       @pagesize = 200
       @set
-        user: new User()
         securityToken: window.sessionStorage.getItem 'token'
       @listenTo this, 'change:user', @_onUserChange
       @listenTo this, 'change:mode', @_onModeChange
@@ -110,8 +109,11 @@ define ->
       )
           
     fetchUserInfo: (cb) ->
-      u = new User()
-      u.fetchSelf (err, u) =>
+      user = new User()
+      @aggregator.beginLoad component: user, description: 'fetching self'
+
+      user.fetchSelf (err, u) =>
+        @aggregator.endLoad component: user
         unless err?
           @set 'user', u 
         cb(err, u)
@@ -168,11 +170,12 @@ define ->
       preferences = new Preferences()
       @set 'prefs', preferences
 
-      user = @get('user')
+      user = value
 
       userProfile = new UserProfile
         ObjectID: utils.getOidFromRef(user.get('UserProfile')._ref)
 
+      @aggregator.beginLoad component: this, description: 'session init'
       $.when(
         projects.fetch(
           data:
@@ -183,6 +186,7 @@ define ->
         userProfile.fetch()
         preferences.fetchMobilePrefs user
       ).then (p, u, prefs) =>
+        @aggregator.endLoad component: this
         @_setModeFromPreference()
         totalProjectResults = p[0].QueryResult.TotalResultCount
         @_fetchRestOfProjects(projects, totalProjectResults).then =>

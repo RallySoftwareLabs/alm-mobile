@@ -21,7 +21,8 @@
     "express": "3.4.3",
     "html-md": "3.0.2",
     "lodash": "2.4.1",
-    "request": "2.27.0"
+    "request": "2.27.0",
+    "rallymetrics": "0.1.8"
   },
   "devDependencies": {
     "expect.js": "0.2.0",
