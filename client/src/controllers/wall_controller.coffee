@@ -14,11 +14,12 @@ define ->
       @whenLoggedIn =>
         @updateTitle "Enterprise Backlog"
         initiatives = new Initiatives()
-        @fetchInitiatives initiatives
+        initiatives.clientMetricsParent = this
         @view = @renderReactComponent WallView, model: initiatives, region: 'main'
         @subscribeEvent 'cardclick', @onCardClick
+        @fetchInitiatives initiatives
     fetchInitiatives: (initiatives) ->
-      hardcodedRandDProjectRef = appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/project/334329159'
+      hardcodedRandDProjectRef = appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/project/12271'#334329159'
       initiatives.fetch
         data:
           fetch: 'FormattedID,Name,ObjectID,Owner,Children'
@@ -28,9 +29,16 @@ define ->
           projectScopeUp: false
           projectScopeDown: true
         success: (initiatives) =>
-          @fetchFeatures initiative for initiative in initiatives.models;
+          if initiatives.isEmpty()
+            @markFinished()
+          else
+            $.when.apply($, initiatives.map(@fetchFeatures, this)).always =>
+              @markFinished()
+
     fetchFeatures: (initiative) ->
+      deferred = $.Deferred()
       initiative.features = new Features()
+      initiative.features.clientMetricsParent = this
       parentRef = initiative.attributes._ref
       initiative.features.fetch
         data:
@@ -39,9 +47,18 @@ define ->
           order: 'Rank ASC'
         success: (features) =>
           this.view.forceUpdate()
-          @fetchUserStories userStory for userStory in features.models;
+          if features.isEmpty()
+            deferred.resolve()
+          else
+            $.when.apply($, features.map(@fetchUserStories, this)).always =>
+              deferred.resolve()
+
+      deferred.promise()
+
     fetchUserStories: (feature) ->
+      deferred = $.Deferred()
       feature.userStories = new UserStories()
+      feature.userStories.clientMetricsParent = this
       parentRef = feature.attributes._ref
       feature.userStories.fetch
         data: 
@@ -50,6 +67,11 @@ define ->
           order: 'Rank ASC'
         success:  =>
           this.view.forceUpdate()
+          deferred.resolve()
+      
+      deferred.promise()
+
     onCardClick: (oid, type) ->
+      app.aggregator.recordAction component: this, description: "clicked wall card"
       mappedType = 'portfolioitem'
       @redirectTo "#{mappedType}/#{oid}"

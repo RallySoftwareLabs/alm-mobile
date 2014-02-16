@@ -48,3 +48,5 @@ define ->
               fetch: 'Blocked,FormattedID,Name,ObjectID,Parent,Ready,ScheduleState,State,ToDo'
               query: "(Parent = \"#{model.get('_ref')}\")"
               order: 'ObjectID ASC'
+            success: =>
+              @markFinished()

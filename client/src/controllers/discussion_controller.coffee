@@ -17,13 +17,15 @@ define ->
 
         @subscribeEvent 'reply', @onReplyClick
 
-        @discussions.fetch
+        @discussions.fetch(
           data:
             fetch: "Text,User,Artifact,CreationDate"
             query: "(Artifact = #{@artifactRef})"
             order: "CreationDate DESC,ObjectID"
+        ).always => @markFinished()
 
     onReplyClick: (text) ->
+      app.aggregator.recordAction component: this, description: 'clicked reply'
       @_addComment(text)
 
     _addComment: (text) ->

@@ -1,16 +1,23 @@
 define ->
-
+  Backbone = require 'backbone'
   bus = require 'message_bus'
 
   Messageable =
     publishEvent: (type, args...) ->
-      bus.publish type, args...
+      bus.trigger type, args...
 
     subscribeEvent: (type, handler) ->
-      bus.subscribe type, handler, this
+      @listenTo bus, type, handler
+
+    subscribeEventOnce: (type, handler) ->
+      @listenToOnce bus, type, handler
 
     unsubscribeEvent: (type, handler) ->
-      bus.unsubscribe type, handler, this
+      @stopListening bus, type, handler
 
     unsubscribeAllEvents: ->
-      bus.unsubscribe null, null, this
+      @stopListening bus
+
+  _.extend Messageable, Backbone.Events
+
+  Messageable

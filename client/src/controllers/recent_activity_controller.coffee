@@ -9,13 +9,15 @@ define ->
     show: (params) ->
       @whenLoggedIn ->
         discussions = new Discussions()
-        discussions.fetch
+        discussions.fetch(
           data:
             fetch: "Text,User,Artifact,CreationDate,FormattedID"
             project: app.session.get('project').get('_ref')
             projectScopeUp: false
             projectScopeDown: true
             order: "CreationDate DESC,ObjectID"
+        ).always => @markFinished()
+        
         @view = @renderReactComponent(DiscussionView,
           region: 'main'
           model: discussions

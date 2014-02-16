@@ -25,7 +25,7 @@ define ->
           
           allowedValues = _.map(
             _.filter(attributes, (attr) => attr.ElementName in @prototype.allowedValueFields),
-            @_getAttributeAllowedValues
+            _.partial(@_getAttributeAllowedValues, schema)
           )
 
         $.when.apply($, allowedValues).then (values...) =>
@@ -34,11 +34,12 @@ define ->
       getFieldDisplayName: (fieldElementName) ->
         @prototype.fields[fieldElementName]?.Name
 
-      _getAttributeAllowedValues: (attr) ->
+      _getAttributeAllowedValues: (schema, attr) ->
         return if _.isArray attr.AllowedValues
           [attr.ElementName, attr.AllowedValues]
         else
-          av = new AllowedValues
+          av = new AllowedValues()
+          av.clientMetricsParent = schema
           av.url = attr.AllowedValues._ref
           av.fetch().then -> [attr.ElementName, av.invoke('toJSON')]
 

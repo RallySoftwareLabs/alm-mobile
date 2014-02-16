@@ -22,16 +22,13 @@ define ->
 
       @aggregator.startSession 'Mobile App Init', slug: Backbone.history.location.pathname
 
-      @aggregator.recordAction component: this, description: 'mobile app init'
+      @aggregator.recordAction component: this, description: 'authentication'
 
       React.initializeTouchEvents true
 
-      @session = new Session(@aggregator)
+      @session = new Session(this, @aggregator)
       @afterLogin = ''
       @session.authenticated (authenticated) =>
-
-        if authenticated
-          @aggregator.beginLoad component: this, description: 'initializing'
 
         # @initRouter routes, pushState: false, root: '/subdir/'
         Router.initialize aggregator: @aggregator
@@ -41,9 +38,9 @@ define ->
         
         hash = Backbone.history.fragment
         if authenticated
-            @aggregator.endLoad component: this
           if hash == 'login'
             @publishEvent 'router:route', ''
+          @session.initSessionForUser()
         else
           unless _.contains(['login', 'logout', 'labsNotice'], hash)
             @afterLogin = hash

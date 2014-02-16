@@ -2,6 +2,7 @@ define ->
   _ = require 'underscore'
   Backbone = require 'backbone'
   Messageable = require 'lib/messageable'
+  MetricsHandler = require 'lib/metrics_handler'
   appConfig = require 'appConfig'
 
   controllerSuffix = '_controller'
@@ -19,12 +20,22 @@ define ->
 
     routes[path] = ->
       slug = Backbone.history.location.pathname
+
       aggregator.startSession('Navigation', slug: slug)
+      aggregator.recordAction
+        component: this
+        description: "visited #{slug}"
+
       currentController?.dispose()
       currentController = new controllerClass()
-      aggregator.recordAction
+      
+      aggregator.beginLoad
         component: currentController
-        description: "visited #{slug}"
+        description: "loading page"
+
+      @listenToOnce currentController, 'controllerfinished', ->
+        aggregator.endLoad component: currentController
+        
       currentController[fnName].apply(currentController, arguments)
 
   return {
@@ -81,6 +92,7 @@ define ->
 
       Router = Backbone.Router.extend
         routes: routes
+        clientMetricsType: 'PageNavigationMetrics'
 
         onRoute: (path, options = {}) ->
           @navigate path, _.defaults(options, trigger: true)
