@@ -2,7 +2,11 @@ define ->
   return {
     getComponentHierarchy: (cmp) ->
       if cmp
-        [cmp].concat @getComponentHierarchy(cmp.clientMetricsParent)
+        current = if @getComponentType(cmp)
+          [cmp]
+        else
+          []
+        current.concat @getComponentHierarchy(cmp.clientMetricsParent)
       else
         []
 

@@ -119,6 +119,7 @@ define ->
       @get('prefs').findPreference(Preference::acceptedLabsNotice)?
 
     acceptLabsNotice: ->
+      @aggregator.beginLoad component: this, description: 'accepting labs notics'
       $.when(
         @get('prefs').updatePreference @get('user'), Preference::acceptedLabsNotice, true
       )
@@ -128,6 +129,7 @@ define ->
       @setUsername null
       @clear silent: true
 
+      @aggregator.beginLoad component: this, description: 'logging out'
       $.ajax(
         url: "#{appConfig.almWebServiceBaseUrl}/resources/jsp/security/clear.jsp"
         type: 'GET'
@@ -135,15 +137,15 @@ define ->
         beforeSend: (xhr) ->
           xhr.setRequestHeader("X-Requested-By", "Rally")
           xhr.setRequestHeader("X-RallyIntegrationName", appConfig.appName)
-      )
+      ).always => @aggregator.endLoad component: this
           
     fetchUserInfo: (cb) ->
       user = new User()
       user.clientMetricsParent = this
-      @aggregator.beginLoad component: user, description: 'fetching logged-in user'
+      @aggregator.beginLoad component: this, description: 'fetching logged-in user'
 
       user.fetchSelf (err, u) =>
-        @aggregator.endLoad component: user
+        @aggregator.endLoad component: this
         unless err?
           @set 'user', u
         cb(err, u)
@@ -182,11 +184,17 @@ define ->
       @setBoardColumns boardField, newColumns
 
     setBoardColumns: (boardField, columns) ->
+      @aggregator.beginLoad component: this, description: 'saving board columns'
       pref = "#{Preference::defaultBoardColumnsPrefix}.#{boardField}"
       projectOid = utils.getOidFromRef @get('project').get('_ref')
 
       @set "#{pref}.#{projectOid}", columns
-      @get('prefs').updateProjectPreference @get('user').get('_ref'), @get('project').get('_ref'), pref, columns.join(',')
+      @get('prefs').updateProjectPreference(
+        @get('user').get('_ref'),
+        @get('project').get('_ref'),
+        pref,
+        columns.join(',')
+      ).always => @aggregator.endLoad component: this
 
     _getDefaultBoardColumns: (boardField) ->
       switch boardField
@@ -292,3 +300,5 @@ define ->
     _onIterationChange: (model, value, options) ->
       iterationRef = value?.get('_ref')
       @setIterationPreference iterationRef
+
+    _asClientMetricsParent: -> clientMetricsParent: this

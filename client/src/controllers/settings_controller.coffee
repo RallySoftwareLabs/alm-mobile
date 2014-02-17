@@ -48,7 +48,7 @@ define ->
       @updateTitle "Settings: #{app.session.getProjectName()}"
 
     onChangeIteration: (iterationRef) ->
-      if iteration == 'null'
+      if iterationRef == 'null'
         app.aggregator.recordAction component: this, description: "removed iteration"
         return app.session.set 'iteration', null
 
