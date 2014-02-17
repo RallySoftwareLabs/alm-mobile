@@ -14,9 +14,9 @@ define ->
         @_goToPage callback
       else
         @view = @renderReactComponent LoadingIndicatorView, region: 'main', text: 'Initializing'
-        @subscribeEventOnce 'projectready', @onProjectReady(callback)
+        @subscribeEventOnce 'projectready', @_onProjectReady(callback)
 
-    onProjectReady: (callback) ->
+    _onProjectReady: (callback) ->
       func = => 
         @_goToPage callback
 

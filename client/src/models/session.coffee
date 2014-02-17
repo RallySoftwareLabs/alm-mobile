@@ -4,9 +4,7 @@ define ->
   utils = require 'lib/utils'
   Model = require 'models/base/model'
   User = require 'models/user'
-  Defect = require 'models/defect'
   Preference = require 'models/preference'
-  Task = require 'models/task'
   UserStory = require 'models/user_story'
   UserProfile = require 'models/user_profile'
   Schema = require 'collections/schema'
@@ -253,15 +251,9 @@ define ->
       @set 'boardField', boardField
 
     _loadSchema: (project) ->
-      projectRef = project.get('_ref')
-      projectOid = utils.getOidFromRef projectRef
-      projectSchema = project.get('SchemaVersion')
-
       schema = new Schema()
       schema.clientMetricsParent = this
-      schema.url = "#{appConfig.almWebServiceBaseUrl}/schema/@@WSAPI_VERSION/project/#{projectOid}/#{projectSchema}"
-      schema.fetch(accepts: json: 'text/plain').then =>
-        $.when.apply($, _.map [Defect, Task, UserStory], (model) -> model.updateFromSchema(schema))
+      schema.fetchForProject(project)
 
     _onModeChange: (model, value, options) ->
       @get('prefs').updatePreference @get('user'), Preference::defaultMode, value
