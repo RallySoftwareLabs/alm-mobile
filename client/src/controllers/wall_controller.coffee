@@ -12,64 +12,94 @@ define ->
   class WallController extends SiteController
     index: (params) ->
       @updateTitle "Enterprise Backlog"
-      initiatives = new Initiatives()
-      initiatives.clientMetricsParent = this
-      @view = @renderReactComponent WallView, model: initiatives, region: 'main'
+
+      @initiatives = new Initiatives()
+      @initiatives.clientMetricsParent = this
+
+      @features = new Features()
+      @features.clientMetricsParent = this
+
+      @userStories = new UserStories()
+      @userStories.clientMetricsParent = this
+
+      @view = @renderReactComponent WallView, model: @initiatives, region: 'main'
       @subscribeEvent 'cardclick', @onCardClick
-      @fetchInitiatives initiatives
-      
-    fetchInitiatives: (initiatives) ->
+
       hardcodedRandDProjectRef = appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/project/12271'#334329159'
-      initiatives.fetch
+
+      $.when(
+        @fetchInitiatives(hardcodedRandDProjectRef)
+        @fetchFeatures(hardcodedRandDProjectRef)
+        @fetchUserStories(hardcodedRandDProjectRef)
+      ).then =>
+        unless @initiatives.isEmpty()
+          @features.each (f) =>
+            parentRef = f.get('Parent')._ref
+            initiative = @initiatives.find _.isAttributeEqual('_ref', parentRef)
+
+            if initiative?
+              initiative.features ?= new Features()
+              initiative.features.add f
+
+          @userStories.each (us) =>
+            parentRef = us.get('PortfolioItem')._ref
+            feature = @features.find _.isAttributeEqual('_ref', parentRef)
+
+            if feature?
+              feature.userStories ?= new UserStories()
+              feature.userStories.add us
+
+        @initiatives.trigger('add')
+        @markFinished()
+
+    fetchInitiatives: (projectRef) ->
+      @initiatives.fetch
         data:
           fetch: 'FormattedID,Name,ObjectID,Owner,Children'
           query: '(State.Name = "Building")'
           order: 'Rank ASC'
-          project: hardcodedRandDProjectRef
+          pagesize: 200
+          project: projectRef
           projectScopeUp: false
           projectScopeDown: true
-        success: (initiatives) =>
-          if initiatives.isEmpty()
-            @markFinished()
-          else
-            $.when.apply($, initiatives.map(@fetchFeatures, this)).always =>
-              @markFinished()
 
-    fetchFeatures: (initiative) ->
-      deferred = $.Deferred()
-      initiative.features = new Features()
-      initiative.features.clientMetricsParent = this
-      parentRef = initiative.attributes._ref
-      initiative.features.fetch
+    fetchFeatures: (projectRef) ->
+      @features.fetch
         data:
-          fetch: 'FormattedID,Name,ObjectID,Owner,LeafStoryCount',
-          query: "(Parent = " + parentRef + ")",
+          fetch: 'FormattedID,Name,ObjectID,Owner,LeafStoryCount,Parent',
+          query: "(Parent != null)",
           order: 'Rank ASC'
-        success: (features) =>
-          this.view.forceUpdate()
-          if features.isEmpty()
-            deferred.resolve()
-          else
-            $.when.apply($, features.map(@fetchUserStories, this)).always =>
-              deferred.resolve()
+          pagesize: 200
+          project: projectRef
+          projectScopeUp: false
+          projectScopeDown: true
 
-      deferred.promise()
-
-    fetchUserStories: (feature) ->
-      deferred = $.Deferred()
-      feature.userStories = new UserStories()
-      feature.userStories.clientMetricsParent = this
-      parentRef = feature.attributes._ref
-      feature.userStories.fetch
-        data: 
-          fetch: 'FormattedID,Name,Release,Iteration',
-          query: "(PortfolioItem = " + parentRef + ")",
-          order: 'Rank ASC'
-        success:  =>
-          this.view.forceUpdate()
-          deferred.resolve()
+    fetchUserStories: (projectRef) ->
       
-      deferred.promise()
+      # start = @pagesize + 1
+      # projectFetches = while totalCount >= start
+      #   fetch = projects.fetch(
+      #     remove: false
+      #     data:
+      #       fetch: 'Name,SchemaVersion'
+      #       start: start
+      #       pagesize: @pagesize
+      #       order: 'Name'
+      #   )
+      #   start += @pagesize
+      #   fetch
+
+      # $.when.apply($, projectFetches).always =>
+      #   @aggregator.endLoad component: this
+      @userStories.fetch
+        data: 
+          fetch: 'FormattedID,Name,Release,Iteration,PortfolioItem',
+          query: "(PortfolioItem != null)",
+          order: 'Rank ASC'
+          pagesize: 200
+          project: projectRef
+          projectScopeUp: false
+          projectScopeDown: true
 
     onCardClick: (oid, type) ->
       app.aggregator.recordAction component: this, description: "clicked wall card"

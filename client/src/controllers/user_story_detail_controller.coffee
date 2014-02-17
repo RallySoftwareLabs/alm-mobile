@@ -27,6 +27,16 @@ define ->
             @updateTitle "New Child for #{model.get('FormattedID')}: #{model.get('_refObjectName')}"
             @showCreateView UserStory, View, Parent: model.attributes
 
+    childForPortfolioItem: (id) ->
+      @whenProjectIsLoaded ->
+        model = new UserStory(ObjectID: id)
+        model.fetch
+          data:
+            fetch: 'FormattedID'
+          success: (model, response, opts) =>
+            @updateTitle "New Child for #{model.get('FormattedID')}: #{model.get('_refObjectName')}"
+            @showCreateView UserStory, View, Parent: model.attributes
+
     storyForColumn: (column) ->
       @whenProjectIsLoaded ->
         props = {}

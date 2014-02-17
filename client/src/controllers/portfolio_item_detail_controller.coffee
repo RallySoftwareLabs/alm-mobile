@@ -17,6 +17,16 @@ define ->
       @whenProjectIsLoaded ->
         @showCreateView PortfolioItem, View
 
+    newChild: (id) ->
+      @whenProjectIsLoaded ->
+        model = new PortfolioItem(ObjectID: id)
+        model.fetch
+          data:
+            fetch: 'FormattedID,Children'
+          success: (model, response, opts) =>
+            @updateTitle "New Child for #{model.get('FormattedID')}: #{model.get('_refObjectName')}"
+            newModel = @showCreateView PortfolioItem, View, Parent: model.get('_ref')
+            newModel.urlRoot = model.urlRoot.replace('portfolioitem', model.get('Children')._type.toLowerCase())
     getFieldNames: ->
       [
         'Blocked',

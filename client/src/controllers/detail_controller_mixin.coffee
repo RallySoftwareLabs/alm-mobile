@@ -26,6 +26,7 @@ define ->
       @subscribeEvent 'save', @saveNew
       @subscribeEvent 'cancel', @cancelNew
       @markFinished()
+      model
 
     saveField: (updates, opts) ->
       if @view.props.newArtifact

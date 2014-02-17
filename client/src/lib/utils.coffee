@@ -42,7 +42,8 @@ define ->
     getTypeFromRef: (ref) ->
       return '' unless ref
       parts = ref.split '/'
-      @getTypeForDetailLink parts[parts.length - 2]
+      piIndex = _.indexOf(parts, 'portfolioitem')
+      @getTypeForDetailLink parts[if piIndex > -1 then piIndex else parts.length - 2]
 
     getProfileImageUrl: (ref, size = 25) ->
       return "" unless ref
@@ -61,6 +62,7 @@ define ->
     getTypeForDetailLink: (value) ->
       str = (value || '').toLowerCase()
       str = 'userstory' if str == 'hierarchicalrequirement'
+      str = 'portfolioitem' if _.contains(str, 'portfolioitem')
       str
 
     fixImageSrcs: (html) ->

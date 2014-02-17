@@ -23,7 +23,7 @@ define(function() {
           label="Children"
           item={ this.props.item }
           valueMarkup={ this._getValueMarkup() }
-          routeTo={Backbone.history.fragment + '/children' }/>;
+          routeTo={Backbone.history.fragment + '/' + this.props.field.toLowerCase() }/>;
     },
 
     _getValueMarkup: function() {

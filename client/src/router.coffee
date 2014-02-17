@@ -71,6 +71,10 @@ define ->
       addRoute 'defect/:id/tasks/new', 'task_detail#taskForDefect'
       addRoute 'task/:id', 'task_detail#show'
       addRoute 'portfolioitem/:id', 'portfolio_item_detail#show'
+      addRoute 'portfolioitem/:id/children', 'associations#childrenForPortfolioItem'
+      addRoute 'portfolioitem/:id/children/new', 'portfolio_item_detail#newChild'
+      addRoute 'portfolioitem/:id/userstories', 'associations#userStoriesForPortfolioItem'
+      addRoute 'portfolioitem/:id/userstories/new', 'user_story_detail#childForPortfolioItem'
 
       addRoute 'new/userstory', 'user_story_detail#create'
       addRoute 'new/task', 'task_detail#create'
