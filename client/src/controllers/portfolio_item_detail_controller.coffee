@@ -20,7 +20,8 @@ define ->
     getFieldNames: ->
       [
         'Blocked',
-        'Children'
+        'Children',
+        'UserStories',
         'Description',
         'Discussion',
         'FormattedID',
