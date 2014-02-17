@@ -9,7 +9,7 @@ define ->
 
   class BoardController extends SiteController
     index: (params) ->
-      @whenLoggedIn =>
+      @whenProjectIsLoaded =>
         field = app.session.get('boardField')
         columns = @getColumnModels field
 
@@ -24,7 +24,7 @@ define ->
 
     column: (colValue) ->
       
-      @whenLoggedIn =>
+      @whenProjectIsLoaded =>
         @updateTitle app.session.getProjectName()
 
         field = app.session.get('boardField')

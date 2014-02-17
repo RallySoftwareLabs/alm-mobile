@@ -10,15 +10,15 @@ define ->
     _.extend @prototype, DetailControllerMixin
 
     show: (id) ->
-      @whenLoggedIn ->
+      @whenProjectIsLoaded ->
         @fetchModelAndShowView UserStory, View, id
 
     create: ->
-      @whenLoggedIn ->
+      @whenProjectIsLoaded ->
         @showCreateView UserStory, View
 
     childForStory: (id) ->
-      @whenLoggedIn ->
+      @whenProjectIsLoaded ->
         model = new UserStory(ObjectID: id)
         model.fetch
           data:
@@ -28,7 +28,7 @@ define ->
             @showCreateView UserStory, View, Parent: model.attributes
 
     storyForColumn: (column) ->
-      @whenLoggedIn ->
+      @whenProjectIsLoaded ->
         props = {}
         props[app.session.get('boardField')] = column
         iterationRef = app.session.get('iteration')?.get('_ref')

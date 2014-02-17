@@ -8,7 +8,7 @@ define ->
 
   class DiscussionController extends SiteController
     show: (type, id) ->
-      @whenLoggedIn ->
+      @whenProjectIsLoaded ->
         @discussions = new Discussions()
 
         @artifactRef = utils.getRef(type, id)

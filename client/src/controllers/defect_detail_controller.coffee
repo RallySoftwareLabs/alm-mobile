@@ -11,15 +11,15 @@ define ->
     _.extend @prototype, DetailControllerMixin
 
     show: (id) ->
-      @whenLoggedIn ->
+      @whenProjectIsLoaded ->
         @fetchModelAndShowView Defect, View, id
 
     create: ->
-      @whenLoggedIn ->
+      @whenProjectIsLoaded ->
         @showCreateView Defect, View
 
     defectForStory: (id) ->
-      @whenLoggedIn ->
+      @whenProjectIsLoaded ->
         model = new UserStory(ObjectID: id)
         model.fetch
           data:

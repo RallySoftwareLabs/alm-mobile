@@ -9,7 +9,7 @@ define ->
 
     _.extend @prototype, Messageable
       
-    whenLoggedIn: (callback) ->
+    whenProjectIsLoaded: (callback) ->
       if app.session.get('project')?
         @_goToPage callback
       else

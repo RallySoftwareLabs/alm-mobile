@@ -11,7 +11,7 @@ define ->
   class SettingsController extends SiteController
 
     show: (params) ->
-      @whenLoggedIn ->
+      @whenProjectIsLoaded ->
         @view = @renderReactComponent SettingsView, region: 'main', model: app.session
         @subscribeEvent 'changeMode', @onChangeMode
         @subscribeEvent 'changeBoardField', @onChangeBoardField
@@ -23,7 +23,7 @@ define ->
         @markFinished()
 
     board: (params) ->
-      @whenLoggedIn ->
+      @whenProjectIsLoaded ->
         fieldName = UserStory.getFieldDisplayName app.session.get('boardField')
         @view = @renderReactComponent BoardSettingsView,
           region: 'main'

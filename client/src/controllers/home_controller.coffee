@@ -36,7 +36,7 @@ define ->
         'defects'
 
     _fetchCollectionAndRender: (collection, fetch, query, tab) ->
-      @whenLoggedIn =>
+      @whenProjectIsLoaded =>
         collection.fetch(data: @_getFetchData(fetch, query)).always => @markFinished()
         @renderReactComponent(HomeView,
           tab: tab

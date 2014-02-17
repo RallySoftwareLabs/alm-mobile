@@ -10,11 +10,11 @@ define ->
     _.extend @prototype, DetailControllerMixin
 
     show: (id) ->
-      @whenLoggedIn ->
+      @whenProjectIsLoaded ->
         @fetchModelAndShowView PortfolioItem, View, id
 
     create: ->
-      @whenLoggedIn ->
+      @whenProjectIsLoaded ->
         @showCreateView PortfolioItem, View
 
     getFieldNames: ->

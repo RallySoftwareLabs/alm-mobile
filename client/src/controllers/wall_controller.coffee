@@ -11,13 +11,13 @@ define ->
 
   class WallController extends SiteController
     index: (params) ->
-      @whenLoggedIn =>
-        @updateTitle "Enterprise Backlog"
-        initiatives = new Initiatives()
-        initiatives.clientMetricsParent = this
-        @view = @renderReactComponent WallView, model: initiatives, region: 'main'
-        @subscribeEvent 'cardclick', @onCardClick
-        @fetchInitiatives initiatives
+      @updateTitle "Enterprise Backlog"
+      initiatives = new Initiatives()
+      initiatives.clientMetricsParent = this
+      @view = @renderReactComponent WallView, model: initiatives, region: 'main'
+      @subscribeEvent 'cardclick', @onCardClick
+      @fetchInitiatives initiatives
+      
     fetchInitiatives: (initiatives) ->
       hardcodedRandDProjectRef = appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/project/12271'#334329159'
       initiatives.fetch

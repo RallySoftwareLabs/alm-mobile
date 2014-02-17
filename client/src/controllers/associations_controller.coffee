@@ -27,7 +27,7 @@ define ->
     _createAssociationView: (model, association, reverseAssociation) ->
       associatedItems = new associationClasses[association]()
 
-      @whenLoggedIn ->
+      @whenProjectIsLoaded ->
         
         @_fetchAssociation model, associatedItems, association, reverseAssociation
 

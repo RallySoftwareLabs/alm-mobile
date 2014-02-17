@@ -11,15 +11,15 @@ define ->
     _.extend @prototype, DetailControllerMixin
 
     show: (id) ->
-      @whenLoggedIn ->
+      @whenProjectIsLoaded ->
         @fetchModelAndShowView Task, View, id
 
     create: ->
-      @whenLoggedIn ->
+      @whenProjectIsLoaded ->
         @showCreateView Task, View
 
     taskForDefect: (id) ->
-      @whenLoggedIn ->
+      @whenProjectIsLoaded ->
         model = new Defect(ObjectID: id)
         model.fetch
           data:
@@ -29,7 +29,7 @@ define ->
             @showCreateView Task, View, WorkProduct: model.attributes
 
     taskForStory: (id) ->
-      @whenLoggedIn ->
+      @whenProjectIsLoaded ->
         model = new UserStory(ObjectID: id)
         model.fetch
           data:

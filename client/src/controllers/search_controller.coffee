@@ -7,7 +7,7 @@ define ->
 
   class SearchController extends SiteController
     search: (keywords = '') ->
-      @whenLoggedIn ->
+      @whenProjectIsLoaded ->
         artifacts = new Artifacts()
         @view = @renderReactComponent(SearchView,
           collection: artifacts
