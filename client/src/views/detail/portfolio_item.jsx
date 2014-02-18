@@ -29,8 +29,8 @@ define(function() {
   			    </div>
   			  </div>
           <div className="row">
-            <div className="col-xs-12 ellipsis ParentView">
-              <WorkProduct item={ model } editMode={ newArtifact } field="Parent" label="Parent"/>
+            <div className="col-xs-12 DescriptionView">
+              <Description item={ model } editMode={ newArtifact }/>
             </div>
           </div>
   			  <div className="row">
@@ -46,24 +46,6 @@ define(function() {
   			    	<Discussion item={ model } editMode={ newArtifact }/>
   			    </div>
   			  </div>
-  			  <div className="row">
-  			    <div className="col-xs-12 DescriptionView">
-  			    	<Description item={ model } editMode={ newArtifact }/>
-  			    </div>
-  			  </div>
-          {
-            !newArtifact ?
-    			  <div className="row">
-    			    <div className="col-xs-1"/>
-    			    <div className="col-xs-5 toggle BlockedView">
-    			    	<Toggle item={ model } editMode={ newArtifact } field='Blocked' label='Blocked'/>
-    			    </div>
-    			    <div className="col-xs-5 toggle ReadyView">
-    			    	<Toggle item={ model } editMode={ newArtifact } field='Ready' label='Ready'/>
-    			    </div>
-    			    <div className="col-xs-1"/>
-    			  </div> : ''
-          }
           {
             this.props.newArtifact ?
             <div className="row">
