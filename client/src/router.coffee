@@ -2,10 +2,13 @@ define ->
   _ = require 'underscore'
   Backbone = require 'backbone'
   Messageable = require 'lib/messageable'
+  MetricsHandler = require 'lib/metrics_handler'
+  appConfig = require 'appConfig'
 
   controllerSuffix = '_controller'
   routes = {}
   currentController = null
+  aggregator = null
 
   addRoute = (path, handler) ->
     [controllerName, fnName] = handler.split '#'
@@ -16,14 +19,36 @@ define ->
       throw new Error "Cannot create route for unknown controller function #{path}, #{handler}"
 
     routes[path] = ->
+      slug = Backbone.history.location.pathname
+
+      aggregator.startSession('Navigation', slug: slug)
+      aggregator.recordAction
+        component: this
+        description: "visited #{slug}"
+
       currentController?.dispose()
       currentController = new controllerClass()
-      view = currentController[fnName].apply(currentController, arguments)
+      
+      aggregator.beginLoad
+        component: currentController
+        description: "loading page"
+
+      @listenToOnce currentController, 'controllerfinished', ->
+        aggregator.endLoad component: currentController
+        
+      currentController[fnName].apply(currentController, arguments)
 
   return {
-    initialize: ->
+    initialize: (config) ->
 
-      addRoute '', 'board#index'
+      aggregator = config.aggregator
+
+      defaultRoutes =
+        board: 'board#index'
+        wall: 'wall#index'
+
+      addRoute '', defaultRoutes[appConfig.mode]
+
       addRoute 'board', 'board#index'
       addRoute 'board/:column', 'board#column'
       addRoute 'board/:column/userstory/new', 'user_story_detail#storyForColumn'
@@ -46,6 +71,10 @@ define ->
       addRoute 'defect/:id/tasks/new', 'task_detail#taskForDefect'
       addRoute 'task/:id', 'task_detail#show'
       addRoute 'portfolioitem/:id', 'portfolio_item_detail#show'
+      addRoute 'portfolioitem/:id/children', 'associations#childrenForPortfolioItem'
+      addRoute 'portfolioitem/:id/children/new', 'portfolio_item_detail#newChild'
+      addRoute 'portfolioitem/:id/userstories', 'associations#userStoriesForPortfolioItem'
+      addRoute 'portfolioitem/:id/userstories/new', 'user_story_detail#childForPortfolioItem'
 
       addRoute 'new/userstory', 'user_story_detail#create'
       addRoute 'new/task', 'task_detail#create'
@@ -67,6 +96,7 @@ define ->
 
       Router = Backbone.Router.extend
         routes: routes
+        clientMetricsType: 'PageNavigationMetrics'
 
         onRoute: (path, options = {}) ->
           @navigate path, _.defaults(options, trigger: true)

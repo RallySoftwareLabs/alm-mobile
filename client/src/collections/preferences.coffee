@@ -40,8 +40,11 @@ define ->
 
         newPref = new Preference changedAttrs
 
-      unless _.isEmpty(changedAttrs)
-        newPref.save changedAttrs, patch: true, success: (model) => @add newPref unless existingPref
+      $.when(
+        unless _.isEmpty(changedAttrs)
+          newPref.clientMetricsParent = this
+          newPref.save changedAttrs, patch: true, success: (model) => @add newPref unless existingPref
+      )
 
     updateProjectPreference: (user, project, name, value) ->
       existingPref = newPref = @findProjectPreference project, name
@@ -59,8 +62,11 @@ define ->
 
         newPref = new Preference changedAttrs
 
-      unless _.isEmpty(changedAttrs)
-        newPref.save changedAttrs, patch: true, success: (model) => @add newPref unless existingPref
+      $.when(
+        unless _.isEmpty(changedAttrs)
+          newPref.clientMetricsParent = this
+          newPref.save changedAttrs, patch: true, success: (model) => @add newPref unless existingPref
+      )
 
     _getProjectPreferenceName: (project, name) ->
       projectOid = utils.getOidFromRef(project)

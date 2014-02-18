@@ -10,15 +10,25 @@ define ->
     _.extend @prototype, DetailControllerMixin
 
     show: (id) ->
-      @whenLoggedIn ->
+      @whenProjectIsLoaded ->
         @fetchModelAndShowView UserStory, View, id
 
     create: ->
-      @whenLoggedIn ->
+      @whenProjectIsLoaded ->
         @showCreateView UserStory, View
 
     childForStory: (id) ->
-      @whenLoggedIn ->
+      @whenProjectIsLoaded ->
+        model = new UserStory(ObjectID: id)
+        model.fetch
+          data:
+            fetch: 'FormattedID'
+          success: (model, response, opts) =>
+            @updateTitle "New Child for #{model.get('FormattedID')}: #{model.get('_refObjectName')}"
+            @showCreateView UserStory, View, Parent: model.attributes
+
+    childForPortfolioItem: (id) ->
+      @whenProjectIsLoaded ->
         model = new UserStory(ObjectID: id)
         model.fetch
           data:
@@ -28,7 +38,7 @@ define ->
             @showCreateView UserStory, View, Parent: model.attributes
 
     storyForColumn: (column) ->
-      @whenLoggedIn ->
+      @whenProjectIsLoaded ->
         props = {}
         props[app.session.get('boardField')] = column
         iterationRef = app.session.get('iteration')?.get('_ref')

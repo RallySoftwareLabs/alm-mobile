@@ -9,11 +9,14 @@ define ->
 
   class BoardController extends SiteController
     index: (params) ->
-      @whenLoggedIn =>
+      @whenProjectIsLoaded =>
         field = app.session.get('boardField')
         columns = @getColumnModels field
 
-        col.fetch(@getFetchData(field, col.get('value'))) for col in columns
+        $.when.apply($,
+          _.map columns, (col) => col.fetch(@getFetchData(field, col.get('value')))
+        ).always => @markFinished()
+
         @view = @renderReactComponent BoardView, columns: columns, region: 'main'
 
         @subscribeEvent 'headerclick', @onColumnClick
@@ -21,12 +24,13 @@ define ->
 
     column: (colValue) ->
       
-      @whenLoggedIn =>
+      @whenProjectIsLoaded =>
         @updateTitle app.session.getProjectName()
 
         field = app.session.get('boardField')
         col = new Column(field: field, value: colValue)
-        col.fetch @getFetchData(field, colValue)
+        col.clientMetricsParent = this
+        col.fetch(@getFetchData(field, colValue)).always => @markFinished()
 
         @view = @renderReactComponent ColumnView,
           region: 'main'
@@ -43,32 +47,39 @@ define ->
         @subscribeEvent 'goright', @goRight
 
     onColumnClick: (col) ->
+      app.aggregator.recordAction component: this, description: 'clicked column'
       colValue = col.get('value')
       @redirectTo "board/#{colValue}"
 
     onCardClick: (oid, type) ->
+      app.aggregator.recordAction component: this, description: 'clicked card'
       mappedType = @getRouteTypeFromModelType(type)
       @redirectTo "#{mappedType}/#{oid}"
 
     goLeft: (col) ->
+      app.aggregator.recordAction component: this, description: 'clicked left on column'
       field = app.session.get('boardField')
       columns = @getColumnModels field
-      colIndex = _.findIndex columns, (c) -> c.get('value') == col.get('value')
+      colIndex = _.findIndex columns, _.isAttributeEqual('value', col.get('value'))
       if colIndex > 0
         newColumn = columns[colIndex - 1]
         @redirectTo "/board/#{newColumn.get('value')}"
         @view.setProps model: newColumn
 
     goRight: (col) ->
+      app.aggregator.recordAction component: this, description: 'clicked right on column'
       field = app.session.get('boardField')
       columns = @getColumnModels field
-      colIndex = _.findIndex columns, (c) -> c.get('value') == col.get('value')
+      colIndex = _.findIndex columns, _.isAttributeEqual('value', col.get('value'))
       if colIndex < columns.length - 1
         newColumn = columns[colIndex + 1]
         @redirectTo "/board/#{newColumn.get('value')}"
 
     getColumnModels: (field) ->
-      _.map app.session.getBoardColumns(), (value) -> new Column(field: field, value: value)
+      _.map app.session.getBoardColumns(), (value) =>
+          col = new Column({field, value})
+          col.clientMetricsParent = this
+          col
 
     getFetchData: (field, value) ->
       data =

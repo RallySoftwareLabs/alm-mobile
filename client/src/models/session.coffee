@@ -4,9 +4,7 @@ define ->
   utils = require 'lib/utils'
   Model = require 'models/base/model'
   User = require 'models/user'
-  Defect = require 'models/defect'
   Preference = require 'models/preference'
-  Task = require 'models/task'
   UserStory = require 'models/user_story'
   UserProfile = require 'models/user_profile'
   Schema = require 'collections/schema'
@@ -16,11 +14,9 @@ define ->
   Users = require 'collections/users'
 
   class Session extends Model
-    initialize: ->
+    initialize: (@clientMetricsParent, @aggregator) ->
       super
-      @pagesize = 200
       @set
-        user: new User()
         securityToken: window.sessionStorage.getItem 'token'
       @listenTo this, 'change:user', @_onUserChange
       @listenTo this, 'change:mode', @_onModeChange
@@ -59,6 +55,32 @@ define ->
           cb? false
       )
 
+    initSessionForUser: (options) ->
+      @aggregator.beginLoad component: this, description: 'session init'
+      projects = new Projects()
+      projects.clientMetricsParent = this
+      @set 'projects', projects
+
+      preferences = new Preferences()
+      preferences.clientMetricsParent = this
+      @set 'prefs', preferences
+
+      userProfile = new UserProfile
+        ObjectID: utils.getOidFromRef(@get('user').get('UserProfile')._ref)
+      userProfile.clientMetricsParent = this
+
+      $.when(
+        projects.fetchAllPages(
+          data:
+            fetch: 'Name,SchemaVersion'
+            order: 'Name'
+        ),
+        userProfile.fetch()
+        preferences.fetchMobilePrefs @get('user')
+      ).then (p, u, prefs) =>
+        @_setModeFromPreference()
+        @_setDefaultProject projects, userProfile
+
     setIterationPreference: (value) ->
       projectRef = @get('project').get('_ref')
       prefs = @get('prefs')
@@ -91,6 +113,7 @@ define ->
       @get('prefs').findPreference(Preference::acceptedLabsNotice)?
 
     acceptLabsNotice: ->
+      @aggregator.beginLoad component: this, description: 'accepting labs notics'
       $.when(
         @get('prefs').updatePreference @get('user'), Preference::acceptedLabsNotice, true
       )
@@ -100,6 +123,7 @@ define ->
       @setUsername null
       @clear silent: true
 
+      @aggregator.beginLoad component: this, description: 'logging out'
       $.ajax(
         url: "#{appConfig.almWebServiceBaseUrl}/resources/jsp/security/clear.jsp"
         type: 'GET'
@@ -107,13 +131,17 @@ define ->
         beforeSend: (xhr) ->
           xhr.setRequestHeader("X-Requested-By", "Rally")
           xhr.setRequestHeader("X-RallyIntegrationName", appConfig.appName)
-      )
+      ).always => @aggregator.endLoad component: this
           
     fetchUserInfo: (cb) ->
-      u = new User()
-      u.fetchSelf (err, u) =>
+      user = new User()
+      user.clientMetricsParent = this
+      @aggregator.beginLoad component: this, description: 'fetching logged-in user'
+
+      user.fetchSelf (err, u) =>
+        @aggregator.endLoad component: this
         unless err?
-          @set 'user', u 
+          @set 'user', u
         cb(err, u)
 
     initColumnsFor: (boardField) ->
@@ -150,59 +178,21 @@ define ->
       @setBoardColumns boardField, newColumns
 
     setBoardColumns: (boardField, columns) ->
+      @aggregator.beginLoad component: this, description: 'saving board columns'
       pref = "#{Preference::defaultBoardColumnsPrefix}.#{boardField}"
       projectOid = utils.getOidFromRef @get('project').get('_ref')
 
       @set "#{pref}.#{projectOid}", columns
-      @get('prefs').updateProjectPreference @get('user').get('_ref'), @get('project').get('_ref'), pref, columns.join(',')
+      @get('prefs').updateProjectPreference(
+        @get('user').get('_ref'),
+        @get('project').get('_ref'),
+        pref,
+        columns.join(',')
+      ).always => @aggregator.endLoad component: this
 
     _getDefaultBoardColumns: (boardField) ->
       switch boardField
         when 'ScheduleState' then ['Defined', 'In-Progress', 'Completed', 'Accepted']
-        else []
-
-    _onUserChange: (model, value, options) ->
-      projects = new Projects()
-      @set 'projects', projects
-
-      preferences = new Preferences()
-      @set 'prefs', preferences
-
-      user = @get('user')
-
-      userProfile = new UserProfile
-        ObjectID: utils.getOidFromRef(user.get('UserProfile')._ref)
-
-      $.when(
-        projects.fetch(
-          data:
-            fetch: 'Name,SchemaVersion'
-            pagesize: @pagesize
-            order: 'Name'
-        ),
-        userProfile.fetch()
-        preferences.fetchMobilePrefs user
-      ).then (p, u, prefs) =>
-        @_setModeFromPreference()
-        totalProjectResults = p[0].QueryResult.TotalResultCount
-        @_fetchRestOfProjects(projects, totalProjectResults).then =>
-          @_setDefaultProject projects, userProfile
-
-    _fetchRestOfProjects: (projects, totalCount) ->
-      start = @pagesize + 1
-      projectFetches = while totalCount >= start
-        fetch = projects.fetch(
-          remove: false
-          data:
-            fetch: 'Name,SchemaVersion'
-            start: start
-            pagesize: @pagesize
-            order: 'Name'
-        )
-        start += @pagesize
-        fetch
-
-      $.when.apply($, projectFetches)
 
     _setDefaultProject: (projects, userProfile) ->
       defaultProject = @get('prefs').findPreference(Preference::defaultProject)
@@ -240,14 +230,9 @@ define ->
       @set 'boardField', boardField
 
     _loadSchema: (project) ->
-      projectRef = project.get('_ref')
-      projectOid = utils.getOidFromRef projectRef
-      projectSchema = project.get('SchemaVersion')
-
       schema = new Schema()
-      schema.url = "#{appConfig.almWebServiceBaseUrl}/schema/@@WSAPI_VERSION/project/#{projectOid}/#{projectSchema}"
-      schema.fetch(accepts: json: 'text/plain').then =>
-        $.when.apply($, _.map [Defect, Task, UserStory], (model) -> model.updateFromSchema(schema))
+      schema.clientMetricsParent = this
+      schema.fetchForProject(project)
 
     _onModeChange: (model, value, options) ->
       @get('prefs').updatePreference @get('user'), Preference::defaultMode, value
@@ -256,6 +241,7 @@ define ->
       @get('prefs').updateProjectPreference @get('user').get('_ref'), @get('project').get('_ref'), Preference::defaultBoardField, value
 
     _onProjectChange: (model, value, options) ->
+      @aggregator.beginLoad component: this, description: 'on project change'
       projectRef = value.get('_ref')
       prefs = @get('prefs')
 
@@ -264,22 +250,25 @@ define ->
       prefs.updatePreference @get('user'), Preference::defaultProject, projectRef
 
       iterations = new Iterations()
+      iterations.clientMetricsParent = this
       @set 'iterations', iterations
 
       $.when(
         @_loadSchema(value),
-        iterations.fetch(
+        iterations.fetchAllPages(
           data:
             fetch: 'Name,StartDate,EndDate'
-            pagesize: @pagesize
             order: 'StartDate DESC,EndDate DESC,ObjectID'
             query: "(Project = \"#{projectRef}\")"
         )
       ).then (s, i) =>
         @initColumnsFor @get('boardField')
         @_setIterationFromPreference()
+        @aggregator.endLoad component: this
         @publishEvent "projectready", @getProjectName()
 
     _onIterationChange: (model, value, options) ->
       iterationRef = value?.get('_ref')
       @setIterationPreference iterationRef
+
+    _asClientMetricsParent: -> clientMetricsParent: this

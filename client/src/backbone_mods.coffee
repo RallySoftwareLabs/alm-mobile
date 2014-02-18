@@ -88,8 +88,12 @@ define ->
     params.data ?= {}
     params.data.pagesize ?= 50
 
+    metricsData = app.aggregator.beginDataRequest model, params.url
+    # _.assign options.headers, metricsData.xhrHeaders
+
     error = options.error
     options.error = (xhr, status, thrown) ->
+      app.aggregator.endDataRequest model, xhr, metricsData.requestId
       error?(xhr, status, thrown)
       model.trigger('error', model, xhr, options) unless options.silent
       if xhr.status is 401 or xhr.status is 0 or status.indexOf('Not authorized') > -1
@@ -99,6 +103,7 @@ define ->
 
     success = options.success
     options.success = (resp, status, xhr) ->
+      app.aggregator.endDataRequest model, xhr, metricsData.requestId
       updateResultObj = (resp.OperationResult || resp.CreateResult)
       errors = updateResultObj?.Errors
       if errors?.length > 0

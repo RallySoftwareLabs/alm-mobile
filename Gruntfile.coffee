@@ -98,18 +98,19 @@ module.exports = (grunt) ->
         options:
           name: 'initialize'
           paths:
-            jquery: "empty:"
-            bootstrap: "empty:"
-            spin: "empty:"
-            jqueryBase64: "empty:"
-            underscore: "../../../../node_modules/lodash/dist/lodash"
-            backbone: "empty:"
-            handlebars: "empty:"
-            moment: "empty:"
             appConfig: "empty:"
+            backbone: "empty:"
+            bootstrap: "empty:"
+            handlebars: "empty:"
+            jquery: "empty:"
+            jqueryBase64: "empty:"
             md: "../../../../node_modules/html-md/dist/md.min"
+            moment: "empty:"
             pagedown: "empty:"
+            rallymetrics: "../../../../node_modules/rallymetrics/builds/rallymetrics"
             react: "empty:"
+            spin: "empty:"
+            underscore: "../../../../node_modules/lodash/dist/lodash"
           shim:
             appConfig:
               exports: "AppConfig"

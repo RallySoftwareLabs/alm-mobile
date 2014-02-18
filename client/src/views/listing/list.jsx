@@ -50,6 +50,10 @@ define(function() {
       return this._userstoryItemMarkup(model);
     },
 
+    _portfolioitemItemMarkup: function(model) {
+      return this._userstoryItemMarkup(model);
+    },
+
     _taskItemMarkup: function(model) {
       var todo;
       if (model.get('ToDo')) {

@@ -11,45 +11,81 @@ define ->
 
   class WallController extends SiteController
     index: (params) ->
-      @whenLoggedIn =>
-        @updateTitle "Enterprise Backlog"
-        initiatives = new Initiatives()
-        @fetchInitiatives initiatives
-        @view = @renderReactComponent WallView, model: initiatives, region: 'main'
-        @subscribeEvent 'cardclick', @onCardClick
-    fetchInitiatives: (initiatives) ->
-      hardcodedRandDProjectRef = appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/project/334329159'
-      initiatives.fetch
+      @updateTitle "Enterprise Backlog"
+
+      @initiatives = new Initiatives()
+      @initiatives.clientMetricsParent = this
+
+      @features = new Features()
+      @features.clientMetricsParent = this
+
+      @userStories = new UserStories()
+      @userStories.clientMetricsParent = this
+
+      @view = @renderReactComponent WallView, model: @initiatives, region: 'main'
+      @subscribeEvent 'cardclick', @onCardClick
+
+      hardcodedRandDProjectRef = appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/project/334329159'#12271
+
+      $.when(
+        @fetchInitiatives(hardcodedRandDProjectRef)
+        @fetchFeatures(hardcodedRandDProjectRef)
+        userStoriesFetchPromise = @fetchUserStories(hardcodedRandDProjectRef)        
+      ).then =>
+        if @initiatives.isEmpty()
+          @markFinished()
+        else
+          @features.each (f) =>
+            parentRef = f.get('Parent')._ref
+            initiative = @initiatives.find _.isAttributeEqual('_ref', parentRef)
+
+            if initiative?
+              initiative.features ?= new Features()
+              initiative.features.add f
+
+          userStoriesFetchPromise.then =>
+            @userStories.each (us) =>
+              parentRef = us.get('PortfolioItem')._ref
+              feature = @features.find _.isAttributeEqual('_ref', parentRef)
+
+              if feature?
+                feature.userStories ?= new UserStories()
+                feature.userStories.add us
+
+            @initiatives.trigger('add')
+            @markFinished()
+
+    fetchInitiatives: (projectRef) ->
+      @initiatives.fetchAllPages
         data:
           fetch: 'FormattedID,Name,ObjectID,Owner,Children'
           query: '(State.Name = "Building")'
           order: 'Rank ASC'
-          project: hardcodedRandDProjectRef
+          project: projectRef
           projectScopeUp: false
           projectScopeDown: true
-        success: (initiatives) =>
-          @fetchFeatures initiative for initiative in initiatives.models;
-    fetchFeatures: (initiative) ->
-      initiative.features = new Features()
-      parentRef = initiative.attributes._ref
-      initiative.features.fetch
+
+    fetchFeatures: (projectRef) ->
+      @features.fetchAllPages
         data:
-          fetch: 'FormattedID,Name,ObjectID,Owner,LeafStoryCount',
-          query: "(Parent = " + parentRef + ")",
+          fetch: 'FormattedID,Name,ObjectID,Owner,LeafStoryCount,Parent',
+          query: "(Parent != null)",
           order: 'Rank ASC'
-        success: (features) =>
-          this.view.forceUpdate()
-          @fetchUserStories userStory for userStory in features.models;
-    fetchUserStories: (feature) ->
-      feature.userStories = new UserStories()
-      parentRef = feature.attributes._ref
-      feature.userStories.fetch
+          project: projectRef
+          projectScopeUp: false
+          projectScopeDown: true
+
+    fetchUserStories: (projectRef) ->
+      @userStories.fetchAllPages
         data: 
-          fetch: 'FormattedID,Name,Release,Iteration',
-          query: "(PortfolioItem = " + parentRef + ")",
+          fetch: 'FormattedID,Name,Release,Iteration,PortfolioItem',
+          query: "(PortfolioItem != null)",
           order: 'Rank ASC'
-        success:  =>
-          this.view.forceUpdate()
+          project: projectRef
+          projectScopeUp: false
+          projectScopeDown: true
+
     onCardClick: (oid, type) ->
+      app.aggregator.recordAction component: this, description: "clicked wall card"
       mappedType = 'portfolioitem'
       @redirectTo "#{mappedType}/#{oid}"

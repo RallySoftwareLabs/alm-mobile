@@ -7,35 +7,36 @@ define ->
 
   class Controller
 
-    _.extend @prototype, Backbone.Events
     _.extend @prototype, Messageable
       
-    whenLoggedIn: (callback) ->
+    whenProjectIsLoaded: (callback) ->
       if app.session.get('project')?
-        @goToPage callback
+        @_goToPage callback
       else
         @view = @renderReactComponent LoadingIndicatorView, region: 'main', text: 'Initializing'
-        @subscribeEvent 'projectready', @onProjectReady(callback)
+        @subscribeEventOnce 'projectready', @_onProjectReady(callback)
 
-    onProjectReady: (callback) ->
+    _onProjectReady: (callback) ->
       func = => 
-        @unsubscribeEvent 'projectready', func
-        # @view.dispose()
-        @goToPage callback
+        @_goToPage callback
 
-    goToPage: (callback) ->
+    _goToPage: (callback) ->
       if app.session.hasAcceptedLabsNotice()
         callback?.apply this
       else
         setTimeout =>
+          @markFinished()
           @redirectTo 'labsNotice'
-        , 0
+        , 1
 
     updateTitle: (title) ->
       @publishEvent "updatetitle", title
 
     redirectTo: (path, params) ->
       @publishEvent "router:route", path
+
+    markFinished: ->
+      @trigger 'controllerfinished', this
 
     renderReactComponent: (componentClass, props = {}, id) ->
       component = componentClass(_.omit(props, 'region'))
@@ -47,3 +48,5 @@ define ->
     dispose: ->
       @stopListening()
       @unsubscribeAllEvents()
+
+

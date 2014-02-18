@@ -1,8 +1,10 @@
 define ->
   $ = require 'jquery'
   _ = require 'underscore'
-  Messageable = require 'lib/messageable'
+  RallyMetrics = require 'rallymetrics'
   React = require 'react'
+  Messageable = require 'lib/messageable'
+  MetricsHandler = require 'lib/metrics_handler'
   User = require 'models/user'
   Session = require 'models/session'
   Router = require 'router'
@@ -13,14 +15,23 @@ define ->
 
     initialize: ->
 
+      @aggregator = new RallyMetrics.Aggregator
+        flushInterval: 10000
+        beaconUrl: "https://trust.f4tech.com/beacon/"
+        handlers: [MetricsHandler]
+
+      @aggregator.startSession 'Mobile App Init', slug: Backbone.history.location.pathname
+
+      @aggregator.recordAction component: this, description: 'authentication'
+
       React.initializeTouchEvents true
 
-      @session = new Session()
+      @session = new Session(this, @aggregator)
       @afterLogin = ''
       @session.authenticated (authenticated) =>
 
         # @initRouter routes, pushState: false, root: '/subdir/'
-        Router.initialize()
+        Router.initialize aggregator: @aggregator
 
         # Actually start routing.
         Backbone.history.start pushState: true
@@ -29,6 +40,7 @@ define ->
         if authenticated
           if hash == 'login'
             @publishEvent 'router:route', ''
+          @session.initSessionForUser()
         else
           unless _.contains(['login', 'logout', 'labsNotice'], hash)
             @afterLogin = hash

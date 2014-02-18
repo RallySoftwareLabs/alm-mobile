@@ -10,6 +10,7 @@ define ->
       @artifacts = new Artifacts()
 
     fetch: (data) ->
+      @artifacts.clientMetricsParent = this
       $.when(
         @artifacts.fetch(data: data)
       ).done (a) =>

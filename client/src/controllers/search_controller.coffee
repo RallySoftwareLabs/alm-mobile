@@ -7,9 +7,8 @@ define ->
 
   class SearchController extends SiteController
     search: (keywords = '') ->
-      @whenLoggedIn ->
+      @whenProjectIsLoaded ->
         artifacts = new Artifacts()
-        @_fetchResults(artifacts, keywords) if keywords
         @view = @renderReactComponent(SearchView,
           collection: artifacts
           keywords: keywords
@@ -17,8 +16,13 @@ define ->
         )
 
         @subscribeEvent 'search', @onSearch
+        if keywords
+          @_fetchResults(artifacts, keywords)
+        else
+          @markFinished()
 
     onSearch: (keywords) ->
+      app.aggregator.recordAction component: this, description: 'search submitted'
       @redirectTo "/search/#{encodeURIComponent(keywords)}"
 
     _fetchResults: (artifacts, keywords) ->
@@ -32,3 +36,4 @@ define ->
           order: 'ObjectID DESC'
         success: (collection, response, options) =>
           collection.remove collection.reject (model) -> _.contains(['HierarchicalRequirement', 'Task', 'Defect'], model.get('_type'))
+          @markFinished()

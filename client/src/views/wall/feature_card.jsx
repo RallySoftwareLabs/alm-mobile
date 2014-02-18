@@ -2,40 +2,29 @@
 define(function() {
   var React = require('react'),
       ReactView = require('views/base/react_view'),
-  		_ = require('underscore'),
-  		app = require('application'),
-  		utils = require('lib/utils');
   		StoryBox = require ('views/wall/story_box');
   	
   return ReactView.createBackboneClass({
     render: function() {
-        model = this.props.model
+        var model = this.props.model;
         var userStories = model.userStories;
+        var storyBoxes;
+
         if (userStories != null) {
-          var storyBoxes = _.map(userStories.models, function(userStory){
-            return (
-              <StoryBox model={userStory} />
-            );
-          }, this);
+          storyBoxes = userStories.map(function(userStory) {
+            return <StoryBox model={userStory} />;
+          });
         }
         return (  
-          <div className={this.getChildClass(model)} onClick={this.onClick}>
+          <div className={this.getChildClass(userStories)} onClick={this.onClick}>
                <div className="grandchildren">
                   {storyBoxes}
                </div>
           </div>
       );
     },
-    getChildClass: function(model) {
-      return (this.allStoriesAreScheduled(model)) ? "child on" : "child";
-    },
-    allStoriesAreScheduled: function(model) {
-      if (!model.userStories || model.userStories.length == 0) {
-        return false;
-      }
-      return _.every(model.userStories.models, function(userStory) {
-        return userStory.isScheduled();
-      });
+    getChildClass: function(userStories) {
+      return (userStories && userStories.areAllStoriesScheduled()) ? "child on" : "child";
     },
     onClick: function(e) {
       var m = this.props.model;

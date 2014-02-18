@@ -11,7 +11,7 @@ define ->
   class SettingsController extends SiteController
 
     show: (params) ->
-      @whenLoggedIn ->
+      @whenProjectIsLoaded ->
         @view = @renderReactComponent SettingsView, region: 'main', model: app.session
         @subscribeEvent 'changeMode', @onChangeMode
         @subscribeEvent 'changeBoardField', @onChangeBoardField
@@ -20,33 +20,44 @@ define ->
         @subscribeEvent 'logout', @onLogout
         @subscribeEvent 'projectready', => @view.forceUpdate()
         @updateTitle "Settings: #{app.session.getProjectName()}"
+        @markFinished()
 
     board: (params) ->
-      @whenLoggedIn ->
+      @whenProjectIsLoaded ->
         fieldName = UserStory.getFieldDisplayName app.session.get('boardField')
         @view = @renderReactComponent BoardSettingsView,
           region: 'main'
           fieldName: fieldName
           model: app.session
         @subscribeEvent 'columnClick', @onColumnClick
+        @markFinished()
 
     onChangeMode: (mode) ->
+      app.aggregator.recordAction component: this, description: "changed mode to #{mode}"
       app.session.set 'mode', mode
 
     onChangeBoardField: (boardField) ->
+      app.aggregator.recordAction component: this, description: "changed board field to #{boardField}"
       app.session.set 'boardField', boardField
       @redirectTo 'settings/board'
 
-    onChangeProject: (project) ->
-      app.session.set 'project', _.find app.session.get('projects').models, _.isAttributeEqual '_ref', project
+    onChangeProject: (projectRef) ->
+      newProject = app.session.get('projects').find _.isAttributeEqual '_ref', projectRef
+      app.aggregator.recordAction component: this, description: "changed project"
+      app.session.set 'project', newProject
       @updateTitle "Settings: #{app.session.getProjectName()}"
 
-    onChangeIteration: (iteration) ->
-      if iteration == 'null'
+    onChangeIteration: (iterationRef) ->
+      if iterationRef == 'null'
+        app.aggregator.recordAction component: this, description: "removed iteration"
         return app.session.set 'iteration', null
-      app.session.set 'iteration', _.find app.session.get('iterations').models, _.isAttributeEqual '_ref', iteration
+
+      newIteration = app.session.get('iterations').find _.isAttributeEqual '_ref', iterationRef
+      app.aggregator.recordAction component: this, description: "set new iteration"
+      app.session.set 'iteration', newIteration
 
     onColumnClick: (column) ->
+      app.aggregator.recordAction component: this, description: "toggled column"
       app.session.toggleBoardColumn column
 
     onLogout: ->

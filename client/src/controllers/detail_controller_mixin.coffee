@@ -16,6 +16,7 @@ define ->
         success: (model, response, opts) =>
           @_setTitle model
           @view = @renderReactComponent View, model: model, region: 'main', fieldNames: fieldNames
+          @markFinished()
       @subscribeEvent 'saveField', @saveField
 
     showCreateView: (Model, View, defaultValues = {}) ->
@@ -24,6 +25,8 @@ define ->
       @subscribeEvent 'saveField', @saveField
       @subscribeEvent 'save', @saveNew
       @subscribeEvent 'cancel', @cancelNew
+      @markFinished()
+      model
 
     saveField: (updates, opts) ->
       if @view.props.newArtifact

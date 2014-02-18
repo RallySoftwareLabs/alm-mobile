@@ -1,4 +1,5 @@
 define ->
+  _ = require 'underscore'
   Backbone = require 'backbone'
   Messageable = require 'lib/messageable'
 

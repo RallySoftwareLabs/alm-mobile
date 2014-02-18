@@ -36,8 +36,8 @@ define ->
         'defects'
 
     _fetchCollectionAndRender: (collection, fetch, query, tab) ->
-      @whenLoggedIn =>
-        collection.fetch data: @_getFetchData(fetch, query)
+      @whenProjectIsLoaded =>
+        collection.fetch(data: @_getFetchData(fetch, query)).always => @markFinished()
         @renderReactComponent(HomeView,
           tab: tab
           collection: collection
@@ -62,5 +62,3 @@ define ->
       if iterationRef
         data.query = "(#{data.query} AND (Iteration = \"#{iterationRef}\"))"
       data
-
-  HomeController
