@@ -16,7 +16,6 @@ define ->
   class Session extends Model
     initialize: (@clientMetricsParent, @aggregator) ->
       super
-      @pagesize = 200
       @set
         securityToken: window.sessionStorage.getItem 'token'
       @listenTo this, 'change:user', @_onUserChange
@@ -71,19 +70,16 @@ define ->
       userProfile.clientMetricsParent = this
 
       $.when(
-        projects.fetch(
+        projects.fetchAllPages(
           data:
             fetch: 'Name,SchemaVersion'
-            pagesize: @pagesize
             order: 'Name'
         ),
         userProfile.fetch()
         preferences.fetchMobilePrefs @get('user')
       ).then (p, u, prefs) =>
         @_setModeFromPreference()
-        totalProjectResults = p[0].QueryResult.TotalResultCount
-        @_fetchRestOfProjects(projects, totalProjectResults).then =>
-          @_setDefaultProject projects, userProfile
+        @_setDefaultProject projects, userProfile
 
     setIterationPreference: (value) ->
       projectRef = @get('project').get('_ref')
@@ -198,23 +194,6 @@ define ->
       switch boardField
         when 'ScheduleState' then ['Defined', 'In-Progress', 'Completed', 'Accepted']
 
-    _fetchRestOfProjects: (projects, totalCount) ->
-      start = @pagesize + 1
-      projectFetches = while totalCount >= start
-        fetch = projects.fetch(
-          remove: false
-          data:
-            fetch: 'Name,SchemaVersion'
-            start: start
-            pagesize: @pagesize
-            order: 'Name'
-        )
-        start += @pagesize
-        fetch
-
-      $.when.apply($, projectFetches).always =>
-        @aggregator.endLoad component: this
-
     _setDefaultProject: (projects, userProfile) ->
       defaultProject = @get('prefs').findPreference(Preference::defaultProject)
       if defaultProject
@@ -276,10 +255,9 @@ define ->
 
       $.when(
         @_loadSchema(value),
-        iterations.fetch(
+        iterations.fetchAllPages(
           data:
             fetch: 'Name,StartDate,EndDate'
-            pagesize: @pagesize
             order: 'StartDate DESC,EndDate DESC,ObjectID'
             query: "(Project = \"#{projectRef}\")"
         )
