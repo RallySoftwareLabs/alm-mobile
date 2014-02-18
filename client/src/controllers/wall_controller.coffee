@@ -25,14 +25,16 @@ define ->
       @view = @renderReactComponent WallView, model: @initiatives, region: 'main'
       @subscribeEvent 'cardclick', @onCardClick
 
-      hardcodedRandDProjectRef = appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/project/12271'#334329159'
+      hardcodedRandDProjectRef = appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/project/334329159'#12271
 
       $.when(
         @fetchInitiatives(hardcodedRandDProjectRef)
         @fetchFeatures(hardcodedRandDProjectRef)
-        @fetchUserStories(hardcodedRandDProjectRef)
+        userStoriesFetchPromise = @fetchUserStories(hardcodedRandDProjectRef)        
       ).then =>
-        unless @initiatives.isEmpty()
+        if @initiatives.isEmpty()
+          @markFinished()
+        else
           @features.each (f) =>
             parentRef = f.get('Parent')._ref
             initiative = @initiatives.find _.isAttributeEqual('_ref', parentRef)
@@ -41,62 +43,44 @@ define ->
               initiative.features ?= new Features()
               initiative.features.add f
 
-          @userStories.each (us) =>
-            parentRef = us.get('PortfolioItem')._ref
-            feature = @features.find _.isAttributeEqual('_ref', parentRef)
+          userStoriesFetchPromise.then =>
+            @userStories.each (us) =>
+              parentRef = us.get('PortfolioItem')._ref
+              feature = @features.find _.isAttributeEqual('_ref', parentRef)
 
-            if feature?
-              feature.userStories ?= new UserStories()
-              feature.userStories.add us
+              if feature?
+                feature.userStories ?= new UserStories()
+                feature.userStories.add us
 
-        @initiatives.trigger('add')
-        @markFinished()
+            @initiatives.trigger('add')
+            @markFinished()
 
     fetchInitiatives: (projectRef) ->
-      @initiatives.fetch
+      @initiatives.fetchAllPages
         data:
           fetch: 'FormattedID,Name,ObjectID,Owner,Children'
           query: '(State.Name = "Building")'
           order: 'Rank ASC'
-          pagesize: 200
           project: projectRef
           projectScopeUp: false
           projectScopeDown: true
 
     fetchFeatures: (projectRef) ->
-      @features.fetch
+      @features.fetchAllPages
         data:
           fetch: 'FormattedID,Name,ObjectID,Owner,LeafStoryCount,Parent',
           query: "(Parent != null)",
           order: 'Rank ASC'
-          pagesize: 200
           project: projectRef
           projectScopeUp: false
           projectScopeDown: true
 
     fetchUserStories: (projectRef) ->
-      
-      # start = @pagesize + 1
-      # projectFetches = while totalCount >= start
-      #   fetch = projects.fetch(
-      #     remove: false
-      #     data:
-      #       fetch: 'Name,SchemaVersion'
-      #       start: start
-      #       pagesize: @pagesize
-      #       order: 'Name'
-      #   )
-      #   start += @pagesize
-      #   fetch
-
-      # $.when.apply($, projectFetches).always =>
-      #   @aggregator.endLoad component: this
-      @userStories.fetch
+      @userStories.fetchAllPages
         data: 
           fetch: 'FormattedID,Name,Release,Iteration,PortfolioItem',
           query: "(PortfolioItem != null)",
           order: 'Rank ASC'
-          pagesize: 200
           project: projectRef
           projectScopeUp: false
           projectScopeDown: true
