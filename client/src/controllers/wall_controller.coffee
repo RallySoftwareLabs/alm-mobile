@@ -27,11 +27,13 @@ define ->
 
       hardcodedRandDProjectRef = appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/project/334329159'#12271
 
-      $.when(
+      initiativesAndFeaturesPromise = $.when(
         @fetchInitiatives(hardcodedRandDProjectRef)
         @fetchFeatures(hardcodedRandDProjectRef)
-        userStoriesFetchPromise = @fetchUserStories(hardcodedRandDProjectRef)        
-      ).then =>
+      )
+      userStoriesFetchPromise = @fetchUserStories(hardcodedRandDProjectRef)        
+      
+      initiativesAndFeaturesPromise.then =>
         if @initiatives.isEmpty()
           @markFinished()
         else
@@ -42,6 +44,8 @@ define ->
             if initiative?
               initiative.features ?= new Features()
               initiative.features.add f
+          
+          @initiatives.trigger('add')
 
           userStoriesFetchPromise.then =>
             @userStories.each (us) =>
@@ -58,7 +62,7 @@ define ->
     fetchInitiatives: (projectRef) ->
       @initiatives.fetchAllPages
         data:
-          fetch: 'FormattedID,Name,ObjectID,Owner,Children'
+          fetch: 'FormattedID,Name'
           query: '(State.Name = "Building")'
           order: 'Rank ASC'
           project: projectRef
@@ -68,7 +72,7 @@ define ->
     fetchFeatures: (projectRef) ->
       @features.fetchAllPages
         data:
-          fetch: 'FormattedID,Name,ObjectID,Owner,LeafStoryCount,Parent',
+          fetch: 'Parent',
           query: "(Parent != null)",
           order: 'Rank ASC'
           project: projectRef
@@ -78,7 +82,7 @@ define ->
     fetchUserStories: (projectRef) ->
       @userStories.fetchAllPages
         data: 
-          fetch: 'FormattedID,Name,Release,Iteration,PortfolioItem',
+          fetch: 'Release,Iteration,PortfolioItem',
           query: "(PortfolioItem != null)",
           order: 'Rank ASC'
           project: projectRef
