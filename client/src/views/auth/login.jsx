@@ -9,14 +9,13 @@ define(function() {
     	return (
         <div id="login">
           <div className="login-header">
-            <div>
-              <div className="labs-icon"/>
-              <div className="slogan">Go Agile. Go Rally.</div>
-            </div>
+            <a className="labs-link" title="Rally Innovation Labs" href="//labs.rallydev.com">
+              <img src="img/logo-labs.gif" alt="Rally Innovation Labs"/>
+            </a>
           </div>
           <form className="login-form" role="form" onSubmit={this.signIn}>
             <div className="form-group">
-              <h2 className="control-label">LOGIN</h2>
+              <h2>Sign in to Rally</h2>
             </div>
             <div className="alert alert-danger"/>
             <div className="form-group">
