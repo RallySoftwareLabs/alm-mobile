@@ -1,24 +1,24 @@
 module.exports = (grunt) ->
 
-  grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-contrib-clean'
-  grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
-  grunt.loadNpmTasks 'grunt-contrib-watch'
-  grunt.loadNpmTasks 'grunt-contrib-requirejs'
-  grunt.loadNpmTasks 'grunt-simple-mocha'
+  grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-compile-handlebars'
+  grunt.loadNpmTasks 'grunt-contrib-less'
+  grunt.loadNpmTasks 'grunt-contrib-requirejs'
+  grunt.loadNpmTasks 'grunt-contrib-uglify'
+  grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-react'
-  grunt.loadNpmTasks 'grunt-recess'
   grunt.loadNpmTasks 'grunt-replace'
   grunt.loadNpmTasks 'grunt-s3'
+  grunt.loadNpmTasks 'grunt-simple-mocha'
 
-  grunt.registerTask 'default', ['clean','coffee','react','recess','compile-handlebars', 'copy:js','requirejs','replace','copy','concat']
+  grunt.registerTask 'default', ['clean','coffee','react','less','compile-handlebars', 'copy:js','requirejs','replace','copy','concat']
 
   grunt.registerTask 'test', ['clean', 'coffee', 'simplemocha']
 
-  grunt.registerTask 'heroku', ['clean','coffee','recess','compile-handlebars', 'copy:js','requirejs','replace','copy','concat']
+  grunt.registerTask 'heroku', ['clean','coffee','less','compile-handlebars', 'copy:js','requirejs','replace','copy','concat']
 
   grunt.initConfig
 
@@ -36,7 +36,7 @@ module.exports = (grunt) ->
 
       clientStyles:
         files: 'client/styles/**/*.less'
-        tasks: ['recess:client', 'concat:css']
+        tasks: ['less:client', 'concat:css']
 
       clientIndexHtml:
         files: ['config.json', 'client/src/*.hbs']
@@ -128,7 +128,7 @@ module.exports = (grunt) ->
         templateData: 'config.json'
         output: 'client/dist/index.html'
 
-    recess:
+    less:
       client:
         options:
           compile: true

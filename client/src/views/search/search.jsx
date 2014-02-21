@@ -14,11 +14,13 @@ define(function() {
     render: function() {
     	return (
         <div id="search-view">
-          <form className="form-inline search-form" role="form" onSubmit={ this.onSearch }>
-              <div className="input-row">
+          <form className="search-form" role="form" onSubmit={ this.onSearch }>
+              <div className="input-group">
                 <label className="sr-only" htmlFor="search-input">Search keywords</label>
-                <span><input type="text" id="search-input" className="form-control" placeholder="Search keywords" value={ this.props.keywords } onChange={ this.handleChange }/></span>
-              <button type="submit" className="btn btn-primary">Search</button>
+                <input type="text" id="search-input" className="form-control" placeholder="Search keywords" value={ this.props.keywords } onChange={ this.handleChange }/>
+                <span className="input-group-btn">
+                  <button type="submit" className="btn btn-primary">Search</button>
+                </span>
               </div>
           </form>
           <div className="listing">
