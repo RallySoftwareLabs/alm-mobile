@@ -67,4 +67,25 @@ define ->
         onBlur: @endEdit
         onKeyDown: @onKeyDown
       )
+
+    toSelectOptions: (values, options = {}) ->
+      _.map values, (val) ->
+        v = val || options.emptyText || 'None'
+        React.DOM.option( {value: v,  key: (options.keyPrefix || '') + v },  v )
+      , this
+
+    getAllowedValuesSelectMarkup: ->
+      options = @toSelectOptions(@getAllowedValues(),
+        keyPrefix: @props.field
+        emptyText: 'None'
+      )
+      React.DOM.select(
+        {
+          className: "editor " + @props.field
+          defaultValue: @getFieldValue()
+          onBlur: @endEdit
+          onKeyDown: @onKeyDown
+        },
+        options
+      )
   }

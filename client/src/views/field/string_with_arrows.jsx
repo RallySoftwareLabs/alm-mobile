@@ -8,23 +8,41 @@ define(function() {
   return ReactView.createBackboneClass({
   	mixins: [FieldMixin],
   	render: function() {
-  		return (
-  			<div className="display">
-	  			<div className="well-title control-label">{ this.props.label }</div>
-	  			<div className="arrows-left" onClick={ this.onLeftArrow }>
-	  			    <div className={ 'well well-sm lt' + (this._cantGoLeft() ? ' disabled' : '') }><i className="picto icon-chevron-left"></i></div>
-	  			</div>
-	  			<div className="arrows-center">
-	  				<div className="well well-sm">
-	  					{ this.getFieldValue() }
-	  				</div>
-	  			</div>
-	  			<div className="arrows-right" onClick={ this.onRightArrow }>
-	  			    <div className={ 'well well-sm lt' + (this._cantGoRight() ? ' disabled' : '') }><i className="picto icon-chevron-right"></i></div>
-	  			</div>
-  			</div>
-			);
+      var editMode = this.isEditMode();
+      var valueMarkup = editMode ? this._getEditModeMarkup() : this._getDisplayModeMarkup();
+  		return valueMarkup;
   	},
+
+    _getDisplayModeMarkup: function() {
+      return (
+        <div className="display">
+          <div className="well-title control-label">{ this.props.label }</div>
+          <div className="arrows-left" onClick={ this.onLeftArrow }>
+              <div className={ 'well well-sm lt' + (this._cantGoLeft() ? ' disabled' : '') }><i className="picto icon-chevron-left"></i></div>
+          </div>
+          <div className="arrows-center">
+            <div className="well well-sm" onClick={ this.startEdit }>
+              { this.getFieldValue() }
+            </div>
+          </div>
+          <div className="arrows-right" onClick={ this.onRightArrow }>
+              <div className={ 'well well-sm lt' + (this._cantGoRight() ? ' disabled' : '') }><i className="picto icon-chevron-right"></i></div>
+          </div>
+        </div>
+      );
+    },
+
+    _getEditModeMarkup: function() {
+      var selectMarkup = this.getAllowedValuesSelectMarkup();
+      return (
+        <div className="edit">
+          <div className="well-title control-label">{ this.props.label }</div>
+          <div className="well well-sm">
+            { selectMarkup }
+          </div>
+        </div>
+      );
+    },
 
   	_cantGoLeft: function() {
   		return this._indexInAllowedValues() <= 0;
