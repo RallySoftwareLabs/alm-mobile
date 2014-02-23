@@ -48,7 +48,7 @@ define(function() {
     },
 
     _getDisplayMarkup: function() {
-      var fieldValue = this.getFieldValue();
+      var fieldValue = this.getFieldDisplayValue();
       return fieldValue ? fieldValue : <span dangerouslySetInnerHTML={{__html: '&nbsp;'}} />;
     }
   });

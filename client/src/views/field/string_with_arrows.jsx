@@ -14,19 +14,20 @@ define(function() {
   	},
 
     _getDisplayModeMarkup: function() {
+      var reverseArrows = this.props.reverseArrows;
       return (
         <div className="display">
           <div className="well-title control-label">{ this.props.label }</div>
-          <div className="arrows-left" onClick={ this.onLeftArrow }>
-              <div className={ 'well well-sm lt' + (this._cantGoLeft() ? ' disabled' : '') }><i className="picto icon-chevron-left"></i></div>
+          <div className="arrows-left" onClick={ this[reverseArrows ? '_onRightArrow' : '_onLeftArrow'] }>
+              <div className={ 'well well-sm lt' + (this[reverseArrows ? '_cantGoRight' : '_cantGoLeft']() ? ' disabled' : '') }><i className="picto icon-chevron-left"></i></div>
           </div>
           <div className="arrows-center">
             <div className="well well-sm" onClick={ this.startEdit }>
-              { this.getFieldValue() }
+              { this.getFieldDisplayValue() || this.getEmptySpanMarkup() }
             </div>
           </div>
-          <div className="arrows-right" onClick={ this.onRightArrow }>
-              <div className={ 'well well-sm lt' + (this._cantGoRight() ? ' disabled' : '') }><i className="picto icon-chevron-right"></i></div>
+          <div className="arrows-right" onClick={ this[reverseArrows ? '_onLeftArrow' : '_onRightArrow'] }>
+              <div className={ 'well well-sm lt' + (this[reverseArrows ? '_cantGoLeft' : '_cantGoRight']() ? ' disabled' : '') }><i className="picto icon-chevron-right"></i></div>
           </div>
         </div>
       );
@@ -49,37 +50,48 @@ define(function() {
   	},
 
   	_cantGoRight: function() {
-  		return this._indexInAllowedValues() === this.getAllowedValues().length - 1;
+      var index = this._indexInAllowedValues();
+  		return index === this._getNonEmptyAllowedValues().length - 1 || index === -1;
   	},
+
+    _getNonEmptyAllowedValues: function() {
+      return _.reject(this.getAllowedValues(), { value: 'null'});
+    },
 
   	_indexInAllowedValues: function() {
-  		return this.getAllowedValues().indexOf(this.getFieldValue());
+      var fieldValue = this.getFieldValue();
+      if (_.isObject(fieldValue)) {
+        fieldValue = fieldValue._ref;
+      }
+      return _.findIndex(this._getNonEmptyAllowedValues(), function(value) {
+        return fieldValue === value.value;
+      }, this);
   	},
 
-    onRightArrow: function(e) {
+    _onRightArrow: function(e) {
       e.preventDefault();
       e.stopPropagation();
-      var allowedValues = this.getAllowedValues();
-      var currentIndex = allowedValues.indexOf(this.props.item.get(this.props.field));
+      var allowedValues = this._getNonEmptyAllowedValues();
+      var currentIndex = this._indexInAllowedValues();
 
       if (currentIndex < allowedValues.length - 1) {
         var newValue = allowedValues[currentIndex + 1];
         var modelUpdates = {};
-        modelUpdates[this.props.field] = newValue;
+        modelUpdates[this.props.field] = newValue.value;
         this.saveModel(modelUpdates);
       }
     },
 
-    onLeftArrow: function(e) {
+    _onLeftArrow: function(e) {
       e.preventDefault();
       e.stopPropagation();
-      var allowedValues = this.getAllowedValues();
-      var currentIndex = allowedValues.indexOf(this.props.item.get(this.props.field));
+      var allowedValues = this._getNonEmptyAllowedValues();
+      var currentIndex = this._indexInAllowedValues();
 
       if (currentIndex > 0) {
         var newValue = allowedValues[currentIndex - 1];
         var modelUpdates = {};
-        modelUpdates[this.props.field] = newValue;
+        modelUpdates[this.props.field] = newValue.value;
         this.saveModel(modelUpdates);
       }
     }

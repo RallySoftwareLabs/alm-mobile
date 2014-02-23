@@ -5,7 +5,8 @@ define(function() {
       DetailMixin = require('views/detail/detail_mixin'),
   		Defects = require('views/field/defects'),
   		Description = require('views/field/description'),
-  		Discussion = require('views/field/discussion'),
+      Discussion = require('views/field/discussion'),
+  		Iteration = require('views/field/iteration'),
   		Name = require('views/field/name'),
       Owner = require('views/field/owner'),
   		Tasks = require('views/field/tasks'),
@@ -49,14 +50,27 @@ define(function() {
             </div>
           </div>
           <div className="row">
-            <div className="col-xs-4 PlanEstimateView">
-              <TitledWell item={ model } editMode={ newArtifact } field='PlanEstimate' label='Plan Est' inputType='number'/>
+            <div className="col-xs-8 IterationView">
+              <Iteration item={ model } editMode={ newArtifact } field="Iteration" label="Iteration"/>
             </div>
-            <div className="col-xs-4 TasksView">
-              <Tasks item={ model } editMode={ newArtifact }/>
+            <div className="col-xs-4 ProjectView">
+              <TitledWell item={ model } editMode={ newArtifact } field='Project' label='Project'/>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-xs-8 ReleaseView">
+              <StringWithArrows item={ model } editMode={ newArtifact } field="Release" label="Release"/>
             </div>
             <div className="col-xs-4 DiscussionView">
               <Discussion item={ model } editMode={ newArtifact }/>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-xs-6 PlanEstimateView">
+              <TitledWell item={ model } editMode={ newArtifact } field='PlanEstimate' label='Plan Est' inputType='number'/>
+            </div>
+            <div className="col-xs-6 TasksView">
+              <Tasks item={ model } editMode={ newArtifact }/>
             </div>
           </div>
           <div className="row">

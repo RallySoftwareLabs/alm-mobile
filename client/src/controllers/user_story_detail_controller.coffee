@@ -49,17 +49,19 @@ define ->
 
     getFieldNames: ->
       [
-        'Blocked',
+        'Blocked'
         'Children'
-        'Defects',
-        'Description',
-        'Discussion',
-        'FormattedID',
-        'Name',
-        'Owner',
-        'Parent',
-        'PlanEstimate',
-        'Ready',
-        'Tasks',
+        'Defects'
+        'Description'
+        'Discussion'
+        'FormattedID'
+        'Iteration'
+        'Name'
+        'Owner'
+        'Parent'
+        'PlanEstimate'
+        'Ready'
+        'Release'
+        'Tasks'
         app.session.get('boardField')
       ]

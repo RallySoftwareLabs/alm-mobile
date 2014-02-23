@@ -49,9 +49,9 @@ define ->
 
     _getAttributeAllowedValues: (attr) ->
       return if _.isArray attr.AllowedValues
-        [attr.ElementName, attr.AllowedValues]
+        [attr.ElementName, _.map(attr.AllowedValues, (value) -> _.extend(value, AllowedValueType: attr.AllowedValueType))]
       else
         av = new AllowedValues()
         av.clientMetricsParent = this
         av.url = attr.AllowedValues._ref
-        av.fetch().then -> [attr.ElementName, av.invoke('toJSON')]
+        av.fetch().then -> [attr.ElementName, av.map((value) -> _.extend(value.toJSON(), AllowedValueType: attr.AllowedValueType))]
