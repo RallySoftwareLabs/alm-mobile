@@ -17,7 +17,10 @@ define ->
     capitalize: (string = '') ->
       string.charAt(0).toUpperCase() + string.substring(1).toLowerCase()
     singularize: (string = '') ->
-      string.slice(0, -1)
+      switch string
+        when 'Children' then 'Child'
+        when 'UserStories' then 'User Story'
+        else string.slice(0, -1)
     getAttribute: (attr) ->
       return -> @get(attr)
     isAttributeEqual: (attr, value) ->

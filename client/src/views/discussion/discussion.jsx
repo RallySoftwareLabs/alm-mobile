@@ -32,12 +32,14 @@ define(function() {
 		_getInputMarkup: function() {
 			if (this.props.showInput) {
 				return (
-					<form className="form-inline reply-form" role="form" onSubmit={this._onSubmit}>
-					    <div className="discussion-reply">
-					      <label className="sr-only" htmlFor="comment-input">Comment</label>
-					      <span><input type="text" id="comment-input" className="form-control" placeholder="Enter comments"/></span>
-					      <button type="submit" className="btn btn-primary" onclick={this._onSubmit}>Reply</button>
-					    </div>
+					<form className="reply-form" role="form" onSubmit={this._onSubmit}>
+				    <div className="discussion-reply input-group">
+				      <label className="sr-only" htmlFor="comment-input">Comment</label>
+				      <input type="text" id="comment-input" className="form-control" placeholder="Enter comments"/>
+              <span className="input-group-btn">
+				       <button type="submit" className="btn btn-primary" onclick={this._onSubmit}>Reply</button>
+              </span>
+				    </div>
 					</form>
 				);
 			}

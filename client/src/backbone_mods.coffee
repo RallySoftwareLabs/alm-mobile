@@ -89,7 +89,7 @@ define ->
     params.data.pagesize ?= 50
 
     metricsData = app.aggregator.beginDataRequest model, params.url
-    # _.assign options.headers, metricsData.xhrHeaders
+    _.assign options.headers, metricsData.xhrHeaders
 
     error = options.error
     options.error = (xhr, status, thrown) ->

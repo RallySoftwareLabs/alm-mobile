@@ -38,7 +38,7 @@ define(function() {
       }
       if (this.isEditMode()) {
         if (this.props.item.allowedValues[this.props.field]) {
-          return this._getSelectMarkup();
+          return this.getAllowedValuesSelectMarkup();
         } else {
           return this.getInputMarkup();
         }
@@ -48,23 +48,8 @@ define(function() {
     },
 
     _getDisplayMarkup: function() {
-      var fieldValue = this.getFieldValue();
+      var fieldValue = this.getFieldDisplayValue();
       return fieldValue ? fieldValue : <span dangerouslySetInnerHTML={{__html: '&nbsp;'}} />;
-    },
-
-    _getSelectMarkup: function() {
-      var options = _.map(this.getAllowedValues(), function(val) {
-        var v = val || 'None';
-        return <option value={ v } key={ this.props.field + v }>{ v }</option>;
-      }, this);
-      return (
-        <select className={ "editor " + this.props.field }
-                defaultValue={ this.getFieldValue() }
-                onBlur={ this.endEdit }
-                onKeyDown={ this.onKeyDown }>
-          { options }
-        </select>
-      );
     }
   });
 });

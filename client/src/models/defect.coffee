@@ -15,4 +15,13 @@ define ->
       "State" : "Submitted"
       "ScheduleState": "Idea"
 
-    allowedValueFields: ['ScheduleState', 'State', 'Priority', 'Severity', 'c_KanbanState']
+    allowedValueFields: [
+      'Iteration'
+      'Priority'
+      'Project'
+      'Release'
+      'ScheduleState'
+      'Severity'
+      'State'
+      'c_KanbanState'
+    ]

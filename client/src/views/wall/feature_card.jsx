@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 define(function() {
   var React = require('react'),
+      utils = require('lib/utils'),
       ReactView = require('views/base/react_view'),
   		StoryBox = require ('views/wall/story_box');
   	
@@ -28,7 +29,7 @@ define(function() {
     },
     onClick: function(e) {
       var m = this.props.model;
-      this.publishEvent('cardclick', m.get('ObjectID'), m.get('_type'));
+      this.publishEvent('cardclick', utils.getOidFromRef(m.get('_ref')), m.get('_type'));
       e.preventDefault();
     }
   });

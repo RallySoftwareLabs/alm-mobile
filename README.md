@@ -1,11 +1,17 @@
-![Rally Labs](client/assets/img/labs.png)
+![Rally Labs](client/assets/img/rally-labs-logo-trans.png)
 
 Use of this mobile application is on an as-is, as-available basis and it not subject to Rally’s Service Level Agreement.  Support of this mobile application, evolution of this application and even ongoing existence of this Rally Labs mobile application is not guaranteed.
 
 ALM Mobile [![Stories in Ready](https://badge.waffle.io/RallySoftwareLabs/alm-mobile.png?label=ready)](http://waffle.io/RallySoftwareLabs/alm-mobile)
 =========
 
-## Getting Started
+This site is currently running at https://m.rallydev.com.
+
+## How can I contribute?
+
+We welcome pull requests, so if you would like the site to behave differently or would like to see additional functionality, you can make the code change yourself and [submit a pull request](https://help.github.com/articles/creating-a-pull-request). If you'd simply like to file a defect or feature request, you can [submit a GitHub issue](https://github.com/RallySoftwareLabs/alm-mobile/issues).
+
+## Ready to hack? Here's how.
 
 Clone the repo:
 
@@ -36,35 +42,15 @@ In a separate terminal window, to run the application (and reload when files are
 
         npm start
 
-## Setting up Apache virtual hosts
+## Application Configuration
 
-Edit /etc/apache2/httpd.conf to enable the virtual hosts file. Uncomment out the second line:
+You will need to create a config.json file to configure the ALM url. You should copy from config.json.example as a template.
 
-        # Virtual hosts
-        Include /private/etc/apache2/extra/httpd-vhosts.conf
+#### Properties
 
-Edit /etc/apache2/extra/httpd-vhosts.conf with the following, swapping out _[hostname]_ for your machine's actual hostname.
-Edit your /etc/hosts file and add alm.f4tech.com at the end of the 127.0.0.1 line:
-
-        <VirtualHost *:80>
-            ServerAdmin [email]
-            ServerName [hostname]
-            ServerAlias [hostname]
-            ProxyPass / http://[hostname]:3000/
-            ProxyPassReverse / http://[hostname]:3000/
-            ErrorLog "/private/var/log/apache2/[hostname]-error_log"
-            CustomLog "/private/var/log/apache2/[hostname]-access_log" common
-        </VirtualHost>
-
-        <VirtualHost *:80>
-            ServerAdmin [email]
-            ServerName alm.f4tech.com
-            ServerAlias alm.f4tech.com
-            ProxyPass / http://alm.f4tech.com:7001/
-            ProxyPassReverse / http://alm.f4tech.com:7001/
-            ErrorLog "/private/var/log/apache2/[alm.f4tech.com]-error_log"
-            CustomLog "/private/var/log/apache2/[alm.f4tech.com]-access_log" common
-        </VirtualHost>
+- **almWebServiceBaseUrl**: You should change this value if you want to point to a different Rally ALM Server URL
+- **appName**: You should change this value so that it is a unique name that represents your application and who your are.
+- **mode**: Which mode do you want to run the site in? Acceptable values are "board" and "wall"
 
 ## Customizing Bootstrap Stylesheets
 
@@ -77,16 +63,6 @@ They're in original [LESS](http://lesscss.org/) format in order to be easily cus
     client/styles/_bootstrap.less
 
 **Do not directly modify any files in vendor/styles/bootstrap. The changes will be overwritten as we upgrade that library.**
-
-## Application Configuration
-
-You will need to create a config.json file to configure the ALM url. You should copy from config.json.example as a template.
-
-#### Properties
-
-- almWebServiceBaseUrl: You should change this value if you want to point to a different Rally ALM Server URL
-- appName: You should change this value so that it is a unique name that represents your application and who your are.
-- mode: Which mode do you want to run the site in? Acceptable values are "board" and "wall"
 
 # Deploying to S3
 
@@ -149,4 +125,5 @@ To use your computer's keyboard inside the emulator:
 
 ## Conventions
 
-All CoffeeScript should be indented with 2 spaces (soft tabs)
+* All CoffeeScript should be indented with 2 spaces (soft tabs).
+* All JavaScript files should be indented with 4 spaces (soft tabs).

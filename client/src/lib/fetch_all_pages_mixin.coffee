@@ -1,5 +1,5 @@
 define ->
-  pagesize = 5
+  pagesize = 200
 
   return {
     fetchAllPages: (options = {}) ->

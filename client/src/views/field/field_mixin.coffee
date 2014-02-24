@@ -7,18 +7,30 @@ define ->
       @$('.editor').focus();
 
   return {
-    componentDidMount: focusEditor,
-    componentDidUpdate: focusEditor,
+    componentDidMount: focusEditor
+    componentDidUpdate: focusEditor
+
     getAllowedValues: ->
+      av = @props.item.getAllowedValues?(@props.field)
       if app.session.get('boardField') == @props.field
         boardColumns = app.session.getBoardColumns()
-        return boardColumns if _.contains(boardColumns, @getFieldValue())
+        if _.contains(boardColumns, @getFieldValue())
+          av = _.filter av, (value) ->
+            _.contains(boardColumns, value.StringValue)
+        else
+          av = null
 
-      av = @props.item.getAllowedValues?(@props.field)
-      av && _.pluck(av, 'StringValue')
+      av && _.map(av, (value) ->
+        value: if _.isObject(value.AllowedValueType) then value._ref else value.StringValue
+        label: value.StringValue
+      )
 
     getFieldValue: ->
       @props.value || @props.item.get(@props.field)
+
+    getFieldDisplayValue: ->
+      val = @getFieldValue()
+      if _.isObject(val) then val._refObjectName else val
       
     saveModel: (updates, opts) ->
       @publishEvent 'saveField', updates, opts
@@ -66,5 +78,32 @@ define ->
         defaultValue: @getFieldValue()
         onBlur: @endEdit
         onKeyDown: @onKeyDown
+      )
+
+    getAllowedValuesSelectMarkup: ->
+      field = @props.field
+      options = _.map @getAllowedValues(), (val) ->
+        value = val.value
+        label = val.label || 'None'
+        React.DOM.option( {value: value,  key: field + value },  label )
+
+      defaultValue = @getFieldValue()
+      if _.isObject(defaultValue)
+        defaultValue = defaultValue._ref
+      
+      React.DOM.select(
+        {
+          className: "editor " + @props.field
+          defaultValue: defaultValue
+          onBlur: @endEdit
+          onKeyDown: @onKeyDown
+        },
+        options
+      )
+
+    getEmptySpanMarkup: ->
+      React.DOM.span(
+        dangerouslySetInnerHTML:
+          __html: '&nbsp;'
       )
   }

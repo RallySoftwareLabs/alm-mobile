@@ -3,15 +3,16 @@ define(function() {
   var React = require('react'),
       ReactView = require('views/base/react_view'),
       DetailMixin = require('views/detail/detail_mixin'),
-      Defects = require('views/field/defects'),
       Children = require('views/field/children'),
+      Defects = require('views/field/defects'),
       Description = require('views/field/description'),
       Discussion = require('views/field/discussion'),
+      Iteration = require('views/field/iteration'),
       Name = require('views/field/name'),
       Owner = require('views/field/owner'),
+      StringWithArrows = require('views/field/string_with_arrows'),
       Tasks = require('views/field/tasks'),
       TitledWell = require('views/field/titled_well'),
-      StringWithArrows = require('views/field/string_with_arrows'),
       WorkProduct = require('views/field/work_product');
 
   return ReactView.createBackboneClass({
@@ -44,11 +45,28 @@ define(function() {
             </div>
           </div>
           <div className="row">
-            <div className="col-xs-8 ScheduleStateView">
-              <StringWithArrows item={ model } editMode={ newArtifact } field={ this.getBoardField() } label={ this.getScheduleStateLabel() }/>
+            <div className="col-xs-8">
+              <div className="row">
+                <div className="col-xs-12 ScheduleStateView">
+                  <StringWithArrows item={ model } editMode={ newArtifact } field={ this.getBoardField() } label={ this.getScheduleStateLabel() }/>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-xs-12 IterationView">
+                  <Iteration item={ model } editMode={ newArtifact } field="Iteration" label="Iteration"/>
+                </div>
+              </div>
             </div>
             <div className="col-xs-4 OwnerView">
               <Owner item={ model } editMode={ newArtifact }/>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-xs-8 ReleaseView">
+              <StringWithArrows item={ model } editMode={ newArtifact } field="Release" label="Release"/>
+            </div>
+            <div className="col-xs-4 ProjectView">
+              <TitledWell item={ model } editMode={ newArtifact } field='Project' label='Project'/>
             </div>
           </div>
           <div className="row">
