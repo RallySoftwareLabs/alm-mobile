@@ -192,7 +192,8 @@ define ->
 
     _getDefaultBoardColumns: (boardField) ->
       switch boardField
-        when 'ScheduleState' then ['Defined', 'In-Progress', 'Completed', 'Accepted']
+        when 'ScheduleState' then _(UserStory.getAllowedValues(boardField)).pluck('StringValue').compact().value()
+        else []
 
     _setDefaultProject: (projects, userProfile) ->
       defaultProject = @get('prefs').findPreference(Preference::defaultProject)
