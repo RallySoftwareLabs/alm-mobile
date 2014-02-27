@@ -1,6 +1,7 @@
 define ->
   _ = require 'underscore'
   app = require 'application'
+  utils = require 'lib/utils'
   SiteController = require 'controllers/base/site_controller'
   WallView = require 'views/wall/wall'
   WallCreateView = require 'views/wall/create'
@@ -14,15 +15,16 @@ define ->
   class WallController extends SiteController
     create: ->
       @subscribeEvent 'changeProject', @onChangeProject
-      app.session.fetchAllProjects()
+      projectsFetch = app.session.fetchAllProjects()
       @view = @renderReactComponent WallCreateView, region: 'main', model: app.session.get('projects')
       @subscribeEvent 'createwall', @onCreateWall
+      projectsFetch.then => @markFinished()
 
     splash: ->
       prefs = new Preferences()
       prefs.clientMetricsParent = this
       @view = @renderReactComponent WallSplashView, region: 'main', model: prefs
-      prefs.fetchWallPrefs()
+      prefs.fetchWallPrefs().then => @markFinished()
 
     show: (project) ->
       @initiatives = new Initiatives()
@@ -114,4 +116,5 @@ define ->
       prefs = new Preferences()
       prefs.clientMetricsParent = this
       user = app.session.get('user')
-      prefs.updateWallPreference(user, wallInfo)
+      prefs.updateWallPreference(user, wallInfo).then =>
+        @redirectTo "/wall/#{utils.getOidFromRef(wallInfo.project.get('_ref'))}"

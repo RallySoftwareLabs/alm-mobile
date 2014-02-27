@@ -104,6 +104,7 @@ define(function() {
     },
 
     _onSave: function(event) {
+      app.aggregator.recordAction({component: this, description: "saving wall"});
       this.publishEvent('createwall', _.omit(this.state, 'availableStates'));
       event.preventDefault();
     }
