@@ -18,11 +18,11 @@ define ->
         error: (collection, resp, options) =>
           cb?('auth', collection)
 
-    fetchWallPrefs: (user, cb) ->
+    fetchWallPrefs: (cb) ->
       @fetch
         data:
           fetch: 'ObjectID,Name,Value'
-          query: "((Name CONTAINS \"wall.\") AND (SubscriptionID = \"#{user.get('Subscription').SubscriptionID}\"))"
+          query: "(Name CONTAINS \"wall.\")"
         success: (collection, resp, options) =>
           cb?(null, collection)
         error: (collection, resp, options) =>
@@ -77,6 +77,33 @@ define ->
           newPref.clientMetricsParent = this
           newPref.save changedAttrs, patch: true, success: (model) => @add newPref unless existingPref
       )
+
+    updateWallPreference: (user, value) ->
+      @fetchWallPrefs().then =>
+        project = value.project
+        prefName = "wall.#{utils.getOidFromRef(project.get('_ref'))}"
+        prefValue = JSON.stringify(_.omit(value, 'project'))
+        
+        existingPref = newPref = @findPreference prefName
+
+        changedAttrs = {}
+        
+        if existingPref
+          if existingPref.get('Value') != prefValue
+            changedAttrs.Value = prefValue || ''
+        else
+          changedAttrs =
+            Name: prefName
+            Workspace: project.get('Workspace')._ref
+            Value: prefValue
+
+          newPref = new Preference changedAttrs
+
+        $.when(
+          unless _.isEmpty(changedAttrs)
+            newPref.clientMetricsParent = this
+            newPref.save changedAttrs, patch: true, success: (model) => @add newPref unless existingPref
+        )
 
     _getProjectPreferenceName: (project, name) ->
       projectOid = utils.getOidFromRef(project)

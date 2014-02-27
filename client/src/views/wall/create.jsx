@@ -53,13 +53,14 @@ define(function() {
     },
 
     _getStateItems: function(currentProject) {
-      var allowedValues = this.state.states;
+      var allowedValues = this.state.availableStates;
       return _.map(allowedValues, function(allowedValue) {
+        var avString = allowedValue.StringValue;
         return (
-          <div className={ "list-group-item " + allowedValue.StringValue } key={ "allowedValue " + allowedValue.StringValue } onClick={ this._selectState(allowedValue) }>
+          <div className={ "list-group-item " + avString } key={ "allowedValue " + avString } onClick={ this._selectStateFn(avString) }>
             <div className="row">
-              <div className="col-xs-1 selection-icon">{ this._showSelectedWhen(_.has(this.state.states, allowedValue.StringValue)) }</div>
-              <div className="col-xs-11">{ allowedValue.StringValue }</div>
+              <div className="col-xs-1 selection-icon">{ this._showSelectedWhen(_.contains(this.state.chosenStates, avString)) }</div>
+              <div className="col-xs-11">{ avString }</div>
             </div>
           </div>
         );
@@ -73,13 +74,26 @@ define(function() {
       app.session.loadSchema(project).then(function(schema) {
         me.setState({
           project: project,
-          states: Initiative.getAllowedValues('State')
+          availableStates: Initiative.getAllowedValues('State'),
+          chosenStates: []
         });
       });
     },
 
-    _selectState: function(allowedValue) {
-      app.aggregator.recordAction({component: this, description: "selected wall state"});
+    _selectStateFn: function(piState) {
+      return _.bind(function() {
+        app.aggregator.recordAction({component: this, description: "selected wall state"});
+        var chosenStates = this.state.chosenStates;
+        if (_.contains(chosenStates, piState)) {
+          this.setState({
+            chosenStates: _.without(chosenStates, piState)
+          });
+        } else {
+          this.setState({
+            chosenStates: _.union(chosenStates, [piState])
+          });
+        }
+      }, this);
     },
 
     _showSelectedWhen: function(bool) {
@@ -89,8 +103,9 @@ define(function() {
       return <span dangerouslySetInnerHTML={{__html: '&nbsp;'}}/>;
     },
 
-    _onSave: function() {
-      this.publishEvent('createwall', this.state);
+    _onSave: function(event) {
+      this.publishEvent('createwall', _.omit(this.state, 'availableStates'));
+      event.preventDefault();
     }
   });
 });

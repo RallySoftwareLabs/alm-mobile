@@ -22,7 +22,7 @@ define ->
       prefs = new Preferences()
       prefs.clientMetricsParent = this
       @view = @renderReactComponent WallSplashView, region: 'main', model: prefs
-      prefs.fetchWallPrefs(app.session.get('user'))
+      prefs.fetchWallPrefs()
 
     show: (project) ->
       @initiatives = new Initiatives()
@@ -111,4 +111,7 @@ define ->
       @redirectTo "#{mappedType}/#{oid}"
 
     onCreateWall: (wallInfo) ->
-
+      prefs = new Preferences()
+      prefs.clientMetricsParent = this
+      user = app.session.get('user')
+      prefs.updateWallPreference(user, wallInfo)

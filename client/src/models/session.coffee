@@ -67,7 +67,7 @@ define ->
         @set 'projects', projects
         projects.fetchAllPages(
           data:
-            fetch: 'Name,SchemaVersion'
+            fetch: 'Name,Workspace,SchemaVersion'
             order: 'Name'
         )
 
