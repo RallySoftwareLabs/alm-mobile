@@ -18,6 +18,16 @@ define ->
         error: (collection, resp, options) =>
           cb?('auth', collection)
 
+    fetchWallPrefs: (user, cb) ->
+      @fetch
+        data:
+          fetch: 'ObjectID,Name,Value'
+          query: "((Name CONTAINS \"wall.\") AND (SubscriptionID = \"#{user.get('Subscription').SubscriptionID}\"))"
+        success: (collection, resp, options) =>
+          cb?(null, collection)
+        error: (collection, resp, options) =>
+          cb?('auth', collection)
+
     findPreference: (name) ->
       @find _.isAttributeEqual('Name', name)
 

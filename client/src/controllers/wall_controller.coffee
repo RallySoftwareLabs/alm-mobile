@@ -5,15 +5,22 @@ define ->
   WallView = require 'views/wall/wall'
   WallSplashView = require 'views/wall/splash'
   Initiatives = require 'collections/initiatives'
+  Preferences = require 'collections/preferences'
   Initiative = require 'models/initiative'
   Features = require 'collections/features'
   UserStories = require 'collections/user_stories'
 
   class WallController extends SiteController
-    splash: (params) ->
+    create: ->
       @subscribeEvent 'changeProject', @onChangeProject
       app.session.fetchAllProjects()
-      @view = @renderReactComponent WallSplashView, region: 'main', model: app.session.get('projects')          
+      @view = @renderReactComponent WallSplashView, region: 'main', model: app.session.get('projects')
+      @subscribeEvent 'createwall', @onCreateWall
+
+    splash: ->
+      prefs = new Preferences()
+      @view = @renderReactComponent WallSplashView, region: 'main', model: prefs
+      prefs.fetchWallPrefs(app.session.get('user'))
 
     show: (project) ->
       @initiatives = new Initiatives()
@@ -100,3 +107,6 @@ define ->
       app.aggregator.recordAction component: this, description: "clicked wall card"
       mappedType = 'portfolioitem'
       @redirectTo "#{mappedType}/#{oid}"
+
+    onCreateWall: (wallInfo) ->
+

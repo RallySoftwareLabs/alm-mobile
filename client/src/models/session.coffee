@@ -87,6 +87,7 @@ define ->
         userProfile.fetch()
         preferences.fetchMobilePrefs @get('user')
       ).then (p, u, prefs) =>
+        projects = @get 'projects'
         @_setModeFromPreference()
         if projectRef
           specifiedProject = projects.find _.isAttributeEqual('_ref', projectRef)
