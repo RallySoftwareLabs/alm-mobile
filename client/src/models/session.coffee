@@ -78,22 +78,17 @@ define ->
       preferences.clientMetricsParent = this
       @set 'prefs', preferences
 
-      userProfile = new UserProfile
-        ObjectID: utils.getOidFromRef(@get('user').get('UserProfile')._ref)
-      userProfile.clientMetricsParent = this
-
       $.when(
         @fetchAllProjects(),
-        userProfile.fetch()
         preferences.fetchMobilePrefs @get('user')
-      ).then (p, u, prefs) =>
+      ).then (p, prefs) =>
         projects = @get 'projects'
         @_setModeFromPreference()
         if projectRef
           specifiedProject = projects.find _.isAttributeEqual('_ref', projectRef)
           @set('project', specifiedProject) if specifiedProject
         else
-          @_setDefaultProject projects, userProfile
+          @_setDefaultProject projects
 
     setIterationPreference: (value) ->
       projectRef = @get('project').get('_ref')
@@ -209,14 +204,14 @@ define ->
         when 'ScheduleState' then _(UserStory.getAllowedValues(boardField)).pluck('StringValue').compact().value()
         else []
 
-    _setDefaultProject: (projects, userProfile) ->
+    _setDefaultProject: (projects) ->
       defaultProject = @get('prefs').findPreference(Preference::defaultProject)
       if defaultProject
         savedProject = projects.find _.isAttributeEqual('_ref', defaultProject.get('Value'))
         @set('project', savedProject) if savedProject
 
       if !@get 'project'
-        defaultProject = userProfile.get('DefaultProject')?._ref
+        defaultProject = @get('user').UserProfile.DefaultProject._ref
         proj = projects.find _.isAttributeEqual('_ref', defaultProject)
         @set 'project', proj || projects.first()
 
