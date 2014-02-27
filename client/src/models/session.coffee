@@ -72,6 +72,8 @@ define ->
         )
 
     initSessionForUser: (projectRef) ->
+      user = @get('user')
+      return unless user?
       @aggregator.beginLoad component: this, description: 'session init'
 
       preferences = new Preferences()
@@ -80,7 +82,7 @@ define ->
 
       $.when(
         @fetchAllProjects(),
-        preferences.fetchMobilePrefs @get('user')
+        preferences.fetchMobilePrefs user
       ).then (p, prefs) =>
         projects = @get 'projects'
         @_setModeFromPreference()

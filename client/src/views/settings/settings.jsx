@@ -41,7 +41,7 @@ define(function() {
               <div className="list-group">{ this._getBoardFieldItems() }</div>
             </div>
             <div className="logout">
-              <button className="btn btn-default" onClick={ this.publishEventLogout }>Logout</button>
+              <button className="btn btn-default" onClick={ this.triggerLogout }>Logout</button>
             </div>
           </form>
         </div>
