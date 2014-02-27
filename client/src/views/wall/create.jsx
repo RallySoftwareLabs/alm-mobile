@@ -5,7 +5,7 @@ define(function() {
       React = require('react'),
       ReactView = require('views/base/react_view'),
       app = require('application'),
-      PortfolioItem = require('models/portfolio_item');
+      Initiative = require('models/initiative');
 
   return ReactView.createBackboneClass({
 
@@ -73,7 +73,7 @@ define(function() {
       app.session.loadSchema(project).then(function(schema) {
         me.setState({
           project: project,
-          states: PortfolioItem.getAllowedValues('State')
+          states: Initiative.getAllowedValues('State')
         });
       });
     },
