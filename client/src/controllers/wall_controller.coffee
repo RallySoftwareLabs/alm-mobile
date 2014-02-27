@@ -3,6 +3,7 @@ define ->
   app = require 'application'
   SiteController = require 'controllers/base/site_controller'
   WallView = require 'views/wall/wall'
+  WallCreateView = require 'views/wall/create'
   WallSplashView = require 'views/wall/splash'
   Initiatives = require 'collections/initiatives'
   Preferences = require 'collections/preferences'
@@ -14,11 +15,12 @@ define ->
     create: ->
       @subscribeEvent 'changeProject', @onChangeProject
       app.session.fetchAllProjects()
-      @view = @renderReactComponent WallSplashView, region: 'main', model: app.session.get('projects')
+      @view = @renderReactComponent WallCreateView, region: 'main', model: app.session.get('projects')
       @subscribeEvent 'createwall', @onCreateWall
 
     splash: ->
       prefs = new Preferences()
+      prefs.clientMetricsParent = this
       @view = @renderReactComponent WallSplashView, region: 'main', model: prefs
       prefs.fetchWallPrefs(app.session.get('user'))
 
@@ -45,7 +47,7 @@ define ->
           @fetchInitiatives(projectRef)
           @fetchFeatures(projectRef)
         )
-        userStoriesFetchPromise = @fetchUserStories(projectRef)        
+        userStoriesFetchPromise = @fetchUserStories(projectRef)
         
         initiativesAndFeaturesPromise.then =>
           if @initiatives.isEmpty()
