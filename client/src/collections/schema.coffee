@@ -6,6 +6,7 @@ define ->
   AllowedValues = require 'collections/allowed_values'
   Collection = require 'collections/collection'
   Defect = require 'models/defect'
+  PortfolioItem = require 'models/portfolio_item'
   Task = require 'models/task'
   TypeDefinition = require 'models/type_definition'
   UserStory = require 'models/user_story'
@@ -25,7 +26,7 @@ define ->
 
     updateModelsFromSchema: ->
       $.when.apply($, 
-        _.map [Defect, Task, UserStory], (m) =>
+        _.map [Defect, Task, UserStory, PortfolioItem], (m) =>
           typePath = m::typePath
           model = @find (model) -> model.get('TypePath').toLowerCase() == typePath
 

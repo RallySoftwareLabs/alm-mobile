@@ -55,11 +55,24 @@ define ->
           cb? false
       )
 
-    initSessionForUser: (options) ->
+    fetchAllProjects: ->
+      projects = @get 'projects'
+      if projects
+        d = $.Deferred()
+        d.resolve projects
+        d.promise()
+      else
+        projects = new Projects()
+        projects.clientMetricsParent = this
+        @set 'projects', projects
+        projects.fetchAllPages(
+          data:
+            fetch: 'Name,SchemaVersion'
+            order: 'Name'
+        )
+
+    initSessionForUser: (projectRef) ->
       @aggregator.beginLoad component: this, description: 'session init'
-      projects = new Projects()
-      projects.clientMetricsParent = this
-      @set 'projects', projects
 
       preferences = new Preferences()
       preferences.clientMetricsParent = this
@@ -70,16 +83,16 @@ define ->
       userProfile.clientMetricsParent = this
 
       $.when(
-        projects.fetchAllPages(
-          data:
-            fetch: 'Name,SchemaVersion'
-            order: 'Name'
-        ),
+        @fetchAllProjects(),
         userProfile.fetch()
         preferences.fetchMobilePrefs @get('user')
       ).then (p, u, prefs) =>
         @_setModeFromPreference()
-        @_setDefaultProject projects, userProfile
+        if projectRef
+          specifiedProject = projects.find _.isAttributeEqual('_ref', projectRef)
+          @set('project', specifiedProject) if specifiedProject
+        else
+          @_setDefaultProject projects, userProfile
 
     setIterationPreference: (value) ->
       projectRef = @get('project').get('_ref')
@@ -230,7 +243,7 @@ define ->
 
       @set 'boardField', boardField
 
-    _loadSchema: (project) ->
+    loadSchema: (project) ->
       schema = new Schema()
       schema.clientMetricsParent = this
       schema.fetchForProject(project)
@@ -255,7 +268,7 @@ define ->
       @set 'iterations', iterations
 
       $.when(
-        @_loadSchema(value),
+        @loadSchema(value),
         iterations.fetchAllPages(
           data:
             fetch: 'Name,StartDate,EndDate'

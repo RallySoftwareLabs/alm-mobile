@@ -1,18 +1,21 @@
 define ->
   _ = require 'underscore'
   app = require 'application'
-  appConfig = require 'appConfig'
   SiteController = require 'controllers/base/site_controller'
   WallView = require 'views/wall/wall'
+  WallSplashView = require 'views/wall/splash'
   Initiatives = require 'collections/initiatives'
   Initiative = require 'models/initiative'
   Features = require 'collections/features'
   UserStories = require 'collections/user_stories'
 
   class WallController extends SiteController
-    index: (params) ->
-      @updateTitle "Enterprise Backlog"
+    splash: (params) ->
+      @subscribeEvent 'changeProject', @onChangeProject
+      app.session.fetchAllProjects()
+      @view = @renderReactComponent WallSplashView, region: 'main', model: app.session.get('projects')          
 
+    show: (project) ->
       @initiatives = new Initiatives()
       @initiatives.clientMetricsParent = this
 
@@ -22,42 +25,46 @@ define ->
       @userStories = new UserStories()
       @userStories.clientMetricsParent = this
 
-      @view = @renderReactComponent WallView, model: @initiatives, region: 'main'
+      @view = @renderReactComponent WallView, showLoadingIndicator: true, model: @initiatives, region: 'main'
       @subscribeEvent 'cardclick', @onCardClick
 
-      hardcodedRandDProjectRef = appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/project/334329159'#12271
+      @updateTitle "Enterprise Backlog"
 
-      initiativesAndFeaturesPromise = $.when(
-        @fetchInitiatives(hardcodedRandDProjectRef)
-        @fetchFeatures(hardcodedRandDProjectRef)
-      )
-      userStoriesFetchPromise = @fetchUserStories(hardcodedRandDProjectRef)        
-      
-      initiativesAndFeaturesPromise.then =>
-        if @initiatives.isEmpty()
-          @markFinished()
-        else
-          @features.each (f) =>
-            parentRef = f.get('Parent')._ref
-            initiative = @initiatives.find _.isAttributeEqual('_ref', parentRef)
+      @whenProjectIsLoaded project: project, showLoadingIndicator: false, fn: =>
+        @updateTitle "Enterprise Backlog for #{app.session.getProjectName()}"
+        projectRef = "/project/#{project}"#334329159'#12271
 
-            if initiative?
-              initiative.features ?= new Features()
-              initiative.features.add f
-          
-          @initiatives.trigger('add')
-
-          userStoriesFetchPromise.then =>
-            @userStories.each (us) =>
-              parentRef = us.get('PortfolioItem')._ref
-              feature = @features.find _.isAttributeEqual('_ref', parentRef)
-
-              if feature?
-                feature.userStories ?= new UserStories()
-                feature.userStories.add us
-
-            @initiatives.trigger('add')
+        initiativesAndFeaturesPromise = $.when(
+          @fetchInitiatives(projectRef)
+          @fetchFeatures(projectRef)
+        )
+        userStoriesFetchPromise = @fetchUserStories(projectRef)        
+        
+        initiativesAndFeaturesPromise.then =>
+          if @initiatives.isEmpty()
             @markFinished()
+          else
+            @features.each (f) =>
+              parentRef = f.get('Parent')._ref
+              initiative = @initiatives.find _.isAttributeEqual('_ref', parentRef)
+
+              if initiative?
+                initiative.features ?= new Features()
+                initiative.features.add f
+            
+            @initiatives.trigger('add')
+
+            userStoriesFetchPromise.then =>
+              @userStories.each (us) =>
+                parentRef = us.get('PortfolioItem')._ref
+                feature = @features.find _.isAttributeEqual('_ref', parentRef)
+
+                if feature?
+                  feature.userStories ?= new UserStories()
+                  feature.userStories.add us
+
+              @initiatives.trigger('add')
+              @markFinished()
 
     fetchInitiatives: (projectRef) ->
       @initiatives.fetchAllPages

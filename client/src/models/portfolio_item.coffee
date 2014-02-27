@@ -12,4 +12,6 @@ define ->
     _.extend this, SchemaMixin.static
     _.extend @prototype, SchemaMixin.prototype
 
+    allowedValueFields: ['State']
+
    

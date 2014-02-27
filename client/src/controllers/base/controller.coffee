@@ -2,6 +2,7 @@ define ->
   Backbone = require 'backbone'
   React = require 'react'
   app = require 'application'
+  appConfig = require 'appConfig'
   Messageable = require 'lib/messageable'
   LoadingIndicatorView = require 'views/loading_indicator'
 
@@ -9,12 +10,24 @@ define ->
 
     _.extend @prototype, Messageable
       
-    whenProjectIsLoaded: (callback) ->
-      if app.session.get('project')?
-        @_goToPage callback
+    whenProjectIsLoaded: (options) ->
+      if _.isFunction(options)
+        callback = options
       else
-        @view = @renderReactComponent LoadingIndicatorView, region: 'main', text: 'Initializing'
-        @subscribeEventOnce 'projectready', @_onProjectReady(callback)
+        callback = options.fn
+        projectRef = "#{appConfig.almWebServiceBaseUrl}/webservice/@@WSAPI_VERSION/project/#{options.project}"
+
+      sessionProject = app.session.get('project')
+      if sessionProject?
+        if _.contains(sessionProject.get('_ref'), projectRef)
+          @_goToPage callback
+        else
+          project = app.session.get('projects').find _.isAttributeEqual '_ref', projectRef
+          @_renderLoadingIndicatorUntilProjectIsReady(callback)
+          app.session.set 'project', project
+      else
+        @_renderLoadingIndicatorUntilProjectIsReady(callback, options.showLoadingIndicator)
+        app.session.initSessionForUser(projectRef)
 
     _onProjectReady: (callback) ->
       func = => 
@@ -28,6 +41,11 @@ define ->
           @markFinished()
           @redirectTo 'labsNotice'
         , 1
+
+    _renderLoadingIndicatorUntilProjectIsReady: (callback, showLoadingIndicator) ->
+      if showLoadingIndicator != false
+        @view = @renderReactComponent LoadingIndicatorView, region: 'main', text: 'Initializing'
+      @subscribeEventOnce 'projectready', @_onProjectReady(callback)
 
     updateTitle: (title) ->
       @publishEvent "updatetitle", title
