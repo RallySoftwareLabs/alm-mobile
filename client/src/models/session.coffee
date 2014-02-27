@@ -162,7 +162,8 @@ define ->
         columns = savedColumns.get 'Value'
 
       visibleColumns = if columns then columns.split ',' else @_getDefaultBoardColumns(boardField)
-      @setBoardColumns boardField, visibleColumns
+      $.when(visibleColumns).then (cols) =>
+        @setBoardColumns boardField, cols
       visibleColumns
 
     getBoardColumns: (boardField = @get('boardField')) ->
@@ -181,12 +182,13 @@ define ->
       newColumns = if _.contains(shownColumns, column)
         _.without(shownColumns, column)
       else
-        allowedValues = UserStory.getAllowedValues boardField
-        columns = _.pluck(allowedValues, 'StringValue')
+        UserStory.getAllowedValues(boardField).then (allowedValues) =>
+          columns = _.pluck(allowedValues, 'StringValue')
 
-        _.intersection(columns, shownColumns.concat([column]))
+          _.intersection(columns, shownColumns.concat([column]))
 
-      @setBoardColumns boardField, newColumns
+      $.when(newColumns).then (cols) =>
+        @setBoardColumns boardField, cols
 
     setBoardColumns: (boardField, columns) ->
       @aggregator.beginLoad component: this, description: 'saving board columns'
@@ -244,6 +246,7 @@ define ->
     loadSchema: (project) ->
       schema = new Schema()
       schema.clientMetricsParent = this
+      @set('schema', schema)
       schema.fetchForProject(project)
 
     _onModeChange: (model, value, options) ->

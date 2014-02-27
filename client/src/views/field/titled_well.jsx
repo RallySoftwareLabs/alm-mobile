@@ -37,7 +37,7 @@ define(function() {
         return this.props.valueMarkup;
       }
       if (this.isEditMode()) {
-        if (this.props.item.allowedValues[this.props.field]) {
+        if (this.getAllowedValues()) {
           return this.getAllowedValuesSelectMarkup();
         } else {
           return this.getInputMarkup();

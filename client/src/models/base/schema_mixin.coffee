@@ -5,13 +5,25 @@ define ->
   return {
     prototype:
       getAllowedValues: (field) ->
-        @allowedValues[field]
+        app = require 'application'
+        schema = app.session.get('schema')
+        schema.getAllowedValues(this, field)
+
+      hasAllowedValues: (field) ->
+        app = require 'application'
+        schema = app.session.get('schema')
+        schema.hasAllowedValues(this, field)
       
     static:
       getAllowedValues: (field) ->
-        @prototype.allowedValues[field]
+        @prototype.getAllowedValues(field)
 
-      getFieldDisplayName: (fieldElementName) ->
-        @prototype.fields[fieldElementName]?.Name
+      hasAllowedValues: (field) ->
+        @prototype.hasAllowedValues(field)
+
+      getFieldDisplayName: (fieldName) ->
+        app = require 'application'
+        schema = app.session.get('schema')
+        schema.getFieldDisplayName(this, fieldName)
 
   }

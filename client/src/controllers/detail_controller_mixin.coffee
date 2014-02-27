@@ -10,13 +10,24 @@ define ->
       @view = @renderReactComponent LoadingIndicatorView, region: 'main', shared: false
       fieldNames = @getFieldNames()
       model = new Model(ObjectID: id)
-      model.fetch
-        data:
-          fetch: fieldNames.join ','
-        success: (model, response, opts) =>
-          @_setTitle model
-          @view = @renderReactComponent View, model: model, region: 'main', fieldNames: fieldNames
-          @markFinished()
+      $.when.apply($,
+        _.union(
+          _.map(fieldNames, model.getAllowedValues, model)
+          model.fetch
+            data:
+              fetch: fieldNames.join ','
+            success: (model, response, opts) =>
+        )
+      ).then (fetches...) =>
+        @_setTitle model
+
+        allowedValues = _.reduce(_.initial(fetches), (result, av, index) ->
+          result[fieldNames[index]] = av
+          result
+        , {})
+        @view = @renderReactComponent View, model: model, region: 'main', fieldNames: fieldNames, allowedValues: allowedValues
+        @markFinished()
+
       @subscribeEvent 'saveField', @saveField
 
     showCreateView: (Model, View, defaultValues = {}) ->
