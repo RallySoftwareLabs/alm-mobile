@@ -24,7 +24,9 @@ define(function() {
             <form className="settings" role="form">
               <div className="form-group project">
                 <label htmlFor="project" className="control-label choose-project">Where are your initiatives?</label>
-                <select name="project" className="form-control project-select" onChange={ this._updateSelectedProject }>{ projects }</select>
+                <select name="project" className="form-control project-select" onChange={ this._updateSelectedProject }>
+                  { !_.isEmpty(projects) ? _.union([<option key="" value="">--select a project--</option>], projects) : '' }
+                </select>
               </div>
               { this._getStateSectionMarkup() }
             </form>
@@ -42,7 +44,7 @@ define(function() {
             <div className="form-group states listing">
               <div className="list-group">{ this._getStateItems(currentProject) }</div>
             </div>
-            <div className="logout">
+            <div>
               <button className="btn btn-primary" onClick={ this._onSave }>Create Wall</button>
             </div>
           </div>
@@ -69,7 +71,12 @@ define(function() {
 
     _updateSelectedProject: function(event) {
       var me = this;
-      var project = this.props.model.find(_.isAttributeEqual('_ref', this.$('.project-select option:selected').val()));
+      var optionValue = this.$('.project-select option:selected').val();
+      if (!optionValue) {
+        this.replaceState(this.getInitialState());
+        return;
+      }
+      var project = this.props.model.find(_.isAttributeEqual('_ref', optionValue));
       app.aggregator.recordAction({component: this, description: "selected wall project"});
       app.session.loadSchema(project).then(function(schema) {
         return Initiative.getAllowedValues('State');

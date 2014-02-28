@@ -23,7 +23,7 @@ define ->
           @_goToPage callback
         else
           project = app.session.get('projects').find _.isAttributeEqual '_ref', projectRef
-          @_renderLoadingIndicatorUntilProjectIsReady(callback)
+          @_renderLoadingIndicatorUntilProjectIsReady(callback, options.showLoadingIndicator)
           app.session.set 'project', project
       else
         @_renderLoadingIndicatorUntilProjectIsReady(callback, options.showLoadingIndicator)

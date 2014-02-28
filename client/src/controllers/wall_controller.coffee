@@ -6,25 +6,42 @@ define ->
   WallView = require 'views/wall/wall'
   WallCreateView = require 'views/wall/create'
   WallSplashView = require 'views/wall/splash'
+  Features = require 'collections/features'
   Initiatives = require 'collections/initiatives'
   Preferences = require 'collections/preferences'
-  Initiative = require 'models/initiative'
-  Features = require 'collections/features'
+  Projects = require 'collections/projects'
   UserStories = require 'collections/user_stories'
+  Project = require 'models/project'
 
   class WallController extends SiteController
     create: ->
-      @subscribeEvent 'changeProject', @onChangeProject
       projectsFetch = app.session.fetchAllProjects()
-      @view = @renderReactComponent WallCreateView, region: 'main', model: app.session.get('projects')
-      @subscribeEvent 'createwall', @onCreateWall
+      @view = @renderReactComponent WallCreateView, region: 'main', model: app.session.get('projects'), changeOptions: 'complete'
+      @subscribeEvent 'createwall', @createWall
       projectsFetch.then => @markFinished()
 
     splash: ->
       prefs = new Preferences()
       prefs.clientMetricsParent = this
-      @view = @renderReactComponent WallSplashView, region: 'main', model: prefs
-      prefs.fetchWallPrefs().then => @markFinished()
+      projects = new Projects()
+      @view = @renderReactComponent WallSplashView, region: 'main', model: projects
+      @subscribeEvent 'selectProject', @onSelectProject
+      @subscribeEvent 'showCreateWall', @showCreateWallPage
+
+      prefs.fetchWallPrefs().then =>
+        queryString = prefs.reduce((result, pref) ->
+          prefName = pref.get('Name')
+          objectId = prefName.substring(prefName.indexOf('.') + 1)
+          queryParam = "(ObjectID = #{objectId})" 
+
+          if result then "(#{result} OR #{queryParam})" else queryParam
+        , "")
+
+        projects.fetchAllPages(
+          data:
+            fetch: 'Name'
+            query: queryString
+        ).then => @markFinished()
 
     show: (project) ->
       @initiatives = new Initiatives()
@@ -53,6 +70,7 @@ define ->
         
         initiativesAndFeaturesPromise.then =>
           if @initiatives.isEmpty()
+            @initiatives.trigger('add')
             @markFinished()
           else
             @features.each (f) =>
@@ -107,11 +125,17 @@ define ->
           projectScopeUp: false
           projectScopeDown: true
 
+    onSelectProject: (projectRef) ->
+      @redirectTo "/wall/#{utils.getOidFromRef(projectRef)}"
+
     onCardClick: (oid, type) ->
       mappedType = 'portfolioitem'
       @redirectTo "#{mappedType}/#{oid}"
 
-    onCreateWall: (wallInfo) ->
+    showCreateWallPage: ->
+      @redirectTo "/wall/create"
+
+    createWall: (wallInfo) ->
       prefs = new Preferences()
       prefs.clientMetricsParent = this
       user = app.session.get('user')
