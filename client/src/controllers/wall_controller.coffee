@@ -108,7 +108,6 @@ define ->
           projectScopeDown: true
 
     onCardClick: (oid, type) ->
-      app.aggregator.recordAction component: this, description: "clicked wall card"
       mappedType = 'portfolioitem'
       @redirectTo "#{mappedType}/#{oid}"
 

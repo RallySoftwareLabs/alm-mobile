@@ -25,7 +25,6 @@ define ->
         ).always => @markFinished()
 
     onReplyClick: (text) ->
-      app.aggregator.recordAction component: this, description: 'clicked reply'
       @_addComment(text)
 
     _addComment: (text) ->
@@ -34,7 +33,9 @@ define ->
           Text: text
           Artifact: @artifactRef
           User: app.session.get('user')?.get('_ref')
-        new Discussion().save updates,
+        discussion = new Discussion()
+        discussion.clientMetricsParent = this
+        discussion.save updates,
           wait: true
           patch: true
           success: (model, resp, options) =>

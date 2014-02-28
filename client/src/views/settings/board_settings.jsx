@@ -2,8 +2,9 @@
 define(function() {
   var _ = require('underscore'),
       React = require('react'),
-      UserStory = require('models/user_story'),
-      ReactView = require('views/base/react_view');
+      ReactView = require('views/base/react_view'),
+      app = require('application'),
+      UserStory = require('models/user_story');
 
   return ReactView.createBackboneClass({
 
@@ -43,6 +44,7 @@ define(function() {
 
     onColumnClickFn: function(col) {
       return _.bind(function(event) {
+        app.aggregator.recordAction({component: this, description: "toggled column"});
         this.publishEvent('columnClick', col.StringValue);
       }, this);
     },

@@ -3,7 +3,8 @@ define(function() {
   var $ = require('jquery'),
       _ = require('underscore'),
       React = require('react'),
-      ReactView = require('views/base/react_view');
+      ReactView = require('views/base/react_view'),
+      app = require('application');
 
   return ReactView.createBackboneClass({
 
@@ -106,6 +107,7 @@ define(function() {
     changeModeFn: function(mode) {
       return _.bind(function() {
         var newMode = mode.mode;
+        app.aggregator.recordAction({component: this, description: "changed mode to " + newMode});
         this.publishEvent('changeMode', newMode);
       }, this);
     },
@@ -113,15 +115,18 @@ define(function() {
     changeBoardFieldFn: function(field) {
       return _.bind(function() {
         var newField = field.field;
+        app.aggregator.recordAction({component: this, description: "changed board field to " + newField});
         this.publishEvent('changeBoardField', newField);
       }, this);
     },
 
     updateSelectedProject: function(event) {
+      app.aggregator.recordAction({component: this, description: "changed project"});
       this.publishEvent('changeProject', this.$('.project-select option:selected').val());
     },
 
     updateSelectedIteration: function(event) {
+      app.aggregator.recordAction({component: this, description: "changed iteration"});
       this.publishEvent('changeIteration', this.$('.iteration-select option:selected').val());
     }
   });
