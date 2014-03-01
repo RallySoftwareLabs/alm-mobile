@@ -79,7 +79,7 @@ define(function() {
       e.preventDefault();
       e.stopPropagation();
     },	
-    onAddClick: function() {
+    onAddClick: function(e) {
       app.aggregator.recordAction({component: this, description: 'clicked add card'});
       this.publishEvent('router:route', 'board/' + this.props.model.get('value') + '/userstory/new');
       e.preventDefault();
