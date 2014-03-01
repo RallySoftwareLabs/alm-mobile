@@ -50,6 +50,7 @@ define ->
           fromModel: model
 
     _fetchAssociation: (model, associatedItems, association, reverseAssociation) ->
+      model.clientMetricsParent = this
       model.fetch
         data:
           fetch: 'ObjectID,FormattedID'

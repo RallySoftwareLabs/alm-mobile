@@ -10,6 +10,7 @@ define ->
       @view = @renderReactComponent LoadingIndicatorView, region: 'main', shared: false
       fieldNames = @getFieldNames()
       model = new Model(ObjectID: id)
+      model.clientMetricsParent = this
       model.fetch(
         data:
           fetch: fieldNames.join ','
@@ -23,6 +24,7 @@ define ->
 
     showCreateView: (Model, View, defaultValues = {}) ->
       model = new Model _.defaults(defaultValues, Project: app.session.get('project').get('_ref'))
+      model.clientMetricsParent = this
       @_getAllowedValuesForFields(model).then (allowedValues) =>
         @view = @renderReactComponent View, model: model, region: 'main', newArtifact: true, allowedValues: allowedValues
         @subscribeEvent 'saveField', @saveField
