@@ -6,9 +6,13 @@ define(function() {
   	
   return ReactView.createBackboneClass({
     render: function() {
-      var flipchartNodes = this.props.model.map(function(initiative) {
+      var model = this.props.model;
+      var flipchartNodes = model.map(function(initiative) {
         return <Flipchart model={initiative}></Flipchart>;     
       });
+      if (model.synced && model.isEmpty()) {
+        flipchartNodes = <div className="alert alert-warning"><strong>Oh noes!</strong> There are no initiatives for this project.</div>;
+      }
       return (  
         <div className="wall"> 
           <h1>

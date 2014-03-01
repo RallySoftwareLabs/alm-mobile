@@ -1,18 +1,49 @@
 define ->
   _ = require 'underscore'
   app = require 'application'
-  appConfig = require 'appConfig'
+  utils = require 'lib/utils'
   SiteController = require 'controllers/base/site_controller'
   WallView = require 'views/wall/wall'
-  Initiatives = require 'collections/initiatives'
-  Initiative = require 'models/initiative'
+  WallCreateView = require 'views/wall/create'
+  WallSplashView = require 'views/wall/splash'
   Features = require 'collections/features'
+  Initiatives = require 'collections/initiatives'
+  Preferences = require 'collections/preferences'
+  Projects = require 'collections/projects'
   UserStories = require 'collections/user_stories'
+  Project = require 'models/project'
 
   class WallController extends SiteController
-    index: (params) ->
-      @updateTitle "Enterprise Backlog"
+    create: ->
+      projectsFetch = app.session.fetchAllProjects()
+      @view = @renderReactComponent WallCreateView, region: 'main', model: app.session.get('projects'), changeOptions: 'complete'
+      @subscribeEvent 'createwall', @createWall
+      projectsFetch.then => @markFinished()
 
+    splash: ->
+      prefs = new Preferences()
+      prefs.clientMetricsParent = this
+      projects = new Projects()
+      @view = @renderReactComponent WallSplashView, region: 'main', model: projects
+      @subscribeEvent 'selectProject', @onSelectProject
+      @subscribeEvent 'showCreateWall', @showCreateWallPage
+
+      prefs.fetchWallPrefs().then =>
+        queryString = prefs.reduce((result, pref) ->
+          prefName = pref.get('Name')
+          objectId = prefName.substring(prefName.indexOf('.') + 1)
+          queryParam = "(ObjectID = #{objectId})" 
+
+          if result then "(#{result} OR #{queryParam})" else queryParam
+        , "")
+
+        projects.fetchAllPages(
+          data:
+            fetch: 'Name'
+            query: queryString
+        ).then => @markFinished()
+
+    show: (project) ->
       @initiatives = new Initiatives()
       @initiatives.clientMetricsParent = this
 
@@ -22,42 +53,47 @@ define ->
       @userStories = new UserStories()
       @userStories.clientMetricsParent = this
 
-      @view = @renderReactComponent WallView, model: @initiatives, region: 'main'
+      @view = @renderReactComponent WallView, showLoadingIndicator: true, model: @initiatives, region: 'main'
       @subscribeEvent 'cardclick', @onCardClick
 
-      hardcodedRandDProjectRef = appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/project/334329159'#12271
+      @updateTitle "Enterprise Backlog"
 
-      initiativesAndFeaturesPromise = $.when(
-        @fetchInitiatives(hardcodedRandDProjectRef)
-        @fetchFeatures(hardcodedRandDProjectRef)
-      )
-      userStoriesFetchPromise = @fetchUserStories(hardcodedRandDProjectRef)        
-      
-      initiativesAndFeaturesPromise.then =>
-        if @initiatives.isEmpty()
-          @markFinished()
-        else
-          @features.each (f) =>
-            parentRef = f.get('Parent')._ref
-            initiative = @initiatives.find _.isAttributeEqual('_ref', parentRef)
+      @whenProjectIsLoaded project: project, showLoadingIndicator: false, fn: =>
+        @updateTitle "Enterprise Backlog for #{app.session.getProjectName()}"
+        projectRef = "/project/#{project}"#334329159'#12271
 
-            if initiative?
-              initiative.features ?= new Features()
-              initiative.features.add f
-          
-          @initiatives.trigger('add')
-
-          userStoriesFetchPromise.then =>
-            @userStories.each (us) =>
-              parentRef = us.get('PortfolioItem')._ref
-              feature = @features.find _.isAttributeEqual('_ref', parentRef)
-
-              if feature?
-                feature.userStories ?= new UserStories()
-                feature.userStories.add us
-
+        initiativesAndFeaturesPromise = $.when(
+          @fetchInitiatives(projectRef)
+          @fetchFeatures(projectRef)
+        )
+        userStoriesFetchPromise = @fetchUserStories(projectRef)
+        
+        initiativesAndFeaturesPromise.then =>
+          if @initiatives.isEmpty()
             @initiatives.trigger('add')
             @markFinished()
+          else
+            @features.each (f) =>
+              parentRef = f.get('Parent')._ref
+              initiative = @initiatives.find _.isAttributeEqual('_ref', parentRef)
+
+              if initiative?
+                initiative.features ?= new Features()
+                initiative.features.add f
+            
+            @initiatives.trigger('add')
+
+            userStoriesFetchPromise.then =>
+              @userStories.each (us) =>
+                parentRef = us.get('PortfolioItem')._ref
+                feature = @features.find _.isAttributeEqual('_ref', parentRef)
+
+                if feature?
+                  feature.userStories ?= new UserStories()
+                  feature.userStories.add us
+
+              @initiatives.trigger('add')
+              @markFinished()
 
     fetchInitiatives: (projectRef) ->
       @initiatives.fetchAllPages
@@ -89,7 +125,19 @@ define ->
           projectScopeUp: false
           projectScopeDown: true
 
+    onSelectProject: (projectRef) ->
+      @redirectTo "/wall/#{utils.getOidFromRef(projectRef)}"
+
     onCardClick: (oid, type) ->
-      app.aggregator.recordAction component: this, description: "clicked wall card"
       mappedType = 'portfolioitem'
       @redirectTo "#{mappedType}/#{oid}"
+
+    showCreateWallPage: ->
+      @redirectTo "/wall/create"
+
+    createWall: (wallInfo) ->
+      prefs = new Preferences()
+      prefs.clientMetricsParent = this
+      user = app.session.get('user')
+      prefs.updateWallPreference(user, wallInfo).then =>
+        @redirectTo "/wall/#{utils.getOidFromRef(wallInfo.project.get('_ref'))}"

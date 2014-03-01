@@ -2,7 +2,8 @@
 define(function() {
   var $ = require('jquery'),
 			React = require('react'),
-  		ReactView = require('views/base/react_view');
+  		ReactView = require('views/base/react_view'),
+      app = require('application');
 
   return ReactView.createBackboneClass({
     render: function() {
@@ -21,11 +22,13 @@ define(function() {
     },
 
     accept: function(event) {
+      app.aggregator.recordAction({component: this, description: 'accepted labs notice'});
       this.publishEvent('accept');
       event.preventDefault();
     },
 
     reject: function(event) {
+      app.aggregator.recordAction({component: this, description: 'rejected labs notice'});
       this.publishEvent('reject');
       event.preventDefault();
     }

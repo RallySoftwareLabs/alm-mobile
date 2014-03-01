@@ -3,6 +3,7 @@ define(function() {
   var $ = require('jquery'),
 			React = require('react'),
   		ReactView = require('views/base/react_view'),
+      app = require('application'),
   		ListView = require('views/listing/list');
 
   return ReactView.createBackboneClass({
@@ -40,6 +41,7 @@ define(function() {
     },
 
     onSearch: function(event) {
+      app.aggregator.recordAction({component: this, description: 'search submitted'});
       this.publishEvent('search', this._getInputField().val());
       event.preventDefault();
     },

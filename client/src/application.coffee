@@ -38,9 +38,8 @@ define ->
         
         hash = Backbone.history.fragment
         if authenticated
-          if hash == 'login'
-            @publishEvent 'router:route', ''
-          @session.initSessionForUser()
+          hash = '' if hash == 'login'
+          @publishEvent 'router:route', hash
         else
           unless _.contains(['login', 'logout', 'labsNotice'], hash)
             @afterLogin = hash

@@ -23,7 +23,6 @@ define ->
       @markFinished()
 
     onSubmit: (username, password, rememberme) ->
-      app.aggregator.recordAction component: this, description: 'logging in'
       app.session.authenticate username, password, (authenticated) =>
         if err?
           app.session.logout()
@@ -36,10 +35,8 @@ define ->
             @view.showError 'The password you have entered is incorrect.'
 
     onAccept: ->
-      app.aggregator.recordAction component: this, description: 'accepted labs notice'
       app.session.acceptLabsNotice().then =>
         @redirectTo app.afterLogin, replace: true
 
     onReject: ->
-      app.aggregator.recordAction component: this, description: 'rejected labs notice'
       @redirectTo 'login'

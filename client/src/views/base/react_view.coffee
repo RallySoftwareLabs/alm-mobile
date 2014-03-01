@@ -7,18 +7,17 @@ define ->
   Collection = require 'collections/collection'
 
   React.BackboneMixin =
+    _getModelEvents: (model) ->
+      if model instanceof Collection
+        @props.changeOptions || 'add remove reset sort'
+      else if model
+        @props.changeOptions || 'sync change'
+
     _subscribe: (model) ->
       return unless model?
-      # Detect if it's a collection
-      if model instanceof Collection
-        model.on(@props.changeOptions || 'add remove reset sort', ->
-          @forceUpdate()
-        , this)
-      else if model
-        changeOptions = @props.changeOptions || 'sync change'
-        model.on(changeOptions, ->
-          (@onModelChange || @forceUpdate).call(this)
-        , this)
+      model.on(@_getModelEvents(model), ->
+        (@onModelChange || @forceUpdate).call(this)
+      , this)
 
     _unsubscribe: (model) ->
       return unless model?
@@ -28,7 +27,7 @@ define ->
       model = @getModel()
       return unless model
 
-      model.once 'sync', _.bind(@__toggleLoadingIndicator__, this, false)
+      model.once @_getModelEvents(model), _.bind(@__toggleLoadingIndicator__, this, false)
       @__toggleLoadingIndicator__ true
 
     __toggleLoadingIndicator__: (show = false) ->

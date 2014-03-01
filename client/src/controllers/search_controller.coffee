@@ -22,7 +22,6 @@ define ->
           @markFinished()
 
     onSearch: (keywords) ->
-      app.aggregator.recordAction component: this, description: 'search submitted'
       @redirectTo "/search/#{encodeURIComponent(keywords)}"
 
     _fetchResults: (artifacts, keywords) ->

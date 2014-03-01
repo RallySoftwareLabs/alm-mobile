@@ -33,31 +33,26 @@ define ->
         @markFinished()
 
     onChangeMode: (mode) ->
-      app.aggregator.recordAction component: this, description: "changed mode to #{mode}"
       app.session.set 'mode', mode
 
     onChangeBoardField: (boardField) ->
-      app.aggregator.recordAction component: this, description: "changed board field to #{boardField}"
       app.session.set 'boardField', boardField
       @redirectTo 'settings/board'
 
     onChangeProject: (projectRef) ->
       newProject = app.session.get('projects').find _.isAttributeEqual '_ref', projectRef
-      app.aggregator.recordAction component: this, description: "changed project"
       app.session.set 'project', newProject
       @updateTitle "Settings: #{app.session.getProjectName()}"
 
     onChangeIteration: (iterationRef) ->
-      if iterationRef == 'null'
-        app.aggregator.recordAction component: this, description: "removed iteration"
-        return app.session.set 'iteration', null
-
-      newIteration = app.session.get('iterations').find _.isAttributeEqual '_ref', iterationRef
-      app.aggregator.recordAction component: this, description: "set new iteration"
+      newIteration = if iterationRef == 'null'
+        null
+      else
+        app.session.get('iterations').find _.isAttributeEqual '_ref', iterationRef
+      
       app.session.set 'iteration', newIteration
 
     onColumnClick: (column) ->
-      app.aggregator.recordAction component: this, description: "toggled column"
       app.session.toggleBoardColumn column
 
     onLogout: ->

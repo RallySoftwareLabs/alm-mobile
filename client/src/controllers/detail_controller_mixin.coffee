@@ -10,23 +10,27 @@ define ->
       @view = @renderReactComponent LoadingIndicatorView, region: 'main', shared: false
       fieldNames = @getFieldNames()
       model = new Model(ObjectID: id)
-      model.fetch
-        data:
-          fetch: fieldNames.join ','
-        success: (model, response, opts) =>
-          @_setTitle model
-          @view = @renderReactComponent View, model: model, region: 'main', fieldNames: fieldNames
-          @markFinished()
+      $.when(
+        @_getAllowedValuesForFields(model)
+        model.fetch
+          data:
+            fetch: fieldNames.join ','
+      ).then (allowedValues, modelFetch) =>
+        @_setTitle model
+        @view = @renderReactComponent View, model: model, region: 'main', fieldNames: fieldNames, allowedValues: allowedValues
+        @markFinished()
+
       @subscribeEvent 'saveField', @saveField
 
     showCreateView: (Model, View, defaultValues = {}) ->
-      model = new Model defaultValues
-      @view = @renderReactComponent View, model: model, region: 'main', newArtifact: true
-      @subscribeEvent 'saveField', @saveField
-      @subscribeEvent 'save', @saveNew
-      @subscribeEvent 'cancel', @cancelNew
-      @markFinished()
-      model
+      model = new Model _.defaults(defaultValues, Project: app.session.get('project').get('_ref'))
+      @_getAllowedValuesForFields(model).then (allowedValues) =>
+        @view = @renderReactComponent View, model: model, region: 'main', newArtifact: true, allowedValues: allowedValues
+        @subscribeEvent 'saveField', @saveField
+        @subscribeEvent 'save', @saveNew
+        @subscribeEvent 'cancel', @cancelNew
+        @markFinished()
+        model
 
     saveField: (updates, opts) ->
       if @view.props.newArtifact
@@ -53,6 +57,14 @@ define ->
 
     cancelNew: ->
       @publishEvent 'router:route', @homeRoute, replace: false
+
+    _getAllowedValuesForFields: (model) ->
+      fieldNames = @getFieldNames()
+      $.when.apply($, _.map(fieldNames, model.getAllowedValues, model)).then (avs...) =>
+        _.reduce(avs, (result, av, index) ->
+          result[fieldNames[index]] = av
+          result
+        , {})
 
     _saveLocal: (updates) ->
       @view.props.model.set(updates)

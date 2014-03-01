@@ -3,6 +3,7 @@ define(function() {
   var $ = require('jquery'),
 			React = require('react'),
   		ReactView = require('views/base/react_view'),
+      app = require('application'),
   		ListView = require('views/listing/list');
 
   return ReactView.createBackboneClass({
@@ -51,6 +52,7 @@ define(function() {
       inputField.val('');
     },
     _onSubmit: function(event) {
+      app.aggregator.recordAction({component: this, description: 'clicked reply'});
       text = this._getInputField().val();
       this.publishEvent('reply', text);
       event.preventDefault();

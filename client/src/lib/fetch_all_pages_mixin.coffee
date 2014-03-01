@@ -21,5 +21,6 @@ define ->
         start += pagesize
         fetch
 
-      $.when.apply($, remainingFetches)
+      $.when.apply($, remainingFetches).then =>
+        @trigger('complete')
   }
