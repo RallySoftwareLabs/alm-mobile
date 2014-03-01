@@ -215,7 +215,7 @@ define ->
         @set('project', savedProject) if savedProject
 
       if !@get 'project'
-        defaultProject = @get('user').UserProfile.DefaultProject._ref
+        defaultProject = @get('user').get('UserProfile').DefaultProject._ref
         proj = projects.find _.isAttributeEqual('_ref', defaultProject)
         @set 'project', proj || projects.first()
 
