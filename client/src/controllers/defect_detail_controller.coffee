@@ -28,6 +28,16 @@ define ->
             @updateTitle "New Defect for #{model.get('FormattedID')}: #{model.get('_refObjectName')}"
             @showCreateView Defect, View, Requirement: model.attributes
 
+    defectForColumn: (column) ->
+      @whenProjectIsLoaded ->
+        props = {}
+        props[app.session.get('boardField')] = column
+        iterationRef = app.session.get('iteration')?.get('_ref')
+        if iterationRef
+          props.Iteration = iterationRef
+        @updateTitle "New Defect"
+        @showCreateView Defect, View, props
+
     getFieldNames: ->
       [
         'Blocked'
