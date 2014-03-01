@@ -30,20 +30,22 @@ define ->
 
     getFieldNames: ->
       [
-        'Blocked',
-        'Description',
-        'Discussion',
-        'FormattedID',
-        'Iteration',
-        'Name',
-        'Owner',
-        'PlanEstimate',
-        'Priority',
-        'Ready',
-        'Release',
-        'Requirement',
-        'Severity',
-        'State',
-        'Tasks',
+        'Blocked'
+        'Description'
+        'Discussion'
+        'FormattedID'
+        'Iteration'
+        'Name'
+        'Owner'
+        'PlanEstimate'
+        'Priority'
+        'Project'
+        'Ready'
+        'Release'
+        'Requirement'
+        'ScheduleState'
+        'Severity'
+        'State'
+        'Tasks'
         app.session.get('boardField')
       ]

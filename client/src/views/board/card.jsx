@@ -2,7 +2,8 @@
 define(function() {
   var React = require('react');
   var ReactView = require('views/base/react_view');
-  var Owner = require('views/board/owner')
+  var app = require('application');
+  var Owner = require('views/board/owner');
 
   return ReactView.createBackboneClass({
     render: function() {
@@ -38,6 +39,7 @@ define(function() {
     },
     onClick: function(e) {
     	var m = this.props.model;
+      app.aggregator.recordAction({component: this, description: 'clicked card'});
     	this.publishEvent('cardclick', m.get('ObjectID'), m.get('_type'));
     	e.preventDefault();
     }

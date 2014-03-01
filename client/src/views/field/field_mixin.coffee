@@ -11,7 +11,7 @@ define ->
     componentDidUpdate: focusEditor
 
     getAllowedValues: ->
-      av = @props.item.getAllowedValues?(@props.field)
+      av = @props.allowedValues
       if app.session.get('boardField') == @props.field
         boardColumns = app.session.getBoardColumns()
         if _.contains(boardColumns, @getFieldValue())
@@ -68,7 +68,7 @@ define ->
     onKeyDown: (event) ->
       switch event.which
         when @keyCodes.ENTER_KEY then @endEdit event
-        when @keyCodes.ESCAPE_KEY then @_switchToViewMode()
+        when @keyCodes.ESCAPE_KEY then @setState editMode: false
 
     getInputMarkup: ->
       React.DOM.input(

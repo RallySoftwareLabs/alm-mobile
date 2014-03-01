@@ -67,32 +67,30 @@ define ->
         @set 'projects', projects
         projects.fetchAllPages(
           data:
-            fetch: 'Name,SchemaVersion'
+            fetch: 'Name,Workspace,SchemaVersion'
             order: 'Name'
         )
 
     initSessionForUser: (projectRef) ->
+      user = @get('user')
+      return unless user?
       @aggregator.beginLoad component: this, description: 'session init'
 
       preferences = new Preferences()
       preferences.clientMetricsParent = this
       @set 'prefs', preferences
 
-      userProfile = new UserProfile
-        ObjectID: utils.getOidFromRef(@get('user').get('UserProfile')._ref)
-      userProfile.clientMetricsParent = this
-
       $.when(
         @fetchAllProjects(),
-        userProfile.fetch()
-        preferences.fetchMobilePrefs @get('user')
-      ).then (p, u, prefs) =>
+        preferences.fetchMobilePrefs user
+      ).then (p, prefs) =>
+        projects = @get 'projects'
         @_setModeFromPreference()
         if projectRef
           specifiedProject = projects.find _.isAttributeEqual('_ref', projectRef)
           @set('project', specifiedProject) if specifiedProject
         else
-          @_setDefaultProject projects, userProfile
+          @_setDefaultProject projects
 
     setIterationPreference: (value) ->
       projectRef = @get('project').get('_ref')
@@ -164,7 +162,8 @@ define ->
         columns = savedColumns.get 'Value'
 
       visibleColumns = if columns then columns.split ',' else @_getDefaultBoardColumns(boardField)
-      @setBoardColumns boardField, visibleColumns
+      $.when(visibleColumns).then (cols) =>
+        @setBoardColumns boardField, cols
       visibleColumns
 
     getBoardColumns: (boardField = @get('boardField')) ->
@@ -183,12 +182,13 @@ define ->
       newColumns = if _.contains(shownColumns, column)
         _.without(shownColumns, column)
       else
-        allowedValues = UserStory.getAllowedValues boardField
-        columns = _.pluck(allowedValues, 'StringValue')
+        UserStory.getAllowedValues(boardField).then (allowedValues) =>
+          columns = _.pluck(allowedValues, 'StringValue')
 
-        _.intersection(columns, shownColumns.concat([column]))
+          _.intersection(columns, shownColumns.concat([column]))
 
-      @setBoardColumns boardField, newColumns
+      $.when(newColumns).then (cols) =>
+        @setBoardColumns boardField, cols
 
     setBoardColumns: (boardField, columns) ->
       @aggregator.beginLoad component: this, description: 'saving board columns'
@@ -208,14 +208,14 @@ define ->
         when 'ScheduleState' then _(UserStory.getAllowedValues(boardField)).pluck('StringValue').compact().value()
         else []
 
-    _setDefaultProject: (projects, userProfile) ->
+    _setDefaultProject: (projects) ->
       defaultProject = @get('prefs').findPreference(Preference::defaultProject)
       if defaultProject
         savedProject = projects.find _.isAttributeEqual('_ref', defaultProject.get('Value'))
         @set('project', savedProject) if savedProject
 
       if !@get 'project'
-        defaultProject = userProfile.get('DefaultProject')?._ref
+        defaultProject = @get('user').UserProfile.DefaultProject._ref
         proj = projects.find _.isAttributeEqual('_ref', defaultProject)
         @set 'project', proj || projects.first()
 
@@ -246,6 +246,7 @@ define ->
     loadSchema: (project) ->
       schema = new Schema()
       schema.clientMetricsParent = this
+      @set('schema', schema)
       schema.fetchForProject(project)
 
     _onModeChange: (model, value, options) ->

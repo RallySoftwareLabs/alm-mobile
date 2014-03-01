@@ -60,8 +60,10 @@ define ->
         'Owner'
         'Parent'
         'PlanEstimate'
+        'Project'
         'Ready'
         'Release'
+        'ScheduleState'
         'Tasks'
         app.session.get('boardField')
       ]

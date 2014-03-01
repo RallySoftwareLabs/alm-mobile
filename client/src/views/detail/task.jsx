@@ -30,7 +30,7 @@ define(function() {
           </div>
           <div className="row">
             <div className="col-xs-8 StateView">
-              <StringWithArrows item={ model } editMode={ newArtifact } field="State" label="State"/>
+              <StringWithArrows item={ model } allowedValues={ this.props.allowedValues.State } editMode={ newArtifact } field="State" label="State"/>
             </div>
             <div className="col-xs-4 OwnerView">
               <Owner item={ model } editMode={ newArtifact }/>

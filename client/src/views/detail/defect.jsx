@@ -36,12 +36,12 @@ define(function() {
             <div className="col-xs-8">
               <div className="row">
                 <div className="col-xs-12 ScheduleStateView">
-                  <StringWithArrows item={ model } editMode={ newArtifact } field={ this.getBoardField() } label={ this.getScheduleStateLabel() }/>
+                  <StringWithArrows item={ model } allowedValues={ this.props.allowedValues.ScheduleState } editMode={ newArtifact } field={ this.getBoardField() } label={ this.getScheduleStateLabel() }/>
                 </div>
               </div>
               <div className="row">
                 <div className="col-xs-12 StateView">
-                  <StringWithArrows item={ model } editMode={ newArtifact } field="State" label="State"/>
+                  <StringWithArrows item={ model } allowedValues={ this.props.allowedValues.State } editMode={ newArtifact } field="State" label="State"/>
                 </div>
               </div>
             </div>
@@ -51,15 +51,15 @@ define(function() {
           </div>
           <div className="row">
             <div className="col-xs-8 IterationView">
-              <Iteration item={ model } editMode={ newArtifact } field="Iteration" label="Iteration"/>
+              <Iteration item={ model } allowedValues={ this.props.allowedValues.Iteration } editMode={ newArtifact } field="Iteration" label="Iteration"/>
             </div>
             <div className="col-xs-4 ProjectView">
-              <TitledWell item={ model } editMode={ newArtifact } field='Project' label='Project'/>
+              <TitledWell item={ model } allowedValues={ this.props.allowedValues.Project } editMode={ newArtifact } field='Project' label='Project'/>
             </div>
           </div>
           <div className="row">
             <div className="col-xs-8 ReleaseView">
-              <StringWithArrows item={ model } editMode={ newArtifact } field="Release" label="Release"/>
+              <StringWithArrows item={ model } allowedValues={ this.props.allowedValues.Release } editMode={ newArtifact } field="Release" label="Release"/>
             </div>
             <div className="col-xs-4 DiscussionView">
               <Discussion item={ model } editMode={ newArtifact }/>
@@ -75,10 +75,10 @@ define(function() {
           </div>
           <div className="row">
             <div className="col-xs-6 SeverityView">
-              <TitledWell item={ model } editMode={ newArtifact } field='Severity' label='Severity'/>
+              <TitledWell item={ model } allowedValues={ this.props.allowedValues.Severity } editMode={ newArtifact } field='Severity' label='Severity'/>
             </div>
             <div className="col-xs-6 PriorityView">
-              <TitledWell item={ model } editMode={ newArtifact } field='Priority' label='Priority'/>
+              <TitledWell item={ model } allowedValues={ this.props.allowedValues.Priority } editMode={ newArtifact } field='Priority' label='Priority'/>
             </div>
           </div>
           <div className="row">

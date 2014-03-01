@@ -6,7 +6,7 @@ define ->
   AllowedValues = require 'collections/allowed_values'
   Collection = require 'collections/collection'
   Defect = require 'models/defect'
-  PortfolioItem = require 'models/portfolio_item'
+  Initiative = require 'models/initiative'
   Task = require 'models/task'
   TypeDefinition = require 'models/type_definition'
   UserStory = require 'models/user_story'
@@ -21,38 +21,27 @@ define ->
       projectSchema = project.get('SchemaVersion')
       @url = "#{appConfig.almWebServiceBaseUrl}/schema/@@WSAPI_VERSION/project/#{projectOid}/#{projectSchema}"
 
-      @fetch(accepts: json: 'text/plain').then =>
-        @updateModelsFromSchema()
+      @fetch(accepts: json: 'text/plain')
 
-    updateModelsFromSchema: ->
-      $.when.apply($, 
-        _.map [Defect, Task, UserStory, PortfolioItem], (m) =>
-          typePath = m::typePath
-          model = @find (model) -> model.get('TypePath').toLowerCase() == typePath
+    getAllowedValues: (model, fieldName) ->
+      @_getAttributeAllowedValues(@_getAttribute(model, fieldName))
 
-          allowedValues = []
+    hasAllowedValues: (model, fieldName) ->
+      @_getAttribute(model, fieldName).Constrained
 
-          if model
-            m::fields = {}
-            attributes = model.get('Attributes')
+    getFieldDisplayName: (model, fieldName) ->
+      @_getAttribute(model, fieldName).Name
 
-            _.each attributes, (attr) => m::fields[attr.ElementName] = {Name: attr.Name}
-            
-            allowedValues = _.map(
-              _.filter(attributes, (attr) => attr.ElementName in m::allowedValueFields),
-              @_getAttributeAllowedValues,
-              this
-            )
-
-          $.when.apply($, allowedValues).then (values...) =>
-            m::allowedValues = _.object values
-      )
+    _getAttribute: (model, fieldName) ->
+      typeDef = @find (type) -> type.get('TypePath').toLowerCase() == model.typePath
+      attribute = _.find(typeDef.get('Attributes'), ElementName: fieldName)
 
     _getAttributeAllowedValues: (attr) ->
-      return if _.isArray attr.AllowedValues
-        [attr.ElementName, _.map(attr.AllowedValues, (value) -> _.extend(value, AllowedValueType: attr.AllowedValueType))]
-      else
+      allowedValues = if _.isArray attr.AllowedValues
+        _.map(attr.AllowedValues, (value) -> _.extend(value, AllowedValueType: attr.AllowedValueType))
+      else if attr.Constrained
         av = new AllowedValues()
         av.clientMetricsParent = this
         av.url = attr.AllowedValues._ref
-        av.fetch().then -> [attr.ElementName, av.map((value) -> _.extend(value.toJSON(), AllowedValueType: attr.AllowedValueType))]
+        av.fetch().then -> av.map((value) -> _.extend(value.toJSON(), AllowedValueType: attr.AllowedValueType))
+      else []

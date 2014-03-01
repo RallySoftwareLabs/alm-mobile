@@ -40,15 +40,16 @@ define ->
 
     getFieldNames: ->
       [
-        'FormattedID',
-        'Name',
-        'Owner',
-        'Estimate',
-        'ToDo',
-        'State',
-        'Discussion',
-        'Description',
-        'Blocked',
-        'Ready',
+        'FormattedID'
+        'Name'
+        'Owner'
+        'Estimate'
+        'Project'
+        'ToDo'
+        'State'
+        'Discussion'
+        'Description'
+        'Blocked'
+        'Ready'
         'WorkProduct'
       ]

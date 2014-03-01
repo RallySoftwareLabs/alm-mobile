@@ -54,6 +54,7 @@ define ->
       addRoute 'board/:column/userstory/new', 'user_story_detail#storyForColumn'
       
       addRoute 'wall', 'wall#splash'
+      addRoute 'wall/create', 'wall#create'
       addRoute 'wall/:project', 'wall#show'
 
       addRoute 'userstories', 'home#userstories'

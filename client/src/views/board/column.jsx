@@ -3,6 +3,7 @@ define(function() {
   var React = require('react'),
       _ = require('underscore'),
       ReactView = require('views/base/react_view'),
+      app = require('application'),
       Card = require('views/board/card'),
       IterationHeader = require('views/iteration_header');
 
@@ -62,21 +63,26 @@ define(function() {
       return str + (model.isSynced() ? " (" + storiesAndDefects.length + ")" : " ...");
     },
     onHeaderClick: function(e) {
+      app.aggregator.recordAction({component: this, description: 'clicked column'});
       this.publishEvent('headerclick', this.props.model);
       e.preventDefault();
     },
     goLeft: function(e) {
+      app.aggregator.recordAction({component: this, description: 'clicked left on column'});
       this.publishEvent('goleft', this.props.model);
       e.preventDefault();
       e.stopPropagation();
     },
     goRight: function(e) {
+      app.aggregator.recordAction({component: this, description: 'clicked right on column'});
       this.publishEvent('goright', this.props.model);
       e.preventDefault();
       e.stopPropagation();
     },	
-	onAddClick: function() {
+    onAddClick: function() {
+      app.aggregator.recordAction({component: this, description: 'clicked add card'});
       this.publishEvent('router:route', 'board/' + this.props.model.get('value') + '/userstory/new');
+      e.preventDefault();
     }
   });
 });

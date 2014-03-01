@@ -8,8 +8,8 @@ define ->
 
     fetchSelf: (cb) ->
       @fetch
-        params:
-          fetch: 'ObjectID,DisplayName,UserProfile'
+        data:
+          fetch: 'ObjectID,DisplayName,UserProfile,DefaultProject,Subscription,SubscriptionID'
         success: (model, resp, opts) =>
           cb?(null, model)
         error: (model, resp, options) =>

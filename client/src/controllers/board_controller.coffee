@@ -47,17 +47,14 @@ define ->
         @subscribeEvent 'goright', @goRight
 
     onColumnClick: (col) ->
-      app.aggregator.recordAction component: this, description: 'clicked column'
       colValue = col.get('value')
       @redirectTo "board/#{colValue}"
 
     onCardClick: (oid, type) ->
-      app.aggregator.recordAction component: this, description: 'clicked card'
       mappedType = @getRouteTypeFromModelType(type)
       @redirectTo "#{mappedType}/#{oid}"
 
     goLeft: (col) ->
-      app.aggregator.recordAction component: this, description: 'clicked left on column'
       field = app.session.get('boardField')
       columns = @getColumnModels field
       colIndex = _.findIndex columns, _.isAttributeEqual('value', col.get('value'))
@@ -67,7 +64,6 @@ define ->
         @view.setProps model: newColumn
 
     goRight: (col) ->
-      app.aggregator.recordAction component: this, description: 'clicked right on column'
       field = app.session.get('boardField')
       columns = @getColumnModels field
       colIndex = _.findIndex columns, _.isAttributeEqual('value', col.get('value'))
