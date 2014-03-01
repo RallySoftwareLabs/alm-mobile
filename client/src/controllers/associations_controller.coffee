@@ -70,6 +70,7 @@ define ->
       else
         cls = associationClasses[association]
 
-      new cls()
-
+      coll = new cls()
+      coll.clientMetricsParent = this
+      coll
       
