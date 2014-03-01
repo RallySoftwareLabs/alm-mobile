@@ -48,7 +48,7 @@ define ->
         @showCreateView UserStory, View, props
 
     getFieldNames: ->
-      [
+      _.uniq([
         'Blocked'
         'Children'
         'Defects'
@@ -66,4 +66,4 @@ define ->
         'ScheduleState'
         'Tasks'
         app.session.get('boardField')
-      ]
+      ])

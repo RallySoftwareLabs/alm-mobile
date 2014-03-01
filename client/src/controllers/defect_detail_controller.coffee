@@ -39,7 +39,7 @@ define ->
         @showCreateView Defect, View, props
 
     getFieldNames: ->
-      [
+      _.uniq([
         'Blocked'
         'Description'
         'Discussion'
@@ -58,4 +58,4 @@ define ->
         'State'
         'Tasks'
         app.session.get('boardField')
-      ]
+      ])
