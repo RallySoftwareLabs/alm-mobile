@@ -52,11 +52,10 @@ define ->
       addRoute 'board', 'board#index'
       addRoute 'board/:column', 'board#column'
       addRoute 'board/:column/userstory/new', 'user_story_detail#storyForColumn'
-      addRoute 'board/:column/defect/new', 'defect_detail#defectForColumn'
       
       addRoute 'wall', 'wall#splash'
-      addRoute 'wall/create', 'wall#create'
       addRoute 'wall/:project', 'wall#show'
+      addRoute 'swimlaneWall', 'swimlane_wall#show'
 
       addRoute 'userstories', 'home#userstories'
       addRoute 'defects', 'home#defects'

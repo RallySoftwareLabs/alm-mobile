@@ -1,25 +1,35 @@
 .wall{
   h1 {
     font-family: "ProximaNovaBold";
-    font-size: 1.5em;
-    .small {
-      font-size: 1.125em;
-      color: #666;
-      font-weight: normal;
-    }
   }
 }
-.splash {
-  .header {
-    .btn-container {
-      margin-top: 20px;
-    }
+.swimlane {
+  border: solid #999999 1px;
+  color: black;
+  background: white;
+  margin: 2px;
+  padding: 5px;
+  width: 100%;
+  display: block;
+  vertical-align: center;
+  overflow: auto;
+
+  .teamName { 
+    display: inline-block;
+    font-size: 16px;
+    font-family: "ProximaNovaBold"; 
   }
-  .list-group-item {
-    cursor: pointer;
-  }
-  .project-item {
-    padding-left: 10px;
+
+  .iterationBox {
+      display: inline-block;
+      vertical-align: top;
+      overflow: hidden;
+      margin: 2px;
+      width: 100px;
+      height: 100px;
+      color: #333333;
+      background: #cccccc;
+      font-size: 10px;
   }
 }
 .flipchart {
@@ -61,7 +71,6 @@
   	  height: 70px;
       color: #333333;
       background: #cccccc;
-      cursor: pointer;
       
     	.header {
     	  margin: 2px;
@@ -81,7 +90,7 @@
     	  line-height: .4;
     	}
   	}
-  	
+ } 	
   	.grandchild {
   	  display: inline-block;
   	  background: Silver;
@@ -90,10 +99,9 @@
   	  margin: 2px;
       border: solid #666 1px;
   	  &.on {
-  	    background: @cyan;
+  	    background: @cyan-med;
   	    border: solid @cyan 1px;
         .animated;
         .pulse;
   	  }
   	}
-}
