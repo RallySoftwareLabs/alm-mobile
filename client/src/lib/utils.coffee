@@ -33,7 +33,7 @@ define ->
   return {
     getDetailHash: (model) ->
       attributes = model.attributes || model
-      "#{@_getNavigationType(@getTypeFromRef(attributes._ref))}/#{@getOidFromRef(attributes._ref)}"
+      "#{@_getNavigationType(@getTypeFromRef(attributes._ref).split('/')[0])}/#{@getOidFromRef(attributes._ref)}"
 
     getRef: (type, oid) ->
       "/#{@_getWsapiType(type)}/#{oid}"
@@ -46,7 +46,10 @@ define ->
       return '' unless ref
       parts = ref.split '/'
       piIndex = _.indexOf(parts, 'portfolioitem')
-      @getTypeForDetailLink parts[if piIndex > -1 then piIndex else parts.length - 2]
+      if piIndex > -1
+        parts.slice(piIndex, piIndex + 2).join('/')
+      else
+        parts[parts.length - 2]
 
     getProfileImageUrl: (ref, size = 25) ->
       return "" unless ref

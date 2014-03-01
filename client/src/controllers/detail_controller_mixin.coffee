@@ -10,15 +10,14 @@ define ->
       @view = @renderReactComponent LoadingIndicatorView, region: 'main', shared: false
       fieldNames = @getFieldNames()
       model = new Model(ObjectID: id)
-      $.when(
-        @_getAllowedValuesForFields(model)
-        model.fetch
-          data:
-            fetch: fieldNames.join ','
-      ).then (allowedValues, modelFetch) =>
-        @_setTitle model
-        @view = @renderReactComponent View, model: model, region: 'main', fieldNames: fieldNames, allowedValues: allowedValues
-        @markFinished()
+      model.fetch(
+        data:
+          fetch: fieldNames.join ','
+      ).then =>
+        @_getAllowedValuesForFields(model).then (allowedValues) =>
+          @_setTitle model
+          @view = @renderReactComponent View, model: model, region: 'main', fieldNames: fieldNames, allowedValues: allowedValues
+          @markFinished()
 
       @subscribeEvent 'saveField', @saveField
 
