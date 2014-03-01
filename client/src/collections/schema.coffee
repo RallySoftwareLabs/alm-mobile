@@ -24,17 +24,23 @@ define ->
       @fetch(accepts: json: 'text/plain')
 
     getAllowedValues: (model, fieldName) ->
-      @_getAttributeAllowedValues(@_getAttribute(model, fieldName))
+      attr = @getAttribute(model, fieldName)
+      if attr then @_getAttributeAllowedValues(attr) else []
 
     hasAllowedValues: (model, fieldName) ->
-      @_getAttribute(model, fieldName).Constrained
+      @getAttribute(model, fieldName).Constrained
 
     getFieldDisplayName: (model, fieldName) ->
-      @_getAttribute(model, fieldName).Name
+      @getAttribute(model, fieldName).Name
 
-    _getAttribute: (model, fieldName) ->
+    getTypeDef: (model) ->
       typeDef = @find (type) -> type.get('TypePath').toLowerCase() == model.typePath
-      attribute = _.find(typeDef.get('Attributes'), ElementName: fieldName)
+
+    getAttributes: (model) ->
+      @getTypeDef(model).get('Attributes')
+      
+    getAttribute: (model, fieldName) ->
+      attribute = _.find(@getAttributes(model), ElementName: fieldName)
 
     _getAttributeAllowedValues: (attr) ->
       allowedValues = if _.isArray attr.AllowedValues
