@@ -23,7 +23,7 @@ define(function() {
           </div>
           
           <div className="col-md-3 hidden-xs hidden-sm">
-            <h4><span aria-hidden="true" class="picto icon-rss"></span>{location.hostname}:{location.port}</h4>
+            <h4>{this.generateMobileURL()}</h4>
             Access details on your device
           </div>
 
@@ -32,6 +32,10 @@ define(function() {
           </div>
         </div>
       );
+     },
+     generateMobileURL: function() {
+        var port = (location.port != "80") ? ":" + location.port : "";
+        return location.hostname + port;
      }
   });
 });
