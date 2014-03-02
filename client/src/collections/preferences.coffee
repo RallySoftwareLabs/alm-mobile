@@ -28,6 +28,16 @@ define ->
         error: (collection, resp, options) =>
           cb?('auth', collection)
 
+    fetchWallPref: (projectId, cb) ->
+      @fetch
+        data:
+          fetch: 'ObjectID,Name,Value'
+          query: "(Name = \"wall.#{projectId}\")"
+        success: (collection, resp, options) =>
+          cb?(null, collection)
+        error: (collection, resp, options) =>
+          cb?('auth', collection)
+
     findPreference: (name) ->
       @find _.isAttributeEqual('Name', name)
 

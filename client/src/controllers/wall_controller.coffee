@@ -24,18 +24,16 @@ define ->
       prefs = new Preferences()
       prefs.clientMetricsParent = this
       projects = new Projects()
+      projects.clientMetricsParent = this
       @view = @renderReactComponent WallSplashView, region: 'main', model: projects
       @subscribeEvent 'selectProject', @onSelectProject
       @subscribeEvent 'showCreateWall', @showCreateWallPage
 
       prefs.fetchWallPrefs().then =>
-        queryString = prefs.reduce((result, pref) ->
+        queryString = utils.createQueryFromCollection(prefs, 'ObjectID', 'OR', (pref) ->
           prefName = pref.get('Name')
-          objectId = prefName.substring(prefName.indexOf('.') + 1)
-          queryParam = "(ObjectID = #{objectId})" 
-
-          if result then "(#{result} OR #{queryParam})" else queryParam
-        , "")
+          prefName.substring(prefName.indexOf('.') + 1)
+        )
 
         projects.fetchAllPages(
           data:
@@ -58,48 +56,62 @@ define ->
 
       @updateTitle "Enterprise Backlog"
 
-      @whenProjectIsLoaded project: project, showLoadingIndicator: false, fn: =>
-        @updateTitle "Enterprise Backlog for #{app.session.getProjectName()}"
-        projectRef = "/project/#{project}"#334329159'#12271
+      prefs = new Preferences()
+      prefs.clientMetricsParent = this
+      prefFetch = prefs.fetchWallPref(project)
 
-        initiativesAndFeaturesPromise = $.when(
-          @fetchInitiatives(projectRef)
-          @fetchFeatures(projectRef)
-        )
-        userStoriesFetchPromise = @fetchUserStories(projectRef)
-        
-        initiativesAndFeaturesPromise.then =>
-          if @initiatives.isEmpty()
+      @whenProjectIsLoaded project: project, showLoadingIndicator: false, fn: =>
+        $.when(prefFetch).then =>
+          if !prefs.length
             @initiatives.trigger('add')
             @markFinished()
-          else
-            @features.each (f) =>
-              parentRef = f.get('Parent')._ref
-              initiative = @initiatives.find _.isAttributeEqual('_ref', parentRef)
 
-              if initiative?
-                initiative.features ?= new Features()
-                initiative.features.add f
-            
-            @initiatives.trigger('add')
+          pref = prefs.first()
+          chosenStates = @getChosenStates(pref)
+          @updateTitle "Enterprise Backlog for #{app.session.getProjectName()}"
+          projectRef = "/project/#{project}"#334329159'#12271
 
-            userStoriesFetchPromise.then =>
-              @userStories.each (us) =>
-                parentRef = us.get('PortfolioItem')._ref
-                feature = @features.find _.isAttributeEqual('_ref', parentRef)
-
-                if feature?
-                  feature.userStories ?= new UserStories()
-                  feature.userStories.add us
-
+          initiativesAndFeaturesPromise = $.when(
+            @fetchInitiatives(projectRef, chosenStates)
+            @fetchFeatures(projectRef)
+          )
+          userStoriesFetchPromise = @fetchUserStories(projectRef)
+          
+          initiativesAndFeaturesPromise.then =>
+            if @initiatives.isEmpty()
               @initiatives.trigger('add')
               @markFinished()
+            else
+              @features.each (f) =>
+                parentRef = f.get('Parent')._ref
+                initiative = @initiatives.find _.isAttributeEqual('_ref', parentRef)
 
-    fetchInitiatives: (projectRef) ->
+                if initiative?
+                  initiative.features ?= new Features()
+                  initiative.features.add f
+              
+              @initiatives.trigger('add')
+
+              userStoriesFetchPromise.then =>
+                @userStories.each (us) =>
+                  parentRef = us.get('PortfolioItem')._ref
+                  feature = @features.find _.isAttributeEqual('_ref', parentRef)
+
+                  if feature?
+                    feature.userStories ?= new UserStories()
+                    feature.userStories.add us
+
+                @initiatives.trigger('add')
+                @markFinished()
+
+    fetchInitiatives: (projectRef, chosenStates) ->
+      statesQuery = utils.createQueryFromCollection(chosenStates, 'State.Name', 'OR', (item) ->
+        "\"#{item}\""
+      )
       @initiatives.fetchAllPages
         data:
           fetch: 'FormattedID,Name'
-          query: '(State.Name = "Building")'
+          query: statesQuery
           order: 'Rank ASC'
           project: projectRef
           projectScopeUp: false
@@ -141,3 +153,6 @@ define ->
       user = app.session.get('user')
       prefs.updateWallPreference(user, wallInfo).then =>
         @redirectTo "/wall/#{utils.getOidFromRef(wallInfo.project.get('_ref'))}"
+
+    getChosenStates: (pref) ->
+      JSON.parse(pref.get('Value')).chosenStates
