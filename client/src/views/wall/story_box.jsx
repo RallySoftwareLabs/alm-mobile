@@ -8,11 +8,16 @@ define(function() {
       return <div className={this.getClass()} />;
     },
     getClass: function() {
-      if (this.props.model.isScheduled()) {
-        return "grandchild on";
+      if (this.props.model != null) {
+        if (this.props.model.isScheduled()) {
+          return "grandchild on";
+        } 
       } else {
-        return "grandchild"; 
+        if (this.props.mode == "scheduled") {
+          return "grandchild on";
+        }
       }
+      return "grandchild"; 
     }
   });
 });
