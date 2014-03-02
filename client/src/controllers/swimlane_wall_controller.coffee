@@ -26,7 +26,7 @@ define ->
         data:
           fetch: 'Name'
           order: 'Name' 
-          query: '((((ObjectID = "9448887926") OR (ObjectID = "184289780")) OR (ObjectID = "1971104447")) OR (ObjectID = "6895507658"))'
+          query: '(((((ObjectID = "9448887926") OR (ObjectID = "184289780")) OR (ObjectID = "1971104447")) OR (ObjectID = "6895507658")) OR (ObjectID = "2870644941"))'
         success: (teams) =>
           @fetchIterations team for team in teams.models
 
@@ -35,7 +35,7 @@ define ->
       projectRef = team.get('_ref') 
       team.iterations.fetch       
         data: 
-          fetch: 'Name,StartDate,EndDate,Project'
+          fetch: 'Name,StartDate,EndDate,PlannedVelocity,Notes,Theme,Project'
           query: '(EndDate > today)'
           order: 'EndDate'
           project: projectRef

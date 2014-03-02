@@ -4,7 +4,7 @@ define(function() {
       ReactView = require('views/base/react_view'),
       app = require('application'),
       utils = require('lib/utils'),
-  		StoryBox = require ('views/wall/story_box');
+      StoryBox = require ('views/wall/story_box');
   	
   return ReactView.createBackboneClass({
     render: function() {
@@ -30,7 +30,7 @@ define(function() {
     },
     onClick: function(e) {
       var m = this.props.model;
-      app.aggregator.recordAction({component: this, description: "clicked wall card"});
+      app.aggregator.recordAction({component: this, description: "clicked feature card"});
       this.publishEvent('cardclick', utils.getOidFromRef(m.get('_ref')), m.get('_type'));
       e.preventDefault();
     }

@@ -15,7 +15,7 @@ define(function() {
       }
       return (
         <div className="swimlane">
-          <div className="teamName">{model.get('Name')}</div>
+          <div className="teamName col-md-1 col-xs-12">{model.get('Name')}</div>
           <div>
             {iterationBoxes}
           </div>

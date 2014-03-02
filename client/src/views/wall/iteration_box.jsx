@@ -21,8 +21,9 @@ define(function() {
         }
       }
       return (
-        <div className="iterationBox">
+        <div className="iterationBox col-xs-6 col-sm-2 col-md-2">
           {model.get('Name')}<br />
+          Planned Velocity: {model.get('PlannedVelocity')}<br />
           <div className="grandchildren">
             {storyBoxes}
           </div>
