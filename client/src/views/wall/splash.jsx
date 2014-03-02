@@ -20,13 +20,14 @@ define(function() {
             <div className="row header">
               <div className="col-xs-12">
                 <h1 className="pull-left">View a wall</h1>
-                <div className="pull-right btn-container">
+                <div className="pull-right btn-container hidden-xs hidden-sm">
                   <button className="btn btn-primary" onClick={ this.showCreateWall }>Create a new wall</button>
                 </div>
               </div>
             </div>
+            <p className="lead visible-xs visible-sm">Choose the wall from your meeting to dive into the details.</p>
             <div className="list-group">{ this._getWallProjects() }</div>
-
+            <p className="lead clearfix hidden-xs hidden-sm">Getting together with your team to plan?  Walls are optimized for projectors and mobile devices.  Create one, project it on the wall, and your team can use their mobile devices to see more details.</p>
           </div>
         </div>
       );
