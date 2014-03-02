@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 define(function() {
   var $ = require('jquery'),
+      moment = require('moment'),
 			React = require('react'),
   		ReactView = require('views/base/react_view'),
   		FieldMixin = require('views/field/field_mixin');
@@ -49,7 +50,14 @@ define(function() {
 
     _getDisplayMarkup: function() {
       var fieldValue = this.getFieldDisplayValue();
-      return fieldValue ? fieldValue : <span dangerouslySetInnerHTML={{__html: '&nbsp;'}} />;
+      return fieldValue ? this._renderFieldValue(fieldValue) : <span dangerouslySetInnerHTML={{__html: '&nbsp;'}} />;
+    },
+
+    _renderFieldValue: function(value) {
+      if (this.props.inputType === 'date') {
+        return moment(value).format('L');
+      }
+      return value;
     }
   });
 });

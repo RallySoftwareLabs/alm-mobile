@@ -10,20 +10,21 @@ define ->
       @view = @renderReactComponent LoadingIndicatorView, region: 'main', shared: false
       fieldNames = @getFieldNames()
       model = new Model(ObjectID: id)
-      $.when(
-        @_getAllowedValuesForFields(model)
-        model.fetch
-          data:
-            fetch: fieldNames.join ','
-      ).then (allowedValues, modelFetch) =>
-        @_setTitle model
-        @view = @renderReactComponent View, model: model, region: 'main', fieldNames: fieldNames, allowedValues: allowedValues
-        @markFinished()
+      model.clientMetricsParent = this
+      model.fetch(
+        data:
+          fetch: fieldNames.join ','
+      ).then =>
+        @_getAllowedValuesForFields(model).then (allowedValues) =>
+          @_setTitle model
+          @view = @renderReactComponent View, model: model, region: 'main', fieldNames: fieldNames, allowedValues: allowedValues
+          @markFinished()
 
       @subscribeEvent 'saveField', @saveField
 
     showCreateView: (Model, View, defaultValues = {}) ->
       model = new Model _.defaults(defaultValues, Project: app.session.get('project').get('_ref'))
+      model.clientMetricsParent = this
       @_getAllowedValuesForFields(model).then (allowedValues) =>
         @view = @renderReactComponent View, model: model, region: 'main', newArtifact: true, allowedValues: allowedValues
         @subscribeEvent 'saveField', @saveField

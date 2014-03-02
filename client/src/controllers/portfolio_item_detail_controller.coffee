@@ -29,14 +29,21 @@ define ->
             newModel.urlRoot = model.urlRoot.replace('portfolioitem', model.get('Children')._type.toLowerCase())
     getFieldNames: ->
       [
+        'ActualStartDate'
+        'ActualEndDate'
         'Children'
         'UserStories'
         'Description'
         'Discussion'
         'FormattedID'
+        'InvestmentCategory'
         'Name'
         'Owner'
         'Parent'
+        'PlannedStartDate'
+        'PlannedEndDate'
+        'PreliminaryEstimate'
+        'Project'
         'Ready'
         'State'
       ]

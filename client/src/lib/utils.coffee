@@ -12,7 +12,6 @@ define ->
   toBeReplaced = new RegExp('[\\s_\\.]', 'g')
   toBeRemoved = new RegExp('[\\+]', 'g')
 
-
   _.mixin
     capitalize: (string = '') ->
       string.charAt(0).toUpperCase() + string.substring(1).toLowerCase()
@@ -33,7 +32,7 @@ define ->
   return {
     getDetailHash: (model) ->
       attributes = model.attributes || model
-      "#{@_getNavigationType(@getTypeFromRef(attributes._ref))}/#{@getOidFromRef(attributes._ref)}"
+      "#{@_getNavigationType(@getTypeFromRef(attributes._ref).split('/')[0])}/#{@getOidFromRef(attributes._ref)}"
 
     getRef: (type, oid) ->
       "/#{@_getWsapiType(type)}/#{oid}"
@@ -46,12 +45,32 @@ define ->
       return '' unless ref
       parts = ref.split '/'
       piIndex = _.indexOf(parts, 'portfolioitem')
-      @getTypeForDetailLink parts[if piIndex > -1 then piIndex else parts.length - 2]
+      if piIndex > -1
+        parts.slice(piIndex, piIndex + 2).join('/')
+      else
+        parts[parts.length - 2]
 
     getProfileImageUrl: (ref, size = 25) ->
       return "" unless ref
       baseUrl = appConfig.almWebServiceBaseUrl
       "#{baseUrl}/profile/image/#{@getOidFromRef(ref)}/#{size}.sp"
+
+    ###*
+     * Maps a collection to a Rally ALM WSAPI query string.
+     *
+     * @param {Collection} collection - The collection to convert to a query
+     * @param {String} property - Which field to use as the property of the filter
+     * @param {String} joinType - To AND or OR all the values
+     * @param {Function} itemValueFn - A function to map each item in the collection to its value to filter on
+     * @public
+    ###
+    createQueryFromCollection: (collection, property, joinType, itemValueFn) ->
+      queryString = collection.reduce((result, item) ->
+        value = itemValueFn(item)
+        queryParam = "(#{property} = #{value})" 
+
+        if result then "(#{result} #{joinType} #{queryParam})" else queryParam
+      , "")
 
     toCssClass: (value) ->
       str = value.toLowerCase();
