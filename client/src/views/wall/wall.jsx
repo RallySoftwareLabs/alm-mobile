@@ -3,6 +3,8 @@ define(function() {
   var React = require('react'),
       ReactView = require('views/base/react_view'),
   		Flipchart = require ('views/wall/flipchart');
+      StoryBox = require ('views/wall/story_box');
+
   	
   return ReactView.createBackboneClass({
     render: function() {
@@ -15,11 +17,17 @@ define(function() {
       }
       return (  
         <div className="wall"> 
-          <h1>
-            Which items have been planned?<br />
-            <small>Features and Stories turn blue when scheduled in an iteration or release</small>
-          </h1>
-          <div className="itemList">
+          <div className="col-md-9">
+            <h1>What is getting planned?</h1>
+            <p><StoryBox />Stories not scheduled <StoryBox mode="scheduled" />Stories scheduled in an Iteration or Release</p>
+          </div>
+          
+          <div className="col-md-3 hidden-xs hidden-sm">
+            <h4><span aria-hidden="true" class="picto icon-rss"></span>{location.hostname}:{location.port}</h4>
+            Access details on your device
+          </div>
+
+          <div className="itemList col-md-12">
             {flipchartNodes}
           </div>
         </div>
