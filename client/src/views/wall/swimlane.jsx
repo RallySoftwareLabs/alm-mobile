@@ -1,8 +1,8 @@
 /** @jsx React.DOM */
 define(function() {
   var React = require('react'),
-      ReactView = require('views/base/react_view'),
-  		IterationBox = require ('views/wall/iteration_box');
+  ReactView = require('views/base/react_view'),
+  IterationBox = require ('views/wall/iteration_box');
    
   return ReactView.createBackboneClass({
     render: function() {
