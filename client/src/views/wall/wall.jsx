@@ -2,9 +2,9 @@
 define(function() {
   var React = require('react'),
       ReactView = require('views/base/react_view'),
-  		Flipchart = require ('views/wall/flipchart');
-      StoryBox = require ('views/wall/story_box');
-
+  		Flipchart = require ('views/wall/flipchart'),
+      StoryBox = require ('views/wall/story_box'),
+      DeviceLoginTip = require ('views/wall/device_login_tip');
   	
   return ReactView.createBackboneClass({
     render: function() {
@@ -21,12 +21,7 @@ define(function() {
             <h1>What is getting planned?</h1>
             <p><StoryBox />Stories not scheduled <StoryBox mode="scheduled" />Stories scheduled in an Iteration or Release</p>
           </div>
-          
-          <div className="col-md-3 hidden-xs hidden-sm">
-            <h4>{this.generateMobileURL()}</h4>
-            Access details on your device
-          </div>
-
+          <DeviceLoginTip />
           <div className="itemList col-md-12">
             {flipchartNodes}
           </div>

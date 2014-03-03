@@ -56,7 +56,7 @@ define ->
       projectRef = iteration.get('Project')._ref
       iteration.userStories.fetch
         data:
-          fetch: 'FormattedID,Name,Release,Iteration,Blocked'
+          fetch: 'FormattedID,Name,Release,Iteration,PlanEstimate,Blocked'
           query: '(Iteration = ' + iterationRef + ')'
           order: 'Rank'
           project: projectRef
@@ -72,7 +72,7 @@ define ->
       projectRef = iteration.get('Project')._ref
       iteration.defects.fetch
         data:
-          fetch: 'FormattedID,Name,Release,Iteration,Blocked'
+          fetch: 'FormattedID,Name,Release,Iteration,PlanEstimate,Blocked'
           query: '(Iteration = ' + iterationRef + ')'
           order: 'Rank'
           project: projectRef

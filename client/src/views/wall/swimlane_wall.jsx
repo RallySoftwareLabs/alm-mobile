@@ -2,7 +2,8 @@
 define(function() {
   var React = require('react'),
       ReactView = require('views/base/react_view'),
-  		Swimlane = require ('views/wall/swimlane');
+  		Swimlane = require ('views/wall/swimlane'),
+      DeviceLoginTip = require ('views/wall/device_login_tip');
   	
   return ReactView.createBackboneClass({
     render: function() {
@@ -11,8 +12,12 @@ define(function() {
       });
       return (  
         <div className="wall"> 
-          <h1>How much planning is done?</h1>
-          <div className="swimlaneList">
+          <div className="col-md-9">
+            <h1>How much planning is done?</h1>
+            <p><StoryBox mode="scheduled" />Stories <div className="picto icon-defect"/>Defects</p>
+          </div>
+          <DeviceLoginTip />
+          <div className="swimlaneList col-md-12">
             {swimlanes}
           </div>
         </div>

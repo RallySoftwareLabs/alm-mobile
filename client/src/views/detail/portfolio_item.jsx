@@ -52,29 +52,29 @@ define(function() {
 
           <div className="row">
             <div className="col-xs-6 col-md-2 PlannedStartDateView">
-              <TitledWell item={ model } editMode={ newArtifact } field='PlannedStartDate' label='Planned Start' inputType='date'/>
+              <TitledWell item={ model } editMode={ newArtifact } field='PlannedStartDate' label='Planned Start' inputType='date' icon='calendar'/>
             </div>
             <div className="col-xs-6 col-md-2 PlannedEndDateView">
-              <TitledWell item={ model } editMode={ newArtifact } field='PlannedEndDate' label='Planned End' inputType='date'/>
+              <TitledWell item={ model } editMode={ newArtifact } field='PlannedEndDate' label='Planned End' inputType='date' icon='calendar'/>
             </div>
           </div>
 
           <div className="row">
             <div className="col-xs-6 col-md-2 ActualStartDateView">
-              <TitledWell item={ model } editMode={ newArtifact } field='ActualStartDate' label='Actual Start' inputType='date'/>
+              <TitledWell item={ model } editMode={ newArtifact } field='ActualStartDate' label='Actual Start' inputType='date' icon='calendar'/>
             </div>
             <div className="col-xs-6 col-md-2 ActualEndDateView">
-              <TitledWell item={ model } editMode={ newArtifact } field='ActualEndDate' label='Actual End' inputType='date'/>
+              <TitledWell item={ model } editMode={ newArtifact } field='ActualEndDate' label='Actual End' inputType='date' icon='calendar'/>
             </div>
           </div>
 
-            <div className="col-xs-12 col-sm-6 StateView">
-                <StringWithArrows item={ model } allowedValues={ this.props.allowedValues.State } editMode={ newArtifact } field="State" label="State"/>
-            </div>
             <div className="col-xs-12 col-sm-6 ProjectView">
               <TitledWell item={ model } allowedValues={ this.props.allowedValues.Project } editMode={ newArtifact } field='Project' label='Project'/>
             </div>
-          
+            <div className="col-xs-12 col-sm-6 StateView">
+                <StringWithArrows item={ model } allowedValues={ this.props.allowedValues.State } editMode={ newArtifact } field="State" label="State"/>
+            </div>
+           
         
           <div className="row">
             <div className="col-xs-4 InvestmentCategoryView">
