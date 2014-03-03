@@ -30,7 +30,7 @@ define(function() {
     },
     onClick: function(e) {
       var m = this.props.model;
-      app.aggregator.recordAction({component: this, description: "clicked initiative flipchart header"});
+      app.aggregator.recordAction({component: this, description: "clicked flipchart header"});
       this.publishEvent('cardclick', utils.getOidFromRef(m.get('_ref')), m.get('_type'));
       e.preventDefault();
     }
