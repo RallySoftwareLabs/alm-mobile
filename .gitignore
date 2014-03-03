@@ -2,6 +2,7 @@ config.json
 grunt-aws.json
 client/gen
 client/dist
+client/dist.zip
 server/gen
 public/
 node_modules/
