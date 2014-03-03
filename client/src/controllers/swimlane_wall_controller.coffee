@@ -19,7 +19,7 @@ define ->
       @fetchTeams()
       @whenProjectIsLoaded project: project, showLoadingIndicator: false, fn: =>
         @updateTitle "Plan for #{app.session.getProjectName()}"
-        projectRef = "/project/#{project}"#334329159'#12271
+        projectRef = "/project/#{project}"
 
     fetchTeams: ->
       @teams.fetchAllPages
