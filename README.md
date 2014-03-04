@@ -1,6 +1,8 @@
 ![Rally Labs](client/assets/img/rally-labs-logo-trans.png)
 
-Use of this mobile application is on an as-is, as-available basis and it not subject to Rally’s Service Level Agreement.  Support of this mobile application, evolution of this application and even ongoing existence of this Rally Labs mobile application is not guaranteed.
+Development of the mobile Rally Software ALM platform is a project of Rally Innovation Labs. For more info, visit http://labs.rallydev.com.
+
+Use of this mobile application is on an as-is, as-available basis and it not subject to Rally’s Service Level Agreement. Support of this mobile application, evolution of this application and even ongoing existence of this Rally Labs mobile application is not guaranteed.
 
 ALM Mobile [![Stories in Ready](https://badge.waffle.io/RallySoftwareLabs/alm-mobile.png?label=ready)](http://waffle.io/RallySoftwareLabs/alm-mobile)
 =========
