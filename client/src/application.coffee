@@ -9,11 +9,20 @@ define ->
   Session = require 'models/session'
   Router = require 'router'
 
+  hideURLbar = -> window.scrollTo(0, 1)
+
+  fixIE10 = ($) ->
+    if navigator.userAgent.match /IEMobile\/10\.0/
+      $('head').append '<style>@-ms-viewport{width:auto!important}</style>'
+
   class Application
 
     _.extend @prototype, Messageable
 
     initialize: ->
+
+      setTimeout(hideURLbar, 0)
+      fixIE10($)
 
       @aggregator = new RallyMetrics.Aggregator
         flushInterval: 10000

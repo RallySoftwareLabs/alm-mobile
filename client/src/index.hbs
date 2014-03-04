@@ -68,15 +68,7 @@
       };
     });
 
-    var hideURLbar = function() {
-      window.scrollTo(0,1);
-    };
-
-    require(['jquery'], function($) {
-      $(function() {
-        setTimeout(hideURLbar, 0);
-      }, false);
-    });
+    window.initializeApp = true;
   </script>
   <script src="/js/app.js"></script>
 </head>
