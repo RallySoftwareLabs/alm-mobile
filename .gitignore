@@ -12,3 +12,5 @@ tmtagsHistory
 .authors
 *.log
 *.DS_Store
+
+*.zip
