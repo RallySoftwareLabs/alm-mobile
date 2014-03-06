@@ -119,7 +119,7 @@ define ->
     fetchFeatures: (projectRef) ->
       @features.fetchAllPages
         data:
-          fetch: 'Parent',
+          fetch: 'Parent,FormattedID',
           query: "(Parent != null)",
           order: 'Rank ASC'
           project: projectRef
