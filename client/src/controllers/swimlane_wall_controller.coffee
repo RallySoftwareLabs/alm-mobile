@@ -43,7 +43,7 @@ define ->
           projectScopeDown: false
           pagesize: 6
         success: =>
-          this.view.forceUpdate()
+          team.iterations.trigger('add')
           @fetchScheduledItems iteration for iteration in team.iterations.models
 
     fetchScheduledItems: (iteration) =>
@@ -64,7 +64,7 @@ define ->
           projectScopeDown: false
           pagesize: 50
         success: =>
-          this.view.forceUpdate()
+          iteration.userStories.trigger('add')
 
     fetchDefects: (iteration) =>
       iteration.defects = new Defects()      

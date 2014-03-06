@@ -60,7 +60,7 @@ define(function() {
     percentLoaded: function(planEstimateTotal,plannedVelocity,unestimatedItemsCount) {
       var unestimatedItemsWarning = "";
       if (unestimatedItemsCount) {
-        unestimatedItemsWarning = "with" + unestimatedItemsCount + " unestimated items.";
+        unestimatedItemsWarning = "with " + unestimatedItemsCount + " unestimated items.";
       }
 
       if (plannedVelocity == null) {
