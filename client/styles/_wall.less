@@ -106,8 +106,7 @@
         cursor: pointer;
     	}
     	&.on {
-    	  border: solid #333333 1px;
-    	  border: solid @cyan 2px;
+    	  border: none;
     	  background: @cyan-med;
     	  color: black;
     	  .animated;
@@ -121,16 +120,14 @@
 .storyBox {
   display: inline-block;
   vertical-align: middle;
-  background: Silver;
+  background: #eee;
   width: 12px;
   height: 12px;
   margin: 2px;
-  border: solid #666 1px;
   
   &.scheduled {
-        border: solid #333333 1px;
         border: solid @cyan 2px;
-        background: @cyan-med;
+        background: @cyan;
         color: black;
         .animated;
         .pulse;
