@@ -19,14 +19,15 @@ define(function() {
         }
         return (  
           <div className={this.getChildClass(userStories)} onClick={this.onClick}>
-               <div className="grandchildren">
+               <div className="header">{model.get('FormattedID')}</div>
+               <div className="storyBoxes">
                   {storyBoxes}
                </div>
           </div>
       );
     },
     getChildClass: function(userStories) {
-      return (userStories && userStories.areAllStoriesScheduled()) ? "child on" : "child";
+      return (userStories && userStories.areAllStoriesScheduled()) ? "featureCard on" : "featureCard";
     },
     onClick: function(e) {
       var m = this.props.model;

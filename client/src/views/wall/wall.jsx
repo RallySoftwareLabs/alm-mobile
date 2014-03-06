@@ -19,7 +19,7 @@ define(function() {
         <div className="wall"> 
           <div className="col-md-9">
             <h1>What is getting planned?</h1>
-            <p><StoryBox />Stories not scheduled <StoryBox mode="scheduled" />Stories scheduled in an Iteration or Release</p>
+            <p><StoryBox />Unscheduled Stories <StoryBox planStatus="scheduled" />Stories scheduled in an Iteration or Release <StoryBox planStatus="completed" />Accepted Stories</p>
           </div>
           <DeviceLoginTip />
           <div className="itemList col-md-12">
