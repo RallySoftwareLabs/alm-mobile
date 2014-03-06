@@ -1,4 +1,11 @@
+path = require 'path'
+_ = require 'lodash'
+
 module.exports = (grunt) ->
+
+  serverPort = grunt.option('port') || 8900
+  inlinePort = grunt.option('port') || 8901
+  debug = grunt.option('verbose') || false
 
   grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
@@ -9,16 +16,21 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-requirejs'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-watch'
+  grunt.loadNpmTasks 'grunt-express'
+  grunt.loadNpmTasks 'grunt-mocha'
   grunt.loadNpmTasks 'grunt-react'
   grunt.loadNpmTasks 'grunt-replace'
   grunt.loadNpmTasks 'grunt-s3'
-  grunt.loadNpmTasks 'grunt-simple-mocha'
 
-  grunt.registerTask 'default', ['clean','coffee','react','less','compile-handlebars', 'copy:js','requirejs','replace','copy','concat']
+  grunt.registerTask 'default', ['clean','coffee','react','less','compile-handlebars:allStatic', 'copy:js','requirejs','replace:js','copy:assets','concat']
 
-  grunt.registerTask 'test', ['clean', 'coffee', 'simplemocha']
+  grunt.registerTask 'test', ['test:conf', 'express:inline', 'mocha']
+  grunt.registerTask 'test:conf', ['clean', 'coffee', 'react', 'less', 'copy','requirejs', 'replace']
+  grunt.registerTask 'test:server', "Starts a test server at localhost:#{serverPort}, specify a different port with --port=<port>", ['express:server', 'express-keepalive']
 
-  grunt.registerTask 'heroku', ['clean','coffee','less','compile-handlebars', 'copy:js','requirejs','replace','copy','concat']
+  grunt.registerTask 'heroku', ['clean','coffee','less','compile-handlebars:allStatic', 'copy:js','requirejs','replace:js','copy','concat']
+
+  testFiles = grunt.file.expand ['client/test/**/*_spec.js']
 
   grunt.initConfig
 
@@ -40,7 +52,7 @@ module.exports = (grunt) ->
 
       clientIndexHtml:
         files: ['config.json', 'client/src/*.hbs']
-        tasks: ['compile-handlebars']
+        tasks: ['compile-handlebars:allStatic']
 
       clientTest:
         files: 'client/test/**/*.coffee'
@@ -59,6 +71,17 @@ module.exports = (grunt) ->
           force: true
         files: [
          expand: true, flatten: true, src: ['client/gen/js/app.js'], dest: 'client/dist/js'
+        ]
+
+      testPage:
+        options:
+          prefix: ""
+          variables: '__testFiles__': _.map(testFiles, (file) ->
+            "'#{file.substring(0, file.length - 3)}'"
+          ).join(',\n')
+        files: [
+          src: ['client/test/testpage.tpl']
+          dest: 'testpage.html'
         ]
 
     coffee:
@@ -154,18 +177,28 @@ module.exports = (grunt) ->
         files:
           'client/dist/js/app.min.js' : 'client/dist/js/app.js'
 
-    simplemocha:
+    express:
       options:
-        globals: ['expect']
-        ignoreLeaks: true
-        timeout: 3000
-        ui: 'bdd'
-        reporter: 'tap'
-      all:
-        src: [
-          'node_modules/chai/chai.js'
-          'client/gen/js/test/**/*.js'
+        bases: [
+          path.resolve(__dirname)
         ]
+        server: path.resolve(__dirname, 'client', 'test', 'server.js')
+        debug: debug
+      server:
+        options:
+          port: serverPort
+      inline:
+        options:
+          port: inlinePort
+
+    mocha:
+      options:
+        log: true
+        urls: ["http://localhost:#{inlinePort}/testpage.html"]
+        logErrors: true
+        run: false
+      client:
+        reporter: 'tap'
 
     aws: grunt.file.readJSON('grunt-aws.json')
     s3:

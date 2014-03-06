@@ -15,8 +15,8 @@ define ->
 
   class WallController extends SiteController
     create: ->
-      projectsFetch = app.session.fetchAllProjects()
-      @view = @renderReactComponent WallCreateView, region: 'main', model: app.session.get('projects'), changeOptions: 'complete'
+      projectsFetch = Projects.fetchAll()
+      @view = @renderReactComponent WallCreateView, region: 'main', model: Projects.projects, changeOptions: 'complete'
       @subscribeEvent 'createwall', @createWall
       projectsFetch.then => @markFinished()
 

@@ -1,6 +1,8 @@
 ![Rally Labs](client/assets/img/rally-labs-logo-trans.png)
 
-Use of this mobile application is on an as-is, as-available basis and it not subject to Rally’s Service Level Agreement.  Support of this mobile application, evolution of this application and even ongoing existence of this Rally Labs mobile application is not guaranteed.
+Development of the mobile Rally Software ALM platform is a project of Rally Innovation Labs. For more info, visit http://labs.rallydev.com.
+
+Use of this mobile application is on an as-is, as-available basis and it not subject to Rally’s Service Level Agreement. Support of this mobile application, evolution of this application and even ongoing existence of this Rally Labs mobile application is not guaranteed.
 
 ALM Mobile [![Stories in Ready](https://badge.waffle.io/RallySoftwareLabs/alm-mobile.png?label=ready)](http://waffle.io/RallySoftwareLabs/alm-mobile)
 =========
@@ -9,7 +11,7 @@ This site is currently running at https://m.rallydev.com.
 
 ## How can I contribute?
 
-We welcome pull requests, so if you would like the site to behave differently or would like to see additional functionality, you can make the code change yourself and [submit a pull request](https://help.github.com/articles/creating-a-pull-request). If you'd simply like to file a defect or feature request, you can [submit a GitHub issue](https://github.com/RallySoftwareLabs/alm-mobile/issues).
+We welcome pull requests, so if you would like the site to behave differently or would like to see additional functionality, you can make the code change yourself and [submit a pull request](https://help.github.com/articles/creating-a-pull-request). If you'd simply like to file a defect or feature request, you can [submit a GitHub issue](https://github.com/RallySoftwareLabs/alm-mobile/issues). You can also track the progress of the issue on our [waffle.io](http://waffle.io/RallySoftwareLabs/alm-mobile) board.
 
 ## Ready to hack? Here's how.
 
