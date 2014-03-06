@@ -14,4 +14,8 @@ define ->
           @typePath = utils.getTypeFromRef(ref)
 
         fetchPromise
+
+    constructor: (typeDef) ->
+      this.typePath = typeDef.get('ElementName')
+      this.urlRoot = appConfig.almWebServiceBaseUrl + '/webService@@WSAPI_VERSION/' + this.typePath
    

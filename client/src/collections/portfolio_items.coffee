@@ -6,3 +6,8 @@ define ->
   class PortfolioItems extends Collection
     url: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/portfolioitem'
     model: PortfolioItem
+
+   	constructor: (typeDef) ->
+      this.typePath = typeDef.get('ElementName')
+      this.urlRoot = appConfig.almWebServiceBaseUrl + '/webService@@WSAPI_VERSION/' + this.typePath
+   
