@@ -23,6 +23,11 @@ define ->
 
       @fetch(accepts: json: 'text/plain')
 
+    ###*
+     * @param {Model} model The model to get the allowed values for
+     * @param {String} fieldName The field in the model to get the allowed values for
+     * @returns {Promise} A promise that resolves to the array of allowed values for this model field
+    ###
     getAllowedValues: (model, fieldName) ->
       attr = @getAttribute(model, fieldName)
       if attr then @_getAttributeAllowedValues(attr) else []
@@ -34,7 +39,7 @@ define ->
       @getAttribute(model, fieldName).Name
 
     getTypeDef: (model) ->
-      typeDef = @find (type) -> type.get('TypePath').toLowerCase() == model.typePath
+      typeDef = @find (type) -> type.get('TypePath').toLowerCase() == (model:: || model).typePath
 
     getAttributes: (model) ->
       @getTypeDef(model).get('Attributes')
@@ -43,11 +48,23 @@ define ->
       attribute = _.find(@getAttributes(model), ElementName: fieldName)
 
     _getAttributeAllowedValues: (attr) ->
-      allowedValues = if _.isArray attr.AllowedValues
-        _.map(attr.AllowedValues, (value) -> _.extend(value, AllowedValueType: attr.AllowedValueType))
+      deferred = $.Deferred()
+      if _.isArray attr.AllowedValues
+        deferred.resolve(
+          _.map(
+            attr.AllowedValues,
+            (value) -> _.extend(value, AllowedValueType: attr.AllowedValueType)
+          )
+        )
       else if attr.Constrained
         av = new AllowedValues()
         av.clientMetricsParent = this
         av.url = attr.AllowedValues._ref
-        av.fetch().then -> av.map((value) -> _.extend(value.toJSON(), AllowedValueType: attr.AllowedValueType))
-      else []
+        av.fetch().then ->
+          deferred.resolve av.map((value) ->
+            _.extend(value.toJSON(), AllowedValueType: attr.AllowedValueType)
+          )
+      else
+        deferred.resolve []
+      
+      deferred.promise()

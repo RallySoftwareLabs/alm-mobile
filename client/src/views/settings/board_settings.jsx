@@ -52,9 +52,8 @@ define(function() {
     _getColumns: function() {
       var boardField = this.props.model.get('boardField');
       var shownColumns = this.props.model.getBoardColumns();
-      var allColumns = UserStory.getAllowedValues(boardField);
 
-      return _.map(allColumns, function(col) {
+      return _.map(this.props.allowedValues, function(col) {
         return {
           StringValue: col.StringValue,
           showing: _.contains(shownColumns, col.StringValue)
