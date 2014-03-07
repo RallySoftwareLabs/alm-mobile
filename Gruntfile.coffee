@@ -22,13 +22,14 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-replace'
   grunt.loadNpmTasks 'grunt-s3'
 
-  grunt.registerTask 'default', ['clean','coffee','react','less','compile-handlebars:allStatic', 'copy:js','requirejs','replace:js','copy:assets','concat']
+  grunt.registerTask 'default', ['clean','coffee','react','less','indexHtml', 'copy:js','requirejs','replace:js','copy:assets','concat']
 
   grunt.registerTask 'test', ['test:conf', 'express:inline', 'mocha']
-  grunt.registerTask 'test:conf', ['clean', 'coffee', 'react', 'less', 'copy','requirejs', 'replace']
+  grunt.registerTask 'test:conf', ['default', 'replace:testPage']
   grunt.registerTask 'test:server', "Starts a test server at localhost:#{serverPort}, specify a different port with --port=<port>", ['express:server', 'express-keepalive']
 
-  grunt.registerTask 'heroku', ['clean','coffee','less','compile-handlebars:allStatic', 'copy:js','requirejs','replace:js','copy','concat']
+  grunt.registerTask 'indexHtml', "Generates the index.html page", ['compile-handlebars:allStatic']
+  grunt.registerTask 'heroku', ['clean','coffee','less','indexHtml', 'copy:js','requirejs','replace:js','copy','concat']
 
   testFiles = grunt.file.expand ['client/test/**/*_spec.js']
 
@@ -52,7 +53,7 @@ module.exports = (grunt) ->
 
       clientIndexHtml:
         files: ['config.json', 'client/src/*.hbs']
-        tasks: ['compile-handlebars:allStatic']
+        tasks: ['indexHtml']
 
       clientTest:
         files: 'client/test/**/*.coffee'
