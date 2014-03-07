@@ -24,13 +24,16 @@ define ->
 
     board: (params) ->
       @whenProjectIsLoaded ->
-        fieldName = UserStory.getFieldDisplayName app.session.get('boardField')
-        @view = @renderReactComponent BoardSettingsView,
-          region: 'main'
-          fieldName: fieldName
-          model: app.session
-        @subscribeEvent 'columnClick', @onColumnClick
-        @markFinished()
+        boardField = app.session.get('boardField')
+        fieldName = UserStory.getFieldDisplayName boardField
+        UserStory.getAllowedValues(boardField).then (allowedValues) =>
+          @view = @renderReactComponent BoardSettingsView,
+            region: 'main'
+            fieldName: fieldName
+            model: app.session
+            allowedValues: allowedValues
+          @subscribeEvent 'columnClick', @onColumnClick
+          @markFinished()
 
     onChangeMode: (mode) ->
       app.session.set 'mode', mode

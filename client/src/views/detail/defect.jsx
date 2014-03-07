@@ -36,7 +36,7 @@ define(function() {
             <div className="col-xs-8">
               <div className="row">
                 <div className="col-xs-12 ScheduleStateView">
-                  <StringWithArrows item={ model } allowedValues={ this.props.allowedValues.ScheduleState } editMode={ newArtifact } field={ this.getBoardField() } label={ this.getScheduleStateLabel() }/>
+                  <StringWithArrows item={ model } allowedValues={ this.props.allowedValues[this.getBoardField()] } editMode={ newArtifact } field={ this.getBoardField() } label={ this.getScheduleStateLabel() }/>
                 </div>
               </div>
               <div className="row">
