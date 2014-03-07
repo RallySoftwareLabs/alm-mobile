@@ -54,9 +54,6 @@ define ->
         @publishEvent 'endEdit', this, @props.field
       catch e
 
-    routeTo: (route) ->
-      @publishEvent('router:route', route);
-
     _parseValue: (value) ->
       val = value
       if @props.inputType == 'number'

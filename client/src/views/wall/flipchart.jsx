@@ -2,6 +2,7 @@
 define(function() {
   var React = require('react'),
       ReactView = require('views/base/react_view'),
+      utils = require('lib/utils'),
   		FeatureCard = require ('views/wall/feature_card');
    
   return ReactView.createBackboneClass({
@@ -15,8 +16,8 @@ define(function() {
       }
       return (
         <div className="flipchart">
-          <div className="header">
-            <span className="formattedID">{model.get('FormattedID')}</span><br />
+          <div className="header" onClick={ this._onHeaderClick }>
+            <span className="formatted-id">{model.get('FormattedID')}</span><br />
             <span className="title">{model.get('Name')}</span><br />
           </div> 
           <div>
@@ -24,6 +25,10 @@ define(function() {
           </div>
         </div>
       );
+    },
+
+    _onHeaderClick: function() {
+      this.publishEvent('headerclick', this, this.props.model);
     }
   });
 });
