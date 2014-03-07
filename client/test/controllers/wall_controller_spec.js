@@ -8,7 +8,8 @@ define([
     'collections/preferences',
     'models/project',
     'models/session',
-    'models/user'
+    'models/user',
+    'views/wall/create'
 ], function(
     $,
     app,
@@ -19,7 +20,8 @@ define([
     Preferences,
     Project,
     Session,
-    User
+    User,
+    CreateView
 ) {
     describe('controllers/wall_controller', function() {
         beforeEach(function() {
@@ -28,7 +30,6 @@ define([
             this.renderReactComponentStub = this.stub(WallController.prototype, 'renderReactComponent', function() {
                 return new View();
             });
-            this.projects = Projects.projects = new Projects();
             this.markFinishedStub = this.stub(WallController.prototype, 'markFinished');
 
             this.wallController = new WallController();
@@ -41,29 +42,33 @@ define([
         describe('#create', function() {
             beforeEach(function() {
                 var me = this;
-                this.fetchProjectsStub = this.stub(Projects, 'fetchAll', function() {
-                    var d = $.Deferred();
-                    d.resolve(me.projects);
+                this.stub(Projects.prototype, 'fetchAllPages', function() {
+                    d = $.Deferred();
+                    me.project = this.add({Name: 'Project 1'});
+                    d.resolve(this);
                     return d.promise();
                 });
+                this.fetchProjectsSpy = this.spy(Projects, 'fetchAll');
             });
 
             it('should fetch all projects', function() {
                 this.wallController.create();
-                expect(this.fetchProjectsStub).to.have.been.calledOnce;
+                expect(this.fetchProjectsSpy).to.have.been.calledOnce;
             });
 
             it('should render the view', function() {
                 this.wallController.create();
                 expect(this.renderReactComponentStub).to.have.been.calledOnce;
+                expect(this.renderReactComponentStub).to.have.been.calledWith(CreateView);
+                expect(this.renderReactComponentStub.args[0][1].model.first()).to.equal(this.project);
             });
 
             it('should mark finished on fetch complete', function(done) {
                 var me = this;
                 this.wallController.create();
-                this.fetchProjectsStub.returnValues[0].then(function() {
+                this.fetchProjectsSpy.returnValues[0].then(function() {
                     expect(me.markFinishedStub).to.have.been.calledOnce;
-                    done();                    
+                    done();
                 });
             });
 
