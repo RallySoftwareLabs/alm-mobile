@@ -79,7 +79,10 @@ define(function() {
       var project = this.props.model.find(_.isAttributeEqual('_ref', optionValue));
       app.aggregator.recordAction({component: this, description: "selected wall project"});
       app.session.loadSchema(project).then(function(schema) {
-        return Initiative.getAllowedValues('State');
+        debugger;
+        initiative = new Initiative()
+        initiative.typePath = 'capability'
+        return initiative.getAllowedValues('State');
       }).then(function(availableStates) {
         me.setState({
           project: project,
