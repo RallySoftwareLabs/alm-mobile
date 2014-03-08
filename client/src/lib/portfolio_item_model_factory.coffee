@@ -15,20 +15,20 @@ define ->
       @fetchTypes().then (piTypeDefinitions) =>
         typePath = @lookupTypePath ordinal,piTypeDefinitions
         PortfolioItems.extend
-          url: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/portfolioitem/' + typePath
+          url: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/' + typePath
           model: @_buildModel(typePath)
 
     @getModel: (ordinal) =>
       @fetchTypes().then (piTypeDefinitions) =>
-        @_buildModel lookupTypePath ordinal,piTypeDefinitions
+        @_buildModel @lookupTypePath ordinal,piTypeDefinitions
 
     @_buildModel: (typePath) =>
       MyModel = PortfolioItem.extend 
-        urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/portfolioitem/' + typePath
+        urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/' + typePath
         typePath: typePath
     
     @lookupTypePath: (ordinal,typeDefinitions) =>
-      typeDefinitions.findWhere({Ordinal: ordinal}).get('ElementName')
+      'portfolioitem/' + typeDefinitions.findWhere({Ordinal: ordinal}).get('ElementName').toLowerCase()
 
     @fetchTypes: =>
         piTypeDefinitions = new TypeDefinitions()
