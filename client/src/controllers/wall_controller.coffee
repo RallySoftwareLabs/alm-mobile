@@ -43,7 +43,7 @@ define ->
         ).then => @markFinished()
 
     show: (project) ->
-      initiativesModelPromise = PortfolioItemModelFactory.getCollectionModel(1)
+      initiativesModelPromise = PortfolioItemModelFactory.getCollection(1)
       initiativesModelPromise.then (initiativesModel) =>
         @initiatives = new initiativesModel()
         @initiatives.clientMetricsParent = this

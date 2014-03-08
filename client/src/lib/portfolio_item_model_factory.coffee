@@ -6,22 +6,29 @@ define ->
   PortfolioItems = require 'collections/portfolio_items'
   TypeDefinitions = require 'collections/type_definitions'
 
+# The shame about this approach is that we fetch the types every 
+# time we ask for a model.  We really should just load them once.
+# and keep them around somewhere
+
   class PortfolioItemModelFactory
-    @getCollectionModel: (ordinal) =>
-      piTypesFetchPromise = @fetchPortfolioItemTypes()
-      piTypesFetchPromise.then =>
-        elementName = @piTypeDefinitions.findWhere({Ordinal: ordinal}).get('ElementName')
+    @getCollection: (ordinal) =>
+      @fetchTypes().then =>
+        typePath = @piTypeDefinitions.findWhere({Ordinal: ordinal}).get('ElementName')
         PortfolioItems.extend
-          url: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/portfolioitem/' + elementName
-          model: @getPortfolioItemModel(elementName)
-        
+          url: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/portfolioitem/' + typePath
+          model: @_buildModel(typePath)
 
-    @getPortfolioItemModel: (elementName) =>
+    @getModel: (ordinal) =>
+      @fetchTypes().then =>
+        typePath = @piTypeDefinitions.findWhere({Ordinal: ordinal}).get('ElementName')
+        @_buildModel(typePath)
+
+    @_buildModel: (typePath) =>
       MyModel = PortfolioItem.extend 
-        urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/portfolioitem/' + elementName
-        typePath: elementName
+        urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/portfolioitem/' + typePath
+        typePath: typePath
 
-    @fetchPortfolioItemTypes: =>
+    @fetchTypes: =>
         @piTypeDefinitions = new TypeDefinitions()
         @piTypeDefinitions.fetchAllPages
           data:
