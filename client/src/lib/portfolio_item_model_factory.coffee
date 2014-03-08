@@ -12,25 +12,27 @@ define ->
 
   class PortfolioItemModelFactory
     @getCollection: (ordinal) =>
-      @fetchTypes().then =>
-        typePath = @piTypeDefinitions.findWhere({Ordinal: ordinal}).get('ElementName')
+      @fetchTypes().then (piTypeDefinitions) =>
+        typePath = @lookupTypePath ordinal,piTypeDefinitions
         PortfolioItems.extend
           url: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/portfolioitem/' + typePath
           model: @_buildModel(typePath)
 
     @getModel: (ordinal) =>
-      @fetchTypes().then =>
-        typePath = @piTypeDefinitions.findWhere({Ordinal: ordinal}).get('ElementName')
-        @_buildModel(typePath)
+      @fetchTypes().then (piTypeDefinitions) =>
+        @_buildModel lookupTypePath ordinal,piTypeDefinitions
 
     @_buildModel: (typePath) =>
       MyModel = PortfolioItem.extend 
         urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/portfolioitem/' + typePath
         typePath: typePath
+    
+    @lookupTypePath: (ordinal,typeDefinitions) =>
+      typeDefinitions.findWhere({Ordinal: ordinal}).get('ElementName')
 
     @fetchTypes: =>
-        @piTypeDefinitions = new TypeDefinitions()
-        @piTypeDefinitions.fetchAllPages
+        piTypeDefinitions = new TypeDefinitions()
+        piTypeDefinitions.fetchAllPages
           data:
             fetch: 'ElementName,Ordinal'
             query: '(Parent.Name = "Portfolio Item")'
