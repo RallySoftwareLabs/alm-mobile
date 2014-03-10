@@ -3,6 +3,7 @@ define ->
   _ = require 'underscore'
   app = require 'application'
   utils = require 'lib/utils'
+  Projects = require 'collections/projects'
   UserStory = require 'models/user_story'
   SiteController = require 'controllers/base/site_controller'
   SettingsView = require 'views/settings/settings'
@@ -12,7 +13,7 @@ define ->
 
     show: (params) ->
       @whenProjectIsLoaded ->
-        @view = @renderReactComponent SettingsView, region: 'main', model: app.session
+        @view = @renderReactComponent SettingsView, region: 'main', model: app.session, projects: Projects::projects
         @subscribeEvent 'changeMode', @onChangeMode
         @subscribeEvent 'changeBoardField', @onChangeBoardField
         @subscribeEvent 'changeProject', @onChangeProject
@@ -43,7 +44,7 @@ define ->
       @redirectTo 'settings/board'
 
     onChangeProject: (projectRef) ->
-      newProject = app.session.get('projects').find _.isAttributeEqual '_ref', projectRef
+      newProject = Projects::projects.find _.isAttributeEqual '_ref', projectRef
       app.session.set 'project', newProject
       @updateTitle "Settings: #{app.session.getProjectName()}"
 

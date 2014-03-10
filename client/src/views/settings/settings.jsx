@@ -13,10 +13,10 @@ define(function() {
           currentProject = session.get('project'),
           currentIteration = session.get('iteration'),
           boardField = session.get('boardField'),
-          projects = session.get('projects').models.map(function(project) {
+          projects = this.props.projects.map(function(project) {
             return <option key={ project.get('_ref') } value={ project.get('_ref') }>{ project.get('_refObjectName') }</option>;
           }),
-          iterations = session.get('iterations').models.map(function(iteration) {
+          iterations = session.get('iterations').map(function(iteration) {
             return <option key={ iteration.get('_ref') } value={ iteration.get('_ref') }>{ iteration.get('_refObjectName') }</option>;
           });
     	return (

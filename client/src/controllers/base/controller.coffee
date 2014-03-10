@@ -4,6 +4,7 @@ define ->
   app = require 'application'
   appConfig = require 'appConfig'
   Messageable = require 'lib/messageable'
+  Projects = require 'collections/projects'
   LoadingIndicatorView = require 'views/loading_indicator'
 
   class Controller
@@ -22,7 +23,7 @@ define ->
         if !projectRef || _.contains(sessionProject.get('_ref'), projectRef)
           @_goToPage callback
         else
-          project = app.session.get('projects').find _.isAttributeEqual '_ref', projectRef
+          project = Projects::projects.find _.isAttributeEqual '_ref', projectRef
           @_renderLoadingIndicatorUntilProjectIsReady(callback, options.showLoadingIndicator)
           app.session.set 'project', project
       else

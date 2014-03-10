@@ -76,6 +76,9 @@ define ->
       spec.updateTitle = (title) ->
         @publishEvent "updatetitle", title
 
+      spec.routeTo = (route) ->
+        @publishEvent 'router:route', route
+
       spec.keyCodes =
         ENTER_KEY: 13
         ESCAPE_KEY: 27

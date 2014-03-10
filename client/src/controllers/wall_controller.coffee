@@ -54,6 +54,7 @@ define ->
 
           @view = @renderReactComponent WallView, showLoadingIndicator: true, model: @initiatives, region: 'main'
           @subscribeEvent 'cardclick', @onCardClick
+          @subscribeEvent 'headerclick', @onHeaderClick
 
           @updateTitle "Enterprise Backlog"
 
@@ -143,6 +144,9 @@ define ->
     onCardClick: (oid, type) ->
       mappedType = 'portfolioitem'
       @redirectTo "#{mappedType}/#{oid}"
+
+    onHeaderClick: (view, model) ->
+      @redirectTo utils.getDetailHash(model)
 
     showCreateWallPage: ->
       @redirectTo "/wall/create"

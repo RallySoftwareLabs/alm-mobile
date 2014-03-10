@@ -18,6 +18,6 @@ define ->
         @::projects = projects = new Projects()
         projects.fetchAllPages(
           data:
-            fetch: 'Name,Workspace,SchemaVersion'
+            shallowFetch: 'Name,Workspace,SchemaVersion'
             order: 'Name'
         )

@@ -134,7 +134,7 @@ module.exports = (grunt) ->
             rallymetrics: "../../../../node_modules/rallymetrics/builds/rallymetrics"
             react: "empty:"
             spin: "empty:"
-            underscore: "../../../../node_modules/lodash/dist/lodash"
+            underscore: "empty:"
           shim:
             appConfig:
               exports: "AppConfig"
