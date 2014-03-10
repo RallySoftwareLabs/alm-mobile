@@ -55,22 +55,6 @@ define ->
           cb? false
       )
 
-    fetchAllProjects: ->
-      projects = @get 'projects'
-      if projects
-        d = $.Deferred()
-        d.resolve projects
-        d.promise()
-      else
-        projects = new Projects()
-        projects.clientMetricsParent = this
-        @set 'projects', projects
-        projects.fetchAllPages(
-          data:
-            fetch: 'Name,Workspace,SchemaVersion'
-            order: 'Name'
-        )
-
     initSessionForUser: (projectRef) ->
       user = @get('user')
       return unless user?
@@ -81,10 +65,10 @@ define ->
       @set 'prefs', preferences
 
       $.when(
-        @fetchAllProjects(),
+        Projects.fetchAll(),
         preferences.fetchMobilePrefs user
       ).then (p, prefs) =>
-        projects = @get 'projects'
+        projects = Projects::projects
         @_setModeFromPreference()
         if projectRef
           specifiedProject = projects.find _.isAttributeEqual('_ref', projectRef)
