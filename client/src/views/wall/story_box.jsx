@@ -8,11 +8,14 @@ define(function() {
       return <div className={this.getClass()} />;
     },
     getClass: function() {
-      if (this.props.model.isScheduled()) {
-        return "grandchild on";
-      } else {
-        return "grandchild"; 
+      var planStatusStyle = "";
+      if (this.props.model != null) {
+        planStatusStyle = this.props.model.planStatus();
       }
+      if (this.props.planStatus != null) {
+        planStatusStyle = this.props.planStatus;
+      }
+      return "storyBox " + planStatusStyle; 
     }
   });
 });

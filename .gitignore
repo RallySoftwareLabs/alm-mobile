@@ -14,3 +14,5 @@ testpage.html
 .authors
 *.log
 *.DS_Store
+
+*.zip
