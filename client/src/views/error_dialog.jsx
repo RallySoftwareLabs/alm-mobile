@@ -12,7 +12,7 @@ define(function() {
             return <li key={ item }>{ item }</li>;
           }, this);
       return (
-        <div className={ "save-failure modal" + (this._hasErrors() ? '' : ' hidden') } tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div className={ "save-failure modal" + (this._hasErrors() ? '' : ' hidden') } tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
