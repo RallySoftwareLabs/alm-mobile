@@ -3,6 +3,7 @@ define ->
   _ = require 'underscore'
   RallyMetrics = require 'rallymetrics'
   React = require 'react'
+  appConfig = require 'appConfig'
   Messageable = require 'lib/messageable'
   MetricsHandler = require 'lib/metrics_handler'
   User = require 'models/user'
@@ -24,9 +25,13 @@ define ->
       setTimeout(hideURLbar, 0)
       fixIE10($)
 
+      beaconUrl = if appConfig.almWebServiceBaseUrl == "https://rally1.rallydev.com/slm"
+        "https://rust.f4tech.com/beacon/"
+      else
+        "https://trust.f4tech.com/beacon/"
       @aggregator = new RallyMetrics.Aggregator
         flushInterval: 10000
-        beaconUrl: "https://trust.f4tech.com/beacon/"
+        beaconUrl: beaconUrl
         handlers: [MetricsHandler]
 
       @aggregator.startSession 'Mobile App Init', slug: Backbone.history.location.pathname
