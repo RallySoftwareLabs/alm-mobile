@@ -7,8 +7,6 @@ define ->
   WallCreateView = require 'views/wall/create'
   WallSplashView = require 'views/wall/splash'
   PortfolioItemModelFactory = require 'lib/portfolio_item_model_factory'
-  Features = require 'collections/features'
-  Initiatives = require 'collections/initiatives'
   Preferences = require 'collections/preferences'
   Projects = require 'collections/projects'
   UserStories = require 'collections/user_stories'
@@ -89,7 +87,7 @@ define ->
                   initiative = @initiatives.find _.isAttributeEqual('_ref', parentRef)
 
                   if initiative?
-                    initiative.features ?= new Features()
+                    initiative.features ?= new featuresModel()
                     initiative.features.add f
                 
                 @initiatives.trigger('add')

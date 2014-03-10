@@ -4,7 +4,6 @@ define ->
   SiteController = require 'controllers/base/site_controller'
   SwimlaneWallView = require 'views/wall/swimlane_wall'
   WallSplashView = require 'views/wall/splash'
-  Features = require 'collections/features'
   UserStories = require 'collections/user_stories'
   Defects = require 'collections/defects'
   Projects = require 'collections/projects'

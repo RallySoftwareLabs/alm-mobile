@@ -5,7 +5,6 @@ define(function() {
       React = require('react'),
       ReactView = require('views/base/react_view'),
       app = require('application'),
-      Initiative = require('models/initiative');
       PortfolioItemModelFactory = require('lib/portfolio_item_model_factory')
 
   return ReactView.createBackboneClass({
