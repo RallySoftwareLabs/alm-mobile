@@ -4,9 +4,11 @@ define(function() {
       ReactView = require('views/base/react_view'),
       app = require('application'),
       utils = require('lib/utils'),
+      PlanStatusMixin = require ('lib/plan_status_mixin'),
       StoryBox = require ('views/wall/story_box');
   	
   return ReactView.createBackboneClass({
+    mixins: [PlanStatusMixin],
     render: function() {
         var model = this.props.model;
         var userStories = model.userStories;
@@ -18,16 +20,13 @@ define(function() {
           });
         }
         return (  
-          <div className={this.getChildClass(userStories)} onClick={this.onClick}>
+          <div className={'featureCard ' + this.collectionPlanStatus(this.props.model.userStories)} onClick={this.onClick}>
                <div className="header">{model.get('FormattedID')}</div>
                <div className="storyBoxes">
                   {storyBoxes}
                </div>
           </div>
       );
-    },
-    getChildClass: function(userStories) {
-      return (userStories && userStories.areAllStoriesScheduled()) ? "featureCard on" : "featureCard";
     },
     onClick: function(e) {
       var m = this.props.model;
