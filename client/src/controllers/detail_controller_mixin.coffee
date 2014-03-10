@@ -13,7 +13,7 @@ define ->
       model.clientMetricsParent = this
       model.fetch(
         data:
-          fetch: fieldNames.join ','
+          shallowFetch: fieldNames.join ','
       ).then =>
         @_getAllowedValuesForFields(model).then (allowedValues) =>
           @_setTitle model
@@ -41,7 +41,7 @@ define ->
 
     saveNew: (model) ->
       model.save null,
-        fetch: @getFieldNames().join ','
+        shallowFetch: @getFieldNames().join ','
         wait: true
         patch: true
         success: (resp, status, xhr) =>
@@ -67,7 +67,7 @@ define ->
 
     _saveRemote: (updates, opts) ->
       @view.props.model.save updates,
-        fetch: ['ObjectID'].concat(@getFieldNames()).join ','
+        shallowFetch: @getFieldNames().join ','
         wait: true
         patch: true
         success: (model, resp, options) =>

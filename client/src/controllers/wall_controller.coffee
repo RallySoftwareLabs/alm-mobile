@@ -110,7 +110,7 @@ define ->
       )
       @initiatives.fetchAllPages
         data:
-          fetch: 'FormattedID,Name'
+          fetch: 'FormattedID'
           query: statesQuery
           order: 'Rank ASC'
           project: projectRef
@@ -120,7 +120,7 @@ define ->
     fetchFeatures: (projectRef) ->
       @features.fetchAllPages
         data:
-          fetch: 'Parent',
+          shallowFetch: 'Parent',
           query: "(Parent != null)",
           order: 'Rank ASC'
           project: projectRef

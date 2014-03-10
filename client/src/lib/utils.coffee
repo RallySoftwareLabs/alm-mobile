@@ -1,4 +1,5 @@
 define ->
+  _ = require 'underscore'
   Markdown = require 'pagedown'
   md = require 'md'
   appConfig = require 'appConfig'

@@ -3,6 +3,7 @@ define(function() {
   var $ = require('jquery'),
 			React = require('react'),
   		ReactView = require('views/base/react_view'),
+      app = require('application'),
   		FieldMixin = require('views/field/field_mixin');
 
   return ReactView.createBackboneClass({
@@ -55,7 +56,18 @@ define(function() {
   	},
 
     _getNonEmptyAllowedValues: function() {
-      return _.reject(this.getAllowedValues(), { value: 'null'});
+      var av = this.getAllowedValues();
+      if (app.session.get('boardField') == this.props.field) {
+        var boardColumns = app.session.getBoardColumns();
+        if (_.contains(boardColumns, this.getFieldValue())) {
+          av = _.filter(av, function(value) {
+            return _.contains(boardColumns, value.label);
+          });
+        } else {
+          av = null;
+        }
+      }
+      return _.reject(av, { value: 'null'});
     },
 
   	_indexInAllowedValues: function() {

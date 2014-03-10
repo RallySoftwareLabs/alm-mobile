@@ -11,7 +11,7 @@ define ->
     fetchMobilePrefs: (user, cb) ->
       @fetch
         data:
-          fetch: 'ObjectID,Name,Project,Value'
+          fetch: 'Name,Project,Value'
           query: "((Name CONTAINS \"mobile.\") AND (User = \"#{user.get('_ref')}\"))"
         success: (collection, resp, options) =>
           cb?(null, collection)
@@ -21,7 +21,7 @@ define ->
     fetchWallPrefs: (cb) ->
       @fetch
         data:
-          fetch: 'ObjectID,Name,Value'
+          fetch: 'Name,Value'
           query: "(Name CONTAINS \"wall.\")"
         success: (collection, resp, options) =>
           cb?(null, collection)
@@ -31,7 +31,7 @@ define ->
     fetchWallPref: (projectId, cb) ->
       @fetch
         data:
-          fetch: 'ObjectID,Name,Value'
+          fetch: 'Name,Value'
           query: "(Name = \"wall.#{projectId}\")"
         success: (collection, resp, options) =>
           cb?(null, collection)

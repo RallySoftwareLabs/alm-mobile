@@ -19,7 +19,7 @@ define(function() {
         <div className="flipchart">
           <div className="header" onClick={ this._onHeaderClick }>
             <span className="formatted-id">{model.get('FormattedID')}</span><br />
-            <span className="title">{model.get('Name')}</span><br />
+            <span className="title">{model.get('_refObjectName')}</span><br />
           </div> 
           <div>
             {featureCards}

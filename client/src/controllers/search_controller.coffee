@@ -27,7 +27,7 @@ define ->
     _fetchResults: (artifacts, keywords) ->
       artifacts.fetch
         data:
-          fetch: 'ObjectID,FormattedID,Name,Ready,Blocked,ToDo'
+          fetch: 'FormattedID,Name,Ready,Blocked,ToDo'
           search: keywords
           project: app.session.get('project').get('_ref')
           projectScopeUp: false
