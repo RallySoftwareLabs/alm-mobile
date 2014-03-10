@@ -18,7 +18,7 @@ define(function() {
       return (  
         <div className="wall"> 
           <div className="col-md-9">
-            <h1>What is getting planned?</h1>
+            <h1>Which items are in the plan?</h1>
             <p><StoryBox />Unscheduled Stories <StoryBox planStatus="scheduled" />Stories scheduled in an Iteration or Release <StoryBox planStatus="completed" />Accepted Stories</p>
           </div>
           <DeviceLoginTip />

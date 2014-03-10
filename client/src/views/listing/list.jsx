@@ -11,7 +11,7 @@ define(function() {
         if (model.length) {
           var listItems = model.map(function(item) {
             return (
-              <li className="list-group-item" key={item.get('_ref')}>
+              <li className={'list-group-item ' + item.planStatus()} key={item.get('_ref')}>
                 {this._getItemMarkup(item)}
               </li>
             );
@@ -41,7 +41,7 @@ define(function() {
                   <div className="workitem-name">{model.get('Name')}</div>
               </div>
           </div>
-          <div className="col-xs-1 chevron"><i className="picto icon-chevron-right"></i></div>
+          <div className="col-xs-1 chevron"><i className="picto icon-chevron-right pull-right"></i></div>
         </div>
       );
     },

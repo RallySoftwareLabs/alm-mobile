@@ -29,3 +29,5 @@ define ->
     isSynced: -> @synced
 
     setSynced: (@synced) ->
+
+    planStatus: ->

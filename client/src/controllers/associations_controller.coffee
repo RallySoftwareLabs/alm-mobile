@@ -58,9 +58,9 @@ define ->
           @updateTitle "#{association} for #{model.get('FormattedID')}: #{model.get('_refObjectName')}"
           associatedItems.fetch
             data:
-              fetch: "Blocked,FormattedID,Name,ObjectID,#{reverseAssociation},Ready,ScheduleState,State,ToDo"
+              fetch: "Blocked,FormattedID,Name,ObjectID,#{reverseAssociation},Ready,ScheduleState,State,ToDo,Iteration,Release"
               query: "(#{reverseAssociation} = \"#{model.get('_ref')}\")"
-              order: 'ObjectID ASC'
+              order: 'rank ASC'
             success: =>
               @markFinished()
 
