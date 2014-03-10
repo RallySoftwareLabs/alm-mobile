@@ -1,6 +1,7 @@
 define ->
   _ = require 'underscore'
   app = require 'application'
+  utils = require 'lib/utils'
   SiteController = require 'controllers/base/site_controller'
   Column = require 'models/column'
   UserStory = require 'models/user_story'
@@ -50,9 +51,8 @@ define ->
       colValue = col.get('value')
       @redirectTo "board/#{colValue}"
 
-    onCardClick: (oid, type) ->
-      mappedType = @getRouteTypeFromModelType(type)
-      @redirectTo "#{mappedType}/#{oid}"
+    onCardClick: (view, model) ->
+      @redirectTo utils.getDetailHash(model)
 
     goLeft: (col) ->
       field = app.session.get('boardField')
@@ -95,10 +95,3 @@ define ->
         data.query = "(#{data.query} AND (Iteration = \"#{iterationRef}\"))"
 
       data
-
-    getRouteTypeFromModelType: (type = 'hierarchicalrequirement') ->
-      routeTypes =
-        hierarchicalrequirement: 'userstory'
-        defect: 'defect'
-
-      routeTypes[type.toLowerCase()]

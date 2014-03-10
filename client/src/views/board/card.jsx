@@ -38,9 +38,8 @@ define(function() {
       return cardClass;
     },
     onClick: function(e) {
-    	var m = this.props.model;
       app.aggregator.recordAction({component: this, description: 'clicked card'});
-    	this.publishEvent('cardclick', m.get('ObjectID'), m.get('_type'));
+    	this.publishEvent('cardclick', this, this.props.model);
     	e.preventDefault();
     }
   });
