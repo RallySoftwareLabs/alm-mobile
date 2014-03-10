@@ -20,7 +20,7 @@ define(function() {
     mixins: [DetailMixin],
     render: function() {
       var model = this.props.model,
-          newArtifact = this.props.newArtifact;
+          newArtifact = !model.get('_ref');
       return (
         <div className="detail-view">
           <div className="row">
