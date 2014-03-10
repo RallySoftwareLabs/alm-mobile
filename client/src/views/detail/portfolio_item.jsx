@@ -29,60 +29,56 @@ define(function() {
             </div>
           </div>
           <div className="row">
-            <div className="col-xs-12 ellipsis ParentView">
-              <WorkProduct item={ model } editMode={ newArtifact } field="Parent" label="Parent"/>
+            <div className="col-xs-12 DescriptionView">
+              <Description item={ model } editMode={ newArtifact }/>
             </div>
           </div>
+
           <div className="row">
-            <div className="col-xs-8">
-              <div className="row">
-                <div className="col-xs-12 StateView">
-                  <StringWithArrows item={ model } allowedValues={ this.props.allowedValues.State } editMode={ newArtifact } field="State" label="State"/>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-xs-12 ProjectView">
-                  <TitledWell item={ model } allowedValues={ this.props.allowedValues.Project } editMode={ newArtifact } field='Project' label='Project'/>
-                </div>
-              </div>
+            <div className="col-xs-3 PreliminaryEstimateView">
+              <TitledWell item={ model } editMode={ newArtifact } field='PreliminaryEstimate' label='Prelim Est' allowedValues={ this.props.allowedValues.PreliminaryEstimate }/>
             </div>
-            <div className="col-xs-4 OwnerView">
+            <div className="col-xs-3 ChildrenView">
+              <Children item={ model } field={ (model.get('Children') && 'Children') || (model.get('UserStories') && 'UserStories') } editMode={ newArtifact }/>
+            </div>
+            <div className="col-xs-3 DiscussionView">
+              <Discussion item={ model } editMode={ newArtifact }/>
+            </div>
+
+             <div className="col-xs-3 OwnerView">
               <Owner item={ model } editMode={ newArtifact }/>
             </div>
           </div>
+
           <div className="row">
-            <div className="col-xs-4 PlannedStartDateView">
-              <TitledWell item={ model } editMode={ newArtifact } field='PlannedStartDate' label='Plan Start' inputType='date'/>
+            <div className="col-xs-6 col-md-2 PlannedStartDateView">
+              <TitledWell item={ model } editMode={ newArtifact } field='PlannedStartDate' label='Planned Start' inputType='date' icon='calendar'/>
             </div>
-            <div className="col-xs-4 PlannedEndDateView">
-              <TitledWell item={ model } editMode={ newArtifact } field='PlannedEndDate' label='Plan End' inputType='date'/>
-            </div>
-            <div className="col-xs-4 DiscussionView">
-              <Discussion item={ model } editMode={ newArtifact }/>
+            <div className="col-xs-6 col-md-2 PlannedEndDateView">
+              <TitledWell item={ model } editMode={ newArtifact } field='PlannedEndDate' label='Planned End' inputType='date' icon='calendar'/>
             </div>
           </div>
+
           <div className="row">
-            <div className="col-xs-4 ActualStartDateView">
-              <TitledWell item={ model } editMode={ newArtifact } field='ActualStartDate' label='Actual Start' inputType='date'/>
+            <div className="col-xs-6 col-md-2 ActualStartDateView">
+              <TitledWell item={ model } editMode={ newArtifact } field='ActualStartDate' label='Actual Start' inputType='date' icon='calendar'/>
             </div>
-            <div className="col-xs-4 ActualEndDateView">
-              <TitledWell item={ model } editMode={ newArtifact } field='ActualEndDate' label='Actual End' inputType='date'/>
-            </div>
-            <div className="col-xs-4 ChildrenView">
-              <Children item={ model } field={ (model.get('Children') && 'Children') || (model.get('UserStories') && 'UserStories') } editMode={ newArtifact }/>
+            <div className="col-xs-6 col-md-2 ActualEndDateView">
+              <TitledWell item={ model } editMode={ newArtifact } field='ActualEndDate' label='Actual End' inputType='date' icon='calendar'/>
             </div>
           </div>
+
+            <div className="col-xs-12 col-sm-6 ProjectView">
+              <TitledWell item={ model } allowedValues={ this.props.allowedValues.Project } editMode={ newArtifact } field='Project' label='Project'/>
+            </div>
+            <div className="col-xs-12 col-sm-6 StateView">
+                <StringWithArrows item={ model } allowedValues={ this.props.allowedValues.State } editMode={ newArtifact } field="State" label="State"/>
+            </div>
+           
+        
           <div className="row">
             <div className="col-xs-4 InvestmentCategoryView">
               <TitledWell item={ model } editMode={ newArtifact } field='InvestmentCategory' label='Invest Cat' allowedValues={ this.props.allowedValues.InvestmentCategory }/>
-            </div>
-            <div className="col-xs-4 PreliminaryEstimateView">
-              <TitledWell item={ model } editMode={ newArtifact } field='PreliminaryEstimate' label='Prelim Est' allowedValues={ this.props.allowedValues.PreliminaryEstimate }/>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-xs-12 DescriptionView">
-              <Description item={ model } editMode={ newArtifact }/>
             </div>
           </div>
           {

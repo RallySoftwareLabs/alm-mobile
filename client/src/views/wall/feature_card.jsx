@@ -4,7 +4,7 @@ define(function() {
       ReactView = require('views/base/react_view'),
       app = require('application'),
       utils = require('lib/utils'),
-  		StoryBox = require ('views/wall/story_box');
+      StoryBox = require ('views/wall/story_box');
   	
   return ReactView.createBackboneClass({
     render: function() {
@@ -19,18 +19,19 @@ define(function() {
         }
         return (  
           <div className={this.getChildClass(userStories)} onClick={this.onClick}>
-               <div className="grandchildren">
+               <div className="header">{model.get('FormattedID')}</div>
+               <div className="storyBoxes">
                   {storyBoxes}
                </div>
           </div>
       );
     },
     getChildClass: function(userStories) {
-      return (userStories && userStories.areAllStoriesScheduled()) ? "child on" : "child";
+      return (userStories && userStories.areAllStoriesScheduled()) ? "featureCard on" : "featureCard";
     },
     onClick: function(e) {
       var m = this.props.model;
-      app.aggregator.recordAction({component: this, description: "clicked wall card"});
+      app.aggregator.recordAction({component: this, description: "clicked feature card"});
       this.publishEvent('cardclick', utils.getOidFromRef(m.get('_ref')), m.get('_type'));
       e.preventDefault();
     }

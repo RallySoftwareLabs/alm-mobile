@@ -14,4 +14,3 @@ define ->
           @typePath = utils.getTypeFromRef(ref)
 
         fetchPromise
-   

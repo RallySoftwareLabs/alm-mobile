@@ -9,7 +9,10 @@ node_modules/
 Gemfile.lock
 tmtags
 tmtagsHistory
+testpage.html
 .tm_properties
 .authors
 *.log
 *.DS_Store
+
+*.zip

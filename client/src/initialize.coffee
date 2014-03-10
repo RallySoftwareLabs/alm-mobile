@@ -21,16 +21,8 @@ require [
   'controllers/task_detail_controller'
   'controllers/user_story_detail_controller'
   'controllers/wall_controller'
+  'controllers/swimlane_wall_controller'
   'controllers/portfolio_item_detail_controller'
 
 ], ($, Backbone, Bootstrap, app) ->
-
-  $(->
-    fixIE10($)
-    app.initialize()
-  )
-
-
-fixIE10 = ($) ->
-  if navigator.userAgent.match /IEMobile\/10\.0/
-    $('head').append '<style>@-ms-viewport{width:auto!important}</style>'
+  app.initialize() if window.initializeApp

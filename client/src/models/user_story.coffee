@@ -11,6 +11,13 @@ define ->
     
     allowedValueFields: ['Iteration', 'Release', 'ScheduleState', 'c_KanbanState']
 
-    isScheduled: ->
-      this.get('Release') or this.get('Iteration')
+    planStatus: ->
+      return 'completed' if @isCompleted() 
+      return 'scheduled' if @isScheduled()  
+      return 'unscheduled'
+
+    isCompleted: ->
+      @get('ScheduleState') is 'Accepted' or @get('ScheduleState') is 'Released' 
       
+    isScheduled: ->
+      @get('Release') or @get('Iteration')
