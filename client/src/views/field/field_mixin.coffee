@@ -1,9 +1,8 @@
 define ->
   _ = require 'underscore'
   React = require 'react'
-  app = require 'application'
   focusEditor = ->
-    if @isEditMode() && @props.item.get('ObjectID')
+    if @isEditMode() && @_isExistingObject()
       @$('.editor').focus();
 
   return {
@@ -12,14 +11,6 @@ define ->
 
     getAllowedValues: ->
       av = @props.allowedValues
-      if app.session.get('boardField') == @props.field
-        boardColumns = app.session.getBoardColumns()
-        if _.contains(boardColumns, @getFieldValue())
-          av = _.filter av, (value) ->
-            _.contains(boardColumns, value.StringValue)
-        else
-          av = null
-
       av && _.map(av, (value) ->
         value: if _.isObject(value.AllowedValueType) then value._ref else value.StringValue
         label: value.StringValue
@@ -33,10 +24,12 @@ define ->
       if _.isObject(val) then val._refObjectName else val
       
     saveModel: (updates, opts) ->
+      if @_isExistingObject()
+        @setState( editMode: false )
       @publishEvent 'saveField', updates, opts
 
     isEditMode: ->
-      @props.editMode || @state?.editMode
+      if @state?.editMode? then @state.editMode else @props.editMode
 
     startEdit: ->
       @publishEvent 'startEdit', this, @props.field
@@ -50,8 +43,6 @@ define ->
           modelUpdates = {}
           modelUpdates[field] = value
           @saveModel modelUpdates
-
-        @publishEvent 'endEdit', this, @props.field
       catch e
 
     _parseValue: (value) ->
@@ -103,4 +94,6 @@ define ->
         dangerouslySetInnerHTML:
           __html: '&nbsp;'
       )
+
+    _isExistingObject: -> @props.item.get('_ref')
   }

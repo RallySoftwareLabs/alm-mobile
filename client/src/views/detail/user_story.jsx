@@ -19,7 +19,7 @@ define(function() {
     mixins: [DetailMixin],
     render: function() {
       var model = this.props.model,
-          newArtifact = this.props.newArtifact,
+          newArtifact = !model.get('_ref'),
           childrenOrTasks = model.get('Children') && model.get('Children').Count ?
             (
               <div className="col-xs-3 ChildrenView">

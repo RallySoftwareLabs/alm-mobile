@@ -19,7 +19,7 @@ define(function() {
     mixins: [DetailMixin],
   	render: function() {
       var model = this.props.model,
-          newArtifact = this.props.newArtifact;
+          newArtifact = !model.get('_ref');
   		return (
   			<div className="detail-view">
   			  <div className="row">
@@ -79,6 +79,11 @@ define(function() {
             </div>
             <div className="col-xs-6 PriorityView">
               <TitledWell item={ model } allowedValues={ this.props.allowedValues.Priority } editMode={ newArtifact } field='Priority' label='Priority'/>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-xs-6 EnvironmentView">
+              <TitledWell item={ model } allowedValues={ this.props.allowedValues.Environment } editMode={ newArtifact } field='Environment' label='Environment'/>
             </div>
           </div>
           <div className="row">

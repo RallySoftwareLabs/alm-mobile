@@ -7,15 +7,9 @@ define(function() {
   return {
     componentDidMount: function() {
       this.subscribeEvent('startEdit', this.onStartEdit);
-      this.subscribeEvent('endEdit', this.onEndEdit);
     },
     onStartEdit: function(view, field) {
       view.setState({ editMode: true });
-    },
-    onEndEdit: function(view, field) {
-      if (this.props.model.get('ObjectID')) {
-        view.setState({ editMode: false });
-      }
     },
     onSave: function() {
       this.publishEvent('save', this.props.model);

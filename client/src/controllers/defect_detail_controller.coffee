@@ -43,6 +43,7 @@ define ->
         'Blocked'
         'Description'
         'Discussion'
+        'Environment'
         'FormattedID'
         'Iteration'
         'Name'
