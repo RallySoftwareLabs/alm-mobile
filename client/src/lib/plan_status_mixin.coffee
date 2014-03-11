@@ -19,5 +19,29 @@ define ->
       return 'scheduled' if collection.every (userStory) =>
         @isScheduled(userStory)
 
+    iterationPlanStatus: (iteration) ->
+      return 'overloaded' if @loadFactor(iteration) > .1
+      return 'sketchy' if !iteration.get('plannedVelocity')
+      return 'sketchy' if !iteration.get()
 
+    loadPercentage: (iteration) ->
+      if iteration.get('PlannedVelocity')?
+        loadFactor = @planEstimateTotal(iteration)/iteration.get('PlannedVelocity')
+        Math.round(loadFactor * 100)
+        
+    planEstimateTotal: (iteration) ->
+      planEstimates = []
+      if iteration.userStories?
+        planEstimates = iteration.userStories.pluck('PlanEstimate')
+      if iteration.defects?
+        planEstimates = planEstimates.concat iteration.defects.pluck('PlanEstimate')
+      if planEstimates.length > 0
+          planEstimates.reduce (total,est) -> total + est
+
+    loadStatus: (iteration) ->
+      percentage = @loadPercentage(iteration)
+      return 'overloaded' if percentage > 100
+      return 'high' if percentage > 70
+      return 'responsive' if percentage > 40
+      return 'unknown'
   }

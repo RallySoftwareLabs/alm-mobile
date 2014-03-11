@@ -41,13 +41,34 @@
       vertical-align: top;
       overflow: auto;
       margin: 2px;
-      padding: 3px;
+      padding: 5px;
       height: 110px;
       color: #333333;
-      background: #cccccc;
+      background: white;
       font-size: 11px;
       line-height: 12px;
       font-family: "NotoSans";
+      border: solid @grey2 4px;
+
+      &.high {
+        border: solid @yellow-med 4px;
+      }
+      &.overloaded {
+        border: solid @red-med 4px;
+      }
+      &.responsive {
+        border: solid @lime-med 4px;
+      }
+      &.unknown {
+        border: solid @grey2 4px;
+      }
+      .name {
+        font-family: "NotoSansBold";
+      }
+      .dates {
+        color: @grey5;
+        margin-bottom: 8px;
+      }
   }
 }
 .wrapIcon {
@@ -68,7 +89,7 @@
   vertical-align: top;
   overflow: auto;
   font-family: "ProximaNova";
-  height: 500px;
+  height: 380px;
   
     .header {
   	  font-size: 24px;

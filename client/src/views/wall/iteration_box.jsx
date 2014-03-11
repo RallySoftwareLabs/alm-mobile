@@ -4,9 +4,11 @@ define(function() {
   moment = require('moment'),
   ReactView = require('views/base/react_view');
   StoryBox = require ('views/wall/story_box');
+  PlanStatusMixin = require ('lib/plan_status_mixin');
 
     
   return ReactView.createBackboneClass({
+    mixins: [PlanStatusMixin],
     render: function() {
       var model = this.props.model;
       var userStories = model.userStories;
@@ -40,22 +42,36 @@ define(function() {
         });
       }
       return (
-        <div className="iterationBox col-xs-6 col-sm-2 col-md-2">
-          <strong>{model.get('Name')}</strong><br />
-          <em>{this.shortDate(model.get('StartDate'))} - {this.shortDate(model.get('EndDate'))}</em><br />
-          {this.percentLoaded(planEstimateTotal,plannedVelocity,unestimatedItemsCount)}<br />
+        <div className={"iterationBox col-xs-6 col-sm-2 col-md-2 " + this.loadStatus(model)}>
+          <div className="name">{model.get('Name')}</div>
+          <div className="dates">
+            {this.shortDate(model.get('StartDate'))} - {this.shortDate(model.get('EndDate'))}
+          </div>
           <div className="grandchildren">
             {storyBoxes}
           </div>
-          {defectIcons}       
+          {defectIcons}
+          <br />
+          <span>{this.loadMessage(model)}</span>
         </div>
       );
     },
     shortDate: function(d) {
       return moment(d).format('MMM D');
     },
-    loadMessage: function() {
-
+    loadMessage: function(model) {
+      velocity = model.get('PlannedVelocity');
+      total = this.planEstimateTotal(model);
+      if ((velocity != null) && (total != null)) {
+        return (<span>
+         {this.loadPercentage(model)}% stuffed 
+         ({ total }/{ velocity })  
+        </span>);
+      } else if (velocity != null) {
+        return "Velocity: " + velocity;
+      } else {
+        return "Velocity not discussed";
+      }
     },
     percentLoaded: function(planEstimateTotal,plannedVelocity,unestimatedItemsCount) {
       var unestimatedItemsWarning = "";
