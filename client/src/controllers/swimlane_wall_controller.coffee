@@ -63,7 +63,7 @@ define ->
           projectScopeDown: false
           pagesize: 50
         success: =>
-          iteration.userStories.trigger('add')
+          iteration.trigger('add')
 
     fetchDefects: (iteration) =>
       iteration.defects = new Defects()      

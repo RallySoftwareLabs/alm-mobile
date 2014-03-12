@@ -14,7 +14,7 @@ define(function() {
         <div className="wall"> 
           <div className="col-md-9">
             <h1>How much planning is done?</h1>
-            <p><StoryBox mode="scheduled" />Stories <div className="picto icon-defect"/>Defects</p>
+            <p><StoryBox planStatus="scheduled" />Stories <div className="picto icon-defect"/>Defects</p>
           </div>
           <DeviceLoginTip />
           <div className="swimlaneList col-md-12">
