@@ -51,8 +51,8 @@ define ->
     updateTitle: (title) ->
       @publishEvent "updatetitle", title
 
-    redirectTo: (path, params) ->
-      @publishEvent "router:route", path
+    redirectTo: (path, options) ->
+      @publishEvent "router:route", path, options
 
     markFinished: ->
       @trigger 'controllerfinished', this
