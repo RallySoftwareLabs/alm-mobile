@@ -79,10 +79,10 @@ module.exports = (grunt) ->
           prefix: ""
           variables: '__testFiles__': _.map(testFiles, (file) ->
             "'#{file.substring(0, file.length - 3)}'"
-          ).join(',\n')
+          ).join(',\n      ')
         files: [
           src: ['client/test/testpage.tpl']
-          dest: 'testpage.html'
+          dest: 'client/test/testpage.html'
         ]
 
     coffee:

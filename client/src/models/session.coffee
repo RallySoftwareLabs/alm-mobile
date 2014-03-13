@@ -76,12 +76,6 @@ define ->
         else
           @_setDefaultProject projects
 
-    setIterationPreference: (value) ->
-      projectRef = @get('project').get('_ref')
-      prefs = @get('prefs')
-
-      prefs.updateProjectPreference @get('user').get('_ref'), projectRef, Preference::defaultIteration, value
-
     getProjectName: ->
       try
         @get('project').get('_refObjectName')
@@ -117,6 +111,11 @@ define ->
       @setSecurityToken null
       @setUsername null
       @clear silent: true
+
+      window.sessionStorage.removeItem('username')
+      window.sessionStorage.removeItem('token')
+      for key of window.sessionStorage
+        window.sessionStorage.removeItem(key) if key.indexOf('iteration.') == 0
 
       @aggregator.beginLoad component: this, description: 'logging out'
       $.ajax(
@@ -203,14 +202,6 @@ define ->
         proj = projects.find _.isAttributeEqual('_ref', defaultProject)
         @set 'project', proj || projects.first()
 
-    _setIterationFromPreference: ->
-      iteration = null
-      savedIteration = @get('prefs').findProjectPreference(@get('project').get('_ref'), Preference::defaultIteration)
-      if savedIteration
-        iteration = @get('iterations').find _.isAttributeEqual('_ref', savedIteration.get('Value'))
-
-      @set('iteration', iteration)
-
     _setModeFromPreference: ->
       mode = 'team'
       savedMode = @get('prefs').findPreference Preference::defaultMode
@@ -262,12 +253,25 @@ define ->
         )
       ).then (s, i) =>
         @initColumnsFor @get('boardField')
-        @_setIterationFromPreference()
+        @_setSessionIteration()
         @aggregator.endLoad component: this
         @publishEvent "projectready", @getProjectName()
 
     _onIterationChange: (model, value, options) ->
       iterationRef = value?.get('_ref')
-      @setIterationPreference iterationRef
+      projectOid = utils.getOidFromRef(@get('project').get('_ref'))
+      window.sessionStorage.setItem "iteration.#{projectOid}", iterationRef
+
+    _setSessionIteration: ->
+      projectOid = utils.getOidFromRef(@get('project').get('_ref'))
+      savedIteration = window.sessionStorage.getItem "iteration.#{projectOid}"
+      iterations = @get('iterations')
+
+      iteration = if savedIteration
+        iterations.find _.isAttributeEqual('_ref', savedIteration)
+      else
+        iterations.findClosestAsCurrent()
+
+      @set('iteration', iteration)
 
     _asClientMetricsParent: -> clientMetricsParent: this

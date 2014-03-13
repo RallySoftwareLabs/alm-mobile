@@ -3,13 +3,13 @@ grunt-aws.json
 client/gen
 client/dist
 client/dist.zip
+client/test/testpage.html
 server/gen
 public/
 node_modules/
 Gemfile.lock
 tmtags
 tmtagsHistory
-testpage.html
 .tm_properties
 .authors
 *.log
