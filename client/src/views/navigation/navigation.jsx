@@ -12,7 +12,7 @@ define(function() {
     },
     render: function() {
     	return (
-        <div className="body row">
+        <div className="body row" aria-hidden="true">
           <div className="col-xs-12 buttons">
             {this.getButtons()}
           </div>

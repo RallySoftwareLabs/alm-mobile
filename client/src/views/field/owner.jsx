@@ -15,9 +15,14 @@ define(function() {
   		};
   	},
   	render: function() {
+      var owner = this.props.item.get('Owner');
   		return (
   			<div className="display">
-	  			<div className="owner-field" onClick={ this._onClick }>{ this._getProfileImageMarkup() }{ this._getNameMarkup() }</div>
+	  			<div className="owner-field"
+               onClick={ this._onClick }
+               aria-label={ "Owner. " + (owner ? "Owned by " + this.getFieldValue()._refObjectName : "Not currently owned") + ". Click to set yourself as the owner." }>
+            { this._getProfileImageMarkup() }{ this._getNameMarkup() }
+          </div>
 	  		</div>
 			);
   	},
@@ -37,9 +42,9 @@ define(function() {
   	_getNameMarkup: function() {
   		var fieldValue = this.getFieldValue();
   		if (this.props.item.get('Owner')) {
-  		    return <div className="name ellipsis" title={ fieldValue._refObjectName }>{ fieldValue._refObjectName }</div>;
+  		    return <div className="name ellipsis" title={ fieldValue._refObjectName } aria-hidden="true">{ fieldValue._refObjectName }</div>;
   		}
-  		return <div className="name">Claim</div>;
+  		return <div className="name" aria-hidden="true">Claim</div>;
   	}
   });
 });

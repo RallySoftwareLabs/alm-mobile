@@ -21,7 +21,7 @@ define(function() {
       var model = this.props.model,
           newArtifact = !model.get('_ref');
   		return (
-  			<div className="detail-view">
+  			<div className="detail-view" autoFocus="autofocus">
   			  <div className="row">
   			    <div className="col-xs-12 NameView">
   			  		<Name item={ model } editMode={ newArtifact }/>

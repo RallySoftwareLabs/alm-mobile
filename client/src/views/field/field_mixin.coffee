@@ -1,6 +1,8 @@
 define ->
   _ = require 'underscore'
   React = require 'react'
+  utils = require 'lib/utils'
+
   focusEditor = ->
     if @isEditMode() && @_isExistingObject()
       @$('.editor').focus();
@@ -22,6 +24,25 @@ define ->
     getFieldDisplayValue: ->
       val = @getFieldValue()
       if _.isObject(val) then val._refObjectName else val
+
+    getFieldId: ->
+      "#{utils.toCssClass(@props.field)}-field"
+
+    getFieldAttribute: ->
+      @props.item.getAttribute(@props.field)
+
+    getFieldDisplayName: ->
+      @getFieldAttribute().Name
+
+    getFieldAriaLabel: ->
+      fieldDisplayName = @getFieldDisplayName()
+      label = "#{fieldDisplayName} field. "
+      label += if @getFieldAttribute().AttributeType == "COLLECTION"
+        fieldValue = @getFieldValue()
+        (if fieldValue then "This item has #{fieldValue.Count} #{fieldDisplayName}" else "This item is still loading") + ". Click to view and add #{fieldDisplayName}."
+      else
+        "Current value is #{@getFieldDisplayValue()}. Click to Edit."
+      label
       
     saveModel: (updates, opts) ->
       if @_isExistingObject()

@@ -19,7 +19,10 @@ define(function() {
       };
       var fieldValue = this.getFieldValue();
       return (
-        <div className="discussion-field display" onClick={ this._onClick }>
+        <div className="discussion-field display"
+             onClick={ this._onClick }
+             role="link"
+             aria-label={ this.getFieldAriaLabel() }>
           <div className="well-title control-label" dangerouslySetInnerHTML={{__html: '&nbsp;'}}/>
           <div className="icon">{ fieldValue ? fieldValue.Count ? fieldValue.Count : <i className="icon-add"/> : '' }</div>
         </div>

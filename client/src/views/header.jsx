@@ -21,9 +21,9 @@ define(function() {
         <div className="navbar navbar-inverse navbar-fixed-top" role="navigation">
           <div className="row">
             <div className="col-xs-2 left-button">{ this.getLeftButton(currentPage) }</div>
-            <div className="col-xs-7 title"><div className="ellipsis">{ this.state.title }</div></div>
+            <div className="col-xs-7 title"><div className="ellipsis" role="heading">{ this.state.title }</div></div>
             <div className="col-xs-3 right-button">
-              <a href="#" className="right" onClick={ this._navigateToFn('search') }><i className="picto icon-search"></i></a>
+              <a href="#" className="right" onClick={ this._navigateToFn('search') } aria-label="Search for artifacts"><i className="picto icon-search"></i></a>
               { this.getRightButton(currentPage) }
             </div>
           </div>
@@ -34,20 +34,20 @@ define(function() {
       if (_.contains(['/', '/userstories', '/defects', '/tasks', '/board', '/recentActivity'], currentPage)) {
         return <span/>;//this.makeButton('navigation', 'grid', 'left');
       } else {
-        return this.makeButton('back', 'back', 'left');
+        return this.makeButton('back', 'back', 'left', 'Go Back');
       }
     },
     getRightButton: function(currentPage) {
       if (currentPage === '/settings') {
         return <div/>;
       } else {
-        return this.makeButton('settings', 'gear', 'right');
+        return this.makeButton('settings', 'gear', 'right', 'Change Settings');
       }
     },
-    makeButton: function(target, icon, cls) {
+    makeButton: function(target, icon, cls, ariaLabel) {
       cls = cls || '';
       return (
-        <a href="#" className={ cls } onClick={ this._navigateToFn(target) }>
+        <a href="#" className={ cls } onClick={ this._navigateToFn(target) } aria-label={ ariaLabel }>
           <i className={ "picto icon-" + icon }/>
         </a>
       );

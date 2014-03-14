@@ -11,12 +11,19 @@ define(function() {
           iterationHeader = <div/>;
       if (iteration && this.props.visible) {
         iterationHeader = (
-          <div className="iteration-header">
-            <dl className="dl-horizontal">
-              <dt>Iteration:</dt>
-              <dd className="name">{iteration.Name}</dd>
-              <dd className="dates">{moment(iteration.StartDate).format('L')} - {moment(iteration.EndDate).format('L')}</dd>
-            </dl>
+          <div>
+            <div className="iteration-header">
+              <dl className="dl-horizontal"
+                  role="heading"
+                  aria-label={
+                    "Current iteration: " + iteration.Name +
+                    ". From " + moment(iteration.StartDate).format('LL') + " to " + moment(iteration.EndDate).format('LL')
+                  }>
+                <dt>Iteration:</dt>
+                <dd className="name">{iteration.Name}</dd>
+                <dd className="dates">{moment(iteration.StartDate).format('L')} - {moment(iteration.EndDate).format('L')}</dd>
+              </dl>
+            </div>
           </div>
         );
       }

@@ -16,7 +16,7 @@ define(function() {
       if (this.isEditMode()) {
         return <div className="edit"><div className="header">{ this.getInputMarkup() }</div></div>;
       }
-  		return <div className="display"><div className="header" onClick={ this._onClick }>{ this.getFieldValue() }</div></div>;
+  		return <div className="display"><div className="header" role="link" onClick={ this._onClick } aria-label={ "Name. " + this.getFieldValue() + ". Click to edit" }>{ this.getFieldValue() }</div></div>;
   	},
 
     _onClick: function(e) {

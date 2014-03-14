@@ -16,11 +16,14 @@ define(function() {
       	cardStyle.color = 'white';
       }
       return (
-        <div className={this.getCardClass(m)} style={cardStyle} onClick={this._onClick}>
-          <a className="field formatted-id">{m.get('FormattedID')}</a>
+        <div className={this.getCardClass(m)}
+             style={cardStyle}
+             onClick={this._onClick}
+             aria-label={ "Card for " + m.get('_type') + " with name: " + m.get('Name') + "." }>
+          <a className="field formatted-id" role="link" aria-label={ "Formatted ID. " + m.get('FormattedID') + ". Click to view item." }>{m.get('FormattedID')}</a>
           <Owner model={m}/>
           <div className="clear"/>
-          <div className="field name">{m.get('Name')}</div>
+          <div className="field name" role="link" aria-label={ "Name. " + m.get('Name') + ". Click to view item." }>{m.get('Name')}</div>
           <CardTasks model={m}/>
           <CardDefects model={m}/>
           <div className="clear"/>
