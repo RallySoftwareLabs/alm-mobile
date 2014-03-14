@@ -19,13 +19,14 @@ define ->
       throw new Error "Cannot create route for unknown controller function #{path}, #{handler}"
 
     routes[path] = ->
+      args = _.toArray(arguments)
       if @authenticated || options.public
-        return @allowThrough(path, controllerClass, fnName, arguments)
+        return @allowThrough(path, controllerClass, fnName, args)
 
       @app.session.authenticated (@authenticated) =>
         if @authenticated
           if @app.session.hasAcceptedLabsNotice()
-            return @allowThrough(path, controllerClass, fnName, arguments)
+            return @allowThrough(path, controllerClass, fnName, args)
           else
             @afterLogin ?= path unless _.contains(['login', 'logout', 'labsNotice'], path)
             @navigate 'labsNotice', trigger: true, replace: true
