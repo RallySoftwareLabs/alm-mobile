@@ -10,7 +10,7 @@ define ->
   currentController = null
   aggregator = null
 
-  addRoute = (path, handler) ->
+  addRoute = (path, handler, options = {}) ->
     [controllerName, fnName] = handler.split '#'
     controllerClass = require("controllers/#{controllerName}#{controllerSuffix}")
     unless controllerClass
@@ -19,24 +19,19 @@ define ->
       throw new Error "Cannot create route for unknown controller function #{path}, #{handler}"
 
     routes[path] = ->
-      slug = Backbone.history.location.pathname
+      if @authenticated || options.public
+        return @allowThrough(path, controllerClass, fnName, arguments)
 
-      aggregator.startSession('Navigation', slug: slug)
-      aggregator.recordAction
-        component: this
-        description: "visited #{slug}"
-
-      currentController?.dispose()
-      currentController = new controllerClass()
-      
-      aggregator.beginLoad
-        component: currentController
-        description: "loading page"
-
-      @listenToOnce currentController, 'controllerfinished', ->
-        aggregator.endLoad component: currentController
-        
-      currentController[fnName].apply(currentController, arguments)
+      @app.session.authenticated (@authenticated) =>
+        if @authenticated
+          if @app.session.hasAcceptedLabsNotice()
+            return @allowThrough(path, controllerClass, fnName, arguments)
+          else
+            @afterLogin ?= path unless _.contains(['login', 'logout', 'labsNotice'], path)
+            @navigate 'labsNotice', trigger: true, replace: true
+        else
+          @afterLogin ?= path unless _.contains(['login', 'logout', 'labsNotice'], path)
+          @navigate 'logout', trigger: true
 
   return {
     initialize: (config) ->
@@ -83,8 +78,8 @@ define ->
       addRoute 'new/task', 'task_detail#create'
       addRoute 'new/defect', 'defect_detail#create'
 
-      addRoute 'login', 'auth#login'
-      addRoute 'logout', 'auth#logout'
+      addRoute 'login', 'auth#login', public: true
+      addRoute 'logout', 'auth#logout', public: true
       addRoute 'labsNotice', 'auth#labsNotice'
 
       addRoute 'settings', 'settings#show'
@@ -107,10 +102,41 @@ define ->
         onChangeURL: (path, options = {}) ->
           @navigate path, _.defaults(options, trigger: false)
 
+        allowThrough: (path, controllerClass, fnName, args) ->
+          if @afterLogin? && path != @afterLogin && !_.contains(['login', 'logout', 'labsNotice'], path)
+            path = @afterLogin
+            @afterLogin = null
+
+            @navigate path, trigger: true, replace: true
+          else
+            @execController(controllerClass, fnName, args)
+
+        execController: (controllerClass, fnName, args) ->
+          slug = Backbone.history.location.pathname
+
+          aggregator.startSession('Navigation', slug: slug)
+          aggregator.recordAction
+            component: this
+            description: "visited #{slug}"
+
+          currentController?.dispose()
+          currentController = new controllerClass()
+          
+          aggregator.beginLoad
+            component: currentController
+            description: "loading page"
+
+          @listenToOnce currentController, 'controllerfinished', ->
+            aggregator.endLoad component: currentController
+            
+          currentController[fnName].apply(currentController, args)
+
         initialize: ->
           _.extend this, Messageable
           @subscribeEvent 'router:route', @onRoute
           @subscribeEvent 'router:changeURL', @onChangeURL
+          @app = config.app
+          @authenticated = false
 
       router = new Router()
 

@@ -45,19 +45,14 @@ define ->
       @session.authenticated (authenticated) =>
 
         # @initRouter routes, pushState: false, root: '/subdir/'
-        Router.initialize aggregator: @aggregator
+        Router.initialize aggregator: @aggregator, app: this
 
         # Actually start routing.
         Backbone.history.start pushState: true
         
         hash = Backbone.history.fragment
-        if authenticated
-          hash = '' if hash == 'login'
-          @publishEvent 'router:route', hash, replace: true
-        else
-          unless _.contains(['login', 'logout', 'labsNotice'], hash)
-            @afterLogin = hash
-            @publishEvent 'router:route', 'logout'
+        
+        @publishEvent 'router:route', hash, replace: true
 
         # Freeze the application instance to prevent further changes.
         Object.freeze? this

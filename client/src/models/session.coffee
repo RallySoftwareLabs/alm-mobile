@@ -28,8 +28,12 @@ define ->
       if !@get('securityToken')
         return cb? false
 
-      @fetchUserInfo (err, model) =>
-        cb? !err?
+      @fetchUserInfo (err, user) =>
+        preferences = new Preferences()
+        preferences.clientMetricsParent = this
+        @set 'prefs', preferences
+        preferences.fetchMobilePrefs(user).then =>
+          cb? !err?
 
     authenticate: (username, password, cb) ->
       $.ajax(
@@ -49,8 +53,7 @@ define ->
           @setUsername username
           @setSecurityToken data.OperationResult.SecurityToken
 
-          @fetchUserInfo (err, model) =>
-            cb? !err?
+          @authenticated cb
         error: (xhr, errorType, error) =>
           cb? false
       )
@@ -60,14 +63,7 @@ define ->
       return unless user?
       @aggregator.beginLoad component: this, description: 'session init'
 
-      preferences = new Preferences()
-      preferences.clientMetricsParent = this
-      @set 'prefs', preferences
-
-      $.when(
-        Projects.fetchAll(),
-        preferences.fetchMobilePrefs user
-      ).then (p, prefs) =>
+      Projects.fetchAll().then (p) =>
         projects = Projects::projects
         @_setModeFromPreference()
         if projectRef
