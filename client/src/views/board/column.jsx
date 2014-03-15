@@ -1,11 +1,12 @@
 /** @jsx React.DOM */
 define(function() {
-  var React = require('react'),
-      _ = require('underscore'),
-      ReactView = require('views/base/react_view'),
-      app = require('application'),
-      Card = require('views/board/card'),
-      IterationHeader = require('views/iteration_header');
+  var React = require('react');
+  var _ = require('underscore');
+  var ReactView = require('views/base/react_view');
+  var app = require('application');
+  var utils = require('lib/utils');
+  var Card = require('views/board/card');
+  var IterationHeader = require('views/iteration_header');
 
   return ReactView.createBackboneClass({
     getDefaultProps: function() {
@@ -34,15 +35,15 @@ define(function() {
               </div>
               <div className="body">
                 <button className="btn btn-primary add-button" onClick={this.onAddClick}>+ Add</button>
-                {this.getCardsMarkup(storiesAndDefects)}
+                {this._getCardsMarkup(storiesAndDefects)}
               </div>
           </div>
         </div>
       );
     },
-    getCardsMarkup: function(storiesAndDefects) {
+    _getCardsMarkup: function(storiesAndDefects) {
       return _.map(storiesAndDefects, function(model) {
-        return <Card key={model.get('_ref')} model={model} key={model.get('_ref')} />;
+        return <Card key={utils.toRelativeRef(model.get('_ref'))} model={model} />;
       }, this);
     },
     isColumnAtIndex: function(index) {
@@ -81,7 +82,7 @@ define(function() {
     },	
     onAddClick: function(e) {
       app.aggregator.recordAction({component: this, description: 'clicked add card'});
-      this.publishEvent('router:route', 'board/' + this.props.model.get('value') + '/userstory/new');
+      this.routeTo('board/' + this.props.model.get('value') + '/userstory/new');
       e.preventDefault();
     }
   });

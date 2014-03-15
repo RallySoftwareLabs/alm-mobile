@@ -101,7 +101,7 @@ define(function() {
     _goToItemPageFn: function(model) {
       var url = utils.getDetailHash(model);
       return _.bind(function(event) {
-        this.publishEvent('router:route', url);
+        this.routeTo(url);
         event.preventDefault();
       }, this);
     },

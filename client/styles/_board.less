@@ -86,7 +86,7 @@
             .formatted-id {
                 overflow: hidden;
             }
-            .name {
+            .name, .defects, .tasks {
                 display: none; // responsive below
             }
 
@@ -118,6 +118,23 @@
                     color: @white;
                 }
             }
+
+            .status-value {
+                margin-top: 5px;
+                margin-right: 5px;
+                float: left;
+                background-color: @nearerWhite;
+                border-radius: @border-radius-base;
+                padding: 4px;
+
+                .percentage {
+                    margin-right: 5px;
+                }
+
+                .to-do, .to-do-value {
+                    display: inline-block;
+                }
+            }
         }
 
         &.multi-column {
@@ -127,7 +144,7 @@
                 }
             }
             @media (min-width: @screen-sm) {
-                .card .owner .owner-name {
+                .card .owner .owner-name, .card .defects, .card .tasks {
                     display: inline-block;
                 }
             }
@@ -140,7 +157,7 @@
 
         &.single-column {
             .card {
-                .name {
+                .name, .defects, .tasks {
                     display: block;
                 }
                 .owner {

@@ -3,24 +3,27 @@ define(function() {
   var React = require('react');
   var ReactView = require('views/base/react_view');
   var app = require('application');
+  var CardDefects = require('views/board/card_defects');
+  var CardTasks = require('views/board/card_tasks');
   var Owner = require('views/board/owner');
 
   return ReactView.createBackboneClass({
     render: function() {
       var m = this.props.model,
-      		cardStyle = {},
-      		name = <div className="field name">{m.get('Name')}</div>,
-      		owner = <Owner model={m}/>;
+      		cardStyle = {};
       if (m.get('DisplayColor')) {
       	cardStyle.backgroundColor = m.get('DisplayColor');
       	cardStyle.color = 'white';
       }
       return (
-        <div className={this.getCardClass(m)} style={cardStyle} onClick={this.onClick}>
+        <div className={this.getCardClass(m)} style={cardStyle} onClick={this._onClick}>
           <a className="field formatted-id">{m.get('FormattedID')}</a>
-          {owner}
+          <Owner model={m}/>
           <div className="clear"/>
-          {name}
+          <div className="field name">{m.get('Name')}</div>
+          <CardTasks model={m}/>
+          <CardDefects model={m}/>
+          <div className="clear"/>
         </div>
       );
     },
@@ -37,7 +40,7 @@ define(function() {
       }
       return cardClass;
     },
-    onClick: function(e) {
+    _onClick: function(e) {
       app.aggregator.recordAction({component: this, description: 'clicked card'});
     	this.publishEvent('cardclick', this, this.props.model);
     	e.preventDefault();

@@ -53,7 +53,7 @@ define(function() {
         currentRoute = window.location.pathname;
 
         if (viewHash !== currentRoute && !(viewHash === '' && _.contains(['/userstories', '/tasks', '/defects'], currentRoute))) {
-          this.publishEvent('router:route', viewHash);
+          this.routeTo(viewHash);
         }
       }, this);
     },

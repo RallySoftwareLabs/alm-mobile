@@ -95,7 +95,7 @@ define ->
         "\"#{value}\""
       )
       data =
-        fetch: "FormattedID,DisplayColor,Blocked,Ready,Name,Owner,#{field}"
+        fetch: "FormattedID,DisplayColor,Blocked,Ready,Name,Owner,#{field},Tasks:summary[State;Estimate;ToDo;Owner;Blocked],TaskStatus,Defects:summary[State;Owner],DefectStatus,Discussion:summary"
         query: "(#{colQuery} AND ((Requirement = null) OR (DirectChildrenCount = 0)))"
         types: 'hierarchicalrequirement,defect'
         order: "Rank ASC"

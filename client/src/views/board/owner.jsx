@@ -23,7 +23,7 @@ define(function() {
           <div className="owner-name">
             {ownerName}
           </div>
-          <div className="profile-image" style={profileImageStyle}>{profileImage}</div>
+          <div className="profile-image" style={profileImageStyle} aria-hidden="true">{profileImage}</div>
         </div>
       );
     }

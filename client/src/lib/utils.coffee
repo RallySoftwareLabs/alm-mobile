@@ -51,6 +51,10 @@ define ->
       else
         parts[parts.length - 2]
 
+    toRelativeRef: (ref = '') ->
+      prefix = appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION'
+      if ref.indexOf(prefix) == -1 then ref else ref.substring(prefix.length)
+
     getProfileImageUrl: (ref, size = 25) ->
       return "" unless ref
       baseUrl = appConfig.almWebServiceBaseUrl

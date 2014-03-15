@@ -72,7 +72,7 @@ define(function() {
       } else if (page === 'navigation') {
         this.publishEvent('navigation:show');
       } else {
-        this.publishEvent('router:route', page);
+        this.routeTo(page);
       }
       e.preventDefault();
     }

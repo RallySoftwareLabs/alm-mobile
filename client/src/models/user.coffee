@@ -9,7 +9,7 @@ define ->
     fetchSelf: (cb) ->
       @fetch
         data:
-          shallowFetch: 'DisplayName,UserProfile[DefaultProject],Subscription,SubscriptionID'
+          fetch: 'DisplayName,UserProfile,DefaultProject,DefaultWorkspace,WorkspaceConfiguration,TaskUnitName,Subscription,SubscriptionID'
         success: (model, resp, opts) =>
           cb?(null, model)
         error: (model, resp, options) =>

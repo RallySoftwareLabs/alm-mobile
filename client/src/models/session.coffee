@@ -7,6 +7,7 @@ define ->
   Preference = require 'models/preference'
   UserStory = require 'models/user_story'
   UserProfile = require 'models/user_profile'
+  Workspace = require 'models/workspace'
   Schema = require 'collections/schema'
   Iterations = require 'collections/iterations'
   Preferences = require 'collections/preferences'
@@ -25,15 +26,19 @@ define ->
       @listenTo this, 'change:iteration', @_onIterationChange
 
     authenticated: (cb) ->
-      if !@get('securityToken')
-        return cb? false
+      return cb? false if !@get('securityToken')
+      return cb? true if @get('user')
 
-      @fetchUserInfo (err, user) =>
+      @aggregator.beginLoad component: this, description: 'fetching logged-in user and prefs'
+      @_fetchUserInfo (err, user) =>
+        cb? false if err?
         preferences = new Preferences()
         preferences.clientMetricsParent = this
         @set 'prefs', preferences
+
         preferences.fetchMobilePrefs(user).then =>
-          cb? !err?
+          @aggregator.endLoad
+          cb? true
 
     authenticate: (username, password, cb) ->
       $.ajax(
@@ -123,13 +128,11 @@ define ->
           xhr.setRequestHeader("X-RallyIntegrationName", appConfig.appName)
       ).always => @aggregator.endLoad component: this
           
-    fetchUserInfo: (cb) ->
+    _fetchUserInfo: (cb) ->
       user = new User()
       user.clientMetricsParent = this
-      @aggregator.beginLoad component: this, description: 'fetching logged-in user'
 
       user.fetchSelf (err, u) =>
-        @aggregator.endLoad component: this
         unless err?
           @set 'user', u
         cb(err, u)
