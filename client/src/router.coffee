@@ -28,10 +28,10 @@ define ->
           if @app.session.hasAcceptedLabsNotice()
             return @allowThrough(path, controllerClass, fnName, args)
           else
-            @afterLogin ?= path unless _.contains(['login', 'logout', 'labsNotice'], path)
+            @afterLogin ?= Backbone.history.fragment unless _.contains(['login', 'logout', 'labsNotice'], path)
             @navigate 'labsNotice', trigger: true, replace: true
         else
-          @afterLogin ?= path unless _.contains(['login', 'logout', 'labsNotice'], path)
+          @afterLogin ?= Backbone.history.fragment unless _.contains(['login', 'logout', 'labsNotice'], path)
           @navigate 'logout', trigger: true
 
   return {
