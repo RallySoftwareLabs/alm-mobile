@@ -40,10 +40,12 @@ define ->
       aggregator = config.aggregator
 
       defaultRoutes =
-        board: 'board#index'
-        wall: 'wall#splash'
+        board: '/board'
+        wall: '/wall'
 
-      addRoute '', defaultRoutes[appConfig.mode]
+      # handle default route by redirecting to full path
+      routes[''] = ->
+        @navigate defaultRoutes[appConfig.mode], trigger: true, replace: true
 
       addRoute 'board', 'board#index'
       addRoute 'board/:column', 'board#column'
