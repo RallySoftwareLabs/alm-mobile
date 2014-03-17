@@ -1,18 +1,14 @@
-![Rally Labs](client/assets/img/rally-labs-logo-trans.png)
-
-This is a fork of https://github.com/RallySoftwareLabs/alm-mobile with some new views that we hope to sell someday.
+This is a fork of https://github.com/RallySoftwareLabs/alm-mobile with some new views that we hope to sell someday. 
 
 This site is currently running at https://wall.rallydev.com.
 
 ## How can I contribute?
 
-We welcome pull requests, so if you would like the site to behave differently or would like to see additional functionality, you can make the code change yourself and [submit a pull request](https://help.github.com/articles/creating-a-pull-request). If you'd simply like to file a defect or feature request, you can [submit a GitHub issue](https://github.com/RallySoftwareLabs/alm-mobile/issues). You can also track the progress of the issue on our [waffle.io](http://waffle.io/RallySoftwareLabs/alm-mobile) board.
+We welcome pull requests, so if you would like the site to behave differently or would like to see additional functionality, you can make the code change yourself and [submit a pull request](https://help.github.com/articles/creating-a-pull-request). 
 
 ## Ready to hack? Here's how.
 
-Clone the repo:
-
-        git clone ssh://git/export/git/alm-mobile.git
+Clone the repo.
 
 If you need to install node, run:
 
