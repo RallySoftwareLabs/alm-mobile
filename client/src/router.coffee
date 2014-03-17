@@ -129,6 +129,7 @@ define ->
 
           @listenToOnce currentController, 'controllerfinished', ->
             aggregator.endLoad component: currentController
+            aggregator.recordComponentReady component: currentController
             
           currentController[fnName].apply(currentController, args)
 
