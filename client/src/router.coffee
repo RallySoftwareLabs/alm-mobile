@@ -112,15 +112,13 @@ define ->
 
             @navigate path, trigger: true, replace: true
           else
-            @execController(controllerClass, fnName, args)
+            @execController(path, controllerClass, fnName, args)
 
-        execController: (controllerClass, fnName, args) ->
-          slug = Backbone.history.location.pathname
-
-          aggregator.startSession('Navigation', slug: slug)
+        execController: (path, controllerClass, fnName, args) ->
+          aggregator.startSession('Navigation', slug: path.replace(/:/g,'_'))
           aggregator.recordAction
             component: this
-            description: "visited #{slug}"
+            description: "visited #{Backbone.history.location.pathname}"
 
           currentController?.dispose()
           currentController = new controllerClass()
