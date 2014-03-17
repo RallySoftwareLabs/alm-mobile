@@ -9,15 +9,14 @@ define(function() {
   return ReactView.createBackboneClass({
     render: function() {
       var m = this.props.model;
-      var activeDefectCount = this._getActiveDefectCount();
-      var defectsMarkup;
-
-      if (this._getActiveDefectCount() > 0) {
-        defectsMarkup = <span><span className="count">{ activeDefectCount }</span><span> active</span></span>;
-      } else {
-        defectsMarkup = <span dangerouslySetInnerHTML={{__html: '&nbsp;'}}/>
-      }
+      var activeDefectCount, defectsMarkup;
       if (this._hasDefects()) {
+        activeDefectCount = this._getActiveDefectCount()
+        if (activeDefectCount > 0) {
+          defectsMarkup = <span><span className="count">{ activeDefectCount }</span><span> active</span></span>;
+        } else {
+          defectsMarkup = <span dangerouslySetInnerHTML={{__html: '&nbsp;'}}/>
+        }
         return (
           <div className="status-value defects"
                title="Manage Defects"
