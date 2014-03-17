@@ -59,9 +59,9 @@
         .card {
             cursor: pointer;
             background-color: @white;
-            padding: 5px;
+            padding: 5px 5px 1px 5px;
             margin: 5px 0;
-
+            border-top: 4px solid @grey5;
 
             &.full {
                 .field {
@@ -86,7 +86,7 @@
             .formatted-id {
                 overflow: hidden;
             }
-            .name, .defects, .tasks {
+            .name, .defects, .tasks, .plan-estimate {
                 display: none; // responsive below
             }
 
@@ -109,14 +109,12 @@
                 }
             }
 
-            .clear {
-                clear: both;
+            .plan-estimate {
+                float: right;
             }
 
-            &.colored {
-                .field {
-                    color: @white;
-                }
+            .clear {
+                clear: both;
             }
 
             .status-value {
@@ -144,8 +142,15 @@
                 }
             }
             @media (min-width: @screen-sm) {
-                .card .owner .owner-name, .card .defects, .card .tasks {
-                    display: inline-block;
+                .card {
+                    background-image: url(/img/point-swipe-grey.png);
+                    background-position: right -2px bottom -2px;
+                    background-repeat: no-repeat;
+                    background-size: auto;
+                    
+                    .owner .owner-name, .plan-estimate, .defects, .tasks {
+                        display: inline-block;
+                    }
                 }
             }
             @media (min-width: @screen-md) {
@@ -157,7 +162,11 @@
 
         &.single-column {
             .card {
-                .name, .defects, .tasks {
+                background-image: url(/img/point-swipe-grey.png);
+                background-position: right -2px bottom -2px;
+                background-repeat: no-repeat;
+                background-size: auto;
+                .name, .plan-estimate, .defects, .tasks {
                     display: block;
                 }
                 .owner {

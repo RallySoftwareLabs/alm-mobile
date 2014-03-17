@@ -9,14 +9,14 @@ define(function() {
 
   return ReactView.createBackboneClass({
     render: function() {
-      var m = this.props.model,
-      		cardStyle = {};
+      var m = this.props.model;
+      var cardStyle = {};
+      var planEstimateMarkup = this._getPlanEstimateMarkup();
       if (m.get('DisplayColor')) {
-      	cardStyle.backgroundColor = m.get('DisplayColor');
-      	cardStyle.color = 'white';
+      	cardStyle.borderTopColor = m.get('DisplayColor');
       }
       return (
-        <div className={this.getCardClass(m)}
+        <div className={this._getCardClass(m)}
              style={cardStyle}
              onClick={this._onClick}
              aria-label={ "Card for " + m.get('_type') + " with name: " + m.get('Name') + "." }>
@@ -27,10 +27,13 @@ define(function() {
           <CardTasks model={m}/>
           <CardDefects model={m}/>
           <div className="clear"/>
+          { planEstimateMarkup }
+          <div className="clear"/>
         </div>
       );
     },
-    getCardClass: function(m) {
+
+    _getCardClass: function(m) {
     	var cardClass = "card full";
       if (m.get('Blocked')) {
       	cardClass += ' blocked';
@@ -38,11 +41,18 @@ define(function() {
       if (m.get('Ready')) {
       	cardClass += ' ready';
       }
-      if (m.get('DisplayColor')) {
-      	cardClass += ' colored';
-      }
       return cardClass;
     },
+
+    _getPlanEstimateMarkup: function() {
+      var m = this.props.model;
+      var planEstimate = m.get('PlanEstimate');
+      if (planEstimate != null) {
+        return <div className="field plan-estimate" role="link" aria-label={ "Plan Estimate. " + planEstimate + ". Click to view item." }>{ planEstimate }</div>;
+      }
+      return <div dangerouslySetInnerHTML={{__html: '&nbsp;'}}/>;
+    },
+
     _onClick: function(e) {
       app.aggregator.recordAction({component: this, description: 'clicked card'});
     	this.publishEvent('cardclick', this, this.props.model);
