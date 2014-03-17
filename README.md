@@ -1,13 +1,8 @@
 ![Rally Labs](client/assets/img/rally-labs-logo-trans.png)
 
-Development of the mobile Rally Software ALM platform is a project of Rally Innovation Labs. For more info, visit http://labs.rallydev.com.
+This is a fork of https://github.com/RallySoftwareLabs/alm-mobile with some new views that we hope to sell someday.
 
-Use of this mobile application is on an as-is, as-available basis and it not subject to Rally’s Service Level Agreement. Support of this mobile application, evolution of this application and even ongoing existence of this Rally Labs mobile application is not guaranteed.
-
-ALM Mobile [![Stories in Ready](https://badge.waffle.io/RallySoftwareLabs/alm-mobile.png?label=ready)](http://waffle.io/RallySoftwareLabs/alm-mobile)
-=========
-
-This site is currently running at https://m.rallydev.com.
+This site is currently running at https://wall.rallydev.com.
 
 ## How can I contribute?
 
