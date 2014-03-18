@@ -25,19 +25,29 @@ define(function() {
           <div className="arrows-left">
               <div className={ 'well well-sm lt' + (leftDisabled ? ' disabled' : '') }
                    onClick={ this[reverseArrows ? '_onRightArrow' : '_onLeftArrow'] }
+                   onKeyDown={ this.handleEnterAsClick(this[reverseArrows ? '_onRightArrow' : '_onLeftArrow']) }
+                   tabIndex="0"
                    role="link"
                    aria-labelledby={ !leftDisabled && this.getFieldId() + (reverseArrows ? '-aria-next' : '-aria-previous') }>
                 <span className="picto icon-chevron-left"></span>
               </div>
           </div>
           <div className="arrows-center">
-            <div className="well well-sm" onClick={ this.startEdit } role="link" aria-labelledby={ this.getFieldId() } aria-label={ "Click to edit." }>
+            <div className="well well-sm"
+                 onClick={ this.startEdit }
+                 onKeyDown={ this.handleEnterAsClick(this.startEdit) }
+                 tabIndex="0"
+                 role="link"
+                 aria-labelledby={ this.getFieldId() }
+                 aria-label={ "Click to edit." }>
               { this.getFieldDisplayValue() || this.getEmptySpanMarkup() }
             </div>
           </div>
           <div className="arrows-right">
               <div className={ 'well well-sm lt' + (rightDisabled ? ' disabled' : '') }
                    onClick={ this[reverseArrows ? '_onLeftArrow' : '_onRightArrow'] }
+                   onKeyDown={ this.handleEnterAsClick(this[reverseArrows ? '_onLeftArrow' : '_onRightArrow']) }
+                   tabIndex="0"
                    role="link"
                    aria-labelledby={ !rightDisabled && this.getFieldId() + (reverseArrows ? '-aria-previous' : '-aria-next') }>
                 <span className="picto icon-chevron-right"></span>

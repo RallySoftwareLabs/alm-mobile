@@ -12,8 +12,13 @@ define(function() {
       var fieldValue = this.getFieldValue();
       return (
         <div className={ "display" + (fieldValue ? ' on' : '')}>
-          <div className="well well-sm" onClick={ this._onClick }>
-              <div className={ "picto icon-" +  this.props.field.toLowerCase() }/>{ this.props.field }
+          <div className="well well-sm"
+            role="link"
+            aria-label={ this.getFieldAriaLabel() }
+            tabIndex="0"
+            onClick={ this._onClick }
+            onKeyDown={ this.handleEnterAsClick(this._onClick) }>
+              <div className={ "picto icon-" +  this.props.field.toLowerCase() } aria-hidden="true"/>{ this.props.field }
           </div>
         </div>
       );

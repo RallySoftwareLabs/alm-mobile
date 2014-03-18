@@ -19,7 +19,9 @@ define(function() {
   		return (
   			<div className="display">
 	  			<div className="owner-field"
+               tabIndex="0"
                onClick={ this._onClick }
+               onKeyDown={ this.handleEnterAsClick(this._onClick) }
                aria-label={ "Owner. " + (owner ? "Owned by " + this.getFieldValue()._refObjectName : "Not currently owned") + ". Click to set yourself as the owner." }>
             { this._getProfileImageMarkup() }{ this._getNameMarkup() }
           </div>

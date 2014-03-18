@@ -10,7 +10,10 @@ define(function() {
 
   return ReactView.createBackboneClass({
     getDefaultProps: function() {
-      return {showLoadingIndicator: true};
+      return {
+        showLoadingIndicator: true,
+        tabIndex: 10
+      };
     },
     render: function() {
       var model = this.props.model,
@@ -19,16 +22,17 @@ define(function() {
           goRight = '',
           storiesAndDefects = model.artifacts.sortBy(function(m) { return m.get('DragAndDropRank') });
       if (singleColumn && !this.isColumnAtIndex(0)) {
-        goLeft = <i className="go-left icon-chevron-left" onClick={this.goLeft} role="link" aria-label="Go to previous column"></i>;
+        goLeft = <i className="go-left icon-chevron-left" onClick={this.goLeft} role="link" aria-label="Go to previous column" tabIndex={ this.props.tabIndex + 1 }></i>;
       }
       if (singleColumn && !this.isColumnAtIndex(this.props.columns.length - 1)) {
-        goRight = <i className="go-right icon-chevron-right" onClick={this.goRight} role="link" aria-label="Go to previous column"></i>;
+        goRight = <i className="go-right icon-chevron-right" onClick={this.goRight} role="link" aria-label="Go to previous column" tabIndex={ this.props.tabIndex + 2 }></i>;
       }
       return (
         <div className="board">
           <IterationHeader visible={this.props.showIteration} />
           <div className={ "column" + (singleColumn ? ' single-column' : ' multi-column') }>
               <div className="header" onClick={this.onHeaderClick}
+                tabIndex={ this.props.tabIndex }
                 aria-label={ "Board column: " + model.get('value') +
                              (model.isSynced() ? ". has " + storiesAndDefects.length + " items" : ". loading") }>
                   {goLeft}
@@ -36,7 +40,7 @@ define(function() {
                   {goRight}
               </div>
               <div className="body">
-                <button className="btn btn-primary add-button" onClick={this.onAddClick} aria-label="Add new story to this column">+ Add</button>
+                <button className="btn btn-primary add-button" onClick={this.onAddClick} aria-label="Add new story to this column" tabIndex={ this.props.tabIndex + 3 }>+ Add</button>
                 {this._getCardsMarkup(storiesAndDefects)}
               </div>
           </div>
@@ -44,8 +48,8 @@ define(function() {
       );
     },
     _getCardsMarkup: function(storiesAndDefects) {
-      return _.map(storiesAndDefects, function(model) {
-        return <Card key={utils.toRelativeRef(model.get('_ref'))} model={model} />;
+      return _.map(storiesAndDefects, function(model, idx) {
+        return <Card key={utils.toRelativeRef(model.get('_ref'))} model={model} tabIndex={ this.props.tabIndex + 4 + idx }/>;
       }, this);
     },
     isColumnAtIndex: function(index) {

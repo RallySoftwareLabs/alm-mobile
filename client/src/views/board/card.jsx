@@ -18,7 +18,9 @@ define(function() {
       return (
         <div className={this._getCardClass(m)}
              style={cardStyle}
-             onClick={this._onClick}
+             tabIndex={ this.props.tabIndex }
+             onClick={ this._onClick }
+             onKeyDown={ this.handleEnterAsClick(this._onClick) }
              aria-label={ "Card for " + m.get('_type') + " with name: " + m.get('Name') + "." }>
           <a className="field formatted-id" role="link" aria-label={ "Formatted ID. " + m.get('FormattedID') + ". Click to view item." }>{m.get('FormattedID')}</a>
           <Owner model={m}/>
