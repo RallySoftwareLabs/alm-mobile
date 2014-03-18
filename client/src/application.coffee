@@ -26,7 +26,7 @@ define ->
       fixIE10($)
 
       beaconUrl = if appConfig.almWebServiceBaseUrl == "https://rally1.rallydev.com/slm"
-        "https://rust.f4tech.com/beacon/"
+        "https://beacon.rallydev.com/beacon/"
       else
         "https://trust.f4tech.com/beacon/"
       @aggregator = new RallyMetrics.Aggregator
