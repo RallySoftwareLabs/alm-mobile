@@ -115,7 +115,7 @@ define ->
             @execController(path, controllerClass, fnName, args)
 
         execController: (path, controllerClass, fnName, args) ->
-          aggregator.startSession('Navigation', slug: path.replace(/:/g,'_'))
+          aggregator.startSession('Navigation', slug: path)
           aggregator.recordAction
             component: this
             description: "visited #{Backbone.history.location.pathname}"
