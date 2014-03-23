@@ -79,6 +79,10 @@ define ->
       spec.routeTo = (route) ->
         @publishEvent 'router:route', route
 
+      spec.handleEnterAsClick = (fn) ->
+        (e) =>
+          if e.keyCode == @keyCodes.ENTER_KEY then fn.call(this, e)
+
       spec.keyCodes =
         ENTER_KEY: 13
         ESCAPE_KEY: 27

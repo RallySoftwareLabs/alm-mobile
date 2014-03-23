@@ -43,28 +43,30 @@
 
     })();
   </script>
-  <script type="text/javascript" src="node_modules/requirejs/require.js"></script>
+  <script type="text/javascript" src="/node_modules/requirejs/require.js"></script>
   <script type="text/javascript">
     require.config({
       baseUrl: "",
       paths: {
-        "jqueryBase64": "/client/dist/js/jquery.base64.min",
         "bootstrap": "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min",
-        "backbone": "//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.0/backbone",
-        "spin": "//cdnjs.cloudflare.com/ajax/libs/spin.js/1.3.3/spin.min",
+        "backbone": "//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min",
+        "jquery": "//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.min",
+        "jqueryBase64": "/client/dist/js/jquery.base64.min",
         "moment": "//cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min",
         "pagedown": "//cdnjs.cloudflare.com/ajax/libs/pagedown/1.0/Markdown.Converter.min",
-        "react": "//cdnjs.cloudflare.com/ajax/libs/react/0.9.0/react",
+        "react": "//cdnjs.cloudflare.com/ajax/libs/react/0.9.0/react.min",
+        "spin": "//cdnjs.cloudflare.com/ajax/libs/spin.js/1.3.3/spin.min",
+        "underscore": "//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min",
         "chai": "/node_modules/chai/chai",
         "sinon": "/node_modules/sinon/pkg/sinon",
         "sinon-chai": "/node_modules/sinon-chai/lib/sinon-chai"
       },
       shim: {
-        sinon: {
-          exports: "sinon"
-        },
         jquery: {
           exports: "$"
+        },
+        underscore: {
+          exports: "_"
         },
         backbone: {
           deps: ["underscore", "jquery"],
@@ -87,6 +89,9 @@
         },
         pagedown: {
           exports: "Markdown"
+        },
+        sinon: {
+          exports: "sinon"
         }
       },
       waitSeconds: 15

@@ -11,11 +11,11 @@ define ->
         discussions = new Discussions()
         discussions.fetch(
           data:
-            fetch: "Text,User,Artifact,CreationDate,FormattedID"
+            shallowFetch: "Text,User,Artifact[FormattedID],CreationDate,FormattedID"
             project: app.session.get('project').get('_ref')
             projectScopeUp: false
             projectScopeDown: true
-            order: "CreationDate DESC,ObjectID"
+            order: "CreationDate DESC"
         ).always => @markFinished()
         
         @view = @renderReactComponent(DiscussionView,

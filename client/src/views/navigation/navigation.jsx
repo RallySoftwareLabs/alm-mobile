@@ -12,7 +12,7 @@ define(function() {
     },
     render: function() {
     	return (
-        <div className="body row">
+        <div className="body row" aria-hidden="true">
           <div className="col-xs-12 buttons">
             {this.getButtons()}
           </div>
@@ -53,7 +53,7 @@ define(function() {
         currentRoute = window.location.pathname;
 
         if (viewHash !== currentRoute && !(viewHash === '' && _.contains(['/userstories', '/tasks', '/defects'], currentRoute))) {
-          this.publishEvent('router:route', viewHash);
+          this.routeTo(viewHash);
         }
       }, this);
     },

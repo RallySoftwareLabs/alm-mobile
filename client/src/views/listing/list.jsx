@@ -35,7 +35,7 @@ define(function() {
 
     _userstoryItemMarkup: function(model) {
       return (
-        <div className="row" id={model.get('ObjectID')} onClick={this._goToItemPageFn(model)}>
+        <div className="row" onClick={this._goToItemPageFn(model)}>
           <div className="col-xs-11 item">
               <div className={this._getStateClassName(model)}></div>
               <div className="item-id-name">
@@ -68,7 +68,7 @@ define(function() {
         todo = <div className="col-xs-2 task-to-do"/>;
       }
       return (
-        <div className="row" id={model.get('ObjectID')} onClick={this._goToItemPageFn(model)}>
+        <div className="row" onClick={this._goToItemPageFn(model)}>
             <div className="col-xs-9 item">
                 <div className={this._getStateClassName(model)}></div>
                 <div className="item-id-name">
@@ -101,9 +101,9 @@ define(function() {
     },
 
     _goToItemPageFn: function(model) {
-      var url = utils.getTypeForDetailLink(model.get('_type')) + '/' + model.get('ObjectID');
+      var url = utils.getDetailHash(model);
       return _.bind(function(event) {
-        this.publishEvent('router:route', url);
+        this.routeTo(url);
         event.preventDefault();
       }, this);
     },

@@ -1,7 +1,9 @@
 define ->
   _ = require 'underscore'
   app = require 'application'
+  utils = require 'lib/utils'
   SiteController = require 'controllers/base/site_controller'
+  Artifacts = require 'collections/artifacts'
   Column = require 'models/column'
   UserStory = require 'models/user_story'
   BoardView = require 'views/board/board'
@@ -12,10 +14,19 @@ define ->
       @whenProjectIsLoaded =>
         field = app.session.get('boardField')
         columns = @getColumnModels field
+        artifacts = new Artifacts()
+        artifacts.clientMetricsParent = this
 
-        $.when.apply($,
-          _.map columns, (col) => col.fetch(@getFetchData(field, col.get('value')))
-        ).always => @markFinished()
+        $.when(
+          artifacts.fetch(@getFetchData(field, app.session.getBoardColumns()))
+        ).always =>
+          artifacts.each (artifact) ->
+            column = _.find columns, (column) ->
+              column.get('value') == artifact.get(field)
+            
+            column.artifacts.add artifact
+          _.invoke(columns, 'trigger', 'sync')
+          @markFinished()
 
         @view = @renderReactComponent BoardView, columns: columns, region: 'main'
 
@@ -29,8 +40,11 @@ define ->
 
         field = app.session.get('boardField')
         col = new Column(field: field, value: colValue)
-        col.clientMetricsParent = this
-        col.fetch(@getFetchData(field, colValue)).always => @markFinished()
+        col.artifacts.clientMetricsParent = this
+        options = @getFetchData(field, [colValue])
+        col.artifacts.fetch(options).always =>
+          col.trigger('sync', col, options)
+          @markFinished()
 
         @view = @renderReactComponent ColumnView,
           region: 'main'
@@ -50,9 +64,8 @@ define ->
       colValue = col.get('value')
       @redirectTo "board/#{colValue}"
 
-    onCardClick: (oid, type) ->
-      mappedType = @getRouteTypeFromModelType(type)
-      @redirectTo "#{mappedType}/#{oid}"
+    onCardClick: (view, model) ->
+      @redirectTo utils.getDetailHash(model)
 
     goLeft: (col) ->
       field = app.session.get('boardField')
@@ -77,12 +90,16 @@ define ->
           col.clientMetricsParent = this
           col
 
-    getFetchData: (field, value) ->
+    getFetchData: (field, values) ->
+      colQuery = utils.createQueryFromCollection(values, field, 'OR', (value) ->
+        "\"#{value}\""
+      )
       data =
-        fetch: ['ObjectID', 'FormattedID', 'Rank', 'DisplayColor', 'Blocked', 'Ready', 'Name', 'Owner'].join ','
-        query: "((#{field} = \"#{value}\") AND ((Requirement = null) OR (DirectChildrenCount = 0)))"
+        fetch: "FormattedID,DisplayColor,Blocked,Ready,Name,Owner,#{field},PlanEstimate,Tasks:summary[State;Estimate;ToDo;Owner;Blocked],TaskStatus,Defects:summary[State;Owner],DefectStatus,Discussion:summary"
+        query: "(#{colQuery} AND ((Requirement = null) OR (DirectChildrenCount = 0)))"
         types: 'hierarchicalrequirement,defect'
-        order: "Rank ASC,ObjectID"
+        order: "Rank ASC"
+        pagesize: 100
         project: app.session.get('project').get('_ref')
         projectScopeUp: false
         projectScopeDown: true
@@ -94,11 +111,4 @@ define ->
       if iterationRef
         data.query = "(#{data.query} AND (Iteration = \"#{iterationRef}\"))"
 
-      data
-
-    getRouteTypeFromModelType: (type = 'hierarchicalrequirement') ->
-      routeTypes =
-        hierarchicalrequirement: 'userstory'
-        defect: 'defect'
-
-      routeTypes[type.toLowerCase()]
+      data: data

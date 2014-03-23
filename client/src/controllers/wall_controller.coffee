@@ -56,54 +56,56 @@ define ->
           @subscribeEvent 'cardclick', @onCardClick
           @subscribeEvent 'headerclick', @onHeaderClick
 
-          @updateTitle "Enterprise Backlog"
-
+          @updateTitle "Enterprise Backlog for ..."
+          
           prefs = new Preferences()
           prefs.clientMetricsParent = this
           prefFetch = prefs.fetchWallPref(project)
 
-          $.when(prefFetch).then =>
-            if !prefs.length
-              @initiatives.trigger('add')
-              @markFinished()
+          @whenProjectIsLoaded project: project, showLoadingIndicator: false, fn: =>
 
-            pref = prefs.first()
-            chosenStates = @getChosenStates(pref)
-            @updateTitle "Enterprise Backlog for #{app.session.getProjectName()}"
-            projectRef = "/project/#{project}"
-
-            initiativesAndFeaturesPromise = $.when(
-              @fetchInitiatives(projectRef, chosenStates)
-              @fetchFeatures(projectRef)
-            )
-            userStoriesFetchPromise = @fetchUserStories(projectRef)
-            
-            initiativesAndFeaturesPromise.then =>
-              if @initiatives.isEmpty()
+            $.when(prefFetch).then =>
+              if !prefs.length
                 @initiatives.trigger('add')
                 @markFinished()
-              else
-                @features.each (f) =>
-                  parentRef = f.get('Parent')._ref
-                  initiative = @initiatives.find _.isAttributeEqual('_ref', parentRef)
 
-                  if initiative?
-                    initiative.features ?= new featuresModel()
-                    initiative.features.add f
-                
-                @initiatives.trigger('add')
+              pref = prefs.first()
+              chosenStates = @getChosenStates(pref)
+              @updateTitle "Enterprise Backlog for #{app.session.getProjectName()}"
+              projectRef = "/project/#{project}"#334329159'#12271
 
-                userStoriesFetchPromise.then =>
-                  @userStories.each (us) =>
-                    parentRef = us.get('PortfolioItem')._ref
-                    feature = @features.find _.isAttributeEqual('_ref', parentRef)
-
-                    if feature?
-                      feature.userStories ?= new UserStories()
-                      feature.userStories.add us
-
+              initiativesAndFeaturesPromise = $.when(
+                @fetchInitiatives(projectRef, chosenStates)
+                @fetchFeatures(projectRef)
+              )
+              userStoriesFetchPromise = @fetchUserStories(projectRef)
+              
+              initiativesAndFeaturesPromise.then =>
+                if @initiatives.isEmpty()
                   @initiatives.trigger('add')
                   @markFinished()
+                else
+                  @features.each (f) =>
+                    parentRef = f.get('Parent')._ref
+                    initiative = @initiatives.find _.isAttributeEqual('_ref', parentRef)
+
+                    if initiative?
+                      initiative.features ?= new Features()
+                      initiative.features.add f
+                  
+                  @initiatives.trigger('add')
+
+                  userStoriesFetchPromise.then =>
+                    @userStories.each (us) =>
+                      parentRef = us.get('PortfolioItem')._ref
+                      feature = @features.find _.isAttributeEqual('_ref', parentRef)
+
+                      if feature?
+                        feature.userStories ?= new UserStories()
+                        feature.userStories.add us
+
+                    @initiatives.trigger('add')
+                    @markFinished()
 
     fetchInitiatives: (projectRef, chosenStates) ->
       statesQuery = utils.createQueryFromCollection(chosenStates, 'State.Name', 'OR', (item) ->
@@ -111,7 +113,7 @@ define ->
       )
       @initiatives.fetchAllPages
         data:
-          fetch: 'FormattedID,Name'
+          fetch: 'FormattedID'
           query: statesQuery
           order: 'Rank ASC'
           project: projectRef
@@ -121,7 +123,7 @@ define ->
     fetchFeatures: (projectRef) ->
       @features.fetchAllPages
         data:
-          fetch: 'Parent,FormattedID',
+          shallowFetch: 'Parent,FormattedID',
           query: "(Parent != null)",
           order: 'Rank ASC'
           project: projectRef

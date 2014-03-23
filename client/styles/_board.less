@@ -59,9 +59,9 @@
         .card {
             cursor: pointer;
             background-color: @white;
-            padding: 5px;
+            padding: 5px 5px 1px 5px;
             margin: 5px 0;
-
+            border-top: 4px solid @grey5;
 
             &.full {
                 .field {
@@ -86,7 +86,7 @@
             .formatted-id {
                 overflow: hidden;
             }
-            .name {
+            .name, .defects, .tasks, .plan-estimate {
                 display: none; // responsive below
             }
 
@@ -109,13 +109,28 @@
                 }
             }
 
+            .plan-estimate {
+                float: right;
+            }
+
             .clear {
                 clear: both;
             }
 
-            &.colored {
-                .field {
-                    color: @white;
+            .status-value {
+                margin-top: 5px;
+                margin-right: 5px;
+                float: left;
+                background-color: @nearerWhite;
+                border-radius: @border-radius-base;
+                padding: 4px;
+
+                .percentage {
+                    margin-right: 5px;
+                }
+
+                .to-do, .to-do-value {
+                    display: inline-block;
                 }
             }
         }
@@ -127,8 +142,15 @@
                 }
             }
             @media (min-width: @screen-sm) {
-                .card .owner .owner-name {
-                    display: inline-block;
+                .card {
+                    background-image: url(/img/point-swipe-grey.png);
+                    background-position: right -2px bottom -2px;
+                    background-repeat: no-repeat;
+                    background-size: auto;
+                    
+                    .owner .owner-name, .plan-estimate, .defects, .tasks {
+                        display: inline-block;
+                    }
                 }
             }
             @media (min-width: @screen-md) {
@@ -140,7 +162,11 @@
 
         &.single-column {
             .card {
-                .name {
+                background-image: url(/img/point-swipe-grey.png);
+                background-position: right -2px bottom -2px;
+                background-repeat: no-repeat;
+                background-size: auto;
+                .name, .plan-estimate, .defects, .tasks {
                     display: block;
                 }
                 .owner {

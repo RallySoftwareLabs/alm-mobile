@@ -19,7 +19,7 @@ define(function() {
     mixins: [DetailMixin],
     render: function() {
       var model = this.props.model,
-          newArtifact = this.props.newArtifact,
+          newArtifact = !model.get('_ref'),
           childrenOrTasks = model.get('Children') && model.get('Children').Count ?
             (
               <div className="col-xs-3 ChildrenView">
@@ -33,7 +33,7 @@ define(function() {
               </div>
             );
       return (
-        <div className="detail-view">
+        <div className="detail-view" autoFocus="autofocus">
           <div className="row">
             <div className="col-xs-12 NameView">
               <Name item={ model } editMode={ newArtifact }/>

@@ -8,11 +8,3 @@ define ->
     constructor: ->
       super
       @artifacts = new Artifacts()
-
-    fetch: (data) ->
-      @artifacts.clientMetricsParent = this
-      $.when(
-        @artifacts.fetch(data: data)
-      ).done (a) =>
-        @setSynced true
-        @trigger 'sync', this, a, data: data

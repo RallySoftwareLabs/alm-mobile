@@ -20,10 +20,10 @@ define(function() {
       }
       return (
         <div className="field owner">
-          <div className="owner-name">
+          <div className="owner-name" role="link" aria-label={ "Owner. " + ownerName }>
             {ownerName}
           </div>
-          <div className="profile-image" style={profileImageStyle}>{profileImage}</div>
+          <div className="profile-image" style={profileImageStyle} aria-hidden="true">{profileImage}</div>
         </div>
       );
     }

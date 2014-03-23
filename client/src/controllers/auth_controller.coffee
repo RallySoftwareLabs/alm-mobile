@@ -29,14 +29,14 @@ define ->
           @view.showError 'There was an error signing in. Please try again.'
         else
           if authenticated
-            @redirectTo app.afterLogin, replace: true
+            @redirectTo '', replace: true
           else
             app.session.logout()
             @view.showError 'The password you have entered is incorrect.'
 
     onAccept: ->
       app.session.acceptLabsNotice().then =>
-        @redirectTo app.afterLogin, replace: true
+        @redirectTo '', replace: true
 
     onReject: ->
       @redirectTo 'login'

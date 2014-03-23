@@ -39,10 +39,11 @@ define ->
         @showCreateView Defect, View, props
 
     getFieldNames: ->
-      _.uniq([
+      [
         'Blocked'
         'Description'
         'Discussion'
+        'Environment'
         'FormattedID'
         'Iteration'
         'Name'
@@ -57,5 +58,5 @@ define ->
         'Severity'
         'State'
         'Tasks'
-        app.session.get('boardField')
-      ])
+        'c_KanbanState'
+      ]

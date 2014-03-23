@@ -13,7 +13,7 @@ define ->
       model.clientMetricsParent = this
       model.fetch(
         data:
-          fetch: fieldNames.join ','
+          shallowFetch: fieldNames.join ','
       ).then =>
         @_getAllowedValuesForFields(model).then (allowedValues) =>
           @_setTitle model
@@ -26,7 +26,7 @@ define ->
       model = new Model _.defaults(defaultValues, Project: app.session.get('project').get('_ref'))
       model.clientMetricsParent = this
       @_getAllowedValuesForFields(model).then (allowedValues) =>
-        @view = @renderReactComponent View, model: model, region: 'main', newArtifact: true, allowedValues: allowedValues
+        @view = @renderReactComponent View, model: model, region: 'main', allowedValues: allowedValues
         @subscribeEvent 'saveField', @saveField
         @subscribeEvent 'save', @saveNew
         @subscribeEvent 'cancel', @cancelNew
@@ -34,26 +34,21 @@ define ->
         model
 
     saveField: (updates, opts) ->
-      if @view.props.newArtifact
-        @_saveLocal(updates, opts)
-      else
+      if @view.props.model.get('_ref')
         @_saveRemote(updates, opts)
-
-      @view.props.model.set updates
+      else
+        @_saveLocal(updates, opts)
 
     saveNew: (model) ->
-      model.set { Project: app.session.get('project').get('_ref') }, { silent: true }
-      model.sync 'create', model,
-        fetch: ['ObjectID'].concat(@getFieldNames()).join ','
+      model.save null,
+        shallowFetch: @getFieldNames().join ','
         wait: true
         patch: true
-        silent: true
         success: (resp, status, xhr) =>
           opts?.success?(model, resp)
           @publishEvent 'router:changeURL', utils.getDetailHash(model), replace: true
-          @view.setProps newArtifact: false
           @_setTitle model
-        error: (resp, status, xhr) =>
+        error: (model, resp, options) =>
           @view.showError(model, resp)
 
     cancelNew: ->
@@ -72,7 +67,7 @@ define ->
 
     _saveRemote: (updates, opts) ->
       @view.props.model.save updates,
-        fetch: ['ObjectID'].concat(@getFieldNames()).join ','
+        shallowFetch: @getFieldNames().join ','
         wait: true
         patch: true
         success: (model, resp, options) =>

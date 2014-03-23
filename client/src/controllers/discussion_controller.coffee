@@ -19,9 +19,9 @@ define ->
 
         @discussions.fetch(
           data:
-            fetch: "Text,User,Artifact,CreationDate"
+            shallowFetch: "Text,User,CreationDate"
             query: "(Artifact = #{@artifactRef})"
-            order: "CreationDate DESC,ObjectID"
+            order: "CreationDate DESC"
         ).always => @markFinished()
 
     onReplyClick: (text) ->

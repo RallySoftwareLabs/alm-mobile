@@ -16,7 +16,12 @@ define(function() {
   		return fieldValue ? (
         <div className="display">
           <div className="well-title control-label">{ this.props.label }</div>
-          <div className="well well-sm titled-well-sm" onClick={ this._onClick }>
+          <div className="well well-sm titled-well-sm"
+               onClick={ this._onClick }
+               onKeyDown={ this.handleEnterAsClick(this._onClick) }
+               tabIndex="0"
+               role="link"
+               aria-label={ "Work Product. " + fieldValue.FormattedID + ": " + fieldValue._refObjectName + " Click to edit." }>
             <span className="work-product-id">{ fieldValue.FormattedID }</span>
             <span className="work-product-name ellipsis">{ fieldValue._refObjectName }</span>
           </div>

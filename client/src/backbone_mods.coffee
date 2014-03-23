@@ -109,7 +109,6 @@ define ->
       if errors?.length > 0
         options.error(xhr, errors[0], resp)
       else
-        model.set updateResultObj.Object, options if updateResultObj
         success?(resp, status, xhr)
 
     # Make the request, allowing the user to override any Ajax options.

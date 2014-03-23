@@ -31,7 +31,13 @@ define(function() {
                         onBlur={ this.endEdit }
                         onKeyDown={ this._onKeyDown }/>
               :
-              <div className="html-field" dangerouslySetInnerHTML={{__html: (fieldValue || '') + '&nbsp;'}} onClick={ this.startEdit }/>
+              <div className="html-field"
+                   tabIndex="0"
+                   dangerouslySetInnerHTML={{__html: (fieldValue || '') + '&nbsp;'}}
+                   onClick={ this.startEdit }
+                   role="link"
+                   aria-label={ this.getFieldAriaLabel() }
+                   onKeyDown={ this.handleEnterAsClick(this.startEdit) }/>
             }
           </div>
         </div>

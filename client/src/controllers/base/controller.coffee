@@ -21,7 +21,7 @@ define ->
       sessionProject = app.session.get('project')
       if sessionProject?
         if !projectRef || _.contains(sessionProject.get('_ref'), projectRef)
-          @_goToPage callback
+          callback?.apply this
         else
           project = Projects::projects.find _.isAttributeEqual '_ref', projectRef
           @_renderLoadingIndicatorUntilProjectIsReady(callback, options.showLoadingIndicator)
@@ -31,17 +31,8 @@ define ->
         app.session.initSessionForUser(projectRef)
 
     _onProjectReady: (callback) ->
-      func = => 
-        @_goToPage callback
-
-    _goToPage: (callback) ->
-      if app.session.hasAcceptedLabsNotice()
+      func = =>
         callback?.apply this
-      else
-        setTimeout =>
-          @markFinished()
-          @redirectTo 'labsNotice'
-        , 1
 
     _renderLoadingIndicatorUntilProjectIsReady: (callback, showLoadingIndicator) ->
       if showLoadingIndicator != false
@@ -51,8 +42,8 @@ define ->
     updateTitle: (title) ->
       @publishEvent "updatetitle", title
 
-    redirectTo: (path, params) ->
-      @publishEvent "router:route", path
+    redirectTo: (path, options) ->
+      @publishEvent "router:route", path, options
 
     markFinished: ->
       @trigger 'controllerfinished', this
@@ -67,5 +58,3 @@ define ->
     dispose: ->
       @stopListening()
       @unsubscribeAllEvents()
-
-

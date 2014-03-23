@@ -53,12 +53,12 @@ define ->
       model.clientMetricsParent = this
       model.fetch
         data:
-          fetch: 'ObjectID,FormattedID'
+          fetch: 'FormattedID'
         success: (model, response, opts) =>
           @updateTitle "#{association} for #{model.get('FormattedID')}: #{model.get('_refObjectName')}"
           associatedItems.fetch
             data:
-              fetch: "Blocked,FormattedID,Name,ObjectID,#{reverseAssociation},Ready,ScheduleState,State,ToDo,Iteration,Release"
+              fetch: "Blocked,FormattedID,Name,#{reverseAssociation},Ready,ScheduleState,State,ToDo,Iteration,Release"
               query: "(#{reverseAssociation} = \"#{model.get('_ref')}\")"
               order: 'rank ASC'
             success: =>

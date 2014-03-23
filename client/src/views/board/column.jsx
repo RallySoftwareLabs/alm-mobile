@@ -1,15 +1,19 @@
 /** @jsx React.DOM */
 define(function() {
-  var React = require('react'),
-      _ = require('underscore'),
-      ReactView = require('views/base/react_view'),
-      app = require('application'),
-      Card = require('views/board/card'),
-      IterationHeader = require('views/iteration_header');
+  var React = require('react');
+  var _ = require('underscore');
+  var ReactView = require('views/base/react_view');
+  var app = require('application');
+  var utils = require('lib/utils');
+  var Card = require('views/board/card');
+  var IterationHeader = require('views/iteration_header');
 
   return ReactView.createBackboneClass({
     getDefaultProps: function() {
-      return {showLoadingIndicator: true};
+      return {
+        showLoadingIndicator: true,
+        tabIndex: 10
+      };
     },
     render: function() {
       var model = this.props.model,
@@ -18,37 +22,40 @@ define(function() {
           goRight = '',
           storiesAndDefects = model.artifacts.sortBy(function(m) { return m.get('DragAndDropRank') });
       if (singleColumn && !this.isColumnAtIndex(0)) {
-        goLeft = <i className="go-left icon-chevron-left" onClick={this.goLeft}></i>;
+        goLeft = <i className="go-left icon-chevron-left" onClick={this.goLeft} role="link" aria-label="Go to previous column" tabIndex={ this.props.tabIndex + 1 }></i>;
       }
       if (singleColumn && !this.isColumnAtIndex(this.props.columns.length - 1)) {
-        goRight = <i className="go-right icon-chevron-right" onClick={this.goRight}></i>;
+        goRight = <i className="go-right icon-chevron-right" onClick={this.goRight} role="link" aria-label="Go to previous column" tabIndex={ this.props.tabIndex + 2 }></i>;
       }
       return (
         <div className="board">
           <IterationHeader visible={this.props.showIteration} />
           <div className={ "column" + (singleColumn ? ' single-column' : ' multi-column') }>
-              <div className="header" onClick={this.onHeaderClick}>
+              <div className="header" onClick={this.onHeaderClick}
+                tabIndex={ this.props.tabIndex }
+                aria-label={ "Board column: " + model.get('value') +
+                             (model.isSynced() ? ". has " + storiesAndDefects.length + " items" : ". loading") }>
                   {goLeft}
-                  {this.getColumnHeaderStr(storiesAndDefects)}
+                  {this._getColumnHeaderStr(storiesAndDefects)}
                   {goRight}
               </div>
               <div className="body">
-                <button className="btn btn-primary add-button" onClick={this.onAddClick}>+ Add</button>
-                {this.getCardsMarkup(storiesAndDefects)}
+                <button className="btn btn-primary add-button" onClick={this.onAddClick} aria-label="Add new story to this column" tabIndex={ this.props.tabIndex + 3 }>+ Add</button>
+                {this._getCardsMarkup(storiesAndDefects)}
               </div>
           </div>
         </div>
       );
     },
-    getCardsMarkup: function(storiesAndDefects) {
-      return _.map(storiesAndDefects, function(model) {
-        return <Card key={model.get('_ref')} model={model} key={model.get('_ref')} />;
+    _getCardsMarkup: function(storiesAndDefects) {
+      return _.map(storiesAndDefects, function(model, idx) {
+        return <Card key={utils.toRelativeRef(model.get('_ref'))} model={model} tabIndex={ this.props.tabIndex + 4 + idx }/>;
       }, this);
     },
     isColumnAtIndex: function(index) {
       return this.props.columns[index] && this.props.columns[index].get('value') == this.props.model.get('value');
     },
-    getColumnHeaderStr: function(storiesAndDefects) {
+    _getColumnHeaderStr: function(storiesAndDefects) {
       var model = this.props.model,
           fieldValue = model.get('value'),
           str;
@@ -81,7 +88,7 @@ define(function() {
     },	
     onAddClick: function(e) {
       app.aggregator.recordAction({component: this, description: 'clicked add card'});
-      this.publishEvent('router:route', 'board/' + this.props.model.get('value') + '/userstory/new');
+      this.routeTo('board/' + this.props.model.get('value') + '/userstory/new');
       e.preventDefault();
     }
   });

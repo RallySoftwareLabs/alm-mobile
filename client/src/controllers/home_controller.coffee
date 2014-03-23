@@ -15,7 +15,7 @@ define ->
       collection = new UserStories()
       
       @_fetchCollectionAndRender collection, 
-          ['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked'],
+          'FormattedID,Name,Ready,Blocked',
           """(((ScheduleState != "Completed") AND (ScheduleState != "Accepted")) AND (ScheduleState != "Released"))""",
           'userstories'
       
@@ -23,7 +23,7 @@ define ->
       collection = new Tasks()
 
       @_fetchCollectionAndRender collection,
-        ['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked', 'ToDo'],
+        'FormattedID,Name,Ready,Blocked,ToDo',
         """(State != "Completed")""",
         'tasks'
 
@@ -31,7 +31,7 @@ define ->
       collection = new Defects()
 
       @_fetchCollectionAndRender collection,
-        ['ObjectID', 'FormattedID', 'Name', 'Ready', 'Blocked'],
+        'FormattedID,Name,Ready,Blocked',
         """(((ScheduleState != "Completed") AND (ScheduleState != "Accepted")) AND (ScheduleState != "Released"))""",
         'defects'
 
@@ -48,7 +48,7 @@ define ->
 
     _getFetchData: (fetch, query) ->
       data =
-        fetch: fetch.join ','
+        fetch: fetch
         project: app.session.get('project').get('_ref')
         projectScopeUp: false
         projectScopeDown: true

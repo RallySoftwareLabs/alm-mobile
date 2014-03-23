@@ -36,7 +36,7 @@ define(function() {
     },
 
     _onAddClick: function() {
-      this.publishEvent('router:route', Backbone.history.fragment + '/new');
+      this.routeTo(Backbone.history.fragment + '/new');
     }
   });
 });

@@ -7,6 +7,7 @@ define ->
   Preference = require 'models/preference'
   UserStory = require 'models/user_story'
   UserProfile = require 'models/user_profile'
+  Workspace = require 'models/workspace'
   Schema = require 'collections/schema'
   Iterations = require 'collections/iterations'
   Preferences = require 'collections/preferences'
@@ -25,11 +26,19 @@ define ->
       @listenTo this, 'change:iteration', @_onIterationChange
 
     authenticated: (cb) ->
-      if !@get('securityToken')
-        return cb? false
+      return cb? false if !@get('securityToken')
+      return cb? true if @get('user')
 
-      @fetchUserInfo (err, model) =>
-        cb? !err?
+      @aggregator.beginLoad component: this, description: 'fetching logged-in user and prefs'
+      @_fetchUserInfo (err, user) =>
+        cb? false if err?
+        preferences = new Preferences()
+        preferences.clientMetricsParent = this
+        @set 'prefs', preferences
+
+        preferences.fetchMobilePrefs(user).then =>
+          @aggregator.endLoad
+          cb? true
 
     authenticate: (username, password, cb) ->
       $.ajax(
@@ -49,8 +58,7 @@ define ->
           @setUsername username
           @setSecurityToken data.OperationResult.SecurityToken
 
-          @fetchUserInfo (err, model) =>
-            cb? !err?
+          @authenticated cb
         error: (xhr, errorType, error) =>
           cb? false
       )
@@ -60,14 +68,7 @@ define ->
       return unless user?
       @aggregator.beginLoad component: this, description: 'session init'
 
-      preferences = new Preferences()
-      preferences.clientMetricsParent = this
-      @set 'prefs', preferences
-
-      $.when(
-        Projects.fetchAll(),
-        preferences.fetchMobilePrefs user
-      ).then (p, prefs) =>
+      Projects.fetchAll().then (p) =>
         projects = Projects::projects
         @_setModeFromPreference()
         if projectRef
@@ -75,12 +76,6 @@ define ->
           @set('project', specifiedProject) if specifiedProject
         else
           @_setDefaultProject projects
-
-    setIterationPreference: (value) ->
-      projectRef = @get('project').get('_ref')
-      prefs = @get('prefs')
-
-      prefs.updateProjectPreference @get('user').get('_ref'), projectRef, Preference::defaultIteration, value
 
     getProjectName: ->
       try
@@ -118,6 +113,11 @@ define ->
       @setUsername null
       @clear silent: true
 
+      window.sessionStorage.removeItem('username')
+      window.sessionStorage.removeItem('token')
+      for key of window.sessionStorage
+        window.sessionStorage.removeItem(key) if key.indexOf('iteration.') == 0
+
       @aggregator.beginLoad component: this, description: 'logging out'
       $.ajax(
         url: "#{appConfig.almWebServiceBaseUrl}/resources/jsp/security/clear.jsp"
@@ -128,13 +128,11 @@ define ->
           xhr.setRequestHeader("X-RallyIntegrationName", appConfig.appName)
       ).always => @aggregator.endLoad component: this
           
-    fetchUserInfo: (cb) ->
+    _fetchUserInfo: (cb) ->
       user = new User()
       user.clientMetricsParent = this
-      @aggregator.beginLoad component: this, description: 'fetching logged-in user'
 
       user.fetchSelf (err, u) =>
-        @aggregator.endLoad component: this
         unless err?
           @set 'user', u
         cb(err, u)
@@ -203,14 +201,6 @@ define ->
         proj = projects.find _.isAttributeEqual('_ref', defaultProject)
         @set 'project', proj || projects.first()
 
-    _setIterationFromPreference: ->
-      iteration = null
-      savedIteration = @get('prefs').findProjectPreference(@get('project').get('_ref'), Preference::defaultIteration)
-      if savedIteration
-        iteration = @get('iterations').find _.isAttributeEqual('_ref', savedIteration.get('Value'))
-
-      @set('iteration', iteration)
-
     _setModeFromPreference: ->
       mode = 'team'
       savedMode = @get('prefs').findPreference Preference::defaultMode
@@ -262,12 +252,25 @@ define ->
         )
       ).then (s, i) =>
         @initColumnsFor @get('boardField')
-        @_setIterationFromPreference()
+        @_setSessionIteration()
         @aggregator.endLoad component: this
         @publishEvent "projectready", @getProjectName()
 
     _onIterationChange: (model, value, options) ->
       iterationRef = value?.get('_ref')
-      @setIterationPreference iterationRef
+      projectOid = utils.getOidFromRef(@get('project').get('_ref'))
+      window.sessionStorage.setItem "iteration.#{projectOid}", iterationRef
+
+    _setSessionIteration: ->
+      projectOid = utils.getOidFromRef(@get('project').get('_ref'))
+      savedIteration = window.sessionStorage.getItem "iteration.#{projectOid}"
+      iterations = @get('iterations')
+
+      iteration = if savedIteration
+        iterations.find _.isAttributeEqual('_ref', savedIteration)
+      else
+        iterations.findClosestAsCurrent()
+
+      @set('iteration', iteration)
 
     _asClientMetricsParent: -> clientMetricsParent: this

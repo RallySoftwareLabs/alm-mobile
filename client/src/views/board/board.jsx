@@ -21,7 +21,7 @@ define(function() {
   		);
     },
     getColumns: function() {
-    	var colMarkup = _.map(this.props.columns, function(col) {
+    	var colMarkup = _.map(this.props.columns, function(col, idx) {
     	  var colValue = col.get('value'),
     	  		colView = ColumnView({
 		  	  		model: col,
@@ -29,7 +29,8 @@ define(function() {
 		  	  		singleColumn: false,
 		  	  		abbreviateHeader: true,
 		  	  		showIteration: false,
-		  	  		key: colValue
+		  	  		key: colValue,
+              tabIndex: (idx + 10) * 50
 		  	  	});
   	  	return <div className={"column-cell"} id={"col-" + utils.toCssClass(colValue)} key={ colValue }>{colView}</div>;
     	}, this);
@@ -38,7 +39,7 @@ define(function() {
     			<div className="row">
     				<div className="col-xs-offset-2 col-xs-8 well no-columns">
     					<p>Your board for this project does not have any columns.</p>
-    					<p>Click the <a href="/settings"><i className="icon-cog"/></a> icon to configure your board.</p>
+    					<p>Click the <a href="/settings" tabIndex="10"><i className="icon-cog"/></a> icon to configure your board.</p>
     				</div>
     			</div>
   			);

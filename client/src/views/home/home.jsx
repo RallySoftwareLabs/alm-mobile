@@ -52,12 +52,18 @@ define(function() {
       return _.map(tabs, function(tab) {
       	return (
       		<li className={tab.active ? 'active' : ''} key={tab.key}>
-      		  <a href={"/" + tab.key} id={tab.key + "-tab"}>
+      		  <a onClick={ this.onPillClickFn(tab) } id={tab.key + "-tab"}>
       		    {tab.value}
       		  </a>
       		</li>
 				);
-      });
+      }, this);
+    },
+
+    onPillClickFn: function(tab) {
+      return _.bind(function() {
+        this.routeTo("/" + tab.key);
+      }, this);
     }
   });
 });

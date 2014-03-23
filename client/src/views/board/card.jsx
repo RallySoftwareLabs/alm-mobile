@@ -3,28 +3,39 @@ define(function() {
   var React = require('react');
   var ReactView = require('views/base/react_view');
   var app = require('application');
+  var CardDefects = require('views/board/card_defects');
+  var CardTasks = require('views/board/card_tasks');
   var Owner = require('views/board/owner');
 
   return ReactView.createBackboneClass({
     render: function() {
-      var m = this.props.model,
-      		cardStyle = {},
-      		name = <div className="field name">{m.get('Name')}</div>,
-      		owner = <Owner model={m}/>;
+      var m = this.props.model;
+      var cardStyle = {};
+      var planEstimateMarkup = this._getPlanEstimateMarkup();
       if (m.get('DisplayColor')) {
-      	cardStyle.backgroundColor = m.get('DisplayColor');
-      	cardStyle.color = 'white';
+      	cardStyle.borderTopColor = m.get('DisplayColor');
       }
       return (
-        <div className={this.getCardClass(m)} style={cardStyle} onClick={this.onClick}>
-          <a className="field formatted-id">{m.get('FormattedID')}</a>
-          {owner}
+        <div className={this._getCardClass(m)}
+             style={cardStyle}
+             tabIndex={ this.props.tabIndex }
+             onClick={ this._onClick }
+             onKeyDown={ this.handleEnterAsClick(this._onClick) }
+             aria-label={ "Card for " + m.get('_type') + " with name: " + m.get('Name') + "." }>
+          <a className="field formatted-id" role="link" aria-label={ "Formatted ID. " + m.get('FormattedID') + ". Click to view item." }>{m.get('FormattedID')}</a>
+          <Owner model={m}/>
           <div className="clear"/>
-          {name}
+          <div className="field name" role="link" aria-label={ "Name. " + m.get('Name') + ". Click to view item." }>{m.get('Name')}</div>
+          <CardTasks model={m}/>
+          <CardDefects model={m}/>
+          <div className="clear"/>
+          { planEstimateMarkup }
+          <div className="clear"/>
         </div>
       );
     },
-    getCardClass: function(m) {
+
+    _getCardClass: function(m) {
     	var cardClass = "card full";
       if (m.get('Blocked')) {
       	cardClass += ' blocked';
@@ -32,15 +43,21 @@ define(function() {
       if (m.get('Ready')) {
       	cardClass += ' ready';
       }
-      if (m.get('DisplayColor')) {
-      	cardClass += ' colored';
-      }
       return cardClass;
     },
-    onClick: function(e) {
-    	var m = this.props.model;
+
+    _getPlanEstimateMarkup: function() {
+      var m = this.props.model;
+      var planEstimate = m.get('PlanEstimate');
+      if (planEstimate != null) {
+        return <div className="field plan-estimate" role="link" aria-label={ "Plan Estimate. " + planEstimate + ". Click to view item." }>{ planEstimate }</div>;
+      }
+      return <div dangerouslySetInnerHTML={{__html: '&nbsp;'}}/>;
+    },
+
+    _onClick: function(e) {
       app.aggregator.recordAction({component: this, description: 'clicked card'});
-    	this.publishEvent('cardclick', m.get('ObjectID'), m.get('_type'));
+    	this.publishEvent('cardclick', this, this.props.model);
     	e.preventDefault();
     }
   });

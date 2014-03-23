@@ -9,15 +9,15 @@ define(function() {
     },
     render: function() {
       var errorItems = (this.state.errors).map(function(item) {
-            return <li key={ item }>{ item }</li>;
+            return <li key={ item } tabIndex="0">{ item }</li>;
           }, this);
       return (
-        <div className={ "save-failure modal" + (this._hasErrors() ? '' : ' hidden') } tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div className={ "save-failure modal" + (this._hasErrors() ? '' : ' hidden') } tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
                 <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 className="modal-title" id="myModalLabel">An Error Occurred saving your changes</h4>
+                <h4 className="modal-title" id="myModalLabel" tabIndex="0">An Error Occurred saving your changes</h4>
               </div>
               <div className="modal-body">
                 <ul>
@@ -41,6 +41,7 @@ define(function() {
       var saveFailure = $('.save-failure');
       if (this._hasErrors()) {
         saveFailure.modal('show');
+        saveFailure.find('#myModalLabel').focus();
       } else {
         saveFailure.modal('hide');
       }
