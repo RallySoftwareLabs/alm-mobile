@@ -41,6 +41,8 @@ define ->
         ).then => @markFinished()
 
     show: (project) ->
+      @updateTitle "Enterprise Backlog for ..."
+
       PortfolioItemModelFactory.getCollection(1).then (initiativesModel) =>
         @initiatives = new initiativesModel()
         @initiatives.clientMetricsParent = this
@@ -55,8 +57,6 @@ define ->
           @view = @renderReactComponent WallView, showLoadingIndicator: true, model: @initiatives, region: 'main'
           @subscribeEvent 'cardclick', @onCardClick
           @subscribeEvent 'headerclick', @onHeaderClick
-
-          @updateTitle "Enterprise Backlog for ..."
           
           prefs = new Preferences()
           prefs.clientMetricsParent = this
