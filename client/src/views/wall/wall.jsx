@@ -2,8 +2,10 @@
 define(function() {
   var React = require('react'),
       ReactView = require('views/base/react_view'),
-  		Flipchart = require ('views/wall/flipchart');
-  	
+      Flipchart = require ('views/wall/flipchart'),
+      StoryBox = require ('views/wall/story_box'),
+      DeviceLoginTip = require ('views/wall/device_login_tip');
+
   return ReactView.createBackboneClass({
     render: function() {
       var model = this.props.model;
@@ -15,15 +17,20 @@ define(function() {
       }
       return (  
         <div className="wall"> 
-          <h1>
-            Which items have been planned?<br />
-            <small>Features and Stories turn blue when scheduled in an iteration or release</small>
-          </h1>
-          <div className="itemList">
+          <div className="col-md-9">
+            <h1>Which items are in the plan?</h1>
+            <p><StoryBox />Unscheduled Stories <StoryBox planStatus="scheduled" />Stories scheduled in an Iteration or Release <StoryBox planStatus="completed" />Accepted Stories</p>
+          </div>
+          <DeviceLoginTip />
+          <div className="itemList col-md-12">
             {flipchartNodes}
           </div>
         </div>
       );
+     },
+     generateMobileURL: function() {
+        var port = (location.port != "80") ? ":" + location.port : "";
+        return location.hostname + port;
      }
   });
 });

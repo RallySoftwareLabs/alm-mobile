@@ -2,16 +2,18 @@
 define(function() {
   var React = require('react');
   var utils = require('lib/utils');
+  var PlanStatusMixin = require ('lib/plan_status_mixin');
   var ReactView = require('views/base/react_view');
 
   return ReactView.createBackboneClass({
+    mixins: [PlanStatusMixin],
     render: function() {
       var model = this.props.model;
       if (model.isSynced()) {
         if (model.length) {
           var listItems = model.map(function(item) {
             return (
-              <li className="list-group-item" key={item.get('_ref')}>
+              <li className={'list-group-item ' + this.planStatus(item)} key={item.get('_ref')}>
                 {this._getItemMarkup(item)}
               </li>
             );

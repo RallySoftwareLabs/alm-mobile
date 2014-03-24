@@ -10,7 +10,3 @@ define ->
       "ScheduleState" : "Idea"
     
     allowedValueFields: ['Iteration', 'Release', 'ScheduleState', 'c_KanbanState']
-
-    isScheduled: ->
-      this.get('Release') or this.get('Iteration')
-      

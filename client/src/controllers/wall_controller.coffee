@@ -6,8 +6,7 @@ define ->
   WallView = require 'views/wall/wall'
   WallCreateView = require 'views/wall/create'
   WallSplashView = require 'views/wall/splash'
-  Features = require 'collections/features'
-  Initiatives = require 'collections/initiatives'
+  PortfolioItemModelFactory = require 'lib/portfolio_item_model_factory'
   Preferences = require 'collections/preferences'
   Projects = require 'collections/projects'
   UserStories = require 'collections/user_stories'
@@ -42,69 +41,71 @@ define ->
         ).then => @markFinished()
 
     show: (project) ->
-      @initiatives = new Initiatives()
-      @initiatives.clientMetricsParent = this
-
-      @features = new Features()
-      @features.clientMetricsParent = this
-
-      @userStories = new UserStories()
-      @userStories.clientMetricsParent = this
-
-      @view = @renderReactComponent WallView, showLoadingIndicator: true, model: @initiatives, region: 'main'
-      @subscribeEvent 'cardclick', @onCardClick
-      @subscribeEvent 'headerclick', @onHeaderClick
-
       @updateTitle "Enterprise Backlog for ..."
-      
-      prefs = new Preferences()
-      prefs.clientMetricsParent = this
-      prefFetch = prefs.fetchWallPref(project)
 
-      @whenProjectIsLoaded project: project, showLoadingIndicator: false, fn: =>
+      PortfolioItemModelFactory.getCollection(1).then (initiativesModel) =>
+        @initiatives = new initiativesModel()
+        @initiatives.clientMetricsParent = this
 
-        $.when(prefFetch).then =>
-          if !prefs.length
-            @initiatives.trigger('add')
-            @markFinished()
+        PortfolioItemModelFactory.getCollection(0).then (featuresModel) =>
+          @features = new featuresModel()
+          @features.clientMetricsParent = this
 
-          pref = prefs.first()
-          chosenStates = @getChosenStates(pref)
-          @updateTitle "Enterprise Backlog for #{app.session.getProjectName()}"
-          projectRef = "/project/#{project}"#334329159'#12271
+          @userStories = new UserStories()
+          @userStories.clientMetricsParent = this
 
-          initiativesAndFeaturesPromise = $.when(
-            @fetchInitiatives(projectRef, chosenStates)
-            @fetchFeatures(projectRef)
-          )
-          userStoriesFetchPromise = @fetchUserStories(projectRef)
+          @view = @renderReactComponent WallView, showLoadingIndicator: true, model: @initiatives, region: 'main'
+          @subscribeEvent 'cardclick', @onCardClick
+          @subscribeEvent 'headerclick', @onHeaderClick
           
-          initiativesAndFeaturesPromise.then =>
-            if @initiatives.isEmpty()
-              @initiatives.trigger('add')
-              @markFinished()
-            else
-              @features.each (f) =>
-                parentRef = f.get('Parent')._ref
-                initiative = @initiatives.find _.isAttributeEqual('_ref', parentRef)
+          prefs = new Preferences()
+          prefs.clientMetricsParent = this
+          prefFetch = prefs.fetchWallPref(project)
 
-                if initiative?
-                  initiative.features ?= new Features()
-                  initiative.features.add f
-              
-              @initiatives.trigger('add')
+          @whenProjectIsLoaded project: project, showLoadingIndicator: false, fn: =>
 
-              userStoriesFetchPromise.then =>
-                @userStories.each (us) =>
-                  parentRef = us.get('PortfolioItem')._ref
-                  feature = @features.find _.isAttributeEqual('_ref', parentRef)
-
-                  if feature?
-                    feature.userStories ?= new UserStories()
-                    feature.userStories.add us
-
+            $.when(prefFetch).then =>
+              if !prefs.length
                 @initiatives.trigger('add')
                 @markFinished()
+
+              pref = prefs.first()
+              chosenStates = @getChosenStates(pref)
+              @updateTitle "Enterprise Backlog for #{app.session.getProjectName()}"
+              projectRef = "/project/#{project}"#334329159'#12271
+
+              initiativesAndFeaturesPromise = $.when(
+                @fetchInitiatives(projectRef, chosenStates)
+                @fetchFeatures(projectRef)
+              )
+              userStoriesFetchPromise = @fetchUserStories(projectRef)
+              
+              initiativesAndFeaturesPromise.then =>
+                if @initiatives.isEmpty()
+                  @initiatives.trigger('add')
+                  @markFinished()
+                else
+                  @features.each (f) =>
+                    parentRef = f.get('Parent')._ref
+                    initiative = @initiatives.find _.isAttributeEqual('_ref', parentRef)
+
+                    if initiative?
+                      initiative.features ?= new featuresModel()
+                      initiative.features.add f
+                  
+                  @initiatives.trigger('add')
+
+                  userStoriesFetchPromise.then =>
+                    @userStories.each (us) =>
+                      parentRef = us.get('PortfolioItem')._ref
+                      feature = @features.find _.isAttributeEqual('_ref', parentRef)
+
+                      if feature?
+                        feature.userStories ?= new UserStories()
+                        feature.userStories.add us
+
+                    @initiatives.trigger('add')
+                    @markFinished()
 
     fetchInitiatives: (projectRef, chosenStates) ->
       statesQuery = utils.createQueryFromCollection(chosenStates, 'State.Name', 'OR', (item) ->
@@ -122,7 +123,7 @@ define ->
     fetchFeatures: (projectRef) ->
       @features.fetchAllPages
         data:
-          shallowFetch: 'Parent',
+          shallowFetch: 'Parent,FormattedID',
           query: "(Parent != null)",
           order: 'Rank ASC'
           project: projectRef
@@ -132,7 +133,7 @@ define ->
     fetchUserStories: (projectRef) ->
       @userStories.fetchAllPages
         data: 
-          fetch: 'Release,Iteration,PortfolioItem',
+          fetch: 'Release,Iteration,PortfolioItem,ScheduleState',
           query: "(PortfolioItem != null)",
           order: 'Rank ASC'
           project: projectRef

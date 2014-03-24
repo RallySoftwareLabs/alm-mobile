@@ -16,6 +16,12 @@
     padding-left: 10px;
   }
 }
+.wrap-icon {
+  padding-top: 20px;
+}
+.mobile-icon {
+  font-size: 44px;
+}
 .flipchart {
   border: solid #999999 1px;
   color: black;
@@ -27,67 +33,72 @@
   vertical-align: top;
   overflow: auto;
   font-family: "ProximaNova";
-  height: 500px;
+  height: 380px;
   
-    .header {
-  	  font-size: 24px;
-      line-height: 26px;
+  .header {
+	  font-size: 24px;
+    line-height: 26px;
+	  margin: 2px;
+    cursor: pointer;
+	    	    	  
+	  .formatted-id {
+      font-family: @proxima-nova-semi-bold;
+  	  color: @cyan;
+  	}
+	}
+  .title {
+    display: inline-block;
+	  font-weight: normal;
+	  width: 100%;
+	}
+	
+	.featureCard {
+	  display: inline-block;
+	  vertical-align: top;
+	  overflow: hidden;
+	  margin: 2px;
+	  width: 30%;
+	  height: 80px;
+    color: #333333;
+    background: #cccccc;
+    cursor: pointer;
+    
+  	.header {
   	  margin: 2px;
+  	  font-size: 9px;
+      line-height: 10px;
+      font-family: @noto-sans;
       cursor: pointer;
-  	    	    	  
-  	  .formatted-id {
-        font-family: @proxima-nova-semi-bold;
-    	  color: @cyan;
-    	}
   	}
-    .title {
-      display: inline-block;
-  	  font-weight: normal;
-  	  width: 100%;
+  	&.scheduled {
+      border: none;
+  	  background: @cyan-med;
+  	  color: black;
+  	  .animated;
+	    .pulse;
   	}
-  	
-  	.child {
-  	  display: inline-block;
-  	  vertical-align: top;
-  	  overflow: hidden;
-  	  margin: 2px;
-  	  width: 30%;
-  	  height: 70px;
-      color: #333333;
-      background: #cccccc;
-      cursor: pointer;
-      
-    	.header {
-    	  margin: 2px;
-    	  font-size: 9px;
-        line-height: 10px;
-        font-family: "NotoSans";
-    	}
-    	&.on {
-    	  border: solid #333333 1px;
-    	  border: solid @cyan 2px;
-    	  background: @cyan-med;
-    	  color: black;
-    	  .animated;
-  	    .pulse;
-    	}
-    	.grandchildren {
-    	  line-height: .4;
-    	}
+  	.storyBoxes {
+  	  line-height: .4;
   	}
-  	
-  	.grandchild {
-  	  display: inline-block;
-  	  background: Silver;
-  	  width: 12px;
-  	  height: 12px;
-  	  margin: 2px;
-      border: solid #666 1px;
-  	  &.on {
-  	    background: @cyan-med;
-  	    border: solid @cyan 1px;
-        .animated;
-        .pulse;
-  	  }
-  	}
+	}
+}
+    
+.storyBox {
+  display: inline-block;
+  vertical-align: middle;
+  background: #eee;
+  width: 12px;
+  height: 12px;
+  margin: 2px;
+  
+  &.scheduled {
+    border: solid @cyan 2px;
+    background: @cyan;
+    .animated;
+    .pulse;
+  }
+  &.completed {
+    background: @blue;
+    border: none;
+  }
 }

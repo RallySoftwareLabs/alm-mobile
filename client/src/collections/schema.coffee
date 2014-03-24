@@ -6,7 +6,6 @@ define ->
   AllowedValues = require 'collections/allowed_values'
   Collection = require 'collections/collection'
   Defect = require 'models/defect'
-  Initiative = require 'models/initiative'
   Task = require 'models/task'
   TypeDefinition = require 'models/type_definition'
   UserStory = require 'models/user_story'

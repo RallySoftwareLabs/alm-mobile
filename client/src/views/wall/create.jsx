@@ -5,7 +5,7 @@ define(function() {
       React = require('react'),
       ReactView = require('views/base/react_view'),
       app = require('application'),
-      Initiative = require('models/initiative');
+      PortfolioItemModelFactory = require('lib/portfolio_item_model_factory');
 
   return ReactView.createBackboneClass({
 
@@ -17,7 +17,7 @@ define(function() {
       var projects = this.props.model.map(function(project) {
             return <option key={ project.get('_ref') } value={ project.get('_ref') }>{ project.get('_refObjectName') }</option>;
           });
-    	return (
+      return (
         <div>
           <div className="container">
             <h1>Create a new wall</h1>
@@ -79,12 +79,15 @@ define(function() {
       var project = this.props.model.find(_.isAttributeEqual('_ref', optionValue));
       app.aggregator.recordAction({component: this, description: "selected wall project"});
       app.session.loadSchema(project).then(function(schema) {
-        return Initiative.getAllowedValues('State');
-      }).then(function(availableStates) {
-        me.setState({
-          project: project,
-          availableStates: availableStates,
-          chosenStates: []
+        // This 1 means the second level of the PI hierarchy. Needs to come from somewhere.
+        PortfolioItemModelFactory.getModel(1).then(function(DynaPortfolioItem) {
+          return DynaPortfolioItem.getAllowedValues('State');        
+        }).then(function(availableStates) {
+          me.setState({
+            project: project,
+            availableStates: availableStates,
+            chosenStates: []
+          });
         });
       });
     },

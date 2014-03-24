@@ -4,9 +4,11 @@ define(function() {
       ReactView = require('views/base/react_view'),
       app = require('application'),
       utils = require('lib/utils'),
-  		StoryBox = require ('views/wall/story_box');
-  	
+      PlanStatusMixin = require ('lib/plan_status_mixin'),
+      StoryBox = require ('views/wall/story_box');
+    
   return ReactView.createBackboneClass({
+    mixins: [PlanStatusMixin],
     render: function() {
         var model = this.props.model;
         var userStories = model.userStories;
@@ -18,19 +20,17 @@ define(function() {
           });
         }
         return (  
-          <div className={this.getChildClass(userStories)} onClick={this.onClick}>
-               <div className="grandchildren">
+          <div className={'featureCard ' + this.collectionPlanStatus(this.props.model.userStories)} onClick={this.onClick}>
+               <div className="header">{model.get('FormattedID')}</div>
+               <div className="storyBoxes">
                   {storyBoxes}
                </div>
           </div>
       );
     },
-    getChildClass: function(userStories) {
-      return (userStories && userStories.areAllStoriesScheduled()) ? "child on" : "child";
-    },
     onClick: function(e) {
       var m = this.props.model;
-      app.aggregator.recordAction({component: this, description: "clicked wall card"});
+      app.aggregator.recordAction({component: this, description: "clicked feature card"});
       this.publishEvent('cardclick', utils.getOidFromRef(m.get('_ref')), m.get('_type'));
       e.preventDefault();
     }
