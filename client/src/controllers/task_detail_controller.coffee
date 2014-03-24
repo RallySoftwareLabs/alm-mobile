@@ -51,5 +51,5 @@ define ->
         'Description'
         'Blocked'
         'Ready'
-        'WorkProduct'
+        'WorkProduct[FormattedID]'
       ]

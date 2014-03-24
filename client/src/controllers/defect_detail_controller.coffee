@@ -53,7 +53,7 @@ define ->
         'Project'
         'Ready'
         'Release'
-        'Requirement'
+        'Requirement[FormattedID]'
         'ScheduleState'
         'Severity'
         'State'
