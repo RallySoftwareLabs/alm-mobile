@@ -2,10 +2,10 @@
 define(function() {
   var React = require('react'),
       ReactView = require('views/base/react_view'),
-  		Flipchart = require ('views/wall/flipchart'),
+      Flipchart = require ('views/wall/flipchart'),
       StoryBox = require ('views/wall/story_box'),
       DeviceLoginTip = require ('views/wall/device_login_tip');
-  	
+
   return ReactView.createBackboneClass({
     render: function() {
       var model = this.props.model;

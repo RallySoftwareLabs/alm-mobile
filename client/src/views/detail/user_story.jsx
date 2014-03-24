@@ -41,7 +41,10 @@ define(function() {
           </div>
           <div className="row">
             <div className="col-xs-12 ellipsis ParentView">
-              <WorkProduct item={ model } editMode={ newArtifact } field="Parent" label="Parent"/>
+              <WorkProduct item={ model }
+                           editMode={ newArtifact }
+                           field={ model.get('PortfolioItem') ? "PortfolioItem" : "Parent" }
+                           label="Parent"/>
             </div>
           </div>
           <div className="row">

@@ -90,7 +90,7 @@ define ->
                     initiative = @initiatives.find _.isAttributeEqual('_ref', parentRef)
 
                     if initiative?
-                      initiative.features ?= new Features()
+                      initiative.features ?= new featuresModel()
                       initiative.features.add f
                   
                   @initiatives.trigger('add')

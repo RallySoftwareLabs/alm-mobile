@@ -6,7 +6,7 @@ define(function() {
       utils = require('lib/utils'),
       PlanStatusMixin = require ('lib/plan_status_mixin'),
       StoryBox = require ('views/wall/story_box');
-  	
+    
   return ReactView.createBackboneClass({
     mixins: [PlanStatusMixin],
     render: function() {

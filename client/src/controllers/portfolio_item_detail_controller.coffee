@@ -39,7 +39,7 @@ define ->
         'InvestmentCategory'
         'Name'
         'Owner'
-        'Parent'
+        'Parent[FormattedID]'
         'PlannedStartDate'
         'PlannedEndDate'
         'PreliminaryEstimate'

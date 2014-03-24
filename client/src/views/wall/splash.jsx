@@ -14,7 +14,7 @@ define(function() {
     },
 
     render: function() {
-    	return (
+      return (
         <div className="splash">
           <div className="container">
             <div className="row header">

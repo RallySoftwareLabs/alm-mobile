@@ -8,8 +8,8 @@ define(function() {
       return (  
           <div className="col-md-3 hidden-xs hidden-sm">
             <div className="row">
-              <div className="col-md-2 wrapIcon">
-                <div className="picto icon-mobile mobileIcon" />
+              <div className="col-md-2 wrap-icon">
+                <div className="picto icon-mobile mobile-icon" />
               </div>
               <div className="col-md-10">
                 <h3>{this.generateMobileURL()}</h3>

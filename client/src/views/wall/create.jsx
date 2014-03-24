@@ -5,7 +5,7 @@ define(function() {
       React = require('react'),
       ReactView = require('views/base/react_view'),
       app = require('application'),
-      PortfolioItemModelFactory = require('lib/portfolio_item_model_factory')
+      PortfolioItemModelFactory = require('lib/portfolio_item_model_factory');
 
   return ReactView.createBackboneClass({
 
@@ -17,7 +17,7 @@ define(function() {
       var projects = this.props.model.map(function(project) {
             return <option key={ project.get('_ref') } value={ project.get('_ref') }>{ project.get('_refObjectName') }</option>;
           });
-    	return (
+      return (
         <div>
           <div className="container">
             <h1>Create a new wall</h1>
