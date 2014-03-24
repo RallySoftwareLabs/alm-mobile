@@ -133,7 +133,7 @@ define ->
     fetchUserStories: (projectRef) ->
       @userStories.fetchAllPages
         data: 
-          fetch: 'Release,Iteration,PortfolioItem,ScheduleState',
+          shallowFetch: 'Release,Iteration,PortfolioItem,ScheduleState',
           query: "(PortfolioItem != null)",
           order: 'Rank ASC'
           project: projectRef
