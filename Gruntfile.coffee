@@ -19,7 +19,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-express'
   grunt.loadNpmTasks 'grunt-mocha'
   grunt.loadNpmTasks 'grunt-react'
-  grunt.loadNpmTasks 'grunt-replace'
+  grunt.loadNpmTasks 'grunt-text-replace'
   grunt.loadNpmTasks 'grunt-s3'
 
   grunt.registerTask 'default', ['clean','coffee','react','less','indexHtml', 'copy:js','requirejs','replace:js','copy:assets','concat']
@@ -65,25 +65,22 @@ module.exports = (grunt) ->
 
     replace:
       js:
-        options:
-          variables:
-            'WSAPI_VERSION': 'v2.0'
-          prefix: '@@'
-          force: true
-        files: [
-         expand: true, flatten: true, src: ['client/gen/js/app.js'], dest: 'client/dist/js'
+        replacements: [
+          from: '@@WSAPI_VERSION'
+          to: 'v2.0'
         ]
+        src: ['client/gen/js/app.js']
+        dest: 'client/dist/js/app.js'
 
       testPage:
-        options:
-          prefix: ""
-          variables: '__testFiles__': _.map(testFiles, (file) ->
+        replacements: [
+          from: '__testFiles__'
+          to: _.map(testFiles, (file) ->
             "'#{file.substring(0, file.length - 3)}'"
           ).join(',\n      ')
-        files: [
-          src: ['client/test/testpage.tpl']
-          dest: 'client/test/testpage.html'
         ]
+        src: ['client/test/testpage.tpl']
+        dest: 'client/test/testpage.html'
 
     coffee:
       clientSrc:
