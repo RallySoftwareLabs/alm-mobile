@@ -52,29 +52,28 @@ module.exports = (grunt) ->
   }]
 
   sharedBrowserifyConfig =
-    options:
-      transform: [
-        'coffeeify'
-        'reactify'
-      ]
-      alias: aliasMappingsToAliasArray({
-        cwd: 'client/src',
-        src: ['**/*.coffee', '**/*.jsx'],
-        dest: ''
-      }).concat([
-        'node_modules/jquery/dist/jquery.js:jquery'
-        'node_modules/backbone/backbone.js:backbone'
-        'node_modules/lodash/dist/lodash.js:underscore'
-        'node_modules/react/react.js:react'
-        'node_modules/moment/moment.js:moment'
-        'node_modules/pagedown/Markdown.Converter.js:pagedown'
-        'vendor/scripts/spin.min.js:spin'
-        'node_modules/rallymetrics/builds/rallymetrics.js:rallymetrics'
-      ])
-      external: [
-        'node_modules/rallymetrics/builds/rallymetrics.js'
-        'html-md'
-      ]
+    transform: [
+      'coffeeify'
+      'reactify'
+    ]
+    alias: aliasMappingsToAliasArray({
+      cwd: 'client/src',
+      src: ['**/*.coffee', '**/*.jsx'],
+      dest: ''
+    }).concat([
+      'node_modules/jquery/dist/jquery.js:jquery'
+      'node_modules/backbone/backbone.js:backbone'
+      'node_modules/lodash/dist/lodash.js:underscore'
+      'node_modules/react/react.js:react'
+      'node_modules/moment/moment.js:moment'
+      'node_modules/pagedown/Markdown.Converter.js:pagedown'
+      'vendor/scripts/spin.min.js:spin'
+      'node_modules/rallymetrics/builds/rallymetrics.js:rallymetrics'
+    ])
+    external: [
+      'node_modules/rallymetrics/builds/rallymetrics.js'
+      'html-md'
+    ]
 
   grunt.initConfig
 
@@ -120,14 +119,15 @@ module.exports = (grunt) ->
         dest: 'client/test/testpage.html'
 
     browserify:
-      app: _.extend(sharedBrowserifyConfig,
-        src: ['client/src/initialize.coffee'],
-        dest: 'client/gen/js/src/app.js'
-      )
-      test: _.extend(sharedBrowserifyConfig,
+      test:
+        options: sharedBrowserifyConfig
         src: ['client/src/initialize.coffee'].concat(testFiles).concat(['client/test/helpers/spec_helper.js']),
         dest: 'client/test/all_code.js'
-      )
+      
+      app:
+        options: sharedBrowserifyConfig,
+        src: ['client/src/initialize.coffee'],
+        dest: 'client/gen/js/src/app.js'
 
     'compile-handlebars':
       allStatic:
