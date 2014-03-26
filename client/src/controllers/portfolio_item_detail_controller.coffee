@@ -1,49 +1,48 @@
-define ->
-  app = require 'application'
-  SiteController = require 'controllers/base/site_controller'
-  DetailControllerMixin = require 'controllers/detail_controller_mixin'
-  View = require 'views/detail/portfolio_item'
-  PortfolioItem = require 'models/portfolio_item'
+app = require 'application'
+SiteController = require 'controllers/base/site_controller'
+DetailControllerMixin = require 'controllers/detail_controller_mixin'
+View = require 'views/detail/portfolio_item'
+PortfolioItem = require 'models/portfolio_item'
 
-  class PortfolioItemDetailController extends SiteController
+module.exports = class PortfolioItemDetailController extends SiteController
 
-    _.extend @prototype, DetailControllerMixin
+  _.extend @prototype, DetailControllerMixin
 
-    show: (id) ->
-      @whenProjectIsLoaded ->
-        @fetchModelAndShowView PortfolioItem, View, id
+  show: (id) ->
+    @whenProjectIsLoaded ->
+      @fetchModelAndShowView PortfolioItem, View, id
 
-    create: ->
-      @whenProjectIsLoaded ->
-        @showCreateView PortfolioItem, View
+  create: ->
+    @whenProjectIsLoaded ->
+      @showCreateView PortfolioItem, View
 
-    newChild: (id) ->
-      @whenProjectIsLoaded ->
-        model = new PortfolioItem(ObjectID: id)
-        model.fetch
-          data:
-            fetch: 'FormattedID,Children'
-          success: (model, response, opts) =>
-            @updateTitle "New Child for #{model.get('FormattedID')}: #{model.get('_refObjectName')}"
-            newModel = @showCreateView PortfolioItem, View, Parent: model.get('_ref')
-            newModel.urlRoot = model.urlRoot.replace('portfolioitem', model.get('Children')._type.toLowerCase())
-    getFieldNames: ->
-      [
-        'ActualStartDate'
-        'ActualEndDate'
-        'Children'
-        'UserStories'
-        'Description'
-        'Discussion'
-        'FormattedID'
-        'InvestmentCategory'
-        'Name'
-        'Owner'
-        'Parent[FormattedID]'
-        'PlannedStartDate'
-        'PlannedEndDate'
-        'PreliminaryEstimate'
-        'Project'
-        'Ready'
-        'State'
-      ]
+  newChild: (id) ->
+    @whenProjectIsLoaded ->
+      model = new PortfolioItem(ObjectID: id)
+      model.fetch
+        data:
+          fetch: 'FormattedID,Children'
+        success: (model, response, opts) =>
+          @updateTitle "New Child for #{model.get('FormattedID')}: #{model.get('_refObjectName')}"
+          newModel = @showCreateView PortfolioItem, View, Parent: model.get('_ref')
+          newModel.urlRoot = model.urlRoot.replace('portfolioitem', model.get('Children')._type.toLowerCase())
+  getFieldNames: ->
+    [
+      'ActualStartDate'
+      'ActualEndDate'
+      'Children'
+      'UserStories'
+      'Description'
+      'Discussion'
+      'FormattedID'
+      'InvestmentCategory'
+      'Name'
+      'Owner'
+      'Parent[FormattedID]'
+      'PlannedStartDate'
+      'PlannedEndDate'
+      'PreliminaryEstimate'
+      'Project'
+      'Ready'
+      'State'
+    ]

@@ -1,23 +1,22 @@
-define ->
-  appConfig = require 'appConfig'
-  Collection = require 'collections/collection'
-  Project = require 'models/project'
+appConfig = require 'app_config'
+Collection = require 'collections/collection'
+Project = require 'models/project'
 
-  class Projects extends Collection
-    url: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/project'
-    model: Project
+module.exports = class Projects extends Collection
+  url: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/project'
+  model: Project
 
-    projects: null
+  projects: null
 
-    @fetchAll: ->
-      if @::projects
-        d = $.Deferred()
-        d.resolve @::projects
-        d.promise()
-      else
-        @::projects = projects = new Projects()
-        projects.fetchAllPages(
-          data:
-            shallowFetch: 'Name,Workspace,SchemaVersion'
-            order: 'Name'
-        )
+  @fetchAll: ->
+    if @::projects
+      d = $.Deferred()
+      d.resolve @::projects
+      d.promise()
+    else
+      @::projects = projects = new Projects()
+      projects.fetchAllPages(
+        data:
+          shallowFetch: 'Name,Workspace,SchemaVersion'
+          order: 'Name'
+      )

@@ -1,76 +1,75 @@
-define ->
-  app = require 'application'
-  utils = require 'lib/utils'
-  Defects = require 'collections/defects'
-  PortfolioItems = require 'collections/portfolio_items'
-  Tasks = require 'collections/tasks'
-  UserStories = require 'collections/user_stories'
-  Defect = require 'models/defect'
-  PortfolioItem = require 'models/portfolio_item'
-  UserStory = require 'models/user_story'
-  SiteController = require 'controllers/base/site_controller'
-  AssociationsView = require 'views/associations/associations'
-  
-  associationClasses =
-    Defects: Defects
-    Tasks: Tasks
-    Children: UserStories
-    UserStories: UserStories
+app = require 'application'
+utils = require 'lib/utils'
+Defects = require 'collections/defects'
+PortfolioItems = require 'collections/portfolio_items'
+Tasks = require 'collections/tasks'
+UserStories = require 'collections/user_stories'
+Defect = require 'models/defect'
+PortfolioItem = require 'models/portfolio_item'
+UserStory = require 'models/user_story'
+SiteController = require 'controllers/base/site_controller'
+AssociationsView = require 'views/associations/associations'
 
-  class AssociationsController extends SiteController
-    childrenForStory: (id) ->
-      @_createAssociationView(new UserStory(ObjectID: id, _type: 'hierarchicalrequirement'), 'Children', 'Parent')
+associationClasses =
+  Defects: Defects
+  Tasks: Tasks
+  Children: UserStories
+  UserStories: UserStories
 
-    defectsForStory: (id) ->
-      @_createAssociationView(new UserStory(ObjectID: id, _type: 'hierarchicalrequirement'), 'Defects', 'Requirement')
+module.exports = class AssociationsController extends SiteController
+  childrenForStory: (id) ->
+    @_createAssociationView(new UserStory(ObjectID: id, _type: 'hierarchicalrequirement'), 'Children', 'Parent')
 
-    tasksForStory: (id) ->
-      @_createAssociationView(new UserStory(ObjectID: id, _type: 'hierarchicalrequirement'), 'Tasks', 'WorkProduct')
+  defectsForStory: (id) ->
+    @_createAssociationView(new UserStory(ObjectID: id, _type: 'hierarchicalrequirement'), 'Defects', 'Requirement')
 
-    tasksForDefect: (id) ->
-      @_createAssociationView(new Defect(ObjectID: id, _type: 'defect'), 'Tasks', 'WorkProduct')
+  tasksForStory: (id) ->
+    @_createAssociationView(new UserStory(ObjectID: id, _type: 'hierarchicalrequirement'), 'Tasks', 'WorkProduct')
 
-    userStoriesForPortfolioItem: (id) ->
-      @_createAssociationView(new PortfolioItem(ObjectID: id, _type: 'portfolioitem'), 'UserStories', 'PortfolioItem')
+  tasksForDefect: (id) ->
+    @_createAssociationView(new Defect(ObjectID: id, _type: 'defect'), 'Tasks', 'WorkProduct')
 
-    childrenForPortfolioItem: (id) ->
-      @_createAssociationView(new PortfolioItem(ObjectID: id, _type: 'portfolioitem'), 'Children', 'Parent')
+  userStoriesForPortfolioItem: (id) ->
+    @_createAssociationView(new PortfolioItem(ObjectID: id, _type: 'portfolioitem'), 'UserStories', 'PortfolioItem')
 
-    _createAssociationView: (model, association, reverseAssociation) ->
-      associatedItems = @_getAssociatedCollection(model, association)
+  childrenForPortfolioItem: (id) ->
+    @_createAssociationView(new PortfolioItem(ObjectID: id, _type: 'portfolioitem'), 'Children', 'Parent')
 
-      @whenProjectIsLoaded ->
-        
-        @_fetchAssociation model, associatedItems, association, reverseAssociation
+  _createAssociationView: (model, association, reverseAssociation) ->
+    associatedItems = @_getAssociatedCollection(model, association)
 
-        @view = @renderReactComponent AssociationsView,
-          region: 'main'
-          associatedItems: associatedItems
-          association: association
-          fromModel: model
-
-    _fetchAssociation: (model, associatedItems, association, reverseAssociation) ->
-      model.clientMetricsParent = this
-      model.fetch
-        data:
-          fetch: 'FormattedID'
-        success: (model, response, opts) =>
-          @updateTitle "#{association} for #{model.get('FormattedID')}: #{model.get('_refObjectName')}"
-          associatedItems.fetch
-            data:
-              shallowFetch: "Blocked,FormattedID,Name,Ready,ScheduleState,State,ToDo,Iteration,Release"
-              query: "(#{reverseAssociation} = \"#{model.get('_ref')}\")"
-              order: 'Rank ASC'
-            success: =>
-              @markFinished()
-
-    _getAssociatedCollection: (model, association) ->
-      if (model.get('_type') == 'portfolioitem' && association == 'Children')
-        cls = PortfolioItems
-      else
-        cls = associationClasses[association]
-
-      coll = new cls()
-      coll.clientMetricsParent = this
-      coll
+    @whenProjectIsLoaded ->
       
+      @_fetchAssociation model, associatedItems, association, reverseAssociation
+
+      @view = @renderReactComponent AssociationsView,
+        region: 'main'
+        associatedItems: associatedItems
+        association: association
+        fromModel: model
+
+  _fetchAssociation: (model, associatedItems, association, reverseAssociation) ->
+    model.clientMetricsParent = this
+    model.fetch
+      data:
+        fetch: 'FormattedID'
+      success: (model, response, opts) =>
+        @updateTitle "#{association} for #{model.get('FormattedID')}: #{model.get('_refObjectName')}"
+        associatedItems.fetch
+          data:
+            shallowFetch: "Blocked,FormattedID,Name,Ready,ScheduleState,State,ToDo,Iteration,Release"
+            query: "(#{reverseAssociation} = \"#{model.get('_ref')}\")"
+            order: 'Rank ASC'
+          success: =>
+            @markFinished()
+
+  _getAssociatedCollection: (model, association) ->
+    if (model.get('_type') == 'portfolioitem' && association == 'Children')
+      cls = PortfolioItems
+    else
+      cls = associationClasses[association]
+
+    coll = new cls()
+    coll.clientMetricsParent = this
+    coll
+    

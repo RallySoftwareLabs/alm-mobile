@@ -1,6 +1,5 @@
-define ->
-  appConfig = require 'appConfig'
-  Model = require 'models/base/model'
+appConfig = require 'app_config'
+Model = require 'models/base/model'
 
-  class Artifact extends Model
-    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/artifact'
+module.exports = class Artifact extends Model
+  urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/artifact'

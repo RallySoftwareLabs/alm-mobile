@@ -1,4 +1,4 @@
-define ->
-  Backbone = require 'backbone'
+Backbone = require 'backbone'
+_ = require 'underscore'
 
-  bus = _.extend({}, Backbone.Events)
+module.exports = _.extend({}, Backbone.Events)

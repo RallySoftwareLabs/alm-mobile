@@ -43,67 +43,18 @@
 
     })();
   </script>
-  <script type="text/javascript" src="/node_modules/requirejs/require.js"></script>
-  <script type="text/javascript">
-    require.config({
-      baseUrl: "",
-      paths: {
-        "bootstrap": "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min",
-        "backbone": "//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min",
-        "jquery": "//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.min",
-        "jqueryBase64": "/client/dist/js/jquery.base64.min",
-        "moment": "//cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min",
-        "pagedown": "//cdnjs.cloudflare.com/ajax/libs/pagedown/1.0/Markdown.Converter.min",
-        "react": "//cdnjs.cloudflare.com/ajax/libs/react/0.9.0/react.min",
-        "spin": "//cdnjs.cloudflare.com/ajax/libs/spin.js/1.3.3/spin.min",
-        "underscore": "//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min",
-        "chai": "/node_modules/chai/chai",
-        "sinon": "/node_modules/sinon/pkg/sinon",
-        "sinon-chai": "/node_modules/sinon-chai/lib/sinon-chai"
-      },
-      shim: {
-        jquery: {
-          exports: "$"
-        },
-        underscore: {
-          exports: "_"
-        },
-        backbone: {
-          deps: ["underscore", "jquery"],
-          exports: "Backbone"
-        },
-        bootstrap: {
-          deps: ["jquery"]
-        },
-        jqueryBase64: {
-          deps: ["jquery"]
-        },
-        spin: {
-          deps: ["jquery"]
-        },
-        moment: {
-          exports: "moment"
-        },
-        md: {
-          exports: "md"
-        },
-        pagedown: {
-          exports: "Markdown"
-        },
-        sinon: {
-          exports: "sinon"
-        }
-      },
-      waitSeconds: 15
-    });
+  
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+  <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/react/0.9.0/react.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/pagedown/1.0/Markdown.Converter.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/spin.js/1.3.3/spin.min.js"></script>
+  <script type="text/javascript" src="/js/jquery.base64.min.js"></script>
+  <script type="text/javascript" src="/js/rallymetrics.js"></script>
 
-    define('appConfig', function() {
-      return {
-      };
-    });
-  </script>
-
-  <script src="node_modules/jquery/dist/jquery.js"></script>
   <script src="node_modules/mocha/mocha.js"></script>
   <script>
     mocha.setup('bdd');
@@ -114,12 +65,11 @@
   <!-- Src files -->
   <script src="client/dist/js/app.js"></script>
   
-  <script>
-    <!-- Test files -->
-    require([
-      'client/test/helpers/spec_helper',
-      __testFiles__
-    ], function() {
+  <!-- Test files -->
+  <script type="text/javascript" src="client/test/all_code.js"></script>
+
+  <script type="text/javascript">
+    $(document).ready(function() {
       mocha.run();
     });
   </script>

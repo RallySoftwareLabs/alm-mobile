@@ -1,23 +1,22 @@
-define ->
-  _ = require 'underscore'
-  Backbone = require 'backbone'
-  FetchAllPagesMixin = require 'lib/fetch_all_pages_mixin'
-  Messageable = require 'lib/messageable'
+_ = require 'underscore'
+Backbone = require 'backbone'
+FetchAllPagesMixin = require 'lib/fetch_all_pages_mixin'
+Messageable = require 'lib/messageable'
 
-  # Base class for all collections.
-  class Collection extends Backbone.Collection
+# Base class for all collections.
+module.exports = class Collection extends Backbone.Collection
 
-    _.extend @prototype, Messageable
-    _.extend @prototype, FetchAllPagesMixin
+  _.extend @prototype, Messageable
+  _.extend @prototype, FetchAllPagesMixin
 
-    constructor: ->
-      super
-      @synced = false
-      this.once('sync', => @synced = true)
+  constructor: ->
+    super
+    @synced = false
+    this.once('sync', => @synced = true)
 
-    parse: (resp) ->
-      resp.QueryResult.Results
+  parse: (resp) ->
+    resp.QueryResult.Results
 
-    isSynced: -> @synced
+  isSynced: -> @synced
 
-    setSynced: (@synced) ->
+  setSynced: (@synced) ->

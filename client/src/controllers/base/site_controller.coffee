@@ -1,30 +1,29 @@
-define ->
-  Controller = require 'controllers/base/controller'
-  SiteView = require 'views/site'
+Controller = require 'controllers/base/controller'
+SiteView = require 'views/site'
 
-  siteView = null
+siteView = null
 
-  class SiteController extends Controller
+module.exports = class SiteController extends Controller
 
-    _getView: (props) ->
-      if siteView && siteView.isMounted()
-        siteView.setProps props
-      else
-        siteView = SiteView(props)
+  _getView: (props) ->
+    if siteView && siteView.isMounted()
+      siteView.setProps props
+    else
+      siteView = SiteView(props)
 
-      siteView
+    siteView
 
-    _setSubView: (name, view) ->
-      props ={}
-      props[name] = view
-      @_getView(props)
+  _setSubView: (name, view) ->
+    props ={}
+    props[name] = view
+    @_getView(props)
 
-    renderReactComponent: (componentClass, props = {}, id) ->
-      component = componentClass(_.omit(props, 'region'))
+  renderReactComponent: (componentClass, props = {}, id) ->
+    component = componentClass(_.omit(props, 'region'))
 
-      siteView = @_setSubView props.region, component
+    siteView = @_setSubView props.region, component
 
-      unless siteView.isMounted()
-        siteView.renderForBackbone id
+    unless siteView.isMounted()
+      siteView.renderForBackbone id
 
-      component
+    component

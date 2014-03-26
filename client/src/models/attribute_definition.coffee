@@ -1,7 +1,6 @@
-define ->
-  appConfig = require 'appConfig'
-  Model = require 'models/base/model'
+appConfig = require 'app_config'
+Model = require 'models/base/model'
 
-  class AttributeDefinition extends Model
-    typePath: 'attributedefinition'
-    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/attributedefinition'
+module.exports = class AttributeDefinition extends Model
+  typePath: 'attributedefinition'
+  urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/attributedefinition'

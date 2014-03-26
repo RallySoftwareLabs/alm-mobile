@@ -1,10 +1,9 @@
-define ->
-  $ = require 'jquery'
-  Model = require 'models/base/model'
-  Artifacts = require 'collections/artifacts'
+$ = require 'jquery'
+Model = require 'models/base/model'
+Artifacts = require 'collections/artifacts'
 
-  class Column extends Model
+module.exports = class Column extends Model
 
-    constructor: ->
-      super
-      @artifacts = new Artifacts()
+  constructor: ->
+    super
+    @artifacts = new Artifacts()
