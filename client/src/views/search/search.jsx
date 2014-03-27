@@ -1,5 +1,4 @@
 /** @jsx React.DOM */
-var $ = require('jquery');
 var React = require('react');
 var ReactView = require('views/base/react_view');
 var app = require('application');
@@ -11,13 +10,19 @@ module.exports = ReactView.createBackboneClass({
     this._getInputField().focus();
   },
 
+  getInitialState: function() {
+    return {
+      keywords: this.props.keywords
+    };
+  },
+
   render: function() {
     return (
       <div id="search-view">
         <form className="search-form" role="form" onSubmit={ this.onSearch }>
             <div className="input-group">
               <label className="sr-only" htmlFor="search-input">Search keywords</label>
-              <input type="text" id="search-input" className="form-control" placeholder="Search keywords" value={ this.props.keywords } onChange={ this.handleChange }/>
+              <input type="text" id="search-input" className="form-control" placeholder="Search keywords" value={ this.state.keywords } onChange={ this.handleChange } ref="input"/>
               <span className="input-group-btn">
                 <button type="submit" className="btn btn-primary">Search</button>
               </span>
@@ -36,16 +41,16 @@ module.exports = ReactView.createBackboneClass({
   },
 
   handleChange: function(event) {
-    this.setProps({keywords: event.target.value});
+    this.setState({keywords: event.target.value});
   },
 
   onSearch: function(event) {
     app.aggregator.recordAction({component: this, description: 'search submitted'});
-    this.publishEvent('search', this._getInputField().val());
+    this.publishEvent('search', this.state.keywords);
     event.preventDefault();
   },
 
   _getInputField: function() {
-    return this.$('.search-form input');
+    return this.refs.input.getDOMNode();
   }
 });

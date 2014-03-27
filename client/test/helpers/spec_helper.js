@@ -1,6 +1,8 @@
 var chai = require('chai');
 var sinon = require('sinon');
 var sinonChai = require('sinon-chai');
+var Messageable = require('lib/messageable');
+var app = require('application');
 
 chai.use(sinonChai);
 window.expect = chai.expect;
@@ -15,11 +17,15 @@ var sinonSandboxSetUp = function(spec) {
   };
 
 var sinonSandboxTearDown = function(spec) {
-    spec.__sandbox__.verifyAndRestore()
+    spec.__sandbox__.verifyAndRestore();
 };
 
 beforeEach(function() {
     sinonSandboxSetUp(this);
+    _.extend(this, Messageable);
+    app.aggregator = {
+        recordAction: this.stub()
+    };
 });
 
 afterEach(function() {
