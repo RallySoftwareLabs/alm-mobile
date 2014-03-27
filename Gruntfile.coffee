@@ -24,16 +24,17 @@ module.exports = (grunt) ->
   grunt.registerTask 'default', ['clean','less','indexHtml', 'copy:js', 'browserify:app', 'replace:js', 'copy:assets', 'concat']
 
   grunt.registerTask 'test', ['test:conf', 'express:inline', 'mocha']
-  grunt.registerTask 'test:conf', ['less', 'copy:js', 'browserify:test', 'replace:test', 'copy:assets', 'concat', 'replace:testPage']
+  grunt.registerTask 'test:conf', ['default', 'browserify:test', 'replace:test', 'replace:testPage']
   grunt.registerTask 'test:server', "Starts a test server at localhost:#{serverPort}, specify a different port with --port=<port>", ['express:server', 'express-keepalive']
 
   grunt.registerTask 'indexHtml', "Generates the index.html page", ['compile-handlebars:allStatic']
   grunt.registerTask 'heroku', ['clean','less','indexHtml', 'copy:js','browserify:app','replace:js','copy','concat']
 
+  srcFiles = grunt.file.expand ['client/src/**/*.coffee', 'client/src/**/*.jsx']
   testFiles = grunt.file.expand ['client/test/**/*_spec.js']
 
   # Takes grunt-browserify aliasMappings config and converts it into an alias array
-  aliasMappingsToAliasArray = (aliasMappings) ->
+  aliasMappingsToAliasArray = (aliasMappings, prefix) ->
     aliasArray = []
     aliases = if util.isArray(aliasMappings) then aliasMappings else [aliasMappings]
     aliases.forEach (alias) ->
@@ -51,6 +52,16 @@ module.exports = (grunt) ->
     to: JSON.stringify(grunt.file.readJSON(path.resolve(__dirname, 'config.json')).config)
   }]
 
+  externalBrowserifyAliases = [
+    'node_modules/jquery/dist/jquery.js:jquery'
+    'node_modules/backbone/backbone.js:backbone'
+    'node_modules/lodash/dist/lodash.js:underscore'
+    'node_modules/react/react.js:react'
+    'node_modules/moment/moment.js:moment'
+    'node_modules/pagedown/Markdown.Converter.js:pagedown'
+    'vendor/scripts/spin.min.js:spin'
+    'node_modules/rallymetrics/builds/rallymetrics.js:rallymetrics'
+  ]
   sharedBrowserifyConfig =
     transform: [
       'coffeeify'
@@ -60,20 +71,24 @@ module.exports = (grunt) ->
       cwd: 'client/src',
       src: ['**/*.coffee', '**/*.jsx'],
       dest: ''
-    }).concat([
-      'node_modules/jquery/dist/jquery.js:jquery'
-      'node_modules/backbone/backbone.js:backbone'
-      'node_modules/lodash/dist/lodash.js:underscore'
-      'node_modules/react/react.js:react'
-      'node_modules/moment/moment.js:moment'
-      'node_modules/pagedown/Markdown.Converter.js:pagedown'
-      'vendor/scripts/spin.min.js:spin'
-      'node_modules/rallymetrics/builds/rallymetrics.js:rallymetrics'
-    ])
+    }).concat(externalBrowserifyAliases)
     external: [
+      'node_modules/jquery/dist/jquery.js'
+      'node_modules/backbone/backbone.js'
+      'node_modules/lodash/dist/lodash.js'
+      'node_modules/react/react.js'
+      'node_modules/moment/moment.js'
+      'node_modules/pagedown/Markdown.Converter.js'
+      'vendor/scripts/spin.min.js'
       'node_modules/rallymetrics/builds/rallymetrics.js'
       'html-md'
     ]
+
+  testBrowserifyConfig = _.clone(sharedBrowserifyConfig)
+  testBrowserifyConfig.external = _.union(
+    testBrowserifyConfig.external,
+    srcFiles
+  )
 
   grunt.initConfig
 
@@ -84,11 +99,11 @@ module.exports = (grunt) ->
     watch:
       clientSrc:
         files: ['client/src/**/*.coffee', 'client/src/views/**/*.jsx']
-        tasks: ['browserify', 'replace:js', 'copy:js']
+        tasks: ['browserify:app', 'replace:js', 'copy:js']
 
       clientTest:
-        files: testFiles
-        tasks: ['browserify:test', 'replace:js']
+        files: testFiles.concat(['client/test/helpers/spec_helper.js'])
+        tasks: ['browserify:test', 'replace:test', 'replace:testPage']
 
       clientStyles:
         files: 'client/styles/**/*.less'
@@ -105,8 +120,8 @@ module.exports = (grunt) ->
         dest: 'client/dist/js/app.js'
       test:
         replacements: variableReplacements
-        src: ['client/test/all_code.js']
-        dest: 'client/test/all_code.js'
+        src: ['client/test/test_code.js']
+        dest: 'client/test/test_code.js'
 
       testPage:
         replacements: [
@@ -119,16 +134,16 @@ module.exports = (grunt) ->
         dest: 'client/test/testpage.html'
 
     browserify:
-      test:
-        options: sharedBrowserifyConfig
-        src: ['client/src/initialize.coffee'].concat(testFiles).concat(['client/test/helpers/spec_helper.js']),
-        dest: 'client/test/all_code.js'
-      
       app:
         options: sharedBrowserifyConfig,
         src: ['client/src/initialize.coffee'],
         dest: 'client/gen/js/src/app.js'
 
+      test:
+        options: testBrowserifyConfig
+        src: testFiles.concat(['client/test/helpers/spec_helper.js']),
+        dest: 'client/test/test_code.js'
+      
     'compile-handlebars':
       allStatic:
         template: 'client/src/index.hbs'

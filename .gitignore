@@ -4,7 +4,7 @@ client/gen
 client/dist
 client/dist.zip
 client/test/testpage.html
-client/test/all_code.js
+client/test/test_code.js
 server/gen
 public/
 node_modules/
