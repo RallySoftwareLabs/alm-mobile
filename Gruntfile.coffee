@@ -193,7 +193,7 @@ module.exports = (grunt) ->
     mocha:
       options:
         log: true
-        urls: ["http://localhost:#{inlinePort}/testpage.html"]
+        urls: ["http://localhost:#{inlinePort}/"]
         logErrors: true
         run: false
       client:
