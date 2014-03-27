@@ -1,37 +1,35 @@
 /** @jsx React.DOM */
-define(function() {
-  var $ = require('jquery'),
-			React = require('react'),
-      utils = require('lib/utils'),
-  		ReactView = require('views/base/react_view'),
-  		FieldMixin = require('views/field/field_mixin');
+var $ = require('jquery');
+var React = require('react');
+var utils = require('lib/utils');
+var ReactView = require('views/base/react_view');
+var FieldMixin = require('views/field/field_mixin');
 
-  return ReactView.createBackboneClass({
-  	mixins: [FieldMixin],
-    getDefaultProps: function() {
-      return { label: 'Work Product' };
-    },
-  	render: function() {
-      var fieldValue = this.getFieldValue();
-  		return fieldValue ? (
-        <div className="display">
-          <div className="well-title control-label">{ this.props.label }</div>
-          <div className="well well-sm titled-well-sm"
-               onClick={ this._onClick }
-               onKeyDown={ this.handleEnterAsClick(this._onClick) }
-               tabIndex="0"
-               role="link"
-               aria-label={ "Work Product. " + fieldValue.FormattedID + ": " + fieldValue._refObjectName + " Click to edit." }>
-            <span className="work-product-id">{ fieldValue.FormattedID }</span>
-            <span className="work-product-name ellipsis">{ fieldValue._refObjectName }</span>
-          </div>
+module.exports = ReactView.createBackboneClass({
+  mixins: [FieldMixin],
+  getDefaultProps: function() {
+    return { label: 'Work Product' };
+  },
+  render: function() {
+    var fieldValue = this.getFieldValue();
+    return fieldValue ? (
+      <div className="display">
+        <div className="well-title control-label">{ this.props.label }</div>
+        <div className="well well-sm titled-well-sm"
+             onClick={ this._onClick }
+             onKeyDown={ this.handleEnterAsClick(this._onClick) }
+             tabIndex="0"
+             role="link"
+             aria-label={ "Work Product. " + fieldValue.FormattedID + ": " + fieldValue._refObjectName + " Click to edit." }>
+          <span className="work-product-id">{ fieldValue.FormattedID }</span>
+          <span className="work-product-name ellipsis">{ fieldValue._refObjectName }</span>
         </div>
-      ) : <div/>;
-  	},
+      </div>
+    ) : <div/>;
+  },
 
-    _onClick: function() {
-      var fieldValue = this.getFieldValue();
-      this.routeTo(utils.getDetailHash(fieldValue));
-    }
-  });
+  _onClick: function() {
+    var fieldValue = this.getFieldValue();
+    this.routeTo(utils.getDetailHash(fieldValue));
+  }
 });

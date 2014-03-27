@@ -1,7 +1,6 @@
-define ->
-  appConfig = require 'appConfig'
-  Model = require 'models/base/model'
+appConfig = require 'app_config'
+Model = require 'models/base/model'
 
-  class Discussion extends Model
-    typePath: 'conversationpost'
-    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/conversationpost'
+module.exports = class Discussion extends Model
+  typePath: 'conversationpost'
+  urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/conversationpost'

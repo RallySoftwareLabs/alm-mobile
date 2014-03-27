@@ -1,7 +1,6 @@
-define ->
-  appConfig = require 'appConfig'
-  Model = require 'models/base/model'
+appConfig = require 'app_config'
+Model = require 'models/base/model'
 
-  class Iteration extends Model
-    typePath: 'iteration'
-    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/iteration'
+module.exports = class Iteration extends Model
+  typePath: 'iteration'
+  urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/iteration'

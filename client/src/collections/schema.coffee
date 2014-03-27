@@ -1,69 +1,68 @@
-define ->
-  $ = require 'jquery'
-  _ = require 'underscore'
-  appConfig = require 'appConfig'
-  utils = require 'lib/utils'
-  AllowedValues = require 'collections/allowed_values'
-  Collection = require 'collections/collection'
-  Defect = require 'models/defect'
-  Task = require 'models/task'
-  TypeDefinition = require 'models/type_definition'
-  UserStory = require 'models/user_story'
+$ = require 'jquery'
+_ = require 'underscore'
+appConfig = require 'app_config'
+utils = require 'lib/utils'
+AllowedValues = require 'collections/allowed_values'
+Collection = require 'collections/collection'
+Defect = require 'models/defect'
+Task = require 'models/task'
+TypeDefinition = require 'models/type_definition'
+UserStory = require 'models/user_story'
 
-  class Schema extends Collection
-    typePath: '__schema__'
-    url: appConfig.almWebServiceBaseUrl + '/schema/@@WSAPI_VERSION/project'
-    model: TypeDefinition
+module.exports = class Schema extends Collection
+  typePath: '__schema__'
+  url: appConfig.almWebServiceBaseUrl + '/schema/@@WSAPI_VERSION/project'
+  model: TypeDefinition
 
-    fetchForProject: (project) ->
-      projectOid = utils.getOidFromRef project.get('_ref')
-      projectSchema = project.get('SchemaVersion')
-      @url = "#{appConfig.almWebServiceBaseUrl}/schema/@@WSAPI_VERSION/project/#{projectOid}/#{projectSchema}"
+  fetchForProject: (project) ->
+    projectOid = utils.getOidFromRef project.get('_ref')
+    projectSchema = project.get('SchemaVersion')
+    @url = "#{appConfig.almWebServiceBaseUrl}/schema/@@WSAPI_VERSION/project/#{projectOid}/#{projectSchema}"
 
-      @fetch(accepts: json: 'text/plain')
+    @fetch(accepts: json: 'text/plain')
 
-    ###*
-     * @param {Model} model The model to get the allowed values for
-     * @param {String} fieldName The field in the model to get the allowed values for
-     * @returns {Promise} A promise that resolves to the array of allowed values for this model field
-    ###
-    getAllowedValues: (model, fieldName) ->
-      attr = @getAttribute(model, fieldName)
-      if attr then @_getAttributeAllowedValues(attr) else []
+  ###*
+   * @param {Model} model The model to get the allowed values for
+   * @param {String} fieldName The field in the model to get the allowed values for
+   * @returns {Promise} A promise that resolves to the array of allowed values for this model field
+  ###
+  getAllowedValues: (model, fieldName) ->
+    attr = @getAttribute(model, fieldName)
+    if attr then @_getAttributeAllowedValues(attr) else []
 
-    hasAllowedValues: (model, fieldName) ->
-      @getAttribute(model, fieldName).Constrained
+  hasAllowedValues: (model, fieldName) ->
+    @getAttribute(model, fieldName).Constrained
 
-    getFieldDisplayName: (model, fieldName) ->
-      @getAttribute(model, fieldName).Name
+  getFieldDisplayName: (model, fieldName) ->
+    @getAttribute(model, fieldName).Name
 
-    getTypeDef: (model) ->
-      typeDef = @find (type) -> type.get('TypePath').toLowerCase() == (model:: || model).typePath
+  getTypeDef: (model) ->
+    typeDef = @find (type) -> type.get('TypePath').toLowerCase() == (model:: || model).typePath
 
-    getAttributes: (model) ->
-      @getTypeDef(model).get('Attributes')
-      
-    getAttribute: (model, fieldName) ->
-      attribute = _.find(@getAttributes(model), ElementName: fieldName)
+  getAttributes: (model) ->
+    @getTypeDef(model).get('Attributes')
+    
+  getAttribute: (model, fieldName) ->
+    attribute = _.find(@getAttributes(model), ElementName: fieldName)
 
-    _getAttributeAllowedValues: (attr) ->
-      deferred = $.Deferred()
-      if _.isArray attr.AllowedValues
-        deferred.resolve(
-          _.map(
-            attr.AllowedValues,
-            (value) -> _.extend(value, AllowedValueType: attr.AllowedValueType)
-          )
+  _getAttributeAllowedValues: (attr) ->
+    deferred = $.Deferred()
+    if _.isArray attr.AllowedValues
+      deferred.resolve(
+        _.map(
+          attr.AllowedValues,
+          (value) -> _.extend(value, AllowedValueType: attr.AllowedValueType)
         )
-      else if attr.Constrained
-        av = new AllowedValues()
-        av.clientMetricsParent = this
-        av.url = attr.AllowedValues._ref
-        av.fetch().then ->
-          deferred.resolve av.map((value) ->
-            _.extend(value.toJSON(), AllowedValueType: attr.AllowedValueType)
-          )
-      else
-        deferred.resolve []
-      
-      deferred.promise()
+      )
+    else if attr.Constrained
+      av = new AllowedValues()
+      av.clientMetricsParent = this
+      av.url = attr.AllowedValues._ref
+      av.fetch().then ->
+        deferred.resolve av.map((value) ->
+          _.extend(value.toJSON(), AllowedValueType: attr.AllowedValueType)
+        )
+    else
+      deferred.resolve []
+    
+    deferred.promise()

@@ -1,4 +1,5 @@
 path = require 'path'
+util = require 'util'
 _ = require 'lodash'
 
 module.exports = (grunt) ->
@@ -7,45 +8,102 @@ module.exports = (grunt) ->
   inlinePort = grunt.option('port') || 8901
   debug = grunt.option('verbose') || false
 
+  grunt.loadNpmTasks 'grunt-browserify'
   grunt.loadNpmTasks 'grunt-contrib-clean'
-  grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-compile-handlebars'
   grunt.loadNpmTasks 'grunt-contrib-less'
-  grunt.loadNpmTasks 'grunt-contrib-requirejs'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-express'
   grunt.loadNpmTasks 'grunt-mocha'
-  grunt.loadNpmTasks 'grunt-react'
-  grunt.loadNpmTasks 'grunt-replace'
+  grunt.loadNpmTasks 'grunt-text-replace'
   grunt.loadNpmTasks 'grunt-s3'
 
-  grunt.registerTask 'default', ['clean','coffee','react','less','indexHtml', 'copy:js','requirejs','replace:js','copy:assets','concat']
+  grunt.registerTask 'default', ['clean','less','indexHtml', 'copy:js', 'browserify:app', 'replace:js', 'copy:assets', 'concat']
 
   grunt.registerTask 'test', ['test:conf', 'express:inline', 'mocha']
-  grunt.registerTask 'test:conf', ['default', 'replace:testPage']
+  grunt.registerTask 'test:conf', ['default', 'browserify:test', 'replace:test', 'replace:testPage']
   grunt.registerTask 'test:server', "Starts a test server at localhost:#{serverPort}, specify a different port with --port=<port>", ['express:server', 'express-keepalive']
 
   grunt.registerTask 'indexHtml', "Generates the index.html page", ['compile-handlebars:allStatic']
-  grunt.registerTask 'heroku', ['clean','coffee','less','indexHtml', 'copy:js','requirejs','replace:js','copy','concat']
+  grunt.registerTask 'heroku', ['clean','less','indexHtml', 'copy:js','browserify:app','replace:js','copy','concat']
 
+  srcFiles = grunt.file.expand ['client/src/**/*.coffee', 'client/src/**/*.jsx']
   testFiles = grunt.file.expand ['client/test/**/*_spec.js']
+
+  # Takes grunt-browserify aliasMappings config and converts it into an alias array
+  aliasMappingsToAliasArray = (aliasMappings, prefix) ->
+    aliasArray = []
+    aliases = if util.isArray(aliasMappings) then aliasMappings else [aliasMappings]
+    aliases.forEach (alias) ->
+      grunt.file.expandMapping(alias.src, alias.dest, {cwd: alias.cwd, filter: 'isFile'}).forEach (file) ->
+        expose = file.dest.substr(0, file.dest.lastIndexOf('.'))
+        aliasArray.push('./' + file.src[0] + ':' + expose)
+    
+    aliasArray
+
+  variableReplacements = [{
+    from: '@@WSAPI_VERSION'
+    to: 'v2.0'
+  }, {
+    from: '@@config'
+    to: JSON.stringify(grunt.file.readJSON(path.resolve(__dirname, 'config.json')).config)
+  }]
+
+  externalBrowserifyAliases = [
+    'node_modules/jquery/dist/jquery.js:jquery'
+    'node_modules/backbone/backbone.js:backbone'
+    'node_modules/lodash/dist/lodash.js:underscore'
+    'node_modules/react/react.js:react'
+    'node_modules/moment/moment.js:moment'
+    'node_modules/pagedown/Markdown.Converter.js:pagedown'
+    'vendor/scripts/spin.min.js:spin'
+    'node_modules/rallymetrics/builds/rallymetrics.js:rallymetrics'
+  ]
+  sharedBrowserifyConfig =
+    transform: [
+      'coffeeify'
+      'reactify'
+    ]
+    alias: aliasMappingsToAliasArray({
+      cwd: 'client/src',
+      src: ['**/*.coffee', '**/*.jsx'],
+      dest: ''
+    }).concat(externalBrowserifyAliases)
+    external: [
+      'node_modules/jquery/dist/jquery.js'
+      'node_modules/backbone/backbone.js'
+      'node_modules/lodash/dist/lodash.js'
+      'node_modules/react/react.js'
+      'node_modules/moment/moment.js'
+      'node_modules/pagedown/Markdown.Converter.js'
+      'vendor/scripts/spin.min.js'
+      'node_modules/rallymetrics/builds/rallymetrics.js'
+      'html-md'
+    ]
+
+  testBrowserifyConfig = _.clone(sharedBrowserifyConfig)
+  testBrowserifyConfig.external = _.union(
+    testBrowserifyConfig.external,
+    srcFiles
+  )
 
   grunt.initConfig
 
-    clean: ['client/gen/*', 'client/dist/*', 'sever/gen/*']
+    clean:
+      generated: ['client/gen/', 'client/dist/', 'server/gen/']
 
     #watch and compile all folders separately for the quickest compile time
     watch:
       clientSrc:
-        files: 'client/src/**/*.coffee'
-        tasks: ['coffee:clientSrc', 'requirejs:compile', 'replace:js', 'copy:js']
+        files: ['client/src/**/*.coffee', 'client/src/views/**/*.jsx']
+        tasks: ['browserify:app', 'replace:js', 'copy:js']
 
-      reactSrc:
-        files: 'client/src/views/**/*.jsx'
-        tasks: ['react:clientSrc', 'requirejs:compile', 'replace:js', 'copy:js']
+      clientTest:
+        files: testFiles.concat(['client/test/helpers/spec_helper.js'])
+        tasks: ['browserify:test', 'replace:test', 'replace:testPage']
 
       clientStyles:
         files: 'client/styles/**/*.less'
@@ -55,97 +113,37 @@ module.exports = (grunt) ->
         files: ['config.json', 'client/src/*.hbs']
         tasks: ['indexHtml']
 
-      clientTest:
-        files: 'client/test/**/*.coffee'
-        tasks: ['coffee:clientTest']
-
-      serverSrc:
-        files: 'server/src/**/*.coffee'
-        tasks: ['coffee:serverSrc']
-
     replace:
       js:
-        options:
-          variables:
-            'WSAPI_VERSION': 'v2.0'
-          prefix: '@@'
-          force: true
-        files: [
-         expand: true, flatten: true, src: ['client/gen/js/app.js'], dest: 'client/dist/js'
-        ]
+        replacements: variableReplacements
+        src: ['client/gen/js/src/app.js']
+        dest: 'client/dist/js/app.js'
+      test:
+        replacements: variableReplacements
+        src: ['client/test/test_code.js']
+        dest: 'client/test/test_code.js'
 
       testPage:
-        options:
-          prefix: ""
-          variables: '__testFiles__': _.map(testFiles, (file) ->
-            "'#{file.substring(0, file.length - 3)}'"
-          ).join(',\n      ')
-        files: [
-          src: ['client/test/testpage.tpl']
-          dest: 'client/test/testpage.html'
+        replacements: [
+          from: '__testFiles__'
+          to: _.map(testFiles, (file) ->
+            "<script type=\"text/javascript\" src=\"#{file}\"></script"
+          ).join('\n      ')
         ]
+        src: ['client/test/testpage.tpl']
+        dest: 'client/test/testpage.html'
 
-    coffee:
-      clientSrc:
-        expand: true
-        cwd: 'client/src/'
-        src: ['**/*.coffee']
-        dest: 'client/gen/js/src'
-        ext: '.js'
+    browserify:
+      app:
+        options: sharedBrowserifyConfig,
+        src: ['client/src/initialize.coffee'],
+        dest: 'client/gen/js/src/app.js'
 
-      clientTest:
-        expand: true
-        cwd: 'client/test/'
-        src: ['**/*.coffee']
-        dest: 'client/gen/js/test'
-        ext: '.js'
-
-      serverSrc:
-        expand: true
-        cwd: 'server/src/'
-        src: ['**/*.coffee']
-        dest: 'server/gen/js/src'
-        ext: '.js'
-
-    react:
-      clientSrc:
-        files: [
-          expand: true
-          ext: '.js'
-          cwd: 'client/src/views'
-          src: ['**/*.jsx']
-          dest: 'client/gen/js/src/views'
-        ]
-
-    requirejs:
-      compile:
-        options:
-          name: 'initialize'
-          paths:
-            appConfig: "empty:"
-            backbone: "empty:"
-            bootstrap: "empty:"
-            handlebars: "empty:"
-            jquery: "empty:"
-            jqueryBase64: "empty:"
-            md: "../../../../node_modules/html-md/dist/md.min"
-            moment: "empty:"
-            pagedown: "empty:"
-            rallymetrics: "../../../../node_modules/rallymetrics/builds/rallymetrics"
-            react: "empty:"
-            spin: "empty:"
-            underscore: "empty:"
-          shim:
-            appConfig:
-              exports: "AppConfig"
-          out: 'client/gen/js/app.js'
-          baseUrl: 'client/gen/js/src'
-          optimize: "none"
-          preserveLicenseComments: false
-          findNestedDependencies: true
-          useStrict: true
-          wrap: true
-
+      test:
+        options: testBrowserifyConfig
+        src: testFiles.concat(['client/test/helpers/spec_helper.js']),
+        dest: 'client/test/test_code.js'
+      
     'compile-handlebars':
       allStatic:
         template: 'client/src/index.hbs'
@@ -160,7 +158,6 @@ module.exports = (grunt) ->
           "client/gen/styles/app.css": ["client/styles/main.less"]
 
     concat:
-
       css:
         src: ['client/gen/styles/*.css']
         dest: 'client/dist/css/app.css'
@@ -169,6 +166,7 @@ module.exports = (grunt) ->
       js:
         files:
           'client/dist/js/jquery.base64.min.js': 'vendor/scripts/jquery.base64.min.js'
+          'client/dist/js/rallymetrics.js': 'node_modules/rallymetrics/builds/rallymetrics.js'
       assets:
         files: [
           {expand: true, dest: 'client/dist/', cwd: 'client/assets/', src: '**', filter: 'isFile'}

@@ -1,12 +1,11 @@
-define ->
-  appConfig = require 'appConfig'
-  Model = require 'models/base/model'
+appConfig = require 'app_config'
+Model = require 'models/base/model'
 
-  class Task extends Model
-    typePath: 'task'
-    urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/task'
+module.exports = class Task extends Model
+  typePath: 'task'
+  urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/task'
 
-    defaults:
-      "State": "Defined"
+  defaults:
+    "State": "Defined"
 
-    allowedValueFields: ['State']
+  allowedValueFields: ['State']

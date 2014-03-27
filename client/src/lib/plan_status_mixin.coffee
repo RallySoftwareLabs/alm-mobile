@@ -1,5 +1,4 @@
-define ->
-  return {
+module.exports = {
     planStatus: (userStory) ->
       return this.props.planStatus if this.props.planStatus
       if userStory?
