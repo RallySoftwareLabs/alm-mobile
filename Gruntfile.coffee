@@ -170,6 +170,7 @@ module.exports = (grunt) ->
           'client/dist/js/jquery.base64.min.js': 'vendor/scripts/jquery.base64.min.js'
           'client/dist/js/reconnecting-websocket.js': 'vendor/scripts/reconnecting-websocket.js'
           'client/dist/js/rallymetrics.js': 'node_modules/rallymetrics/builds/rallymetrics.js'
+          'client/dist/js/html-md.js': 'node_modules/html-md/dist/md.min.js'
       assets:
         files: [
           {expand: true, dest: 'client/dist/', cwd: 'client/assets/', src: '**', filter: 'isFile'}
