@@ -5,7 +5,7 @@ SchemaMixin = require 'models/base/schema_mixin'
 
 # Base class for all models.
 module.exports = class Model extends Backbone.Model
-  idAttribute: 'ObjectID'
+  idAttribute: '_refObjectUUID'
 
   _.extend @prototype, Messageable
   _.extend this, SchemaMixin.static
@@ -21,9 +21,6 @@ module.exports = class Model extends Backbone.Model
     return resp.OperationResult.Object if resp.OperationResult?
     return resp.CreateResult.Object if resp.CreateResult?
     return (value for key, value of resp)[0] # Get value for only key
-
-  isNew: ->
-    !@id? && !@_ref
 
   isSynced: -> @synced
 

@@ -16,6 +16,7 @@ module.exports = class PortfolioItemModelFactory
       PortfolioItems.extend
         url: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/' + typePath
         model: @_buildModel(typePath)
+        typePath: typePath
 
   @getModel: (ordinal) =>
     @fetchTypes().then (piTypeDefinitions) =>

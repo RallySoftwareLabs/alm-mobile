@@ -8,7 +8,7 @@ module.exports = {
   fetchModelAndShowView: (Model, View, id) ->
     @view = @renderReactComponent LoadingIndicatorView, region: 'main', shared: false
     fieldNames = @getFieldNames()
-    model = new Model(ObjectID: id)
+    model = new Model(_refObjectUUID: id)
     model.clientMetricsParent = this
     model.fetch(
       data:

@@ -32,10 +32,10 @@ _.mixin
 module.exports = {
   getDetailHash: (model) ->
     attributes = model.attributes || model
-    "#{@_getNavigationType(@getTypeFromRef(attributes._ref).split('/')[0])}/#{@getOidFromRef(attributes._ref)}"
+    "#{@_getNavigationType(@getTypeFromRef(attributes._ref).split('/')[0])}/#{attributes._refObjectUUID}"
 
-  getRef: (type, oid) ->
-    "/#{@_getWsapiType(type)}/#{oid}"
+  getRef: (type, id) ->
+    "/#{@_getWsapiType(type)}/#{id}"
 
   getOidFromRef: (ref) ->
     ref = ref._ref || ref

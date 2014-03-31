@@ -18,7 +18,7 @@ module.exports = class PortfolioItemDetailController extends SiteController
 
   newChild: (id) ->
     @whenProjectIsLoaded ->
-      model = new PortfolioItem(ObjectID: id)
+      model = new PortfolioItem(_refObjectUUID: id)
       model.fetch
         data:
           fetch: 'FormattedID,Children'

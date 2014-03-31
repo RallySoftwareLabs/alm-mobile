@@ -1,6 +1,7 @@
 app = require 'application'
 SiteController = require 'controllers/base/site_controller'
 DetailControllerMixin = require 'controllers/detail_controller_mixin'
+PortfolioItem = require 'models/portfolio_item'
 UserStory = require 'models/user_story'
 View = require 'views/detail/user_story'
 
@@ -18,7 +19,7 @@ module.exports = class UserStoryDetailController extends SiteController
 
   childForStory: (id) ->
     @whenProjectIsLoaded ->
-      model = new UserStory(ObjectID: id)
+      model = new UserStory(_refObjectUUID: id)
       model.fetch
         data:
           fetch: 'FormattedID'
@@ -28,7 +29,7 @@ module.exports = class UserStoryDetailController extends SiteController
 
   childForPortfolioItem: (id) ->
     @whenProjectIsLoaded ->
-      model = new UserStory(ObjectID: id)
+      model = new PortfolioItem(_refObjectUUID: id)
       model.fetch
         data:
           fetch: 'FormattedID'

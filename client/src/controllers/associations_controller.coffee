@@ -18,22 +18,22 @@ associationClasses =
 
 module.exports = class AssociationsController extends SiteController
   childrenForStory: (id) ->
-    @_createAssociationView(new UserStory(ObjectID: id, _type: 'hierarchicalrequirement'), 'Children', 'Parent')
+    @_createAssociationView(new UserStory(_refObjectUUID: id, _type: 'hierarchicalrequirement'), 'Children', 'Parent')
 
   defectsForStory: (id) ->
-    @_createAssociationView(new UserStory(ObjectID: id, _type: 'hierarchicalrequirement'), 'Defects', 'Requirement')
+    @_createAssociationView(new UserStory(_refObjectUUID: id, _type: 'hierarchicalrequirement'), 'Defects', 'Requirement')
 
   tasksForStory: (id) ->
-    @_createAssociationView(new UserStory(ObjectID: id, _type: 'hierarchicalrequirement'), 'Tasks', 'WorkProduct')
+    @_createAssociationView(new UserStory(_refObjectUUID: id, _type: 'hierarchicalrequirement'), 'Tasks', 'WorkProduct')
 
   tasksForDefect: (id) ->
-    @_createAssociationView(new Defect(ObjectID: id, _type: 'defect'), 'Tasks', 'WorkProduct')
+    @_createAssociationView(new Defect(_refObjectUUID: id, _type: 'defect'), 'Tasks', 'WorkProduct')
 
   userStoriesForPortfolioItem: (id) ->
-    @_createAssociationView(new PortfolioItem(ObjectID: id, _type: 'portfolioitem'), 'UserStories', 'PortfolioItem')
+    @_createAssociationView(new PortfolioItem(_refObjectUUID: id, _type: 'portfolioitem'), 'UserStories', 'PortfolioItem')
 
   childrenForPortfolioItem: (id) ->
-    @_createAssociationView(new PortfolioItem(ObjectID: id, _type: 'portfolioitem'), 'Children', 'Parent')
+    @_createAssociationView(new PortfolioItem(_refObjectUUID: id, _type: 'portfolioitem'), 'Children', 'Parent')
 
   _createAssociationView: (model, association, reverseAssociation) ->
     associatedItems = @_getAssociatedCollection(model, association)
