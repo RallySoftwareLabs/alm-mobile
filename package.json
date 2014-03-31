@@ -68,6 +68,7 @@
     "pagedown": "global:Markdown",
     "rallymetrics": "global:RallyMetrics",
     "html-md": "global:md",
-    "spin": "global:Spinner"
+    "spin": "global:Spinner",
+    "reconnecting-websocket": "global:ReconnectingWebSocket"
   }
 }

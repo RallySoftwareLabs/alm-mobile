@@ -60,6 +60,7 @@ module.exports = (grunt) ->
     'node_modules/moment/moment.js:moment'
     'node_modules/pagedown/Markdown.Converter.js:pagedown'
     'vendor/scripts/spin.min.js:spin'
+    'vendor/scripts/reconnecting-websocket.js:reconnecting-websocket'
     'node_modules/rallymetrics/builds/rallymetrics.js:rallymetrics'
   ]
   sharedBrowserifyConfig =
@@ -80,6 +81,7 @@ module.exports = (grunt) ->
       'node_modules/moment/moment.js'
       'node_modules/pagedown/Markdown.Converter.js'
       'vendor/scripts/spin.min.js'
+      'vendor/scripts/reconnecting-websocket.js'
       'node_modules/rallymetrics/builds/rallymetrics.js'
       'html-md'
     ]
@@ -166,6 +168,7 @@ module.exports = (grunt) ->
       js:
         files:
           'client/dist/js/jquery.base64.min.js': 'vendor/scripts/jquery.base64.min.js'
+          'client/dist/js/reconnecting-websocket.js': 'vendor/scripts/reconnecting-websocket.js'
           'client/dist/js/rallymetrics.js': 'node_modules/rallymetrics/builds/rallymetrics.js'
       assets:
         files: [
