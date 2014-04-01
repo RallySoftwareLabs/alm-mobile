@@ -19,7 +19,7 @@ module.exports = class DefectDetailController extends SiteController
 
   defectForStory: (id) ->
     @whenProjectIsLoaded ->
-      model = new UserStory(ObjectID: id)
+      model = new UserStory(_refObjectUUID: id)
       model.fetch
         data:
           fetch: 'FormattedID'

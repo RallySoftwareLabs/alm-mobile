@@ -24,7 +24,7 @@ class Application
     setTimeout(hideURLbar, 0)
     fixIE10($)
 
-    beaconUrl = if appConfig.almWebServiceBaseUrl == "https://rally1.rallydev.com/slm"
+    beaconUrl = if appConfig.isProd()
       "https://beacon.rallydev.com/beacon/"
     else
       "https://trust.f4tech.com/beacon/"

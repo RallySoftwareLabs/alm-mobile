@@ -4,6 +4,7 @@ var sinonChai = require('sinon-chai');
 var Messageable = require('lib/messageable');
 var app = require('application');
 
+chai.Assertion.includeStack = true;
 chai.use(sinonChai);
 window.expect = chai.expect;
 

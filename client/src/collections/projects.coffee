@@ -17,6 +17,6 @@ module.exports = class Projects extends Collection
       @::projects = projects = new Projects()
       projects.fetchAllPages(
         data:
-          shallowFetch: 'Name,Workspace,SchemaVersion'
+          shallowFetch: 'Name,Parent,Workspace,SchemaVersion'
           order: 'Name'
       )

@@ -19,7 +19,7 @@ module.exports = class TaskDetailController extends SiteController
 
   taskForDefect: (id) ->
     @whenProjectIsLoaded ->
-      model = new Defect(ObjectID: id)
+      model = new Defect(_refObjectUUID: id)
       model.fetch
         data:
           fetch: 'FormattedID'
@@ -29,7 +29,7 @@ module.exports = class TaskDetailController extends SiteController
 
   taskForStory: (id) ->
     @whenProjectIsLoaded ->
-      model = new UserStory(ObjectID: id)
+      model = new UserStory(_refObjectUUID: id)
       model.fetch
         data:
           fetch: 'FormattedID'

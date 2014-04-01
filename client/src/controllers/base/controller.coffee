@@ -1,6 +1,7 @@
 app = require 'application'
 appConfig = require 'app_config'
 Messageable = require 'lib/messageable'
+realtimeUpdater = require 'lib/realtime_updater'
 Projects = require 'collections/projects'
 LoadingIndicatorView = require 'views/loading_indicator'
 
@@ -26,6 +27,9 @@ module.exports = class Controller
     else
       @_renderLoadingIndicatorUntilProjectIsReady(callback, options.showLoadingIndicator)
       app.session.initSessionForUser(projectRef)
+
+  listenForRealtimeUpdates: (options, callback, scope) ->
+    @websocket = realtimeUpdater.listenForRealtimeUpdates(options, callback, scope)
 
   _onProjectReady: (callback) ->
     func = =>
@@ -55,3 +59,5 @@ module.exports = class Controller
   dispose: ->
     @stopListening()
     @unsubscribeAllEvents()
+    @websocket?.close()
+    @websocket = null

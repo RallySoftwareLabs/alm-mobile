@@ -120,11 +120,11 @@ module.exports = ReactView.createBackboneClass({
 
   updateSelectedProject: function(event) {
     app.aggregator.recordAction({component: this, description: "changed project"});
-    this.publishEvent('changeProject', this.$('.project-select option:selected').val());
+    this.publishEvent('changeProject', event.target.value);
   },
 
   updateSelectedIteration: function(event) {
     app.aggregator.recordAction({component: this, description: "changed iteration"});
-    this.publishEvent('changeIteration', this.$('.iteration-select option:selected').val());
+    this.publishEvent('changeIteration', event.target.value);
   }
 });

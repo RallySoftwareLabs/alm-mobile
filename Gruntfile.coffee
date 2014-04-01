@@ -60,6 +60,7 @@ module.exports = (grunt) ->
     'node_modules/moment/moment.js:moment'
     'node_modules/pagedown/Markdown.Converter.js:pagedown'
     'vendor/scripts/spin.min.js:spin'
+    'vendor/scripts/reconnecting-websocket.js:reconnecting-websocket'
     'node_modules/rallymetrics/builds/rallymetrics.js:rallymetrics'
   ]
   sharedBrowserifyConfig =
@@ -80,6 +81,7 @@ module.exports = (grunt) ->
       'node_modules/moment/moment.js'
       'node_modules/pagedown/Markdown.Converter.js'
       'vendor/scripts/spin.min.js'
+      'vendor/scripts/reconnecting-websocket.js'
       'node_modules/rallymetrics/builds/rallymetrics.js'
       'html-md'
     ]
@@ -102,7 +104,7 @@ module.exports = (grunt) ->
         tasks: ['browserify:app', 'replace:js', 'copy:js']
 
       clientTest:
-        files: testFiles.concat(['client/test/helpers/spec_helper.js'])
+        files: testFiles.concat(['client/test/helpers/**/*.js'])
         tasks: ['browserify:test', 'replace:test', 'replace:testPage']
 
       clientStyles:
@@ -110,8 +112,12 @@ module.exports = (grunt) ->
         tasks: ['less:client', 'concat:css']
 
       clientIndexHtml:
-        files: ['config.json', 'client/src/*.hbs']
+        files: ['client/src/*.hbs']
         tasks: ['indexHtml']
+
+      clientConfig:
+        files: ['config.json']
+        tasks: ['replace:js']
 
     replace:
       js:
@@ -141,7 +147,7 @@ module.exports = (grunt) ->
 
       test:
         options: testBrowserifyConfig
-        src: testFiles.concat(['client/test/helpers/spec_helper.js']),
+        src: testFiles.concat(['client/test/helpers/**/*.js']),
         dest: 'client/test/test_code.js'
       
     'compile-handlebars':
@@ -166,7 +172,9 @@ module.exports = (grunt) ->
       js:
         files:
           'client/dist/js/jquery.base64.min.js': 'vendor/scripts/jquery.base64.min.js'
+          'client/dist/js/reconnecting-websocket.js': 'vendor/scripts/reconnecting-websocket.js'
           'client/dist/js/rallymetrics.js': 'node_modules/rallymetrics/builds/rallymetrics.js'
+          'client/dist/js/html-md.js': 'node_modules/html-md/dist/md.min.js'
       assets:
         files: [
           {expand: true, dest: 'client/dist/', cwd: 'client/assets/', src: '**', filter: 'isFile'}
@@ -193,7 +201,7 @@ module.exports = (grunt) ->
     mocha:
       options:
         log: true
-        urls: ["http://localhost:#{inlinePort}/testpage.html"]
+        urls: ["http://localhost:#{inlinePort}/"]
         logErrors: true
         run: false
       client:
