@@ -28,9 +28,8 @@ module.exports = ReactView.createBackboneClass({
     );
   },
   onClick: function(e) {
-    var m = this.props.model;
     app.aggregator.recordAction({component: this, description: "clicked feature card"});
-    this.publishEvent('cardclick', utils.getOidFromRef(m.get('_ref')), m.get('_type'));
+    this.publishEvent('cardclick', this, this.props.model);
     e.preventDefault();
   }
 });
