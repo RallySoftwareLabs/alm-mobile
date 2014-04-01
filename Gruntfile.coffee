@@ -104,7 +104,7 @@ module.exports = (grunt) ->
         tasks: ['browserify:app', 'replace:js', 'copy:js']
 
       clientTest:
-        files: testFiles.concat(['client/test/helpers/spec_helper.js'])
+        files: testFiles.concat(['client/test/helpers/**/*.js'])
         tasks: ['browserify:test', 'replace:test', 'replace:testPage']
 
       clientStyles:
@@ -147,7 +147,7 @@ module.exports = (grunt) ->
 
       test:
         options: testBrowserifyConfig
-        src: testFiles.concat(['client/test/helpers/spec_helper.js']),
+        src: testFiles.concat(['client/test/helpers/**/*.js']),
         dest: 'client/test/test_code.js'
       
     'compile-handlebars':
