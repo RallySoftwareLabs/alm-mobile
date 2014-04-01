@@ -112,8 +112,12 @@ module.exports = (grunt) ->
         tasks: ['less:client', 'concat:css']
 
       clientIndexHtml:
-        files: ['config.json', 'client/src/*.hbs']
+        files: ['client/src/*.hbs']
         tasks: ['indexHtml']
+
+      clientConfig:
+        files: ['config.json']
+        tasks: ['replace:js']
 
     replace:
       js:
