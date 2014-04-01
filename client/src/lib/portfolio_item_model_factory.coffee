@@ -1,6 +1,4 @@
-app = require 'application'
 appConfig = require 'app_config'
-utils = require 'lib/utils'
 PortfolioItem = require 'models/portfolio_item'
 PortfolioItems = require 'collections/portfolio_items'
 TypeDefinitions = require 'collections/type_definitions'
@@ -9,31 +7,48 @@ TypeDefinitions = require 'collections/type_definitions'
 # time we ask for a model.  We really should just load them once.
 # and keep them around somewhere
 
-module.exports = class PortfolioItemModelFactory
-  @getCollection: (ordinal) =>
+module.exports = {
+  getCollection: (ordinal) ->
     @fetchTypes().then (piTypeDefinitions) =>
-      typePath = @lookupTypePath ordinal,piTypeDefinitions
+      typeDef = @lookupTypeDef(ordinal, piTypeDefinitions)
+      typePath = typeDef.get('TypePath')
+      model = @_buildModel(typeDef)
       PortfolioItems.extend
-        url: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/' + typePath
-        model: @_buildModel(typePath)
+        url: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/' + typePath.toLowerCase()
+        model: model
         typePath: typePath
+        name: model.prototype.name
 
-  @getModel: (ordinal) =>
+  getModel: (ordinal) ->
     @fetchTypes().then (piTypeDefinitions) =>
-      @_buildModel @lookupTypePath ordinal,piTypeDefinitions
+      @_buildModel @lookupTypeDef ordinal, piTypeDefinitions
 
-  @_buildModel: (typePath) =>
+  _buildModel: (typeDef) ->
+    typePath = typeDef.get('TypePath')
     MyModel = PortfolioItem.extend 
-      urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/' + typePath
+      urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/' + typePath.toLowerCase()
       typePath: typePath
+      name: typeDef.get('Name')
   
-  @lookupTypePath: (ordinal,typeDefinitions) =>
-    'portfolioitem/' + typeDefinitions.findWhere({Ordinal: ordinal}).get('ElementName').toLowerCase()
+  lookupTypeDef: (ordinal, typeDefinitions) ->
+    typeDefinitions.findWhere({Ordinal: ordinal})
 
-  @fetchTypes: =>
-      piTypeDefinitions = new TypeDefinitions()
-      piTypeDefinitions.fetchAllPages
-        data:
-          fetch: 'ElementName,Ordinal'
-          query: '(Parent.Name = "Portfolio Item")'
-          order: 'Ordinal'
+  fetchTypes: ->
+    if @piTypeDefinitions
+      d = $.Deferred()
+      d.resolve(@piTypeDefinitions)
+      return d.promise()
+      
+    piTypeDefinitions = new TypeDefinitions()
+    piTypeDefinitions.fetchAllPages(
+      data:
+        fetch: 'Name,TypePath,Ordinal'
+        query: '(Parent.Name = "Portfolio Item")'
+        order: 'Ordinal'
+    ).then (value) =>
+      @piTypeDefinitions = piTypeDefinitions
+      value
+
+  clear: -> @piTypeDefinitions = null
+
+}
