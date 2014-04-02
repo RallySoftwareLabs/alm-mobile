@@ -40,13 +40,14 @@ module.exports = class SwimlaneWallController extends SiteController
         order: 'Name' 
         query: '(((((ObjectID = "9448887926") OR (ObjectID = "184289780")) OR (ObjectID = "1971104447")) OR (ObjectID = "6895507658")) OR (ObjectID = "2870644941"))'
       success: (teams) =>
-        teams.each @fetchIterations, this
+        $.when.apply($, teams.map(@fetchIterations, this)).then =>
+          @markFinished()
 
   fetchIterations: (team) =>
     team.iterations = new Iterations()
     team.iterations.team = team
     projectRef = team.get('_ref') 
-    team.iterations.fetch       
+    team.iterations.fetch(
       data: 
         fetch: 'Name,StartDate,EndDate,PlannedVelocity,Notes,Theme,Project'
         query: '(EndDate > today)'
@@ -55,9 +56,9 @@ module.exports = class SwimlaneWallController extends SiteController
         projectScopeUp: false
         projectScopeDown: false
         pagesize: 6
-      success: =>
-        team.trigger('add')
-        team.iterations.each @fetchScheduledItems, this
+    ).then =>
+      team.trigger('add')
+      $.when.apply($, team.iterations.map(@fetchScheduledItems, this))
 
   fetchScheduledItems: (iteration) =>
     $.when(
@@ -93,6 +94,3 @@ module.exports = class SwimlaneWallController extends SiteController
         projectScopeUp: false
         projectScopeDown: false
         pagesize: 50
-
-  # dispose: ->
-  #   React.unmountComponentAtNode(document.getElementsByClassName('navbar-fixed-bottom')[0])
