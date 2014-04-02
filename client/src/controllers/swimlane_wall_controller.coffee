@@ -2,6 +2,7 @@ _ = require 'underscore'
 app = require 'application'
 SiteController = require 'controllers/base/site_controller'
 SwimlaneWallView = require 'views/wall/swimlane_wall'
+SwimlaneLegendView = require 'views/wall/swimlane_legend'
 WallSplashView = require 'views/wall/splash'
 UserStories = require 'collections/user_stories'
 Defects = require 'collections/defects'
@@ -12,12 +13,25 @@ module.exports = class SwimlaneWallController extends SiteController
  
   show: (project) ->
     @teams = new Projects() 
-    @view = @renderReactComponent SwimlaneWallView, showLoadingIndicator: true, model: @teams, region: 'main'
-    @updateTitle "Plan"
     @fetchTeams()
-    @whenProjectIsLoaded project: project, showLoadingIndicator: false, fn: =>
-      @updateTitle "Plan for #{app.session.getProjectName()}"
-      projectRef = "/project/#{project}"
+    @view = @renderReactComponents(
+      [{
+        componentClass: SwimlaneWallView
+        props: 
+          showLoadingIndicator: true
+          model: @teams
+          region: 'main'
+          changeOptions: 'complete'
+      }, {
+        componentClass: SwimlaneLegendView
+        props:
+          region: 'bottom'
+      }]
+    )
+    @updateTitle "Plan"
+    # @whenProjectIsLoaded project: project, showLoadingIndicator: false, fn: =>
+    #   @updateTitle "Plan for #{app.session.getProjectName()}"
+      # projectRef = "/project/#{project}"
 
   fetchTeams: ->
     @teams.fetchAllPages
@@ -26,10 +40,11 @@ module.exports = class SwimlaneWallController extends SiteController
         order: 'Name' 
         query: '(((((ObjectID = "9448887926") OR (ObjectID = "184289780")) OR (ObjectID = "1971104447")) OR (ObjectID = "6895507658")) OR (ObjectID = "2870644941"))'
       success: (teams) =>
-        @fetchIterations team for team in teams.models
+        teams.each @fetchIterations, this
 
   fetchIterations: (team) =>
     team.iterations = new Iterations()
+    team.iterations.team = team
     projectRef = team.get('_ref') 
     team.iterations.fetch       
       data: 
@@ -41,12 +56,15 @@ module.exports = class SwimlaneWallController extends SiteController
         projectScopeDown: false
         pagesize: 6
       success: =>
-        team.iterations.trigger('add')
-        @fetchScheduledItems iteration for iteration in team.iterations.models
+        team.trigger('add')
+        team.iterations.each @fetchScheduledItems, this
 
   fetchScheduledItems: (iteration) =>
-    @fetchStories iteration
-    @fetchDefects iteration
+    $.when(
+      @fetchStories(iteration),
+      @fetchDefects(iteration)
+    ).then =>
+      iteration.collection.team.trigger('change')
 
   fetchStories: (iteration) =>
     iteration.userStories = new UserStories()
@@ -61,8 +79,6 @@ module.exports = class SwimlaneWallController extends SiteController
         projectScopeUp: false
         projectScopeDown: false
         pagesize: 50
-      success: =>
-        iteration.trigger('add')
 
   fetchDefects: (iteration) =>
     iteration.defects = new Defects()      
@@ -77,5 +93,6 @@ module.exports = class SwimlaneWallController extends SiteController
         projectScopeUp: false
         projectScopeDown: false
         pagesize: 50
-      success: =>
-        this.view.forceUpdate()
+
+  # dispose: ->
+  #   React.unmountComponentAtNode(document.getElementsByClassName('navbar-fixed-bottom')[0])

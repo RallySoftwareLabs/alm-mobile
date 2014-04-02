@@ -10,7 +10,7 @@ module.exports = ReactView.createBackboneClass({
     var iterations = model.iterations;
     if (iterations != null) {
       var iterationBoxes = iterations.map(function(iteration) {
-        return <IterationBox model={iteration} />;
+        return <IterationBox model={iteration} key={iteration.get('_refObjectUUID')} />;
       });
     }
     return (

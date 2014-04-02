@@ -26,7 +26,7 @@ module.exports = ReactView.createBackboneClass({
         } else {
           unestimatedItemsCount += 1;
         }
-        return <StoryBox model={userStory} />;
+        return <StoryBox model={userStory} key={userStory.get('_refObjectUUID')} />;
       });
     }
     if (defects != null) {
