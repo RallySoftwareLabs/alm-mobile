@@ -69,9 +69,6 @@ module.exports = {
 
     spec.$el = $(@el)
 
-    spec.renderForBackbone = (id) ->
-      React.renderComponent this, (if id then document.getElementById(id) else document.body)
-
     spec.updateTitle = (title) ->
       @publishEvent "updatetitle", title
 

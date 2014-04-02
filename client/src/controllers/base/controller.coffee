@@ -52,9 +52,7 @@ module.exports = class Controller
   renderReactComponent: (componentClass, props = {}, id) ->
     component = componentClass(_.omit(props, 'region'))
 
-    component.renderForBackbone id
-
-    component
+    React.renderComponent component, (if id then document.getElementById(id) else document.body)
 
   dispose: ->
     @stopListening()
