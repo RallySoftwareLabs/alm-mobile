@@ -114,34 +114,45 @@ module.exports = class WallController extends SiteController
     @initiatives.fetchAllPages @initiativeFetchData
 
   fetchFeatures: (projectRef) ->
-    parentsQuery = utils.createQueryFromCollection(@initiatives, 'Parent', 'OR', (item) ->
-      "\"#{item.get('_ref')}\""
-    )
-    @featureFetchData =
-      data:
-        shallowFetch: 'Parent,FormattedID,DragAndDropRank',
-        query: parentsQuery,
-        order: 'Rank ASC'
-        project: projectRef
-        projectScopeUp: false
-        projectScopeDown: true
+    initiativeGroups = @initiatives.groupBy (initiative, index) -> parseInt(index / 20)
+    featureQueries = _.map initiativeGroups, (initiatives) =>
 
-    @features.fetchAllPages @featureFetchData
+      parentsQuery = utils.createQueryFromCollection(initiatives, 'Parent', 'OR', (item) ->
+        "\"#{utils.toRelativeRef(item.get('_ref'))}\""
+      )
+      @featureFetchData =
+        remove: false
+        data:
+          shallowFetch: 'Parent,FormattedID,DragAndDropRank',
+          query: parentsQuery,
+          order: 'Rank ASC'
+          project: projectRef
+          projectScopeUp: false
+          projectScopeDown: true
+
+      @features.fetchAllPages @featureFetchData
+
+    $.when.apply($, featureQueries)
 
   fetchUserStories: (projectRef) ->
-    parentsQuery = utils.createQueryFromCollection(@features, 'PortfolioItem', 'OR', (item) ->
-      "\"#{item.get('_ref')}\""
-    )
-    @userStoryFetchData =
-      data: 
-        shallowFetch: 'Release,Iteration,PortfolioItem,ScheduleState,DragAndDropRank',
-        query: parentsQuery,
-        order: 'Rank ASC'
-        project: projectRef
-        projectScopeUp: false
-        projectScopeDown: true
+    featureGroups = @features.groupBy (feature, index) -> parseInt(index / 20)
+    usQueries = _.map featureGroups, (features) =>
+      parentsQuery = utils.createQueryFromCollection(features, 'PortfolioItem', 'OR', (item) ->
+        "\"#{utils.toRelativeRef(item.get('_ref'))}\""
+      )
+      @userStoryFetchData =
+        remove: false
+        data: 
+          shallowFetch: 'Release,Iteration,PortfolioItem,ScheduleState,DragAndDropRank',
+          query: parentsQuery,
+          order: 'Rank ASC'
+          project: projectRef
+          projectScopeUp: false
+          projectScopeDown: true
 
-    @userStories.fetchAllPages @userStoryFetchData
+      @userStories.fetchAllPages @userStoryFetchData
+
+    $.when.apply($, usQueries)
 
   onSelectProject: (projectRef) ->
     @redirectTo "/wall/#{utils.getOidFromRef(projectRef)}"
