@@ -20,9 +20,9 @@ module.exports = class SiteController extends Controller
   renderReactComponent: (componentClass, props = {}, id) ->
     component = componentClass(_.omit(props, 'region'))
 
-    props = {}
-    props[name] = component
-    @_getView props, id
+    viewProps = {}
+    viewProps[props.region] = component
+    @_getView viewProps, id
 
   renderReactComponents: (components) ->
     props = _.reduce components, (p, cmp) =>
