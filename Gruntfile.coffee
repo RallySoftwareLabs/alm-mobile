@@ -142,7 +142,7 @@ module.exports = (grunt) ->
     browserify:
       app:
         options: sharedBrowserifyConfig,
-        src: ['client/src/initialize.coffee'],
+        src: ['client/src/initialize.coffee', 'client/src/controllers/**/*.coffee'],
         dest: 'client/gen/js/src/app.js'
 
       test:

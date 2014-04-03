@@ -28,6 +28,7 @@ class Application
       "https://beacon.rallydev.com/beacon/"
     else
       "https://trust.f4tech.com/beacon/"
+
     @aggregator = new RallyMetrics.Aggregator
       flushInterval: 10000
       beaconUrl: beaconUrl
@@ -55,5 +56,9 @@ class Application
 
       # Freeze the application instance to prevent further changes.
       Object.freeze? this
+
+  addRoute: (path, handler, options) ->
+    Router.addRoute(path, handler, options)
+    
 
 module.exports = new Application

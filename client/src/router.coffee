@@ -6,18 +6,28 @@ appConfig = require 'app_config'
 
 controllerSuffix = '_controller'
 routes = {}
+routeDefs = []
 currentController = null
 aggregator = null
 
-addRoute = (path, handler, options = {}) ->
-  [controllerName, fnName] = handler.split '#'
-  controllerClass = require("controllers/#{controllerName}#{controllerSuffix}")
+buildRoutes = ->
+  _.transform routeDefs, (r, [path, handler, options]) ->
+    r[path] = buildRoute.call(this, path, handler, options)
+
+buildRoute = (path, handler, options = {}) ->
+  if _.isString(handler)
+    [controllerName, fnName] = handler.split '#'
+    controllerClass = require("controllers/#{controllerName}#{controllerSuffix}")
+  else
+    controllerClass = handler
+    fnName = options
+
   unless controllerClass
     throw new Error "Cannot create route for unknown controller #{path}, #{handler}"
   unless _.isFunction(controllerClass::[fnName])
     throw new Error "Cannot create route for unknown controller function #{path}, #{handler}"
 
-  routes[path] = ->
+  return ->
     args = _.toArray(arguments)
     if @authenticated || options.public
       return @allowThrough(path, controllerClass, fnName, args)
@@ -34,69 +44,67 @@ addRoute = (path, handler, options = {}) ->
         @navigate 'logout', trigger: true
 
 module.exports = {
+
+  addRoute: (path, handler, options = {}) ->
+    if @router?
+      buildRoute(path, handler, options)
+    else
+      routeDefs.push([path, handler, options])
+
   initialize: (config) ->
 
     aggregator = config.aggregator
 
-    defaultRoutes =
-      board: '/board'
-      wall: '/wall'
-
     # handle default route by redirecting to full path
     routes[''] = ->
-      @navigate defaultRoutes[appConfig.mode], trigger: true, replace: true
+      @navigate appConfig.defaultRoute, trigger: true, replace: true
 
-    addRoute 'board', 'board#index'
-    addRoute 'board/:column', 'board#column'
-    addRoute 'board/:column/userstory/new', 'user_story_detail#storyForColumn'
-    addRoute 'board/:column/defect/new', 'defect_detail#defectForColumn'
+    @addRoute 'board', 'board#index'
+    @addRoute 'board/:column', 'board#column'
+    @addRoute 'board/:column/userstory/new', 'user_story_detail#storyForColumn'
+    @addRoute 'board/:column/defect/new', 'defect_detail#defectForColumn'
     
-    addRoute 'wall', 'wall#splash'
-    addRoute 'wall/create', 'wall#create'
-    addRoute 'wall/:project', 'wall#show'
-    addRoute 'swimlaneWall', 'swimlane_wall#show'
+    @addRoute 'userstories', 'home#userstories'
+    @addRoute 'defects', 'home#defects'
+    @addRoute 'tasks', 'home#tasks'
 
-    addRoute 'userstories', 'home#userstories'
-    addRoute 'defects', 'home#defects'
-    addRoute 'tasks', 'home#tasks'
+    @addRoute 'userstory/:id', 'user_story_detail#show'
+    @addRoute 'userstory/:id/children', 'associations#childrenForStory'
+    @addRoute 'userstory/:id/children/new', 'user_story_detail#childForStory'
+    @addRoute 'userstory/:id/defects', 'associations#defectsForStory'
+    @addRoute 'userstory/:id/defects/new', 'defect_detail#defectForStory'
+    @addRoute 'userstory/:id/tasks', 'associations#tasksForStory'
+    @addRoute 'userstory/:id/tasks/new', 'task_detail#taskForStory'
+    @addRoute 'defect/:id', 'defect_detail#show'
+    @addRoute 'defect/:id/tasks', 'associations#tasksForDefect'
+    @addRoute 'defect/:id/tasks/new', 'task_detail#taskForDefect'
+    @addRoute 'task/:id', 'task_detail#show'
+    @addRoute 'portfolioitem/:id', 'portfolio_item_detail#show'
+    @addRoute 'portfolioitem/:id/children', 'associations#childrenForPortfolioItem'
+    @addRoute 'portfolioitem/:id/children/new', 'portfolio_item_detail#newChild'
+    @addRoute 'portfolioitem/:id/userstories', 'associations#userStoriesForPortfolioItem'
+    @addRoute 'portfolioitem/:id/userstories/new', 'user_story_detail#childForPortfolioItem'
 
-    addRoute 'userstory/:id', 'user_story_detail#show'
-    addRoute 'userstory/:id/children', 'associations#childrenForStory'
-    addRoute 'userstory/:id/children/new', 'user_story_detail#childForStory'
-    addRoute 'userstory/:id/defects', 'associations#defectsForStory'
-    addRoute 'userstory/:id/defects/new', 'defect_detail#defectForStory'
-    addRoute 'userstory/:id/tasks', 'associations#tasksForStory'
-    addRoute 'userstory/:id/tasks/new', 'task_detail#taskForStory'
-    addRoute 'defect/:id', 'defect_detail#show'
-    addRoute 'defect/:id/tasks', 'associations#tasksForDefect'
-    addRoute 'defect/:id/tasks/new', 'task_detail#taskForDefect'
-    addRoute 'task/:id', 'task_detail#show'
-    addRoute 'portfolioitem/:id', 'portfolio_item_detail#show'
-    addRoute 'portfolioitem/:id/children', 'associations#childrenForPortfolioItem'
-    addRoute 'portfolioitem/:id/children/new', 'portfolio_item_detail#newChild'
-    addRoute 'portfolioitem/:id/userstories', 'associations#userStoriesForPortfolioItem'
-    addRoute 'portfolioitem/:id/userstories/new', 'user_story_detail#childForPortfolioItem'
+    @addRoute 'new/userstory', 'user_story_detail#create'
+    @addRoute 'new/task', 'task_detail#create'
+    @addRoute 'new/defect', 'defect_detail#create'
 
-    addRoute 'new/userstory', 'user_story_detail#create'
-    addRoute 'new/task', 'task_detail#create'
-    addRoute 'new/defect', 'defect_detail#create'
+    @addRoute 'login', 'auth#login', public: true
+    @addRoute 'logout', 'auth#logout', public: true
+    @addRoute 'labsNotice', 'auth#labsNotice'
 
-    addRoute 'login', 'auth#login', public: true
-    addRoute 'logout', 'auth#logout', public: true
-    addRoute 'labsNotice', 'auth#labsNotice'
+    @addRoute 'settings', 'settings#show'
+    @addRoute 'settings/board', 'settings#board'
 
-    addRoute 'settings', 'settings#show'
-    addRoute 'settings/board', 'settings#board'
+    @addRoute ':type/:id/discussion', 'discussion#show'
 
-    addRoute ':type/:id/discussion', 'discussion#show'
+    @addRoute 'recentActivity', 'recent_activity#show'
 
-    addRoute 'recentActivity', 'recent_activity#show'
-
-    addRoute 'search', 'search#search'
-    addRoute 'search/:keywords', 'search#search'
+    @addRoute 'search', 'search#search'
+    @addRoute 'search/:keywords', 'search#search'
 
     Router = Backbone.Router.extend
-      routes: routes
+      routes: buildRoutes(routes)
       clientMetricsType: 'PageNavigationMetrics'
 
       onRoute: (path, options = {}) ->
@@ -140,6 +148,6 @@ module.exports = {
         @app = config.app
         @authenticated = false
 
-    router = new Router()
-
+    @router = new Router()
+    routeDefs = null
 }
