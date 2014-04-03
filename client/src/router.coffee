@@ -5,14 +5,19 @@ MetricsHandler = require 'lib/metrics_handler'
 appConfig = require 'app_config'
 
 controllerSuffix = '_controller'
-routes = {}
 routeDefs = []
 currentController = null
 aggregator = null
 
 buildRoutes = ->
-  _.transform routeDefs, (r, [path, handler, options]) ->
+  # handle default route by redirecting to full path
+  routes = '': ->
+    @navigate appConfig.defaultRoute, trigger: true, replace: true
+  
+  _.reduce routeDefs, (r, [path, handler, options]) ->
     r[path] = buildRoute.call(this, path, handler, options)
+    r
+  , routes
 
 buildRoute = (path, handler, options = {}) ->
   if _.isString(handler)
@@ -54,10 +59,6 @@ module.exports = {
   initialize: (config) ->
 
     aggregator = config.aggregator
-
-    # handle default route by redirecting to full path
-    routes[''] = ->
-      @navigate appConfig.defaultRoute, trigger: true, replace: true
 
     @addRoute 'board', 'board#index'
     @addRoute 'board/:column', 'board#column'
@@ -104,7 +105,7 @@ module.exports = {
     @addRoute 'search/:keywords', 'search#search'
 
     Router = Backbone.Router.extend
-      routes: buildRoutes(routes)
+      routes: buildRoutes()
       clientMetricsType: 'PageNavigationMetrics'
 
       onRoute: (path, options = {}) ->
