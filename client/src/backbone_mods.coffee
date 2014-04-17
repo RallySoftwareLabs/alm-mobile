@@ -95,7 +95,7 @@ Backbone.sync = (method, model, options = {}) ->
     app.aggregator.endDataRequest model, xhr, metricsData.requestId
     error?(xhr, status, thrown)
     model.trigger('error', model, xhr, options) unless options.silent
-    if xhr.status is 401 or xhr.status is 0 or status.indexOf('Not authorized') > -1
+    if status.indexOf('Not authorized') > -1
       app.session.logout()
       window.loginError = "Your session has expired. Please login again."
       Backbone.history.navigate('/login', {trigger: true, replace: true})
