@@ -18,6 +18,7 @@ module.exports = ReactView.createBackboneClass({
         <div className="well-title control-label" aria-hidden="true">{ (this.props.icon) ? <div className={ "picto icon-" + this.props.icon}/> : '' }{ this.props.label }</div>
         <div className="well well-sm titled-well-sm"
              tabIndex="0"
+             ref="well"
              onClick={ this._onClick }
              onKeyDown={ this.handleEnterAsClick(this._onClick) }
              role="link"
@@ -26,6 +27,10 @@ module.exports = ReactView.createBackboneClass({
         </div>
       </div>
     );
+  },
+
+  getFocusNode: function() {
+    return this.refs.well.getDOMNode();
   },
 
   _onClick: function() {

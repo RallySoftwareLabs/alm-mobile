@@ -17,7 +17,7 @@ module.exports = ReactView.createBackboneClass({
     return (
       <div className={this._getCardClass(m)}
            style={cardStyle}
-           tabIndex={ this.props.tabIndex }
+           tabIndex="0"
            onClick={ this._onClick }
            onKeyDown={ this.handleEnterAsClick(this._onClick) }
            aria-label={ "Card for " + m.get('_type') + " with name: " + m.get('Name') + "." }>

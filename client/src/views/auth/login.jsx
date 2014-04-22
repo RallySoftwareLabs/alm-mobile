@@ -21,18 +21,18 @@ module.exports = ReactView.createBackboneClass({
           <div className="form-group">
             <label className="control-label" htmlFor="username">Username</label>
             <div>
-              <input className="form-control" type="text" id="username" placeholder="Username" defaultValue="" autoFocus="true" tabIndex="1"/>
+              <input className="form-control" type="text" id="username" placeholder="Username" defaultValue="" autoFocus="true" tabIndex="0"/>
             </div>
           </div>
           <div className="form-group">
             <label className="control-label" htmlFor="password">Password</label>
             <div>
-              <input className="form-control" type="password" id="password" placeholder="Password" defaultValue="" tabIndex="2"/>
+              <input className="form-control" type="password" id="password" placeholder="Password" defaultValue="" tabIndex="0"/>
             </div>
           </div>
           <div className="form-group">
             <div className="control-label">
-              <button type="submit" className="btn btn-lg btn-primary sign-in" tabIndex="3">Sign in</button>
+              <button type="submit" className="btn btn-lg btn-primary sign-in" tabIndex="0">Sign in</button>
             </div>
           </div>
           <div className="form-group copyright">

@@ -12,6 +12,10 @@ module.exports = ReactView.createBackboneClass({
     return valueMarkup;
   },
 
+  getFocusNode: function() {
+    return this.refs.center.getDOMNode();
+  },
+
   _getDisplayModeMarkup: function() {
     var reverseArrows = this.props.reverseArrows;
     var leftDisabled = reverseArrows ? this._cantGoRight() : this._cantGoLeft();
@@ -25,17 +29,18 @@ module.exports = ReactView.createBackboneClass({
                  onClick={ this[reverseArrows ? '_onRightArrow' : '_onLeftArrow'] }
                  onKeyDown={ this.handleEnterAsClick(this[reverseArrows ? '_onRightArrow' : '_onLeftArrow']) }
                  tabIndex="0"
-                 role="link"
+                 role="button"
                  aria-labelledby={ !leftDisabled && this.getFieldId() + (reverseArrows ? '-aria-next' : '-aria-previous') }>
               <span className="picto icon-chevron-left"></span>
             </div>
         </div>
         <div className="arrows-center">
           <div className="well well-sm"
+               ref="center"
                onClick={ this.startEdit }
                onKeyDown={ this.handleEnterAsClick(this.startEdit) }
                tabIndex="0"
-               role="link"
+               role="button"
                aria-labelledby={ this.getFieldId() }
                aria-label={ "Click to edit." }>
             { this.getFieldDisplayValue() || this.getEmptySpanMarkup() }
@@ -110,7 +115,7 @@ module.exports = ReactView.createBackboneClass({
   _onRightArrow: function(e) {
     e.preventDefault();
     e.stopPropagation();
-    var newValue = this._getPreviousValue();
+    var newValue = this._getNextValue();
 
     if (newValue) {
       var modelUpdates = {};

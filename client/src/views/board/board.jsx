@@ -29,7 +29,6 @@ module.exports = ReactView.createBackboneClass({
             abbreviateHeader: true,
             showIteration: false,
             key: colValue,
-            tabIndex: (idx + 10) * 50
           });
       return <div className={"column-cell"} id={"col-" + utils.toCssClass(colValue)} key={ colValue }>{colView}</div>;
     }, this);
@@ -38,7 +37,7 @@ module.exports = ReactView.createBackboneClass({
         <div className="row">
           <div className="col-xs-offset-2 col-xs-8 well no-columns">
             <p>Your board for this project does not have any columns.</p>
-            <p>Click the <a href="/settings" tabIndex="10"><i className="icon-cog"/></a> icon to configure your board.</p>
+            <p>Click the <a href="/settings" tabIndex="0"><i className="icon-cog"/></a> icon to configure your board.</p>
           </div>
         </div>
       );

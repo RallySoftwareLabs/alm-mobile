@@ -19,7 +19,7 @@ module.exports = ReactView.createBackboneClass({
         </dl>
         <div className="row board-columns">
             <div className="col-xs-12 listing">
-                <div className="list-group">{ this._getColumnsMarkup() }</div>
+                <ul className="list-group">{ this._getColumnsMarkup() }</ul>
             </div>
         </div>
       </div>
@@ -29,14 +29,18 @@ module.exports = ReactView.createBackboneClass({
   _getColumnsMarkup: function() {
     return _.map(this._getColumns(), function(column) {
       return (
-        <div className="list-group-item" key={ "column " + column.StringValue }>
-            <div className="row board-column" onClick={ this.onColumnClickFn(column) }>
+        <li className="list-group-item"
+            key={ "column " + column.StringValue }
+            onClick={ this.onColumnClickFn(column) }
+            onKeyDown={ this.handleEnterAsClick(this.onColumnClickFn(column)) }
+            tabIndex="0">
+            <div className="row board-column">
                 <div className="col-xs-1 selection-icon">
                   { column.showing ? <i className="picto icon-ok"/> : <span dangerouslySetInnerHTML={{__html: '&nbsp;'}}/> }
                 </div>
                 <div className="col-xs-11">{ column.StringValue }</div>
             </div>
-        </div>
+        </li>
       );
     }, this);
   },

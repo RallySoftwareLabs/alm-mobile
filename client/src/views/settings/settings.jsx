@@ -1,4 +1,4 @@
-/** @jsx React.DOM */
+  /** @jsx React.DOM */
 var _ = require('underscore');
 var React = require('react');
 var ReactView = require('views/base/react_view');
@@ -33,11 +33,11 @@ module.exports = ReactView.createBackboneClass({
           </div>
           <div className="form-group scope listing">
             <label className="control-label show-work">Show</label>
-            <div className="list-group">{ this._getModeItems() }</div>
+            <ul className="list-group">{ this._getModeItems() }</ul>
           </div>
           <div className="form-group board-column listing">
             <label className="control-label board-field">Board Column</label>
-            <div className="list-group">{ this._getBoardFieldItems() }</div>
+            <ul className="list-group">{ this._getBoardFieldItems() }</ul>
           </div>
           <div className="logout">
             <button className="btn btn-default" onClick={ this.triggerLogout }>Logout</button>
@@ -58,12 +58,16 @@ module.exports = ReactView.createBackboneClass({
         }];
     return _.map(modes, function(mode) {
       return (
-        <div className={ "list-group-item " + mode.mode } key={ "mode " + mode.mode } onClick={ this.changeModeFn(mode) }>
+        <li className={ "list-group-item " + mode.mode }
+            key={ "mode " + mode.mode }
+            onClick={ this.changeModeFn(mode) }
+            onKeyDown={ this.handleEnterAsClick(this.changeModeFn(mode)) }
+            tabIndex="0">
           <div className="row">
             <div className="col-xs-1 selection-icon">{ this._showSelectedWhen(currentMode === mode.mode) }</div>
             <div className="col-xs-11">{ mode.text }</div>
           </div>
-        </div>
+        </li>
       );
     }, this);
   },
@@ -79,13 +83,17 @@ module.exports = ReactView.createBackboneClass({
         }];
     return _.map(fields, function(field) {
       return (
-        <div className="list-group-item schedule-state" key={ "field " + field.field } onClick={ this.changeBoardFieldFn(field) }>
+        <li className="list-group-item schedule-state"
+            key={ "field " + field.field }
+            onClick={ this.changeBoardFieldFn(field) }
+            onKeyDown={ this.handleEnterAsClick(this.changeBoardFieldFn(field)) }
+            tabIndex="0">
           <div className="row">
             <div className="col-xs-1 selection-icon">{ this._showSelectedWhen(currentField === field.field) }</div>
             <div className="col-xs-10">{ field.text }</div>
             <div className="col-xs-1 chevron"><i className="picto icon-chevron-right"/></div>
           </div>
-        </div>
+        </li>
       );
     }, this);
   },

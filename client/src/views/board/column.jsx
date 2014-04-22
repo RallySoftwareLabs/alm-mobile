@@ -10,8 +10,7 @@ var IterationHeader = require('views/iteration_header');
 module.exports = ReactView.createBackboneClass({
   getDefaultProps: function() {
     return {
-      showLoadingIndicator: true,
-      tabIndex: 10
+      showLoadingIndicator: true
     };
   },
   render: function() {
@@ -21,17 +20,19 @@ module.exports = ReactView.createBackboneClass({
         goRight = '',
         storiesAndDefects = model.artifacts.sortBy(function(m) { return m.get('DragAndDropRank') });
     if (singleColumn && !this.isColumnAtIndex(0)) {
-      goLeft = <i className="go-left icon-chevron-left" onClick={this.goLeft} role="link" aria-label="Go to previous column" tabIndex={ this.props.tabIndex + 1 }></i>;
+      goLeft = <i className="go-left icon-chevron-left" onClick={this.goLeft} role="link" aria-label="Go to previous column" tabIndex="0"></i>;
     }
     if (singleColumn && !this.isColumnAtIndex(this.props.columns.length - 1)) {
-      goRight = <i className="go-right icon-chevron-right" onClick={this.goRight} role="link" aria-label="Go to previous column" tabIndex={ this.props.tabIndex + 2 }></i>;
+      goRight = <i className="go-right icon-chevron-right" onClick={this.goRight} role="link" aria-label="Go to previous column" tabIndex="0"></i>;
     }
     return (
       <div className="board">
         <IterationHeader visible={this.props.showIteration} />
         <div className={ "column" + (singleColumn ? ' single-column' : ' multi-column') }>
-            <div className="header" onClick={this.onHeaderClick}
-              tabIndex={ this.props.tabIndex }
+            <div className="header"
+              onClick={this.onHeaderClick}
+              onKeyDown={ this.handleEnterAsClick(this.onHeaderClick) }
+              tabIndex="0"
               aria-label={ "Board column: " + model.get('value') +
                            (model.isSynced() ? ". has " + storiesAndDefects.length + " items" : ". loading") }>
                 {goLeft}
@@ -39,7 +40,7 @@ module.exports = ReactView.createBackboneClass({
                 {goRight}
             </div>
             <div className="body">
-              <button className="btn btn-primary add-button" onClick={this.onAddClick} aria-label="Add new story to this column" tabIndex={ this.props.tabIndex + 3 }>+ Add</button>
+              <button className="btn btn-primary add-button" onClick={this.onAddClick} aria-label="Add new story to this column" tabIndex="0">+ Add</button>
               {this._getCardsMarkup(storiesAndDefects)}
             </div>
         </div>
@@ -48,7 +49,7 @@ module.exports = ReactView.createBackboneClass({
   },
   _getCardsMarkup: function(storiesAndDefects) {
     return _.map(storiesAndDefects, function(model, idx) {
-      return <Card key={utils.toRelativeRef(model.get('_ref'))} model={model} tabIndex={ this.props.tabIndex + 4 + idx }/>;
+      return <Card key={utils.toRelativeRef(model.get('_ref'))} model={model}/>;
     }, this);
   },
   isColumnAtIndex: function(index) {

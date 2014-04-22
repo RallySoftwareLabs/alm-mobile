@@ -45,7 +45,8 @@ module.exports = {
     
   saveModel: (updates, opts) ->
     if @_isExistingObject()
-      @setState( editMode: false )
+      @setState( editMode: false, -> @getFocusNode?().focus() )
+
     @publishEvent 'saveField', updates, opts
 
   isEditMode: ->
@@ -76,7 +77,8 @@ module.exports = {
   onKeyDown: (event) ->
     switch event.which
       when @keyCodes.ENTER_KEY then @endEdit event
-      when @keyCodes.ESCAPE_KEY then @setState editMode: false
+      when @keyCodes.ESCAPE_KEY
+        @setState editMode: false, -> @getFocusNode?().focus()
 
   getInputMarkup: ->
     React.DOM.input(

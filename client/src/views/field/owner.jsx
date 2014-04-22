@@ -18,6 +18,7 @@ module.exports = ReactView.createBackboneClass({
       <div className="display">
         <div className="owner-field"
              tabIndex="0"
+             ref="owner"
              onClick={ this._onClick }
              onKeyDown={ this.handleEnterAsClick(this._onClick) }
              aria-label={ "Owner. " + (owner ? "Owned by " + this.getFieldValue()._refObjectName : "Not currently owned") + ". Click to set yourself as the owner." }>
@@ -25,6 +26,10 @@ module.exports = ReactView.createBackboneClass({
         </div>
       </div>
     );
+  },
+
+  getFocusNode: function() {
+    return this.refs.owner.getDOMNode();
   },
 
   _onClick: function() {

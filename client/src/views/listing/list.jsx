@@ -34,7 +34,7 @@ module.exports = ReactView.createBackboneClass({
 
   _userstoryItemMarkup: function(model) {
     return (
-      <div className="row" onClick={this._goToItemPageFn(model)}>
+      <a className="row" href={utils.getDetailHash(model)}>
         <div className="col-xs-11 item">
             <div className={this._getStateClassName(model)}></div>
             <div className="item-id-name">
@@ -43,7 +43,7 @@ module.exports = ReactView.createBackboneClass({
             </div>
         </div>
         <div className="col-xs-1 chevron"><i className="picto icon-chevron-right"></i></div>
-      </div>
+      </a>
     );
   },
 
@@ -67,7 +67,7 @@ module.exports = ReactView.createBackboneClass({
       todo = <div className="col-xs-2 task-to-do"/>;
     }
     return (
-      <div className="row" onClick={this._goToItemPageFn(model)}>
+      <a className="row" href={utils.getDetailHash(model)}>
           <div className="col-xs-9 item">
               <div className={this._getStateClassName(model)}></div>
               <div className="item-id-name">
@@ -77,7 +77,7 @@ module.exports = ReactView.createBackboneClass({
           </div>
           {todo}
           <div className="col-xs-1 chevron"><i className="picto icon-chevron-right"></i></div>
-      </div>
+      </a>
     );
   },
 
@@ -97,14 +97,6 @@ module.exports = ReactView.createBackboneClass({
           </div>
       </div>
     );
-  },
-
-  _goToItemPageFn: function(model) {
-    var url = utils.getDetailHash(model);
-    return _.bind(function(event) {
-      this.routeTo(url);
-      event.preventDefault();
-    }, this);
   },
 
   _getStateClassName: function(model) {
