@@ -9,3 +9,6 @@ module.exports = class UserStory extends Model
     "ScheduleState" : "Idea"
   
   allowedValueFields: ['Iteration', 'Release', 'ScheduleState', 'c_KanbanState']
+
+  hasChildren: ->
+    @get('DirectChildrenCount') > 0

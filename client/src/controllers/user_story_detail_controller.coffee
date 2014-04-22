@@ -35,7 +35,7 @@ module.exports = class UserStoryDetailController extends SiteController
           fetch: 'FormattedID'
         success: (model, response, opts) =>
           @updateTitle "New Child for #{model.get('FormattedID')}: #{model.get('_refObjectName')}"
-          @showCreateView UserStory, View, Parent: model.attributes
+          @showCreateView UserStory, View, PortfolioItem: model.attributes
 
   storyForColumn: (column) ->
     @whenProjectIsLoaded ->
