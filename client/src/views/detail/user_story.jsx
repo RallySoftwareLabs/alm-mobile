@@ -19,18 +19,28 @@ module.exports = ReactView.createBackboneClass({
   render: function() {
     var model = this.props.model,
         newArtifact = !model.get('_ref'),
-        childrenOrTasks = model.get('Children') && model.get('Children').Count ?
+        childrenAndOrTasks = model.get('Children') && model.get('Children').Count ?
           (
             <div className="col-xs-3 ChildrenView">
               <Children item={ model } editMode={ newArtifact }/>
             </div>
           )
           :
-          (
-            <div className="col-xs-3 TasksView">
+          model.get('Tasks') && model.get('Tasks').Count ?
+            (
+              <div className="col-xs-3 TasksView">
+                <Tasks item={ model } editMode={ newArtifact }/>
+              </div>
+            )
+            :
+            [
+            <div className="col-xs-2 ChildrenView">
+              <Children item={ model } editMode={ newArtifact }/>
+            </div>,
+            <div className="col-xs-2 TasksView">
               <Tasks item={ model } editMode={ newArtifact }/>
             </div>
-          );
+            ];
     return (
       <div className="detail-view" autoFocus="autofocus">
         <div className="row">
@@ -75,11 +85,11 @@ module.exports = ReactView.createBackboneClass({
           <div className="col-xs-3 PlanEstimateView">
             <TitledWell item={ model } editMode={ newArtifact } field='PlanEstimate' label='Plan Est' inputType='number'/>
           </div>
-          { childrenOrTasks }
+          { childrenAndOrTasks }
           <div className="col-xs-3 DefectsView">
             <Defects item={ model } editMode={ newArtifact }/>
           </div>
-          <div className="col-xs-3 DiscussionView">
+          <div className="col-xs-2 DiscussionView">
             <Discussion item={ model } editMode={ newArtifact }/>
           </div>
         </div>
