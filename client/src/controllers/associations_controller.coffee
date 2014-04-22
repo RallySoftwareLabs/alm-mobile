@@ -42,7 +42,7 @@ module.exports = class AssociationsController extends SiteController
       
       @_fetchAssociation model, associatedItems, association, reverseAssociation
 
-      @view = @renderReactComponent AssociationsView,
+      @renderReactComponent AssociationsView,
         region: 'main'
         associatedItems: associatedItems
         association: association

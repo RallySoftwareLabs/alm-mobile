@@ -6,7 +6,7 @@ module.exports = {
   homeRoute: '/board'
 
   fetchModelAndShowView: (Model, View, id) ->
-    @view = @renderReactComponent LoadingIndicatorView, region: 'main', shared: false
+    @renderReactComponent LoadingIndicatorView, region: 'main', shared: false
     fieldNames = @getFieldNames()
     model = new Model(_refObjectUUID: id)
     model.clientMetricsParent = this
@@ -16,7 +16,7 @@ module.exports = {
     ).then =>
       @_getAllowedValuesForFields(model).then (allowedValues) =>
         @_setTitle model
-        @view = @renderReactComponent View, model: model, region: 'main', fieldNames: fieldNames, allowedValues: allowedValues
+        @renderReactComponent View, model: model, region: 'main', fieldNames: fieldNames, allowedValues: allowedValues
         @markFinished()
 
     @subscribeEvent 'saveField', @saveField
@@ -25,20 +25,20 @@ module.exports = {
     model = new Model _.defaults(defaultValues, Project: app.session.get('project').get('_ref'))
     model.clientMetricsParent = this
     @_getAllowedValuesForFields(model).then (allowedValues) =>
-      @view = @renderReactComponent View, model: model, region: 'main', allowedValues: allowedValues
+      @renderReactComponent View, model: model, region: 'main', allowedValues: allowedValues
       @subscribeEvent 'saveField', @saveField
       @subscribeEvent 'save', @saveNew
       @subscribeEvent 'cancel', @cancelNew
       @markFinished()
       model
 
-  saveField: (updates, opts) ->
-    if @view.props.model.get('_ref')
-      @_saveRemote(updates, opts)
+  saveField: (view, updates, opts) ->
+    if view.props.model.get('_ref')
+      @_saveRemote(view, updates, opts)
     else
-      @_saveLocal(updates, opts)
+      @_saveLocal(view, updates, opts)
 
-  saveNew: (model) ->
+  saveNew: (view, model) ->
     model.save null,
       shallowFetch: @getFieldNames().join ','
       wait: true
@@ -48,7 +48,7 @@ module.exports = {
         @publishEvent 'router:changeURL', utils.getDetailHash(model), replace: true
         @_setTitle model
       error: (model, resp, options) =>
-        @view.showError(model, resp)
+        view.showError(model, resp)
 
   cancelNew: ->
     @publishEvent 'router:route', @homeRoute, replace: false
@@ -61,11 +61,11 @@ module.exports = {
         result
       , {})
 
-  _saveLocal: (updates) ->
-    @view.props.model.set(updates)
+  _saveLocal: (view, updates) ->
+    view.props.model.set(updates)
 
-  _saveRemote: (updates, opts) ->
-    @view.props.model.save updates,
+  _saveRemote: (view, updates, opts) ->
+    view.props.model.save updates,
       shallowFetch: @getFieldNames().join ','
       wait: true
       patch: true
@@ -73,7 +73,7 @@ module.exports = {
         opts?.success?(model, resp, options)
       error: (model, resp, options) =>
         opts?.error?(model, resp, options)
-        @view.showError(model, resp)
+        view.showError(model, resp)
 
   _setTitle: (model) ->
     @updateTitle "#{model.get('FormattedID')}: #{model.get('_refObjectName')}"

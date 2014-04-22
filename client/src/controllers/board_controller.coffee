@@ -27,7 +27,7 @@ module.exports = class BoardController extends SiteController
         _.invoke(columns, 'trigger', 'sync')
         @markFinished()
 
-      @view = @renderReactComponent BoardView, columns: columns, region: 'main'
+      @renderReactComponent BoardView, columns: columns, region: 'main'
 
       @subscribeEvent 'headerclick', @onColumnClick
       @subscribeEvent 'cardclick', @onCardClick
@@ -45,7 +45,7 @@ module.exports = class BoardController extends SiteController
         col.trigger('sync', col, options)
         @markFinished()
 
-      @view = @renderReactComponent ColumnView,
+      @renderReactComponent ColumnView,
         region: 'main'
         model: col
         columns: @getColumnModels(field)

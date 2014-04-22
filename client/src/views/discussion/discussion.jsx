@@ -53,7 +53,7 @@ module.exports = ReactView.createBackboneClass({
   _onSubmit: function(event) {
     app.aggregator.recordAction({component: this, description: 'clicked reply'});
     text = this._getInputField().val();
-    this.publishEvent('reply', text);
+    this.publishEvent('reply', this, text);
     event.preventDefault();
   },
   _getInputField: function() {

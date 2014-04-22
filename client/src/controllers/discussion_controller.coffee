@@ -12,7 +12,7 @@ module.exports = class DiscussionController extends SiteController
 
       @artifactRef = utils.getRef(type, id)
 
-      @view = @renderReactComponent DiscussionView, model: @discussions, region: 'main'
+      @renderReactComponent DiscussionView, model: @discussions, region: 'main'
 
       @subscribeEvent 'reply', @onReplyClick
 
@@ -23,10 +23,7 @@ module.exports = class DiscussionController extends SiteController
           order: "CreationDate DESC"
       ).always => @markFinished()
 
-  onReplyClick: (text) ->
-    @_addComment(text)
-
-  _addComment: (text) ->
+  onReplyClick: (view, text) ->
     if text
       updates =
         Text: text
@@ -39,4 +36,4 @@ module.exports = class DiscussionController extends SiteController
         patch: true
         success: (model, resp, options) =>
           @discussions.add model, at: 0
-          @view.clearInputField()
+          view.clearInputField()

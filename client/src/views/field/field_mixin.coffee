@@ -47,7 +47,7 @@ module.exports = {
     if @_isExistingObject()
       @setState( editMode: false, -> @getFocusNode?().focus() )
 
-    @publishEvent 'saveField', updates, opts
+    @publishEvent 'saveField', this, updates, opts
 
   isEditMode: ->
     if @state?.editMode? then @state.editMode else @props.editMode

@@ -8,7 +8,7 @@ module.exports = class SearchController extends SiteController
   search: (keywords = '') ->
     @whenProjectIsLoaded ->
       artifacts = new Artifacts()
-      @view = @renderReactComponent(SearchView,
+      @renderReactComponent(SearchView,
         collection: artifacts
         keywords: keywords
         region: 'main'

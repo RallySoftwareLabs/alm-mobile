@@ -17,7 +17,7 @@ module.exports = class RecentActivityController extends SiteController
           order: "CreationDate DESC"
       ).always => @markFinished()
       
-      @view = @renderReactComponent(DiscussionView,
+      @renderReactComponent(DiscussionView,
         region: 'main'
         model: discussions
         showInput: false

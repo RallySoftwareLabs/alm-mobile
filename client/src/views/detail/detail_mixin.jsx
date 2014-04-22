@@ -11,10 +11,10 @@ module.exports = {
     view.setState({ editMode: true });
   },
   onSave: function() {
-    this.publishEvent('save', this.props.model);
+    this.publishEvent('save', this, this.props.model);
   },
   onCancel: function() {
-    this.publishEvent('cancel');
+    this.publishEvent('cancel', this);
   },
   showError: function(model, resp) {
     respObj = resp.responseJSON;

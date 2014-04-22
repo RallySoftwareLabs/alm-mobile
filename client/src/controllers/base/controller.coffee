@@ -37,7 +37,7 @@ module.exports = class Controller
 
   _renderLoadingIndicatorUntilProjectIsReady: (callback, showLoadingIndicator) ->
     if showLoadingIndicator != false
-      @view = @renderReactComponent LoadingIndicatorView, region: 'main', text: 'Initializing'
+      @renderReactComponent LoadingIndicatorView, region: 'main', text: 'Initializing'
     @subscribeEventOnce 'projectready', @_onProjectReady(callback)
 
   updateTitle: (title) ->

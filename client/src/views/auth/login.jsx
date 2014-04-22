@@ -60,7 +60,7 @@ module.exports = ReactView.createBackboneClass({
     $('.alert').hide();
     username = $('#username').val();
     password = $('#password').val();
-    this.publishEvent('submit', username, password);
+    this.publishEvent('submit', this, username, password);
     event.preventDefault();
   },
 

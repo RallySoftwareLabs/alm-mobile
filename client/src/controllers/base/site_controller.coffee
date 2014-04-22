@@ -1,3 +1,4 @@
+$ = require 'jquery'
 Controller = require 'controllers/base/controller'
 SiteView = require 'views/site'
 
@@ -6,16 +7,19 @@ siteViewInstance = null
 module.exports = class SiteController extends Controller
 
   _getView: (props, id) ->
+    deferred = $.Deferred()
     if siteViewInstance && siteViewInstance.isMounted()
-      siteViewInstance.setProps props
+      siteViewInstance.setProps props, ->
+        deferred.resolve(siteViewInstance.refs.main)
     else
       siteViewInstance = null
       siteView = SiteView(props)
 
     if siteView
       siteViewInstance = React.renderComponent siteView, (if id then document.getElementById(id) else document.body)
+      deferred.resolve(siteViewInstance.refs.main)
 
-    siteViewInstance.refs.main
+    deferred.promise()
 
   renderReactComponent: (componentClass, props = {}, id) ->
     viewProps = {}
