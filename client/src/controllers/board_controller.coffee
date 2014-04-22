@@ -73,7 +73,6 @@ module.exports = class BoardController extends SiteController
     if colIndex > 0
       newColumn = columns[colIndex - 1]
       @redirectTo "/board/#{newColumn.get('value')}"
-      @view.setProps model: newColumn
 
   goRight: (col) ->
     field = app.session.get('boardField')

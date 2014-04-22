@@ -31,7 +31,7 @@ module.exports = ReactView.createBackboneClass({
         </div>
 
         <div className="page-container page transition center" id="page-container">
-            <div className="content-container" id="content">{ this._getContent() }</div>
+          <div className="content-container" id="content">{ this._getContent() }</div>
         </div>
         <ErrorDialog/>
         <div id="mask" style={ {display: "none"} }/>
@@ -41,10 +41,12 @@ module.exports = ReactView.createBackboneClass({
   },
 
   _getContent: function() {
-    return this.props.main;
+    return this.props.main.cmp(this.props.main.props);
   },
 
   _getBottomNavBar: function() {
-    return this.props.bottom;
+    if (this.props.bottom) {
+      return this.props.bottom.cmp(this.props.bottom.props);
+    }
   }
 });

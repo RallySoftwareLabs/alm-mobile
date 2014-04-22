@@ -15,19 +15,16 @@ module.exports = class SiteController extends Controller
     if siteView
       siteViewInstance = React.renderComponent siteView, (if id then document.getElementById(id) else document.body)
 
-    siteViewInstance.props.main
+    siteViewInstance.refs.main
 
   renderReactComponent: (componentClass, props = {}, id) ->
-    component = componentClass(_.omit(props, 'region'))
-
     viewProps = {}
-    viewProps[props.region] = component
+    viewProps[props.region] = cmp: componentClass, props: _.defaults(ref: props.region, _.omit(props, 'region'))
     @_getView viewProps, id
 
   renderReactComponents: (components) ->
     props = _.reduce components, (p, cmp) =>
-      component = cmp.componentClass(_.omit(cmp.props, 'region'))
-      p[cmp.props.region] = component
+      p[cmp.props.region] = cmp: cmp.componentClass, props: _.defaults(ref: props.region, _.omit(props, 'region'))
       p
     , {}
     
