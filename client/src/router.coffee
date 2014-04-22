@@ -115,11 +115,12 @@ module.exports = {
         @navigate path, _.defaults(options, trigger: false)
 
       allowThrough: (path, controllerClass, fnName, args) ->
-        if @afterLogin? && path != @afterLogin && !_.contains(['login', 'logout', 'labsNotice'], path)
-          path = @afterLogin
+        if @afterLogin? && !_.contains(['login', 'logout', 'labsNotice'], path)
+          afterLoginPath = @afterLogin
           @afterLogin = null
 
-          @navigate path, trigger: true, replace: true
+        if afterLoginPath? && path != afterLoginPath
+          @navigate afterLoginPath, trigger: true, replace: true
         else
           @execController(path, controllerClass, fnName, args)
 
