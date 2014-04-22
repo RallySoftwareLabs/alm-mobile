@@ -6,7 +6,7 @@ var ReactView = require('views/base/react_view');
 module.exports = ReactView.createBackboneClass({
   getInitialState: function() {
     return {
-      title: 'ALM Mobile'
+      title: 'Rally ALM Mobile'
     }
   },
   componentWillMount: function() {
@@ -52,7 +52,9 @@ module.exports = ReactView.createBackboneClass({
     );
   },
   _onTitleUpdate: function(title) {
-    this.setState({ title: title });
+    this.setState({ title: title }, function() {
+      document.title = title + ' - Rally ALM Mobile'
+    });
   },
   _onDispatch: function() {
     if (this.isMounted()) {
