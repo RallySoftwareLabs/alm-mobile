@@ -76,12 +76,7 @@ module.exports = {
       @publishEvent 'router:route', route
 
     spec.handleEnterAsClick = (fn) ->
-      (e) =>
-        if e.keyCode == @keyCodes.ENTER_KEY then fn.call(this, e)
-
-    spec.keyCodes =
-      ENTER_KEY: 13
-      ESCAPE_KEY: 27
+      (e) => if e.key == "Enter" then fn.call(this, e)
 
     React.createClass(spec)
 }

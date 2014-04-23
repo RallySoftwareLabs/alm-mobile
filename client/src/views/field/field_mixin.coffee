@@ -75,9 +75,9 @@ module.exports = {
     val
 
   onKeyDown: (event) ->
-    switch event.which
-      when @keyCodes.ENTER_KEY then @endEdit event
-      when @keyCodes.ESCAPE_KEY
+    switch event.key
+      when "Enter" then @endEdit event
+      when "Esc", "Escape"
         @setState editMode: false, -> @getFocusNode?().focus()
 
   getInputMarkup: ->
