@@ -33,7 +33,7 @@ module.exports = {
       model
 
   saveField: (view, updates, opts) ->
-    if view.props.model.get('_ref')
+    if view.props.item.get('_ref')
       @_saveRemote(view, updates, opts)
     else
       @_saveLocal(view, updates, opts)
@@ -62,10 +62,10 @@ module.exports = {
       , {})
 
   _saveLocal: (view, updates) ->
-    view.props.model.set(updates)
+    view.props.item.set(updates)
 
   _saveRemote: (view, updates, opts) ->
-    view.props.model.save updates,
+    view.props.item.save updates,
       shallowFetch: @getFieldNames().join ','
       wait: true
       patch: true
