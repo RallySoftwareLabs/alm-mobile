@@ -7,35 +7,26 @@ module.exports = class Preferences extends Collection
   url: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/preference'
   model: Preference
 
-  fetchMobilePrefs: (user, cb) ->
-    @fetch
+  fetchMobilePrefs: (user) ->
+    @fetchAllPages(
       data:
         fetch: 'Name,Project,Value'
         query: "((Name CONTAINS \"mobile.\") AND (User = \"#{user.get('_ref')}\"))"
-      success: (collection, resp, options) =>
-        cb?(null, collection)
-      error: (collection, resp, options) =>
-        cb?('auth', collection)
+    )
 
-  fetchWallPrefs: (cb) ->
-    @fetch
+  fetchWallPrefs: ->
+    @fetchAllPages(
       data:
         fetch: 'Name,Value'
         query: "(Name CONTAINS \"wall.\")"
-      success: (collection, resp, options) =>
-        cb?(null, collection)
-      error: (collection, resp, options) =>
-        cb?('auth', collection)
+    )
 
-  fetchWallPref: (projectId, cb) ->
-    @fetch
+  fetchWallPref: (projectId) ->
+    @fetchAllPages(
       data:
         fetch: 'Name,Value'
         query: "(Name = \"wall.#{projectId}\")"
-      success: (collection, resp, options) =>
-        cb?(null, collection)
-      error: (collection, resp, options) =>
-        cb?('auth', collection)
+    )
 
   findPreference: (name) ->
     @find _.isAttributeEqual('Name', name)
