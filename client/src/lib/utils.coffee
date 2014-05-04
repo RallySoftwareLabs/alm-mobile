@@ -21,7 +21,7 @@ _.mixin
       when 'UserStories' then 'User Story'
       else string.slice(0, -1)
   getAttribute: (attr) ->
-    return -> @get(attr)
+    return (model) -> model.get(attr)
   isAttributeEqual: (attr, value) ->
     return (model) -> model.get(attr) == value
   areAttributesEqual: (attrs) ->
