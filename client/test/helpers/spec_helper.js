@@ -25,7 +25,9 @@ beforeEach(function() {
     sinonSandboxSetUp(this);
     _.extend(this, Messageable);
     app.aggregator = {
-        recordAction: this.stub()
+        recordAction: this.stub(),
+        beginDataRequest: this.stub(),
+        endDataRequest: this.stub()
     };
 });
 
