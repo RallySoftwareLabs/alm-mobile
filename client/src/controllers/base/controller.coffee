@@ -49,6 +49,9 @@ module.exports = class Controller
   markFinished: ->
     @trigger 'controllerfinished', this
 
+  updateUrl: (newUrl) ->
+    @publishEvent "router:changeURL", newUrl
+
   renderReactComponent: (componentClass, props = {}, id) ->
     component = componentClass(_.omit(props, 'region'))
 

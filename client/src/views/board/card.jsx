@@ -56,7 +56,7 @@ module.exports = ReactView.createBackboneClass({
 
   _onClick: function(e) {
     app.aggregator.recordAction({component: this, description: 'clicked card'});
-    this.publishEvent('cardclick', this, this.props.model);
+    this.props.onCardClick(this, this.props.model);
     e.preventDefault();
   }
 });

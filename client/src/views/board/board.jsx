@@ -1,38 +1,60 @@
 /** @jsx React.DOM */
 var React = require('react');
 var _ = require('underscore');
-var app = require('application');
 var utils = require('lib/utils');
+var BoardStore = require('stores/board_store');
 var ReactView = require('views/base/react_view');
 var ColumnView = require('views/board/column');
 var IterationHeader = require('views/iteration_header');
 
 module.exports = ReactView.createBackboneClass({
-  componentWillMount: function() {
-    this.updateTitle(app.session.getProjectName());
+  getInitialState: function() {
+    var store = this._buildStoreFromProps(this.props);
+    return {
+      store: store
+    };
   },
+  componentDidMount: function() {
+    this.listenTo(this.state.store, 'change', this.forceUpdate);
+  },
+  componentWillReceiveProps: function(newProps) {
+    var newStore = this._buildStoreFromProps(newProps);
+    this.stopListening(this.state.store, 'change', this.forceUpdate);
+    this.listenTo(newStore, 'change', this.forceUpdate);
+    this.setState({
+      store: newStore
+    });
+  },
+
   render: function() {
     return (
       <div className="board">
-        <IterationHeader visible={true} />
+        <IterationHeader visible={true}
+                         iteration={ this.state.store.getIteration() }
+                         iterations={ this.state.store.getIterations() }
+                         onChange={ this._onIterationChange } />
         <div className="column-container">{this.getColumns()}</div>
       </div>
     );
   },
   getColumns: function() {
-    var colMarkup = _.map(this.props.columns, function(col, idx) {
-      var colValue = col.get('value'),
-          colView = ColumnView({
+    var columns = this.state.store.getColumns();
+    var visibleColumns = this.state.store.getVisibleColumns();
+    var zoomedIn = this.state.store.isZoomedIn();
+    var colMarkup = _.map(visibleColumns, function(col) {
+      var colValue = col.get('value');
+      var colView = ColumnView({
             model: col,
-            columns: this.props.columns,
-            singleColumn: false,
+            columns: columns,
+            singleColumn: zoomedIn,
             abbreviateHeader: true,
             showIteration: false,
-            key: colValue,
+            onCardClick: this._onCardClick,
+            onHeaderClick: this._onColumnClick
           });
       return <div className={"column-cell"} id={"col-" + utils.toCssClass(colValue)} key={ colValue }>{colView}</div>;
     }, this);
-    if (!this.props.columns.length) {
+    if (!columns.length) {
       colMarkup = (
         <div className="row">
           <div className="col-xs-offset-2 col-xs-8 well no-columns">
@@ -43,5 +65,30 @@ module.exports = ReactView.createBackboneClass({
       );
     }
     return colMarkup;
+  },
+
+  _buildStoreFromProps: function(props) {
+    return new BoardStore({
+        boardField: props.boardField,
+        boardColumns: props.boardColumns,
+        project: props.project,
+        iteration: props.iteration,
+        iterations: props.iterations,
+        user: props.user,
+        visibleColumn: props.visibleColumn
+      });
+  },
+
+  _onColumnClick: function(view, column) {
+    this.state.store.showOnlyColumn(column.get('value'));
+    this.trigger('columnzoom', column);
+  },
+
+  _onCardClick: function(view, model) {
+    this.trigger('modelselected', view, model);
+  },
+
+  _onIterationChange: function(view, iteration) {
+    this.state.store.setIteration(iteration);
   }
 });

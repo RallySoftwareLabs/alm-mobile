@@ -11,8 +11,7 @@ module.exports = ReactView.createBackboneClass({
   },
   componentWillMount: function() {
     this.subscribeEvent('updatetitle', this._onTitleUpdate);
-    this.subscribeEvent('dispatcher:dispatch', this._onDispatch);
-    this.subscribeEvent('dispatcher:dispatch', this._onDispatch);
+    this.subscribeEvent('urlchanged', this._onDispatch);
   },
   render: function() {
     var currentPage = this.getCurrentPage();

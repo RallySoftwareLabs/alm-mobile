@@ -9,104 +9,25 @@ BoardView = require 'views/board/board'
 ColumnView = require 'views/board/column'
 
 module.exports = class BoardController extends SiteController
-  index: (params) ->
-    @whenProjectIsLoaded =>
-      field = app.session.get('boardField')
-      columns = @getColumnModels field
-      artifacts = new Artifacts()
-      artifacts.clientMetricsParent = this
-
-      $.when(
-        artifacts.fetch(@getFetchData(field, app.session.getBoardColumns()))
-      ).always =>
-        artifacts.each (artifact) ->
-          column = _.find columns, (column) ->
-            column.get('value') == artifact.get(field)
-          
-          column.artifacts.add artifact
-        _.invoke(columns, 'trigger', 'sync')
-        @markFinished()
-
-      @renderReactComponent BoardView, columns: columns, region: 'main'
-
-      @subscribeEvent 'headerclick', @onColumnClick
-      @subscribeEvent 'cardclick', @onCardClick
-
-  column: (colValue) ->
-    
+  index: (colValue) ->
     @whenProjectIsLoaded =>
       @updateTitle app.session.getProjectName()
 
-      field = app.session.get('boardField')
-      col = new Column(field: field, value: colValue)
-      col.artifacts.clientMetricsParent = this
-      options = @getFetchData(field, [colValue])
-      col.artifacts.fetch(options).always =>
-        col.trigger('sync', col, options)
-        @markFinished()
-
-      @renderReactComponent ColumnView,
+      view = @renderReactComponent(BoardView,
         region: 'main'
-        model: col
-        columns: @getColumnModels(field)
-        singleColumn: true
-        abbreviateHeader: false
-        showIteration: true
-      
+        visibleColumn: colValue
+        boardField: app.session.get('boardField')
+        boardColumns: app.session.getBoardColumns()
+        project: app.session.get('project')
+        iteration: app.session.get('iteration')
+        iterations: app.session.get('iterations')
+        user: if app.session.isSelfMode() then app.session.get('user')
+      )
+      @listenTo(view, 'columnzoom', @_onColumnZoom)
+      @listenTo(view, 'modelselected', @_onCardClick)
 
-      @subscribeEvent 'headerclick', @onColumnClick
-      @subscribeEvent 'cardclick', @onCardClick
-      @subscribeEvent 'goleft', @goLeft
-      @subscribeEvent 'goright', @goRight
+  _onColumnZoom: (col) ->
+    @updateUrl "board/#{col.get('value')}"
 
-  onColumnClick: (col) ->
-    colValue = col.get('value')
-    @redirectTo "board/#{colValue}"
-
-  onCardClick: (view, model) ->
+  _onCardClick: (view, model) ->
     @redirectTo utils.getDetailHash(model)
-
-  goLeft: (col) ->
-    field = app.session.get('boardField')
-    columns = @getColumnModels field
-    colIndex = _.findIndex columns, _.isAttributeEqual('value', col.get('value'))
-    if colIndex > 0
-      newColumn = columns[colIndex - 1]
-      @redirectTo "/board/#{newColumn.get('value')}"
-
-  goRight: (col) ->
-    field = app.session.get('boardField')
-    columns = @getColumnModels field
-    colIndex = _.findIndex columns, _.isAttributeEqual('value', col.get('value'))
-    if colIndex < columns.length - 1
-      newColumn = columns[colIndex + 1]
-      @redirectTo "/board/#{newColumn.get('value')}"
-
-  getColumnModels: (field) ->
-    _.map app.session.getBoardColumns(), (value) =>
-        col = new Column({field, value})
-        col.clientMetricsParent = this
-        col
-
-  getFetchData: (field, values) ->
-    colQuery = utils.createQueryFromCollection(values, field, 'OR', (value) ->
-      "\"#{value}\""
-    )
-    data =
-      fetch: "FormattedID,DisplayColor,Blocked,Ready,Name,Owner,#{field},PlanEstimate,Tasks:summary[State;Estimate;ToDo;Owner;Blocked],TaskStatus,Defects:summary[State;Owner],DefectStatus,Discussion:summary"
-      query: "(#{colQuery} AND ((Requirement = null) OR (DirectChildrenCount = 0)))"
-      types: 'hierarchicalrequirement,defect'
-      order: "Rank ASC"
-      pagesize: 100
-      project: app.session.get('project').get('_ref')
-      projectScopeUp: false
-      projectScopeDown: true
-
-    if app.session.isSelfMode()
-      data.query = "(#{data.query} AND (Owner = #{app.session.get('user').get('_ref')}))"
-
-    iterationRef = app.session.get('iteration')?.get('_ref')
-    if iterationRef
-      data.query = "(#{data.query} AND (Iteration = \"#{iterationRef}\"))"
-
-    data: data

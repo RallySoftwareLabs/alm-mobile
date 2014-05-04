@@ -39,18 +39,20 @@ React.BackboneMixin =
 
   componentDidMount: ->
     # Whenever there may be a change in the Backbone data, trigger a reconcile.
-    @_subscribe(@props.model)
+    @_subscribe(@getModel())
 
     @__initLoadingIndicator__() if @props.showLoadingIndicator == true
 
   componentWillReceiveProps: (nextProps) ->
-    if @props.model != nextProps.model
-      @_unsubscribe(@props.model)
-      @_subscribe(nextProps.model)
+    model = @getModel()
+    nextModel = @getModel(nextProps)
+    if model != nextModel
+      @_unsubscribe(model)
+      @_subscribe(nextModel)
 
   componentWillUnmount: ->
     # Ensure that we clean up any dangling references when the component is destroyed.
-    @_unsubscribe(@props.model)
+    @_unsubscribe(@getModel())
     @unsubscribeAllEvents()
 
 module.exports = {
@@ -59,7 +61,7 @@ module.exports = {
 
     spec.mixins = currentMixins.concat [React.BackboneMixin, Messageable]
 
-    spec.getModel = -> @props.model || @props.collection
+    spec.getModel = (props = @props) -> props.model || props.collection || props.store
 
     spec.model = -> @getModel()
 

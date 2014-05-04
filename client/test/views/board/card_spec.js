@@ -1,21 +1,19 @@
-var React = require('react');
 var ReactTestUtils = React.addons.TestUtils;
 var app = require('application');
 var CardView = require('views/board/card');
 var UserStory = require('models/user_story');
 
 describe('views/board/card', function() {
-    it('should publish event on card click', function() {
+    it('should call callback on card click', function() {
         var userstory = new UserStory({
             FormattedID: 'S12345'
         });
+        var eventSpy = this.spy();
         var view = ReactTestUtils.renderIntoDocument(CardView({
-            model: userstory
+            model: userstory,
+            onCardClick: eventSpy
         }));
         
-        var eventSpy = this.spy();
-        this.subscribeEvent('cardclick', eventSpy);
-
         ReactTestUtils.Simulate.click(view.getDOMNode());
 
         expect(eventSpy).to.have.been.calledOnce;
@@ -27,7 +25,8 @@ describe('views/board/card', function() {
             FormattedID: 'S12345'
         });
         var view = ReactTestUtils.renderIntoDocument(CardView({
-            model: userstory
+            model: userstory,
+            onCardClick: function() {}
         }));
         
         ReactTestUtils.Simulate.click(view.getDOMNode());

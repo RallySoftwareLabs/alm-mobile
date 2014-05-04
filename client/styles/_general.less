@@ -65,11 +65,32 @@ dd {
 }
   
 .iteration-header {
+  height: 3em;
 
   .name {
     font-family: @noto-sans-bold;
+    vertical-align: top;
   }
+  .iteration-arrow {
+    display: inline-block;
+    vertical-align: top;
+    height: 3em;
 
+    i {
+      margin: 5px;
+      cursor: pointer;
+      font-size: 26px;
+      vertical-align: middle;
+      height: 3em;
+    }
+  }
+  .iteration-data {
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 10px;
+    height: 3em;
+    line-height: 1.5em;
+  }
 }
 
 @-webkit-viewport   { width: device-width; }
