@@ -9,16 +9,6 @@ var NavigationView = require('views/navigation/navigation');
 var ErrorDialog = require('views/error_dialog');
 
 module.exports = ReactView.createBackboneClass({
-  componentDidMount: function() {
-    this.publishEvent('!region:register', this, 'header', '#header');
-    this.publishEvent('!region:register', this, 'navigation', '#navigation');
-    this.publishEvent('!region:register', this, 'main', '#content');
-  },
-  componentWillUnmount: function() {
-    this.publishEvent('!region:unregister', this, 'header');
-    this.publishEvent('!region:unregister', this, 'navigation');
-    this.publishEvent('!region:unregister', this, 'main');
-  },
   render: function() {
     return (
       <div className="site">
@@ -41,12 +31,12 @@ module.exports = ReactView.createBackboneClass({
   },
 
   _getContent: function() {
-    return this.props.main.cmp(this.props.main.props);
+    return this.props.main.view(this.props.main.props);
   },
 
   _getBottomNavBar: function() {
     if (this.props.bottom) {
-      return this.props.bottom.cmp(this.props.bottom.props);
+      return this.props.bottom.view(this.props.bottom.props);
     }
   }
 });

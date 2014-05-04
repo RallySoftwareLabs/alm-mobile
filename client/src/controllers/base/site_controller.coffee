@@ -10,26 +10,22 @@ module.exports = class SiteController extends Controller
     deferred = $.Deferred()
     if siteViewInstance && siteViewInstance.isMounted()
       siteViewInstance.setProps props, ->
-        deferred.resolve(siteViewInstance.refs.main)
+        deferred.resolve(siteViewInstance)
     else
-      siteViewInstance = null
       siteView = SiteView(props)
-
-    if siteView
       siteViewInstance = React.renderComponent siteView, (if id then document.getElementById(id) else document.body)
-      deferred.resolve(siteViewInstance.refs.main)
+      deferred.resolve(siteViewInstance)
 
     deferred.promise()
 
   renderReactComponent: (componentClass, props = {}, id) ->
     viewProps = {}
-    viewProps[props.region] = cmp: componentClass, props: _.defaults(ref: props.region, _.omit(props, 'region'))
-    @_getView viewProps, id
+    viewProps[props.region] = view: componentClass, props: _.defaults(ref: props.region, _.omit(props, 'region'))
+    @_getView(viewProps, id).then (siteViewInstance) -> siteViewInstance.refs[props.region]
 
   renderReactComponents: (components) ->
-    props = _.reduce components, (p, cmp) =>
-      p[cmp.props.region] = cmp: cmp.componentClass, props: _.defaults(ref: props.region, _.omit(props, 'region'))
-      p
+    props = _.transform components, (p, cmp) =>
+      p[cmp.region] = view: cmp.view, props: _.defaults(ref: cmp.region, cmp.props)
     , {}
     
-    @_getView props
+    @_getView(props).then (siteViewInstance) -> _.pick(siteViewInstance.refs, _.pluck(components, 'region'))
