@@ -1,5 +1,6 @@
 /** @jsx React.DOM */
 var React = require('react');
+var app = require('application');
 var utils = require('lib/utils');
 var PlanStatusMixin = require ('lib/plan_status_mixin');
 var ReactView = require('views/base/react_view');
@@ -34,7 +35,7 @@ module.exports = ReactView.createBackboneClass({
 
   _userstoryItemMarkup: function(model) {
     return (
-      <a className="row" href={utils.getDetailHash(model)}>
+      <div role="link" tabIndex="0" className="row" onClick={ this._onSelectFn(model) } onKeyDown={ this.handleEnterAsClick(this._onSelectFn(model)) }>
         <div className="col-xs-11 item">
             <div className={this._getStateClassName(model)}></div>
             <div className="item-id-name">
@@ -43,7 +44,7 @@ module.exports = ReactView.createBackboneClass({
             </div>
         </div>
         <div className="col-xs-1 chevron"><i className="picto icon-chevron-right"></i></div>
-      </a>
+      </div>
     );
   },
 
@@ -67,7 +68,7 @@ module.exports = ReactView.createBackboneClass({
       todo = <div className="col-xs-2 task-to-do"/>;
     }
     return (
-      <a className="row" href={utils.getDetailHash(model)}>
+      <div role="link" tabIndex="0" className="row" onClick={ this._onSelectFn(model) } onKeyDown={ this.handleEnterAsClick(this._onSelectFn(model)) }>
           <div className="col-xs-9 item">
               <div className={this._getStateClassName(model)}></div>
               <div className="item-id-name">
@@ -77,13 +78,13 @@ module.exports = ReactView.createBackboneClass({
           </div>
           {todo}
           <div className="col-xs-1 chevron"><i className="picto icon-chevron-right"></i></div>
-      </a>
+      </div>
     );
   },
 
   _conversationpostItemMarkup: function(model) {
     return (
-      <div className="discussion-item">
+      <div tabIndex="0" className="discussion-item">
           {this._getDiscussionArtifactMarkup(model)}
           <div className="profile-image">
             <img src={utils.getProfileImageUrl(model.get('User')._ref, 80)}/>
@@ -119,6 +120,14 @@ module.exports = ReactView.createBackboneClass({
       );
     }
     return '';
+  },
+
+  _onSelectFn: function(model) {
+    return function(e) {
+      app.aggregator.recordAction({ component: this, description: 'clicked list item'});
+      this.routeTo(utils.getDetailHash(model));
+      e.preventDefault();
+    };
   }
 
 });
