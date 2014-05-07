@@ -123,11 +123,11 @@ module.exports = ReactView.createBackboneClass({
   },
 
   _onSelectFn: function(model) {
-    return function(e) {
+    return _.bind(function(e) {
       app.aggregator.recordAction({ component: this, description: 'clicked list item'});
       this.routeTo(utils.getDetailHash(model));
       e.preventDefault();
-    };
+    }, this);
   }
 
 });
