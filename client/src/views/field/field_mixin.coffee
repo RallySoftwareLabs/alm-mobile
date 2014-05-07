@@ -44,9 +44,6 @@ module.exports = {
     label
     
   saveModel: (updates, opts) ->
-    if @_isExistingObject()
-      @setState( editMode: false, -> @getFocusNode?().focus() )
-
     @publishEvent 'saveField', this, updates, opts
 
   isEditMode: ->
@@ -55,15 +52,17 @@ module.exports = {
   startEdit: ->
     @publishEvent 'startEdit', this, @props.field
 
-  endEdit: (event) ->
+  endEdit: (e) ->
     try
-      value = (@parseValue || @_parseValue)(event.target.value)
+      value = (@parseValue || @_parseValue)(e.target.value)
       field = @props.field
-      event.preventDefault()
+      e.preventDefault()
       if @props.item.get(field) isnt value
         modelUpdates = {}
         modelUpdates[field] = value
         @saveModel modelUpdates
+      if @_isExistingObject()
+        @setState( editMode: false, => @getFocusNode?().focus() )
     catch e
 
   _parseValue: (value) ->

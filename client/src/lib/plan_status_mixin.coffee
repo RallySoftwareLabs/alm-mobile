@@ -30,13 +30,11 @@ module.exports = {
         
     planEstimateTotal: (iteration) ->
       planEstimates = []
-      if iteration.userStories?
-        planEstimates = iteration.userStories.pluck('PlanEstimate')
-      if iteration.defects?
-        planEstimates = planEstimates.concat iteration.defects.pluck('PlanEstimate')
-      planEstimates.reduce (total,est) ->
-        total + est
-      , 0
+      if iteration.artifacts?
+        iteration.artifacts.reduce (total, artifact) ->
+          total + artifact.get('PlanEstimate')
+        , 0
+      else 0
 
     loadStatus: (iteration) ->
       percentage = @loadPercentage(iteration)

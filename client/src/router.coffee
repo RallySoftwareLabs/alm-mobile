@@ -61,9 +61,11 @@ module.exports = {
     aggregator = config.aggregator
 
     @addRoute 'board', 'board#index'
-    @addRoute 'board/:column', 'board#column'
+    @addRoute 'board/:column', 'board#index'
     @addRoute 'board/:column/userstory/new', 'user_story_detail#storyForColumn'
     @addRoute 'board/:column/defect/new', 'defect_detail#defectForColumn'
+
+    @addRoute 'dashboard', 'dashboard#index'
     
     @addRoute 'userstories', 'home#userstories'
     @addRoute 'defects', 'home#defects'
@@ -85,6 +87,7 @@ module.exports = {
     @addRoute 'portfolioitem/:id/children/new', 'portfolio_item_detail#newChild'
     @addRoute 'portfolioitem/:id/userstories', 'associations#userStoriesForPortfolioItem'
     @addRoute 'portfolioitem/:id/userstories/new', 'user_story_detail#childForPortfolioItem'
+    @addRoute 'iteration/:id', 'iteration#show'
 
     @addRoute 'new/userstory', 'user_story_detail#create'
     @addRoute 'new/task', 'task_detail#create'
@@ -110,9 +113,11 @@ module.exports = {
 
       onRoute: (path, options = {}) ->
         @navigate path, _.defaults(options, trigger: true)
+        @publishEvent 'urlchanged'
 
       onChangeURL: (path, options = {}) ->
         @navigate path, _.defaults(options, trigger: false)
+        @publishEvent 'urlchanged'
 
       allowThrough: (path, controllerClass, fnName, args) ->
         if @afterLogin? && !_.contains(['login', 'logout', 'labsNotice'], path)

@@ -49,7 +49,7 @@ module.exports = ReactView.createBackboneClass({
           </div>
         </div>
         <div className="row">
-          <div className="col-xs-12 ellipsis ParentView">
+          <div className="col-xs-12 ParentView">
             <WorkProduct item={ model }
                          editMode={ newArtifact }
                          field={ model.get('PortfolioItem') ? "PortfolioItem" : "Parent" }
