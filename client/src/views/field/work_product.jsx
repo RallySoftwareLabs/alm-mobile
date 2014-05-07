@@ -22,7 +22,7 @@ module.exports = ReactView.createBackboneClass({
              role="link"
              aria-label={ "Work Product. " + fieldValue.FormattedID + ": " + fieldValue._refObjectName + " Click to edit." }>
           <span className="work-product-id">{ fieldValue.FormattedID }</span>
-          <span className="work-product-name ellipsis">{ fieldValue._refObjectName }</span>
+          <span className="work-product-name">{ fieldValue._refObjectName }</span>
         </div>
       </div>
     ) : <div/>;

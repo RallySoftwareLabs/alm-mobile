@@ -23,7 +23,7 @@ module.exports = ReactView.createBackboneClass({
           </div>
         </div>
         <div className="row">
-          <div className="col-xs-12 ellipsis WorkProductView">
+          <div className="col-xs-12 WorkProductView">
             <WorkProduct item={ model } editMode={ newArtifact } field="WorkProduct"/>
           </div>
         </div>
