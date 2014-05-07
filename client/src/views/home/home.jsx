@@ -16,13 +16,11 @@ module.exports = ReactView.createBackboneClass({
           </ul>
         </div>
 
-        <div className="listing">
-          <ListView
-            model={this.props.collection}
-            noDataMsg={"There are no " + this.props.tab}
-            showLoadingIndicator={true}
-            changeOptions="sync"/>
-        </div>
+        <ListView
+          model={this.props.collection}
+          noDataMsg={"There are no " + this.props.tab}
+          showLoadingIndicator={true}
+          changeOptions="sync"/>
 
         <ul className="type nav nav-pills nav-justified">
           <li className="active">

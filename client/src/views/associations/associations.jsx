@@ -15,13 +15,11 @@ module.exports = ReactView.createBackboneClass({
           {association}
           <button className="btn btn-primary add-button" onClick={ this._onAddClick }>+ Add { _.singularize(association) }</button>
         </h4>
-        <div className="listing">
-          <ListView
-            model={this.props.associatedItems}
-            noDataMsg={"This " + utils.getTypeForDetailLink(this.props.fromModel.get('_type')) + " has no " + association.toLowerCase()}
-            showLoadingIndicator={true}
-            changeOptions="sync"/>
-        </div>
+        <ListView
+          model={this.props.associatedItems}
+          noDataMsg={"This " + utils.getTypeForDetailLink(this.props.fromModel.get('_type')) + " has no " + association.toLowerCase()}
+          showLoadingIndicator={true}
+          changeOptions="sync"/>
       </div>
     );
   },

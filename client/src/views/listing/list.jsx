@@ -18,7 +18,7 @@ module.exports = ReactView.createBackboneClass({
             </li>
           );
         }, this);
-        return <ul className="list-group">{listItems}</ul>;
+        return <ul className="list-group listing">{listItems}</ul>;
       } else {
         return (
           <div className="well no-data">{this.props.noDataMsg}</div>

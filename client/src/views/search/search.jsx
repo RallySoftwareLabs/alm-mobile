@@ -28,14 +28,12 @@ module.exports = ReactView.createBackboneClass({
               </span>
             </div>
         </form>
-        <div className="listing">
-          <ListView
-            model={this.props.collection}
-            noDataMsg="No results matched your search."
-            showLoadingIndicator={!!this.props.keywords}
-            showItemArtifact={this.props.showItemArtifact}
-            changeOptions="sync"/>
-        </div>
+        <ListView
+          model={this.props.collection}
+          noDataMsg="No results matched your search."
+          showLoadingIndicator={!!this.props.keywords}
+          showItemArtifact={this.props.showItemArtifact}
+          changeOptions="sync"/>
       </div>
     );
   },

@@ -15,14 +15,12 @@ module.exports = ReactView.createBackboneClass({
     return (
       <div className="discussion-page">
         {this._getInputMarkup()}
-        <div className="listing">
-          <ListView
-            model={this.props.model}
-            noDataMsg="There is no discussion for this item"
-            showLoadingIndicator={true}
-            showItemArtifact={this.props.showItemArtifact}
-            changeOptions="sync"/>
-        </div>
+        <ListView
+          model={this.props.model}
+          noDataMsg="There is no discussion for this item"
+          showLoadingIndicator={true}
+          showItemArtifact={this.props.showItemArtifact}
+          changeOptions="sync"/>
       </div>
     );
   },

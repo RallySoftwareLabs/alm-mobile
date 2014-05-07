@@ -31,11 +31,11 @@ module.exports = ReactView.createBackboneClass({
               { iterations }
             </select>
           </div>
-          <div className="form-group scope listing">
+          <div className="form-group scope">
             <label className="control-label show-work">Show</label>
             <ul className="list-group">{ this._getModeItems() }</ul>
           </div>
-          <div className="form-group board-column listing">
+          <div className="form-group board-column">
             <label className="control-label board-field">Board Column</label>
             <ul className="list-group">{ this._getBoardFieldItems() }</ul>
           </div>
