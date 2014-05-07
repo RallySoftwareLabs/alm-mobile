@@ -1,0 +1,49 @@
+.meter-container {
+    width: 100%;
+    height: 20px;
+
+    .bar {
+        width: 100%;
+        background-color: @grey2;
+        float: left;
+        height: 20px;
+        border-radius: 2px; 
+    }
+
+    .meter {
+        float: left; 
+        border-top-left-radius: 2px;
+        border-bottom-left-radius: 2px;
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+        text-decoration: none;
+        height: 20px;
+
+        &.high {
+          background-color: @yellow-med;
+        }
+        &.overloaded {
+          background-color: @red-med;
+        }
+        &.responsive {
+          background-color: @lime-med;
+        }
+        &.unknown {
+          background-color: @lightGrey;
+        }
+    }
+
+    .percent {
+        text-transform: uppercase;
+        font-family: @proxima-nova-semi-bold;
+        color: @grey8;
+        font-size: .8em;
+        text-align: center;
+        height: 20px;
+        position: absolute;
+        float: left;
+        width: 50px;
+        padding: 4px 0px;
+    }
+
+}

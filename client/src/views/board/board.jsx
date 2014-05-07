@@ -32,7 +32,8 @@ module.exports = ReactView.createBackboneClass({
         <IterationHeader visible={true}
                          iteration={ this.state.store.getIteration() }
                          iterations={ this.state.store.getIterations() }
-                         onChange={ this._onIterationChange } />
+                         onChange={ this._onIterationChange }
+                         onSelect={ this._onIterationSelect } />
         <div className="column-container">{this.getColumns()}</div>
       </div>
     );
@@ -90,5 +91,9 @@ module.exports = ReactView.createBackboneClass({
 
   _onIterationChange: function(view, iteration) {
     this.state.store.setIteration(iteration);
+  },
+
+  _onIterationSelect: function(view, iteration) {
+    this.trigger('modelselected', view, iteration);
   }
 });

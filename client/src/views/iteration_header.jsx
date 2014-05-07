@@ -21,7 +21,12 @@ module.exports = ReactView.createBackboneClass({
                 }>
             { this._getShowLeftMarkup(currentIndex) }
             <span>Iteration:</span>
-            <div className="iteration-data">
+            <div className="iteration-data"
+                 tabIndex="0"
+                 role="link"
+                 aria-label="Click to view iteration details"
+                 onClick={ this._onSelect }
+                 onKeyDown={ this.handleEnterAsClick(this._onSelect) }>
               <div className="name">{iteration.get('Name')}</div>
               <div className="dates">{moment(iteration.get('StartDate')).format('L')} - {moment(iteration.get('EndDate')).format('L')}</div>
             </div>
@@ -73,5 +78,11 @@ module.exports = ReactView.createBackboneClass({
       this.props.onChange(this, iteration);
       e.preventDefault();
     }, this);
+  },
+
+  _onSelect: function(e) {
+      app.aggregator.recordAction({ component: this, description: "Clicked iteration" });
+      this.props.onSelect(this, this.props.iteration);
+      e.preventDefault();
   }
 });
