@@ -21,6 +21,9 @@ module.exports = class Projects extends Collection
           order: 'Name'
       )
 
+  @clearCache: ->
+    @::projects = null
+
   @getIdsWithinScopeDown: (rootProject) ->
     @fetchAll().then =>
       parentChildHash = @::projects.reduce (acc, p) ->

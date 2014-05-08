@@ -3,6 +3,7 @@ var sinon = require('sinon');
 var sinonChai = require('sinon-chai');
 var Messageable = require('lib/messageable');
 var app = require('application');
+var Projects = require('collections/projects');
 
 chai.Assertion.includeStack = true;
 chai.use(sinonChai);
@@ -32,5 +33,6 @@ beforeEach(function() {
 });
 
 afterEach(function() {
+    Projects.clearCache();
     sinonSandboxTearDown(this);
 });

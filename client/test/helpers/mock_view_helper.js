@@ -8,11 +8,6 @@ beforeEach(function() {
             setState: this.stub()
         });
         _.extend(View.prototype, config);
-        var stub = this.stub(Controller.prototype, 'renderReactComponent', function() {
-            d = $.Deferred();
-            d.resolve(new View());
-            return d.promise();
-        });
-        return stub;
+        return this.stub(Controller.prototype, 'renderReactComponent').returns(new View());
     };
 });
