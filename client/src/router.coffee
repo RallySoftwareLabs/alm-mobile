@@ -87,7 +87,7 @@ module.exports = {
     @addRoute 'portfolioitem/:id/children/new', 'portfolio_item_detail#newChild'
     @addRoute 'portfolioitem/:id/userstories', 'associations#userStoriesForPortfolioItem'
     @addRoute 'portfolioitem/:id/userstories/new', 'user_story_detail#childForPortfolioItem'
-    @addRoute 'iteration/:id', 'iteration#show'
+    @addRoute 'iteration/:id', 'iteration_detail#show'
 
     @addRoute 'new/userstory', 'user_story_detail#create'
     @addRoute 'new/task', 'task_detail#create'

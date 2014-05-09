@@ -22,14 +22,16 @@ module.exports = ReactView.createBackboneClass({
     this.listenTo(this.state.store, 'change', this.forceUpdate);
     this.listenTo(this.state.store, 'error', this.showError);
     this.subscribeEvent('saveField', this.state.store.saveField.bind(this.state.store));
+    this.state.store.load();
   },
   render: function() {
     var iteration = this.state.store.getModel();
+    var scheduledItems = this.state.store.getScheduledItems();
     var loadStatus = this.loadStatus(iteration);
     var loadPercentage = this.loadPercentage(iteration);
-    var scheduledPoints = iteration.artifacts.reduce(function(acc, us) {
+    var scheduledPoints = scheduledItems ? scheduledItems.reduce(function(acc, us) {
       return acc + (us.get('PlanEstimate') || 0);
-    }, 0);
+    }, 0) : 0;
     return (
       <div className={"detail-view iteration " + loadStatus} autoFocus="autofocus">
         <div>
@@ -69,7 +71,7 @@ module.exports = ReactView.createBackboneClass({
           </div>
         </div>
         <div className="well-title control-label" aria-hidden="true">Scheduled Items</div>
-        <ListView model={ iteration.artifacts }/>
+        { scheduledItems ? <ListView model={ scheduledItems }/> : '' }
         { this._getFeaturesMarkup() }
       </div>
     );
