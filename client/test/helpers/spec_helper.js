@@ -27,8 +27,11 @@ beforeEach(function() {
     _.extend(this, Messageable);
     app.aggregator = {
         recordAction: this.stub(),
+        beginLoad: this.stub(),
+        endLoad: this.stub(),
         beginDataRequest: this.stub(),
-        endDataRequest: this.stub()
+        endDataRequest: this.stub(),
+        recordComponentReady: this.stub()
     };
 });
 
