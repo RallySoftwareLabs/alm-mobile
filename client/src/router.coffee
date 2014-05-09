@@ -130,7 +130,7 @@ module.exports = {
           @execController(path, controllerClass, fnName, args)
 
       execController: (path, controllerClass, fnName, args) ->
-        aggregator.startSession('Navigation', slug: path)
+        aggregator.startSession('Navigation', slug: "/#{path}")
         aggregator.recordAction
           component: this
           description: "visited #{Backbone.history.location.pathname}"

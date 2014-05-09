@@ -35,7 +35,7 @@ module.exports = class Session extends Model
       @set 'prefs', preferences
 
       preferences.fetchMobilePrefs(user).then =>
-        @aggregator.endLoad
+        @aggregator.endLoad component: this
         cb? true
 
   authenticate: (username, password, cb) ->
