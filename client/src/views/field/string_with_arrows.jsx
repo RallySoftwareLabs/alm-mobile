@@ -17,20 +17,20 @@ module.exports = ReactView.createBackboneClass({
   },
 
   _getDisplayModeMarkup: function() {
-    var reverseArrows = this.props.reverseArrows;
-    var leftDisabled = reverseArrows ? this._cantGoRight() : this._cantGoLeft();
-    var rightDisabled = reverseArrows ? this._cantGoLeft() : this._cantGoRight();
+    var reverseAllowedValues = this.props.reverseAllowedValues;
+    var leftDisabled = reverseAllowedValues ? this._cantGoRight() : this._cantGoLeft();
+    var rightDisabled = reverseAllowedValues ? this._cantGoLeft() : this._cantGoRight();
 
     return (
       <div id={ this.getFieldId() } className="display" aria-label={ this.getFieldAriaLabel() }>
         <div className="well-title control-label" aria-hidden="true">{ this.props.label }</div>
         <div className="arrows-left">
             <div className={ 'well well-sm lt' + (leftDisabled ? ' disabled' : '') }
-                 onClick={ this[reverseArrows ? '_onRightArrow' : '_onLeftArrow'] }
-                 onKeyDown={ this.handleEnterAsClick(this[reverseArrows ? '_onRightArrow' : '_onLeftArrow']) }
+                 onClick={ this[reverseAllowedValues ? '_onRightArrow' : '_onLeftArrow'] }
+                 onKeyDown={ this.handleEnterAsClick(this[reverseAllowedValues ? '_onRightArrow' : '_onLeftArrow']) }
                  tabIndex="0"
                  role="button"
-                 aria-labelledby={ !leftDisabled && this.getFieldId() + (reverseArrows ? '-aria-next' : '-aria-previous') }>
+                 aria-labelledby={ !leftDisabled && this.getFieldId() + (reverseAllowedValues ? '-aria-next' : '-aria-previous') }>
               <span className="picto icon-chevron-left"></span>
             </div>
         </div>
@@ -48,11 +48,11 @@ module.exports = ReactView.createBackboneClass({
         </div>
         <div className="arrows-right">
             <div className={ 'well well-sm lt' + (rightDisabled ? ' disabled' : '') }
-                 onClick={ this[reverseArrows ? '_onLeftArrow' : '_onRightArrow'] }
-                 onKeyDown={ this.handleEnterAsClick(this[reverseArrows ? '_onLeftArrow' : '_onRightArrow']) }
+                 onClick={ this[reverseAllowedValues ? '_onLeftArrow' : '_onRightArrow'] }
+                 onKeyDown={ this.handleEnterAsClick(this[reverseAllowedValues ? '_onLeftArrow' : '_onRightArrow']) }
                  tabIndex="0"
                  role="link"
-                 aria-labelledby={ !rightDisabled && this.getFieldId() + (reverseArrows ? '-aria-previous' : '-aria-next') }>
+                 aria-labelledby={ !rightDisabled && this.getFieldId() + (reverseAllowedValues ? '-aria-previous' : '-aria-next') }>
               <span className="picto icon-chevron-right"></span>
             </div>
         </div>

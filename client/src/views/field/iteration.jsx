@@ -8,7 +8,7 @@ module.exports = ReactView.createBackboneClass({
   mixins: [FieldMixin],
   getDefaultProps: function() {
     return {
-      reverseArrows: true
+      reverseAllowedValues: true
     };
   },
   render: function() {

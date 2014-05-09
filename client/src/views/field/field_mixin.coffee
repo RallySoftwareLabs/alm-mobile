@@ -11,11 +11,16 @@ module.exports = {
   componentDidUpdate: focusEditor
 
   getAllowedValues: ->
-    av = @props.allowedValues
-    av && _.map(av, (value) ->
-      value: if _.isObject(value.AllowedValueType) then value._ref else value.StringValue
-      label: value.StringValue
-    )
+    av = null
+    if @props.allowedValues
+      av = _.map(@props.allowedValues, (value) ->
+        value: if _.isObject(value.AllowedValueType) then value._ref else value.StringValue
+        label: value.StringValue
+      )
+      if @props.reverseAllowedValues
+        av = av.reverse()
+
+    av
 
   getFieldValue: ->
     @props.value || @props.item.get(@props.field)
