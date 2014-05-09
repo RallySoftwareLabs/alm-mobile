@@ -12,15 +12,15 @@ module.exports = class SettingsController extends SiteController
 
   show: (params) ->
     @whenProjectIsLoaded ->
-      view = @renderReactComponent(SettingsView, region: 'main', model: app.session, projects: Projects::projects)
-      @subscribeEvent 'changeMode', @onChangeMode
-      @subscribeEvent 'changeBoardField', @onChangeBoardField
-      @subscribeEvent 'changeProject', @onChangeProject
-      @subscribeEvent 'changeIteration', @onChangeIteration
-      @subscribeEvent 'logout', @onLogout
-      @subscribeEvent 'projectready', => view.forceUpdate()
-      @updateTitle "Settings: #{app.session.getProjectName()}"
-      @markFinished()
+      @renderReactComponent(SettingsView, region: 'main', model: app.session, projects: Projects::projects).then (view) =>
+        @subscribeEvent 'changeMode', @onChangeMode
+        @subscribeEvent 'changeBoardField', @onChangeBoardField
+        @subscribeEvent 'changeProject', @onChangeProject
+        @subscribeEvent 'changeIteration', @onChangeIteration
+        @subscribeEvent 'logout', @onLogout
+        @subscribeEvent 'projectready', => view.forceUpdate()
+        @updateTitle "Settings: #{app.session.getProjectName()}"
+        @markFinished()
 
   board: (params) ->
     @whenProjectIsLoaded ->

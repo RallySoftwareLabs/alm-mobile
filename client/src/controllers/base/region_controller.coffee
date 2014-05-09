@@ -4,21 +4,25 @@ Controller = require 'controllers/base/controller'
 module.exports = class RegionController extends Controller
 
   _getView: (props, id) ->
+    deferred = $.Deferred()
     target = (if id then document.getElementById(id) else document.body)
-    React.renderComponent @view(props), target
+    containerViewInstance = React.renderComponent @view(props), target, (component) ->
+      deferred.resolve()
+
+    $.when(deferred.promise()).then -> containerViewInstance
 
   renderReactComponent: (componentClass, props = {}, id) ->
-    regions = @renderReactComponents([
+    @renderReactComponents([
       view: componentClass
       region: props.region
       props: _.omit(props, 'region')
-    ])
-    regions[props.region]
+    ]).then (regions) ->
+      regions[props.region]
 
   renderReactComponents: (components) ->
     props = _.transform components, (p, cmp) =>
       p[cmp.region] = view: cmp.view, props: _.defaults(ref: cmp.region, cmp.props)
     , {}
     
-    containerViewInstance = @_getView(props)
-    _.pick(containerViewInstance.refs, _.pluck(components, 'region'))
+    @_getView(props).then (containerViewInstance) ->
+      _.pick(containerViewInstance.refs, _.pluck(components, 'region'))

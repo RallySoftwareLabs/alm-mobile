@@ -12,7 +12,7 @@ module.exports = class BoardController extends SiteController
     @whenProjectIsLoaded =>
       @updateTitle app.session.getProjectName()
 
-      view = @renderReactComponent(BoardView,
+      @renderReactComponent(BoardView,
         region: 'main'
         visibleColumn: colValue
         boardField: app.session.get('boardField')
@@ -21,9 +21,9 @@ module.exports = class BoardController extends SiteController
         iteration: app.session.get('iteration')
         iterations: app.session.get('iterations')
         user: if app.session.isSelfMode() then app.session.get('user')
-      )
-      @listenTo(view, 'columnzoom', @_onColumnZoom)
-      @listenTo(view, 'modelselected', @_onCardClick)
+      ).then (view) =>
+        @listenTo(view, 'columnzoom', @_onColumnZoom)
+        @listenTo(view, 'modelselected', @_onCardClick)
 
   _onColumnZoom: (col) ->
     @updateUrl "board/#{col.get('value')}"

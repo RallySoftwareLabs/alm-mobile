@@ -15,7 +15,7 @@ module.exports = class DoubleBoardController extends RegionController
     @whenProjectIsLoaded =>
       @updateTitle app.session.getProjectName()
 
-      views = @renderReactComponents([{
+      @renderReactComponents([{
         view: BoardView
         region: 'main'
         props:
@@ -33,10 +33,10 @@ module.exports = class DoubleBoardController extends RegionController
           boardColumns: app.session.getBoardColumns('c_KanbanState')
           project: app.session.get('project')
           iteration: app.session.get('iteration')
-      }])
-      _.each ['main', 'app2'], (region) =>
-        @listenTo(views[region], 'columnzoom', @_onColumnZoom)
-        @listenTo(views[region], 'modelselected', @_onCardClick)
+      }]).then (views) =>
+        _.each ['main', 'app2'], (region) =>
+          @listenTo(views[region], 'columnzoom', @_onColumnZoom)
+          @listenTo(views[region], 'modelselected', @_onCardClick)
 
   _onCardClick: (view, model) ->
     @redirectTo utils.getDetailHash(model)
