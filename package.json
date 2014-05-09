@@ -22,7 +22,7 @@
     "html-md": "3.0.2",
     "lodash": "2.4.1",
     "request": "2.34.0",
-    "rallymetrics": "0.2.4",
+    "rallymetrics": "0.2.5",
     "jquery": "~2.1.0",
     "backbone": "~1.1.2",
     "envify": "~1.2.1",
