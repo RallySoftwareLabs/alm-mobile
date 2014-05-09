@@ -1,3 +1,4 @@
+var $ = require('jquery');
 var Messageable = require('lib/messageable');
 
 beforeEach(function() {
@@ -8,6 +9,11 @@ beforeEach(function() {
             setState: this.stub()
         });
         _.extend(View.prototype, config);
-        return this.stub(Controller.prototype, 'renderReactComponent').returns(new View());
+        var stub = this.stub(Controller.prototype, 'renderReactComponent', function() {
+            d = $.Deferred();
+            d.resolve(new View());
+            return d.promise();
+        });
+        return stub;
     };
 });
