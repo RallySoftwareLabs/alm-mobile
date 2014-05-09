@@ -16,6 +16,7 @@ module.exports = ReactView.createBackboneClass({
   },
   componentDidMount: function() {
     this.listenTo(this.state.store, 'change', this.forceUpdate);
+    this.state.store.load();
   },
   componentWillReceiveProps: function(newProps) {
     var newStore = this._buildStoreFromProps(newProps);
@@ -24,6 +25,7 @@ module.exports = ReactView.createBackboneClass({
     this.setState({
       store: newStore
     });
+    newStore.load();
   },
 
   render: function() {

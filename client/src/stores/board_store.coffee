@@ -1,4 +1,5 @@
 _ = require 'underscore'
+app = require 'application'
 utils = require 'lib/utils'
 Artifacts = require 'collections/artifacts'
 Column = require 'models/column'
@@ -8,10 +9,13 @@ BaseStore = require 'stores/base_store'
 module.exports = class BoardStore extends BaseStore
   constructor: ({@boardField, @boardColumns, @project, @iteration, @iterations, @user, @visibleColumn}) ->
     @columns = @_getColumnModels()
+
+  load: ->
     @artifacts = new Artifacts()
     @artifacts.clientMetricsParent = this
 
-    @_fetchCards()
+    @_fetchCards().then =>
+      app.aggregator.recordComponentReady component: this
 
   getColumns: -> @columns
 

@@ -27,6 +27,7 @@ describe('stores/board', function() {
                 boardColumns: this.boardColumns,
                 project: this.project
             });
+            this.boardStore.load();
             expect(this.fetchStub).to.have.been.calledOnce;
             expect(this.fetchStub.firstCall.args[0].data.project).to.equal('/project/12345');
             expect(this.fetchStub.firstCall.args[0].data.projectScopeUp).to.be.false;
@@ -38,6 +39,7 @@ describe('stores/board', function() {
                 boardColumns: this.boardColumns,
                 project: this.project
             });
+            this.boardStore.load();
             expect(this.fetchStub.firstCall.args[0].data.query).to.contain('(ScheduleState = "abc")');
             expect(this.fetchStub.firstCall.args[0].data.query).to.contain('(ScheduleState = "def")');
         });
@@ -48,6 +50,7 @@ describe('stores/board', function() {
                 project: this.project,
                 visibleColumn: 'abc'
             });
+            this.boardStore.load();
             expect(this.fetchStub.firstCall.args[0].data.query).to.contain('(ScheduleState = "abc")');
             expect(this.fetchStub.firstCall.args[0].data.query).to.contain('(ScheduleState = "def")');
         });
@@ -58,6 +61,7 @@ describe('stores/board', function() {
                 project: this.project,
                 user: this.user
             });
+            this.boardStore.load();
             expect(this.fetchStub.firstCall.args[0].data.query).to.contain('(Owner = "/user/23456")');
         });
         it('should query by iteration when passed in', function() {
@@ -67,6 +71,7 @@ describe('stores/board', function() {
                 project: this.project,
                 iteration: new Backbone.Model({ _ref: '/iteration/987'})
             });
+            this.boardStore.load();
             expect(this.fetchStub.firstCall.args[0].data.query).to.contain('(Iteration = "/iteration/987")');
         });
         it('should populate columns with results', function() {
@@ -75,6 +80,7 @@ describe('stores/board', function() {
                 boardColumns: this.boardColumns,
                 project: this.project
             });
+            this.boardStore.load();
             var columns = this.boardStore.getColumns();
             var abcColumn = _.find(columns, _.isAttributeEqual('value', 'abc'));
             expect(abcColumn.artifacts).to.have.length(2);
@@ -97,6 +103,7 @@ describe('stores/board', function() {
                 boardColumns: this.boardColumns,
                 project: this.project
             });
+            this.boardStore.load();
             expect(this.boardStore.isZoomedIn()).to.be.false;
         });
         it('should return true if constructed with a column', function() {
@@ -114,6 +121,7 @@ describe('stores/board', function() {
                 boardColumns: this.boardColumns,
                 project: this.project
             });
+            this.boardStore.load();
             this.boardStore.showOnlyColumn('abc');
             expect(this.boardStore.isZoomedIn()).to.be.true;
         });
@@ -126,6 +134,7 @@ describe('stores/board', function() {
                 boardColumns: this.boardColumns,
                 project: this.project
             });
+            this.boardStore.load();
             expect(this.boardStore.getVisibleColumns()).to.have.length(2);
             expect(
                 _.map(this.boardStore.getVisibleColumns(), _.getAttribute('value'))
@@ -149,6 +158,7 @@ describe('stores/board', function() {
                 boardColumns: this.boardColumns,
                 project: this.project
             });
+            this.boardStore.load();
             this.boardStore.showOnlyColumn('abc');
             expect(this.boardStore.getVisibleColumns()).to.have.length(1);
             expect(
@@ -164,6 +174,7 @@ describe('stores/board', function() {
                 boardColumns: this.boardColumns,
                 project: this.project
             });
+            this.boardStore.load();
             expect(this.boardStore.getColumns()).to.have.length(2);
             expect(
                 _.map(this.boardStore.getColumns(), _.getAttribute('value'))
@@ -187,6 +198,7 @@ describe('stores/board', function() {
                 boardColumns: this.boardColumns,
                 project: this.project
             });
+            this.boardStore.load();
             this.boardStore.showOnlyColumn('abc');
             expect(this.boardStore.getColumns()).to.have.length(2);
             expect(
