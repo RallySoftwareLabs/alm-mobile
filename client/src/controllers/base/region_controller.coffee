@@ -1,15 +1,17 @@
-$ = require 'jquery'
+Promise = require('es6-promise').Promise
 Controller = require 'controllers/base/controller'
 
 module.exports = class RegionController extends Controller
 
   _getView: (props, id) ->
-    deferred = $.Deferred()
-    target = (if id then document.getElementById(id) else document.body)
-    containerViewInstance = React.renderComponent @view(props), target, (component) ->
-      deferred.resolve()
+    containerViewInstance = null
+    promise = new Promise((resolve, reject) =>
+      target = (if id then document.getElementById(id) else document.body)
+      containerViewInstance = React.renderComponent @view(props), target, ->
+        resolve()
+    )
 
-    $.when(deferred.promise()).then -> containerViewInstance
+    promise.then -> containerViewInstance
 
   renderReactComponent: (componentClass, props = {}, id) ->
     @renderReactComponents([

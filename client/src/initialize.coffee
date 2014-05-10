@@ -1,4 +1,4 @@
-require 'jquery'
+$ = require 'jquery'
 require 'backbone'
 app = require 'application'
 require 'backbone_mods'

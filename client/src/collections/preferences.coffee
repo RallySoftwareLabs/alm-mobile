@@ -1,3 +1,4 @@
+promise = require('es6-promise').Promise
 appConfig = require 'app_config'
 utils = require 'lib/utils'
 Collection = require 'collections/collection'
@@ -50,7 +51,7 @@ module.exports = class Preferences extends Collection
 
       newPref = new Preference changedAttrs
 
-    $.when(
+    Promise.resolve(
       unless _.isEmpty(changedAttrs)
         newPref.clientMetricsParent = this
         newPref.save changedAttrs, patch: true, success: (model) => @add newPref unless existingPref
@@ -72,7 +73,7 @@ module.exports = class Preferences extends Collection
 
       newPref = new Preference changedAttrs
 
-    $.when(
+    Promise.resolve(
       unless _.isEmpty(changedAttrs)
         newPref.clientMetricsParent = this
         newPref.save changedAttrs, patch: true, success: (model) => @add newPref unless existingPref
@@ -99,7 +100,7 @@ module.exports = class Preferences extends Collection
 
         newPref = new Preference changedAttrs
 
-      $.when(
+      Promise.resolve(
         unless _.isEmpty(changedAttrs)
           newPref.clientMetricsParent = this
           newPref.save changedAttrs, patch: true, success: (model) => @add newPref unless existingPref

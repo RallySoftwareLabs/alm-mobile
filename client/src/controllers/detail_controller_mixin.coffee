@@ -1,3 +1,4 @@
+Promise = require('es6-promise').Promise
 app = require 'application'
 utils = require 'lib/utils'
 LoadingIndicatorView = require 'views/loading_indicator'
@@ -55,7 +56,7 @@ module.exports = {
 
   _getAllowedValuesForFields: (model) ->
     fieldNames = @getFieldNames()
-    $.when.apply($, _.map(fieldNames, model.getAllowedValues, model)).then (avs...) =>
+    Promise.all(_.map(fieldNames, model.getAllowedValues, model)).then (avs) =>
       _.reduce(avs, (result, av, index) ->
         result[fieldNames[index]] = av
         result

@@ -1,8 +1,8 @@
   /** @jsx React.DOM */
 var _ = require('underscore');
 var React = require('react');
-var ReactView = require('views/base/react_view');
 var app = require('application');
+var ReactView = require('views/base/react_view');
 
 module.exports = ReactView.createBackboneClass({
 
@@ -105,9 +105,10 @@ module.exports = ReactView.createBackboneClass({
     return <span dangerouslySetInnerHTML={{__html: '&nbsp;'}}/>;
   },
 
-  triggerLogout: function(event) {
+  triggerLogout: function(e) {
+    app.aggregator.recordAction({ component: this, description: 'clicked logout button'});
     this.publishEvent('logout');
-    event.preventDefault();
+    e.preventDefault();
   },
 
   changeModeFn: function(mode) {
@@ -126,13 +127,13 @@ module.exports = ReactView.createBackboneClass({
     }, this);
   },
 
-  updateSelectedProject: function(event) {
+  updateSelectedProject: function(e) {
     app.aggregator.recordAction({component: this, description: "changed project"});
-    this.publishEvent('changeProject', event.target.value);
+    this.publishEvent('changeProject', e.target.value);
   },
 
-  updateSelectedIteration: function(event) {
+  updateSelectedIteration: function(e) {
     app.aggregator.recordAction({component: this, description: "changed iteration"});
-    this.publishEvent('changeIteration', event.target.value);
+    this.publishEvent('changeIteration', e.target.value);
   }
 });

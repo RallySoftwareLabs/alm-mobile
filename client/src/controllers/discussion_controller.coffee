@@ -21,7 +21,7 @@ module.exports = class DiscussionController extends SiteController
           shallowFetch: "Text,User,CreationDate"
           query: "(Artifact = #{@artifactRef})"
           order: "CreationDate DESC"
-      ).always => @markFinished()
+      ).then => @markFinished()
 
   onReplyClick: (view, text) ->
     if text

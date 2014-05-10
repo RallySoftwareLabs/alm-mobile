@@ -1,3 +1,4 @@
+Promise = require('es6-promise').Promise
 _ = require 'underscore'
 app = require 'application'
 utils = require 'lib/utils'
@@ -30,7 +31,7 @@ module.exports = class DetailStore extends BaseStore
 
   _getAllowedValuesForFields: (model) ->
     fieldNames = @getFieldNames()
-    $.when.apply($, _.map(fieldNames, model.getAllowedValues, model)).then (avs...) =>
+    Promise.all(_.map(fieldNames, model.getAllowedValues, model)).then (avs...) =>
       _.reduce(avs, (result, av, index) ->
         result[fieldNames[index]] = av
         result

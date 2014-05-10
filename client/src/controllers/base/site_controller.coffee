@@ -1,4 +1,3 @@
-$ = require 'jquery'
 RegionController = require 'controllers/base/region_controller'
 SiteView = require 'views/site'
 

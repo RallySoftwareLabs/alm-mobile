@@ -47,9 +47,7 @@ module.exports = class BoardStore extends BaseStore
         col
 
   _fetchCards: ->
-    $.when(
-      @artifacts.fetch(@_getFetchData(@boardColumns))
-    ).always =>
+    @artifacts.fetch(@_getFetchData(@boardColumns)).then =>
       @artifacts.each (artifact) =>
         column = _.find @columns, _.isAttributeEqual('value', artifact.get(@boardField))
         column.artifacts.add artifact

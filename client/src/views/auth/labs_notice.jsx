@@ -1,5 +1,4 @@
 /** @jsx React.DOM */
-var $ = require('jquery');
 var React = require('react');
 var ReactView = require('views/base/react_view');
 var app = require('application');
@@ -30,15 +29,15 @@ module.exports = ReactView.createBackboneClass({
     );
   },
 
-  accept: function(event) {
+  accept: function(e) {
     app.aggregator.recordAction({component: this, description: 'accepted labs notice'});
     this.publishEvent('accept');
-    event.preventDefault();
+    e.preventDefault();
   },
 
-  reject: function(event) {
+  reject: function(e) {
     app.aggregator.recordAction({component: this, description: 'rejected labs notice'});
     this.publishEvent('reject');
-    event.preventDefault();
+    e.preventDefault();
   }
 });

@@ -1,3 +1,4 @@
+Promise = require('es6-promise').Promise
 appConfig = require 'app_config'
 Collection = require 'collections/collection'
 Workspace = require 'models/workspace'
@@ -10,9 +11,7 @@ module.exports = class Workspaces extends Collection
 
   @fetchAll: ->
     if @::workspaces
-      d = $.Deferred()
-      d.resolve @::workspaces
-      d.promise()
+      Promise.resolve @::workspaces
     else
       @::workspaces = workspaces = new Workspaces()
       workspaces.fetchAllPages(

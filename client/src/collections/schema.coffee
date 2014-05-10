@@ -1,4 +1,4 @@
-$ = require 'jquery'
+Promise = require('es6-promise').Promise
 _ = require 'underscore'
 appConfig = require 'app_config'
 utils = require 'lib/utils'
@@ -46,23 +46,22 @@ module.exports = class Schema extends Collection
     attribute = _.find(@getAttributes(model), ElementName: fieldName)
 
   _getAttributeAllowedValues: (attr) ->
-    deferred = $.Deferred()
-    if _.isArray attr.AllowedValues
-      deferred.resolve(
-        _.map(
-          attr.AllowedValues,
-          (value) -> _.extend(value, AllowedValueType: attr.AllowedValueType)
+    new Promise (resolve, reject) ->
+      if _.isArray attr.AllowedValues
+        resolve(
+          _.map(
+            attr.AllowedValues,
+            (value) -> _.extend(value, AllowedValueType: attr.AllowedValueType)
+          )
         )
-      )
-    else if attr.Constrained
-      av = new AllowedValues()
-      av.clientMetricsParent = this
-      av.url = attr.AllowedValues._ref
-      av.fetch().then ->
-        deferred.resolve av.map((value) ->
-          _.extend(value.toJSON(), AllowedValueType: attr.AllowedValueType)
-        )
-    else
-      deferred.resolve []
+      else if attr.Constrained
+        av = new AllowedValues()
+        av.clientMetricsParent = this
+        av.url = attr.AllowedValues._ref
+        av.fetch().then ->
+          resolve av.map((value) ->
+            _.extend(value.toJSON(), AllowedValueType: attr.AllowedValueType)
+          )
+      else
+        resolve []
     
-    deferred.promise()

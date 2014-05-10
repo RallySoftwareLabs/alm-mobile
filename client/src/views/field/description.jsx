@@ -42,9 +42,9 @@ module.exports = ReactView.createBackboneClass({
     );
   },
 
-  _onKeyDown: function(event) {
-    if (event.which === this.keyCodes.ESCAPE_KEY) {
-      this._switchToViewMode();
+  _onKeyDown: function(e) {
+    if (e.key === 'Esc' || e.key === 'Escape') {
+      this.onKeyDown(e);
     }
   },
 

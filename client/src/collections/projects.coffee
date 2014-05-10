@@ -1,3 +1,4 @@
+Promise = require('es6-promise').Promise
 appConfig = require 'app_config'
 Collection = require 'collections/collection'
 Project = require 'models/project'
@@ -10,9 +11,7 @@ module.exports = class Projects extends Collection
 
   @fetchAll: ->
     if @::projects
-      d = $.Deferred()
-      d.resolve @::projects
-      d.promise()
+      Promise.resolve @::projects
     else
       @::projects = projects = new Projects()
       projects.fetchAllPages(

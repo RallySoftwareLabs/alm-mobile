@@ -1,3 +1,4 @@
+Promise = require('es6-promise').Promise
 appConfig = require 'app_config'
 PortfolioItem = require 'models/portfolio_item'
 PortfolioItems = require 'collections/portfolio_items'
@@ -35,19 +36,15 @@ module.exports = {
 
   fetchTypes: ->
     if @piTypeDefinitions
-      d = $.Deferred()
-      d.resolve(@piTypeDefinitions)
-      return d.promise()
+      return @piTypeDefinitions
       
     piTypeDefinitions = new TypeDefinitions()
-    piTypeDefinitions.fetchAllPages(
+    @piTypeDefinitions = piTypeDefinitions.fetchAllPages(
       data:
         fetch: 'Name,TypePath,Ordinal'
         query: '(Parent.Name = "Portfolio Item")'
         order: 'Ordinal'
-    ).then (value) =>
-      @piTypeDefinitions = piTypeDefinitions
-      value
+    )
 
   clear: -> @piTypeDefinitions = null
 

@@ -1,5 +1,4 @@
 /** @jsx React.DOM */
-var $ = require('jquery');
 var React = require('react');
 var ReactView = require('views/base/react_view');
 var app = require('application');
@@ -33,7 +32,7 @@ module.exports = ReactView.createBackboneClass({
         <form className="reply-form" role="form" onSubmit={this._onSubmit}>
           <div className="discussion-reply input-group">
             <label className="sr-only" htmlFor="comment-input">Comment</label>
-            <input type="text" id="comment-input" className="form-control" placeholder="Enter comments"/>
+            <input ref="inputField" type="text" id="comment-input" className="form-control" placeholder="Enter comments"/>
             <span className="input-group-btn">
              <button type="submit" className="btn btn-primary" onclick={this._onSubmit}>Reply</button>
             </span>
@@ -46,15 +45,15 @@ module.exports = ReactView.createBackboneClass({
   clearInputField: function() {
     var inputField = this._getInputField();
     inputField.focus();
-    inputField.val('');
+    inputField.value = '';
   },
-  _onSubmit: function(event) {
+  _onSubmit: function(e) {
     app.aggregator.recordAction({component: this, description: 'clicked reply'});
-    text = this._getInputField().val();
+    text = this._getInputField().value;
     this.publishEvent('reply', this, text);
-    event.preventDefault();
+    e.preventDefault();
   },
   _getInputField: function() {
-    return $(this.getDOMNode()).find('.discussion-reply input');
+    return this.refs.inputField.getDOMNode();
   }
 });

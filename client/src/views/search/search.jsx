@@ -16,6 +16,11 @@ module.exports = ReactView.createBackboneClass({
     };
   },
 
+  componentWillReceiveProps: function(newProps) {
+    this.setState({ keywords: newProps.keywords });
+    this._getInputField().focus();
+  },
+
   render: function() {
     return (
       <div id="search-view">
@@ -38,14 +43,14 @@ module.exports = ReactView.createBackboneClass({
     );
   },
 
-  handleChange: function(event) {
-    this.setState({keywords: event.target.value});
+  handleChange: function(e) {
+    this.setState({keywords: e.target.value});
   },
 
-  onSearch: function(event) {
+  onSearch: function(e) {
     app.aggregator.recordAction({component: this, description: 'search submitted'});
     this.publishEvent('search', this.state.keywords);
-    event.preventDefault();
+    e.preventDefault();
   },
 
   _getInputField: function() {

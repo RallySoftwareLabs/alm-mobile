@@ -1,4 +1,3 @@
-$ = require 'jquery'
 _ = require 'underscore'
 app = require 'application'
 utils = require 'lib/utils'

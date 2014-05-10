@@ -55,13 +55,13 @@ module.exports = ReactView.createBackboneClass({
     $('body').removeClass('login-body');
   },
 
-  signIn: function(event) {
+  signIn: function(e) {
     app.aggregator.recordAction({component: this, description: 'logging in'});
     $('.alert').hide();
     username = $('#username').val();
     password = $('#password').val();
     this.publishEvent('submit', this, username, password);
-    event.preventDefault();
+    e.preventDefault();
   },
 
   showError: function(error) {

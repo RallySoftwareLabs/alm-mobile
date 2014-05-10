@@ -1,12 +1,11 @@
+Promise = require('es6-promise').Promise
 pagesize = 200
 
 module.exports = {
   fetchAllPages: (options = {}) ->
     options.data ?= {}
     options.data.pagesize ?= pagesize
-    $.when(
-      @fetch(options)
-    ).then (firstFetch) =>
+    @fetch(options).then (firstFetch) =>
       totalResults = firstFetch.QueryResult.TotalResultCount
       @_fetchRemaining(totalResults, options)
 
@@ -20,6 +19,6 @@ module.exports = {
       start += pagesize
       fetch
 
-    $.when.apply($, remainingFetches).then =>
+    Promise.all(remainingFetches).then =>
       @trigger('complete')
 }

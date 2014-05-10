@@ -1,4 +1,4 @@
-$ = require 'jquery'
+Promise = require('es6-promise').Promise
 appConfig = require 'app_config'
 Model = require 'models/base/model'
 Artifacts = require 'collections/artifacts'
@@ -8,7 +8,7 @@ module.exports = class Iteration extends Model
   urlRoot: appConfig.almWebServiceBaseUrl + '/webservice/@@WSAPI_VERSION/iteration'
 
   fetchScheduledItems: (fetchConfig = {}) ->
-    $.when(
+    Promise.resolve(
       if @artifacts
         @artifacts
       else

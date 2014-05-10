@@ -30,7 +30,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'indexHtml', "Generates the index.html page", ['compile-handlebars:allStatic']
   grunt.registerTask 'heroku', ['clean','less','indexHtml', 'copy:js','browserify:app','replace:js','copy','concat']
 
-  srcFiles = grunt.file.expand ['client/src/**/*.coffee', 'client/src/**/*.jsx']
+  srcFiles = grunt.file.expand ['client/src/**/*.js', 'client/src/**/*.coffee', 'client/src/**/*.jsx']
   testFiles = grunt.file.expand ['client/test/**/*_spec.js']
 
   # Takes grunt-browserify aliasMappings config and converts it into an alias array
@@ -70,7 +70,7 @@ module.exports = (grunt) ->
     ]
     alias: aliasMappingsToAliasArray({
       cwd: 'client/src',
-      src: ['**/*.coffee', '**/*.jsx'],
+      src: ['**/*.js', '**/*.coffee', '**/*.jsx'],
       dest: ''
     }).concat(externalBrowserifyAliases)
     external: [
@@ -100,7 +100,7 @@ module.exports = (grunt) ->
     #watch and compile all folders separately for the quickest compile time
     watch:
       clientSrc:
-        files: ['client/src/**/*.coffee', 'client/src/views/**/*.jsx']
+        files: ['client/src/**/*.js', 'client/src/**/*.coffee', 'client/src/views/**/*.jsx']
         tasks: ['browserify:app', 'replace:js', 'copy:js']
 
       clientTest:
@@ -142,7 +142,7 @@ module.exports = (grunt) ->
     browserify:
       app:
         options: sharedBrowserifyConfig,
-        src: ['client/src/initialize.coffee', 'client/src/controllers/**/*.coffee'],
+        src: ['client/src/initialize.coffee', 'client/src/controllers/**/*.js', 'client/src/controllers/**/*.coffee'],
         dest: 'client/gen/js/src/app.js'
 
       test:

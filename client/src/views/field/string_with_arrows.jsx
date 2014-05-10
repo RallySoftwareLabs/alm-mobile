@@ -113,6 +113,7 @@ module.exports = ReactView.createBackboneClass({
   },
 
   _onRightArrow: function(e) {
+    app.aggregator.recordAction({ component: this, description: 'clicked right arrow of ' + this.props.label + ' field'});
     e.preventDefault();
     e.stopPropagation();
     var newValue = this._getNextValue();
@@ -125,6 +126,7 @@ module.exports = ReactView.createBackboneClass({
   },
 
   _onLeftArrow: function(e) {
+    app.aggregator.recordAction({ component: this, description: 'clicked left arrow of ' + this.props.label + ' field'});
     e.preventDefault();
     e.stopPropagation();
     var newValue = this._getPreviousValue();

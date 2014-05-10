@@ -78,11 +78,12 @@ module.exports = {
 
     val
 
-  onKeyDown: (event) ->
-    switch event.key
-      when "Enter" then @endEdit event
+  onKeyDown: (e) ->
+    switch e.key
+      when "Enter" then @endEdit e
       when "Esc", "Escape"
-        @setState editMode: false, -> @getFocusNode?().focus()
+        if @_isExistingObject()
+          @setState editMode: false, -> @getFocusNode?().focus()
 
   getInputMarkup: ->
     React.DOM.input(

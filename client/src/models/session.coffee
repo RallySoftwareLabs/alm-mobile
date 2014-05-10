@@ -1,3 +1,5 @@
+$ = require 'jquery';
+Promise = require('es6-promise').Promise
 appConfig = require 'app_config'
 utils = require 'lib/utils'
 Model = require 'models/base/model'
@@ -102,9 +104,7 @@ module.exports = class Session extends Model
 
   acceptLabsNotice: ->
     @aggregator.beginLoad component: this, description: 'accepting labs notics'
-    $.when(
-      @get('prefs').updatePreference @get('user'), Preference::acceptedLabsNotice, true
-    )
+    @get('prefs').updatePreference @get('user'), Preference::acceptedLabsNotice, true
 
   logout: (options = {}) ->
     @setSecurityToken null
@@ -142,7 +142,7 @@ module.exports = class Session extends Model
       columns = savedColumns.get 'Value'
 
     visibleColumns = if columns then columns.split ',' else @_getDefaultBoardColumns(boardField)
-    $.when(visibleColumns).then (cols) =>
+    Promise.resolve(visibleColumns).then (cols) =>
       @setBoardColumns boardField, cols
     visibleColumns
 
@@ -167,21 +167,22 @@ module.exports = class Session extends Model
 
         _.intersection(columns, shownColumns.concat([column]))
 
-    $.when(newColumns).then (cols) =>
+    Promise.resolve(newColumns).then (cols) =>
       @setBoardColumns boardField, cols
 
   setBoardColumns: (boardField, columns) ->
     @aggregator.beginLoad component: this, description: 'saving board columns'
     pref = "#{Preference::defaultBoardColumnsPrefix}.#{boardField}"
-    projectOid = utils.getOidFromRef @get('project').get('_ref')
+    projectRef = @get('project').get('_ref')
+    projectOid = utils.getOidFromRef projectRef
 
     @set "#{pref}.#{projectOid}", columns
     @get('prefs').updateProjectPreference(
       @get('user').get('_ref'),
-      @get('project').get('_ref'),
+      projectRef,
       pref,
       columns.join(',')
-    ).always => @aggregator.endLoad component: this
+    ).then => @aggregator.endLoad component: this
 
   _getDefaultBoardColumns: (boardField) ->
     switch boardField
@@ -240,7 +241,7 @@ module.exports = class Session extends Model
     iterations.clientMetricsParent = this
     @set 'iterations', iterations
 
-    $.when(
+    Promise.all([
       @loadSchema(value),
       iterations.fetchAllPages(
         data:
@@ -248,7 +249,7 @@ module.exports = class Session extends Model
           order: 'StartDate DESC,EndDate DESC,ObjectID'
           query: "(Project = \"#{projectRef}\")"
       )
-    ).then (s, i) =>
+    ]).then (s, i) =>
       @initColumnsFor @get('boardField')
       @_setSessionIteration()
       @aggregator.endLoad component: this

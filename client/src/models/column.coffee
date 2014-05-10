@@ -1,4 +1,3 @@
-$ = require 'jquery'
 Model = require 'models/base/model'
 Artifacts = require 'collections/artifacts'
 

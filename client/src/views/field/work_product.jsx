@@ -1,5 +1,4 @@
 /** @jsx React.DOM */
-var $ = require('jquery');
 var React = require('react');
 var utils = require('lib/utils');
 var ReactView = require('views/base/react_view');
