@@ -1,5 +1,4 @@
 /** @jsx React.DOM */
-var $ = require('jquery');
 var Backbone = require('backbone');
 var React = require('react');
 var ReactView = require('views/base/react_view');
