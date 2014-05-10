@@ -5,7 +5,7 @@ var Messageable = require('lib/messageable');
 var app = require('application');
 var Projects = require('collections/projects');
 
-chai.Assertion.includeStack = true;
+chai.config.includeStack = true;
 chai.use(sinonChai);
 window.expect = chai.expect;
 
@@ -20,6 +20,7 @@ var sinonSandboxSetUp = function(spec) {
 
 var sinonSandboxTearDown = function(spec) {
     spec.__sandbox__.verifyAndRestore();
+    delete spec.__sandbox__;
 };
 
 beforeEach(function() {
