@@ -7,14 +7,14 @@ DiscussionView = require 'views/discussion/discussion'
 
 module.exports = class DiscussionController extends SiteController
   show: (type, id) ->
-    @whenProjectIsLoaded ->
+    @whenProjectIsLoaded().then =>
       @discussions = new Discussions()
 
       @artifactRef = utils.getRef(type, id)
 
       @renderReactComponent DiscussionView, model: @discussions, region: 'main'
 
-      @subscribeEvent 'reply', @onReplyClick
+      @subscribeEvent 'reply', @_onReplyClick
 
       @discussions.fetch(
         data:
@@ -23,7 +23,7 @@ module.exports = class DiscussionController extends SiteController
           order: "CreationDate DESC"
       ).then => @markFinished()
 
-  onReplyClick: (view, text) ->
+  _onReplyClick: (view, text) ->
     if text
       updates =
         Text: text

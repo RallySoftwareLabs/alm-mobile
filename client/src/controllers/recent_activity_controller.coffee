@@ -6,7 +6,7 @@ DiscussionView = require 'views/discussion/discussion'
 module.exports = class RecentActivityController extends SiteController
 
   show: (params) ->
-    @whenProjectIsLoaded ->
+    @whenProjectIsLoaded().then =>
       discussions = new Discussions()
       discussions.fetch(
         data:
@@ -15,7 +15,7 @@ module.exports = class RecentActivityController extends SiteController
           projectScopeUp: false
           projectScopeDown: true
           order: "CreationDate DESC"
-      ).always => @markFinished()
+      ).then => @markFinished()
       
       @renderReactComponent(DiscussionView,
         region: 'main'

@@ -38,7 +38,7 @@ module.exports = class AssociationsController extends SiteController
   _createAssociationView: (model, association, reverseAssociation) ->
     associatedItems = @_getAssociatedCollection(model, association)
 
-    @whenProjectIsLoaded ->
+    @whenProjectIsLoaded().then =>
       
       @_fetchAssociation model, associatedItems, association, reverseAssociation
 

@@ -35,7 +35,7 @@ module.exports = class HomeController extends SiteController
       'defects'
 
   _fetchCollectionAndRender: (collection, fetch, query, tab) ->
-    @whenProjectIsLoaded =>
+    @whenProjectIsLoaded().then =>
       collection.fetch(data: @_getFetchData(fetch, query)).always => @markFinished()
       @renderReactComponent(HomeView,
         tab: tab

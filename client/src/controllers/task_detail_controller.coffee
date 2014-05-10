@@ -10,15 +10,15 @@ module.exports = class TaskDetailController extends SiteController
   _.extend @prototype, DetailControllerMixin
 
   show: (id) ->
-    @whenProjectIsLoaded ->
+    @whenProjectIsLoaded().then =>
       @fetchModelAndShowView Task, View, id
 
   create: ->
-    @whenProjectIsLoaded ->
+    @whenProjectIsLoaded().then =>
       @showCreateView Task, View
 
   taskForDefect: (id) ->
-    @whenProjectIsLoaded ->
+    @whenProjectIsLoaded().then =>
       model = new Defect(_refObjectUUID: id)
       model.fetch
         data:
@@ -28,7 +28,7 @@ module.exports = class TaskDetailController extends SiteController
           @showCreateView Task, View, WorkProduct: model.attributes
 
   taskForStory: (id) ->
-    @whenProjectIsLoaded ->
+    @whenProjectIsLoaded().then =>
       model = new UserStory(_refObjectUUID: id)
       model.fetch
         data:

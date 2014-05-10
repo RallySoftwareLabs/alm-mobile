@@ -10,15 +10,15 @@ module.exports = class DefectDetailController extends SiteController
   _.extend @prototype, DetailControllerMixin
 
   show: (id) ->
-    @whenProjectIsLoaded ->
+    @whenProjectIsLoaded().then =>
       @fetchModelAndShowView Defect, View, id
 
   create: ->
-    @whenProjectIsLoaded ->
+    @whenProjectIsLoaded().then =>
       @showCreateView Defect, View
 
   defectForStory: (id) ->
-    @whenProjectIsLoaded ->
+    @whenProjectIsLoaded().then =>
       model = new UserStory(_refObjectUUID: id)
       model.fetch
         data:
@@ -28,7 +28,7 @@ module.exports = class DefectDetailController extends SiteController
           @showCreateView Defect, View, Requirement: model.attributes
 
   defectForColumn: (column) ->
-    @whenProjectIsLoaded ->
+    @whenProjectIsLoaded().then =>
       props = {}
       props[app.session.get('boardField')] = column
       iterationRef = app.session.get('iteration')?.get('_ref')

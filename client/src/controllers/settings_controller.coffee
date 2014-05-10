@@ -10,7 +10,7 @@ BoardSettingsView = require 'views/settings/board_settings'
 module.exports = class SettingsController extends SiteController
 
   show: (params) ->
-    @whenProjectIsLoaded ->
+    @whenProjectIsLoaded().then =>
       @renderReactComponent(SettingsView, region: 'main', model: app.session, projects: Projects::projects).then (view) =>
         @subscribeEvent 'changeMode', @onChangeMode
         @subscribeEvent 'changeBoardField', @onChangeBoardField
@@ -22,7 +22,7 @@ module.exports = class SettingsController extends SiteController
         @markFinished()
 
   board: (params) ->
-    @whenProjectIsLoaded ->
+    @whenProjectIsLoaded().then =>
       boardField = app.session.get('boardField')
       fieldName = UserStory.getFieldDisplayName boardField
       UserStory.getAllowedValues(boardField).then (allowedValues) =>

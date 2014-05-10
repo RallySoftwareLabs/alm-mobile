@@ -1,3 +1,4 @@
+Promise = require('es6-promise').Promise
 app = require 'application'
 appConfig = require 'app_config'
 Messageable = require 'lib/messageable'
@@ -9,36 +10,33 @@ module.exports = class Controller
 
   _.extend @prototype, Messageable
     
-  whenProjectIsLoaded: (options) ->
-    if _.isFunction(options)
-      callback = options
-    else
-      callback = options.fn
-      projectRef = "#{appConfig.almWebServiceBaseUrl}/webservice/@@WSAPI_VERSION/project/#{options.project}"
+  whenProjectIsLoaded: (options = {}) ->
+    new Promise (resolve, reject) =>
+      if options.project
+        projectRef = "#{appConfig.almWebServiceBaseUrl}/webservice/@@WSAPI_VERSION/project/#{options.project}"
 
-    sessionProject = app.session.get('project')
-    if sessionProject?
-      if !projectRef || _.contains(sessionProject.get('_ref'), projectRef)
-        callback?.apply this
+      sessionProject = app.session.get('project')
+      if sessionProject?
+        if !projectRef || _.contains(sessionProject.get('_ref'), projectRef)
+          resolve()
+        else
+          project = Projects::projects.find _.isAttributeEqual '_ref', projectRef
+          @_renderLoadingIndicatorUntilProjectIsReady(options.showLoadingIndicator).then ->
+            resolve()
+          app.session.set 'project', project
       else
-        project = Projects::projects.find _.isAttributeEqual '_ref', projectRef
-        @_renderLoadingIndicatorUntilProjectIsReady(callback, options.showLoadingIndicator)
-        app.session.set 'project', project
-    else
-      @_renderLoadingIndicatorUntilProjectIsReady(callback, options.showLoadingIndicator)
-      app.session.initSessionForUser(projectRef)
+        @_renderLoadingIndicatorUntilProjectIsReady(options.showLoadingIndicator).then ->
+          resolve()
+        app.session.initSessionForUser(projectRef)
 
   listenForRealtimeUpdates: (options, callback, scope) ->
     @websocket = realtimeUpdater.listenForRealtimeUpdates(options, callback, scope)
 
-  _onProjectReady: (callback) ->
-    func = =>
-      callback?.apply this
-
-  _renderLoadingIndicatorUntilProjectIsReady: (callback, showLoadingIndicator) ->
-    if showLoadingIndicator != false
-      @renderReactComponent LoadingIndicatorView, region: 'main', text: 'Initializing'
-    @subscribeEventOnce 'projectready', @_onProjectReady(callback)
+  _renderLoadingIndicatorUntilProjectIsReady: (showLoadingIndicator) ->
+    new Promise (resolve, reject) =>
+      if showLoadingIndicator != false
+        @renderReactComponent LoadingIndicatorView, region: 'main', text: 'Initializing'
+      @subscribeEventOnce 'projectready', -> resolve()
 
   updateTitle: (title) ->
     @publishEvent "updatetitle", title

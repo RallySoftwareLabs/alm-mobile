@@ -10,15 +10,15 @@ module.exports = class UserStoryDetailController extends SiteController
   _.extend @prototype, DetailControllerMixin
 
   show: (id) ->
-    @whenProjectIsLoaded ->
+    @whenProjectIsLoaded().then =>
       @fetchModelAndShowView UserStory, View, id
 
   create: ->
-    @whenProjectIsLoaded ->
+    @whenProjectIsLoaded().then =>
       @showCreateView UserStory, View
 
   childForStory: (id) ->
-    @whenProjectIsLoaded ->
+    @whenProjectIsLoaded().then =>
       model = new UserStory(_refObjectUUID: id)
       model.fetch
         data:
@@ -28,7 +28,7 @@ module.exports = class UserStoryDetailController extends SiteController
           @showCreateView UserStory, View, Parent: model.attributes
 
   childForPortfolioItem: (id) ->
-    @whenProjectIsLoaded ->
+    @whenProjectIsLoaded().then =>
       model = new PortfolioItem(_refObjectUUID: id)
       model.fetch
         data:
@@ -38,7 +38,7 @@ module.exports = class UserStoryDetailController extends SiteController
           @showCreateView UserStory, View, PortfolioItem: model.attributes
 
   storyForColumn: (column) ->
-    @whenProjectIsLoaded ->
+    @whenProjectIsLoaded().then =>
       props = {}
       props[app.session.get('boardField')] = column
       iterationRef = app.session.get('iteration')?.get('_ref')

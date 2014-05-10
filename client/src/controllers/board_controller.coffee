@@ -9,7 +9,7 @@ ColumnView = require 'views/board/column'
 
 module.exports = class BoardController extends SiteController
   index: (colValue) ->
-    @whenProjectIsLoaded =>
+    @whenProjectIsLoaded().then =>
       @updateTitle app.session.getProjectName()
 
       @renderReactComponent(BoardView,

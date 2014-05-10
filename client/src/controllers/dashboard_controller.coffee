@@ -12,7 +12,7 @@ module.exports = class DoubleBoardController extends RegionController
   view: DashboardView
 
   index: (colValue) ->
-    @whenProjectIsLoaded =>
+    @whenProjectIsLoaded().then =>
       @updateTitle app.session.getProjectName()
 
       @renderReactComponents([{

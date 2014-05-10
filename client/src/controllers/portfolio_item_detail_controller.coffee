@@ -9,15 +9,15 @@ module.exports = class PortfolioItemDetailController extends SiteController
   _.extend @prototype, DetailControllerMixin
 
   show: (id) ->
-    @whenProjectIsLoaded ->
+    @whenProjectIsLoaded().then =>
       @fetchModelAndShowView PortfolioItem, View, id
 
   create: ->
-    @whenProjectIsLoaded ->
+    @whenProjectIsLoaded().then =>
       @showCreateView PortfolioItem, View
 
   newChild: (id) ->
-    @whenProjectIsLoaded ->
+    @whenProjectIsLoaded().then =>
       model = new PortfolioItem(_refObjectUUID: id)
       model.fetch
         data:
