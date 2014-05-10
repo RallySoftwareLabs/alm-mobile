@@ -1,6 +1,8 @@
+var Promise = require('es6-promise').Promise;
 var PortfolioItemModelFactory = require('lib/portfolio_item_model_factory');
 var PortfolioItems = require('collections/portfolio_items');
 var PortfolioItem = require('models/portfolio_item');
+
 beforeEach(function() {
     this.stubPIFactory = function() {
         this.featureModel = PortfolioItem.extend({
@@ -22,7 +24,7 @@ beforeEach(function() {
             typePath: '/portfolioitem/initiative'
         });
         this.piModelFactoryStub = this.stub(PortfolioItemModelFactory, 'getCollection');
-        this.piModelFactoryStub.withArgs(0).returns(this.promiseResolvingTo(this.featuresCollection));
-        this.piModelFactoryStub.withArgs(1).returns(this.promiseResolvingTo(this.initiativesCollection));
+        this.piModelFactoryStub.withArgs(0).returns(Promise.resolve(this.featuresCollection));
+        this.piModelFactoryStub.withArgs(1).returns(Promise.resolve(this.initiativesCollection));
     };
 });

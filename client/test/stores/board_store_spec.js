@@ -74,25 +74,27 @@ describe('stores/board', function() {
             this.boardStore.load();
             expect(this.fetchStub.firstCall.args[0].data.query).to.contain('(Iteration = "/iteration/987")');
         });
-        it('should populate columns with results', function() {
+        it('should populate columns with results', function(done) {
             this.boardStore = new BoardStore({
                 boardField: this.boardField,
                 boardColumns: this.boardColumns,
                 project: this.project
             });
-            this.boardStore.load();
-            var columns = this.boardStore.getColumns();
-            var abcColumn = _.find(columns, _.isAttributeEqual('value', 'abc'));
-            expect(abcColumn.artifacts).to.have.length(2);
-            expect(
-                abcColumn.artifacts.map(_.getAttribute('Name'))
-            ).to.eql(['1', '2']);
-            
-            var defColumn = _.find(columns, _.isAttributeEqual('value', 'def'));
-            expect(defColumn.artifacts).to.have.length(1);
-            expect(
-                defColumn.artifacts.map(_.getAttribute('Name'))
-            ).to.eql(['3']);
+            this.boardStore.load().then(_.bind(function() {
+                var columns = this.boardStore.getColumns();
+                var abcColumn = _.find(columns, _.isAttributeEqual('value', 'abc'));
+                expect(abcColumn.artifacts).to.have.length(2);
+                expect(
+                    abcColumn.artifacts.map(_.getAttribute('Name'))
+                ).to.eql(['1', '2']);
+                
+                var defColumn = _.find(columns, _.isAttributeEqual('value', 'def'));
+                expect(defColumn.artifacts).to.have.length(1);
+                expect(
+                    defColumn.artifacts.map(_.getAttribute('Name'))
+                ).to.eql(['3']);
+                done();
+            }, this));
         });
     });
 
