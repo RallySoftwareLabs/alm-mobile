@@ -22,11 +22,11 @@ _.extend(IterationStore, {
       }
     }).then(function() {
       me.trigger('change');
-      me.iteration.fetchScheduledItems().then(_.bind(function(scheduledItems) {
-        me.scheduledItems = scheduledItems;
-        me.trigger('change');
-        app.aggregator.recordComponentReady({ component: me });
-      }, me));
+      return me.iteration.fetchScheduledItems();
+    }).then(function(scheduledItems) {
+      me.scheduledItems = scheduledItems;
+      me.trigger('change');
+      app.aggregator.recordComponentReady({ component: me });
     });
   },
 
