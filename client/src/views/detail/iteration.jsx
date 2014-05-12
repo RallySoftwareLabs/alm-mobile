@@ -11,7 +11,8 @@ var TitledWellView = require('views/field/titled_well');
 module.exports = ReactView.createBackboneClass({
   mixins: [PlanStatusMixin, DetailMixin],
   getInitialState: function() {
-    var store = new IterationStore({
+    var store = Object.create(IterationStore);
+    store.init({
       iterationId: this.props.iterationId
     });
     return {

@@ -71,15 +71,17 @@ module.exports = ReactView.createBackboneClass({
   },
 
   _buildStoreFromProps: function(props) {
-    return new BoardStore({
-        boardField: props.boardField,
-        boardColumns: props.boardColumns,
-        project: props.project,
-        iteration: props.iteration,
-        iterations: props.iterations,
-        user: props.user,
-        visibleColumn: props.visibleColumn
-      });
+    var store = Object.create(BoardStore);
+    store.init({
+      boardField: props.boardField,
+      boardColumns: props.boardColumns,
+      project: props.project,
+      iteration: props.iteration,
+      iterations: props.iterations,
+      user: props.user,
+      visibleColumn: props.visibleColumn
+    });
+    return store;
   },
 
   _onColumnClick: function(view, column) {

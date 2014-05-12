@@ -23,10 +23,10 @@ module.exports = class BoardController extends SiteController
         user: if app.session.isSelfMode() then app.session.get('user')
       ).then (view) =>
         @listenTo(view, 'columnzoom', @_onColumnZoom)
-        @listenTo(view, 'modelselected', @_onCardClick)
+        @listenTo(view, 'modelselected', @_onModelSelected)
 
   _onColumnZoom: (col) ->
     @updateUrl "board/#{col.get('value')}"
 
-  _onCardClick: (view, model) ->
+  _onModelSelected: (view, model) ->
     @redirectTo utils.getDetailHash(model)
