@@ -46,7 +46,7 @@ buildRoute = (path, handler, options = {}) ->
           @navigate 'labsNotice', trigger: true, replace: true
       else
         @afterLogin ?= Backbone.history.fragment unless _.contains(['login', 'logout', 'labsNotice'], path)
-        @navigate 'logout', trigger: true
+        document.location
 
 module.exports = {
 

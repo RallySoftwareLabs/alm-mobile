@@ -2,6 +2,12 @@
     "config": {
         "almWebServiceBaseUrl": "https://rally1.rallydev.com/slm",
         "appName": "Rally ALM Mobile",
-        "defaultRoute": "/board"
+        "defaultRoute": "/board",
+        "oauth": {
+        	"CLIENT_ID": "ABCD",
+        	"CLIENT_SECRET": "ABCD",
+        	"SERVER_URL": "http://localhost:3000",
+        	"OAUTH_SERVER": "https://rally1.rallydev.com/login/oauth2"
+        }
     }
 }

@@ -17,8 +17,8 @@ Users = require 'collections/users'
 module.exports = class Session extends Model
   initialize: (@clientMetricsParent, @aggregator) ->
     super
-    @set
-      securityToken: window.sessionStorage.getItem 'token'
+    # @set
+    #   securityToken: window.sessionStorage.getItem 'token'
     @listenTo this, 'change:user', @_onUserChange
     @listenTo this, 'change:mode', @_onModeChange
     @listenTo this, 'change:boardField', @_onBoardFieldChange
@@ -26,7 +26,7 @@ module.exports = class Session extends Model
     @listenTo this, 'change:iteration', @_onIterationChange
 
   authenticated: (cb) ->
-    return cb? false if !@get('securityToken')
+    # return cb? false if !@get('securityToken')
     return cb? true if @get('user')
 
     @aggregator.beginLoad component: this, description: 'fetching logged-in user and prefs'
@@ -86,12 +86,12 @@ module.exports = class Session extends Model
   isSelfMode: -> @get('mode') == 'self'
   isTeamMode: -> @get('mode') == 'team'
 
-  setSecurityToken: (securityToken) ->
-    @set 'securityToken', securityToken
-    window.sessionStorage.setItem 'token', if securityToken then securityToken else ''
+  # setSecurityToken: (securityToken) ->
+  #   @set 'securityToken', securityToken
+  #   window.sessionStorage.setItem 'token', if securityToken then securityToken else ''
 
-  getSecurityToken: ->
-    @get 'securityToken'
+  # getSecurityToken: ->
+  #   @get 'securityToken'
 
   setUsername: (username) ->
     window.sessionStorage.setItem 'username', if username then username else ''
@@ -107,24 +107,24 @@ module.exports = class Session extends Model
     @get('prefs').updatePreference @get('user'), Preference::acceptedLabsNotice, true
 
   logout: (options = {}) ->
-    @setSecurityToken null
+    # @setSecurityToken null
     @setUsername null
     @clear silent: true
 
     window.sessionStorage.removeItem('username')
-    window.sessionStorage.removeItem('token')
+    # window.sessionStorage.removeItem('token')
     for key of window.sessionStorage
       window.sessionStorage.removeItem(key) if key.indexOf('iteration.') == 0
 
-    @aggregator.beginLoad component: this, description: 'logging out'
-    $.ajax(
-      url: "#{appConfig.almWebServiceBaseUrl}/resources/jsp/security/clear.jsp"
-      type: 'GET'
-      dataType: 'html'
-      beforeSend: (xhr) ->
-        xhr.setRequestHeader("X-Requested-By", "Rally")
-        xhr.setRequestHeader("X-RallyIntegrationName", appConfig.appName)
-    ).always => @aggregator.endLoad component: this
+    # @aggregator.beginLoad component: this, description: 'logging out'
+    # $.ajax(
+    #   url: "#{appConfig.almWebServiceBaseUrl}/resources/jsp/security/clear.jsp"
+    #   type: 'GET'
+    #   dataType: 'html'
+    #   beforeSend: (xhr) ->
+    #     xhr.setRequestHeader("X-Requested-By", "Rally")
+    #     xhr.setRequestHeader("X-RallyIntegrationName", appConfig.appName)
+    # ).always => @aggregator.endLoad component: this
         
   _fetchUserInfo: (cb) ->
     user = new User()
