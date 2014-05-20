@@ -12,6 +12,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-contrib-copy'
+  grunt.loadNpmTasks 'grunt-contrib-cssmin'
   grunt.loadNpmTasks 'grunt-compile-handlebars'
   grunt.loadNpmTasks 'grunt-contrib-less'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
@@ -21,7 +22,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-text-replace'
   grunt.loadNpmTasks 'grunt-s3'
 
-  grunt.registerTask 'default', ['clean','less','indexHtml', 'copy:js', 'browserify:app', 'replace:js', 'copy:assets', 'concat']
+  grunt.registerTask 'default', ['clean','less','indexHtml', 'copy:js', 'browserify:app', 'replace:js', 'copy:assets', 'concat', 'uglify', 'cssmin']
 
   grunt.registerTask 'test', ['test:conf', 'express:inline', 'mocha']
   grunt.registerTask 'test:conf', ['default', 'browserify:test', 'replace:test', 'replace:testPage']
@@ -101,7 +102,7 @@ module.exports = (grunt) ->
     watch:
       clientSrc:
         files: ['client/src/**/*.js', 'client/src/**/*.coffee', 'client/src/views/**/*.jsx']
-        tasks: ['browserify:app', 'replace:js', 'copy:js']
+        tasks: ['browserify:app', 'replace:js', 'copy:js', 'uglify']
 
       clientTest:
         files: testFiles.concat(['client/test/helpers/**/*.js'])
@@ -109,7 +110,7 @@ module.exports = (grunt) ->
 
       clientStyles:
         files: 'client/styles/**/*.less'
-        tasks: ['less:client', 'concat:css']
+        tasks: ['less:client', 'concat:css', 'cssmin']
 
       clientIndexHtml:
         files: ['client/src/*.hbs']
@@ -165,25 +166,35 @@ module.exports = (grunt) ->
 
     concat:
       css:
-        src: ['client/gen/styles/*.css']
-        dest: 'client/dist/css/app.css'
+        src: ['client/gen/styles/*.css', 'client/assets/css/pageslider-2013-06-06.css']
+        dest: 'client/gen/css/app.css'
+      js:
+        src: [
+          'vendor/scripts/reconnecting-websocket.js'
+          'node_modules/html-md/dist/md.min.js'
+          'node_modules/rallymetrics/builds/rallymetrics.js'
+          'client/dist/js/app.js'
+        ]
+        dest: 'client/dist/js/app-all.js'
 
     copy:
       js:
         files:
           'client/dist/js/jquery.base64.min.js': 'vendor/scripts/jquery.base64.min.js'
-          'client/dist/js/reconnecting-websocket.js': 'vendor/scripts/reconnecting-websocket.js'
-          'client/dist/js/rallymetrics.js': 'node_modules/rallymetrics/builds/rallymetrics.js'
-          'client/dist/js/html-md.js': 'node_modules/html-md/dist/md.min.js'
       assets:
         files: [
           {expand: true, dest: 'client/dist/', cwd: 'client/assets/', src: '**', filter: 'isFile'}
         ]
+
     uglify:
       js:
         files:
-          'client/dist/js/app.min.js' : 'client/dist/js/app.js'
+          'client/dist/js/app-all.min.js' : 'client/dist/js/app-all.js'
 
+    cssmin:
+      css:
+        files:
+          'client/dist/css/app.min.css' : 'client/gen/css/app.css'
     express:
       options:
         bases: [
