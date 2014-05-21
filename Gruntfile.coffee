@@ -102,7 +102,7 @@ module.exports = (grunt) ->
     watch:
       clientSrc:
         files: ['client/src/**/*.js', 'client/src/**/*.coffee', 'client/src/views/**/*.jsx']
-        tasks: ['browserify:app', 'replace:js', 'copy:js', 'uglify']
+        tasks: ['browserify:app', 'replace:js', 'copy:js', 'concat', 'uglify']
 
       clientTest:
         files: testFiles.concat(['client/test/helpers/**/*.js'])
@@ -118,7 +118,7 @@ module.exports = (grunt) ->
 
       clientConfig:
         files: ['config.json']
-        tasks: ['replace:js']
+        tasks: ['replace:js', 'concat', 'uglify']
 
     replace:
       js:
