@@ -6,6 +6,7 @@ var BoardStore = require('stores/board_store');
 var ReactView = require('views/base/react_view');
 var ColumnView = require('views/board/column');
 var IterationHeader = require('views/iteration_header');
+var StatsBanner = require('views/stats_banner');
 
 module.exports = ReactView.createBackboneClass({
   getInitialState: function() {
@@ -36,9 +37,17 @@ module.exports = ReactView.createBackboneClass({
                          iterations={ this.state.store.getIterations() }
                          onChange={ this._onIterationChange }
                          onSelect={ this._onIterationSelect } />
+        { this.getStatsBannerMarkup() }
         <div className="column-container">{this.getColumns()}</div>
       </div>
     );
+  },
+  getStatsBannerMarkup: function() {
+    var columns = this.state.store.getColumns();
+    if (columns.length && !this.state.store.isZoomedIn()) {
+      return <StatsBanner store={ this.state.store }/>;
+    }
+    return null;
   },
   getColumns: function() {
     var columns = this.state.store.getColumns();

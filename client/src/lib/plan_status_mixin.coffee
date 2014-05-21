@@ -27,14 +27,25 @@ module.exports = {
       if iteration.get('PlannedVelocity')?
         loadFactor = @planEstimateTotal(iteration)/iteration.get('PlannedVelocity')
         Math.round(loadFactor * 100)
+      else 0
         
     planEstimateTotal: (iteration) ->
-      planEstimates = []
       if iteration.artifacts?
         iteration.artifacts.reduce (total, artifact) ->
-          total + artifact.get('PlanEstimate')
+          total + artifact.get('PlanEstimate') || 0
         , 0
       else 0
+
+    acceptedPoints: (artifacts) ->
+      if artifacts?
+        artifacts.reduce (result, artifact) ->
+          if artifact.get('ScheduleState') == 'Accepted'
+            result += artifact.get('PlanEstimate') || 0
+
+          result
+        , 0
+      else 0
+
 
     loadStatus: (iteration) ->
       percentage = @loadPercentage(iteration)

@@ -1,87 +1,103 @@
+var Promise = require('es6-promise').Promise;
 var ReactTestUtils = React.addons.TestUtils;
 var Backbone = require('backbone');
 var app = require('application');
 var Artifacts = require('collections/artifacts');
+var Iteration = require('models/iteration');
 var BoardStore = require('stores/board_store');
 
 describe('stores/board', function() {
   beforeEach(function() {
     this.boardField = 'ScheduleState';
-    this.project =new Backbone.Model({
+    this.project = new Backbone.Model({
       _ref: '/project/12345'
     });
     this.user = new Backbone.Model({
       _ref: '/user/23456'
     });
     this.boardColumns = ['abc', 'def'];
-    this.fetchStub = this.stubCollectionFetch(Artifacts, 'fetch', [
-      new Backbone.Model({ ScheduleState: 'abc', Name: '1' }),
-      new Backbone.Model({ ScheduleState: 'abc', Name: '2' }),
-      new Backbone.Model({ ScheduleState: 'def', Name: '3' })
-    ]);
+    this.iteration = new Iteration({
+      _ref: '/iteration/1',
+      Project: {
+        _ref: '/project/12345'
+      }
+    });
+    this.fetchStub = this.stub(this.iteration, 'fetchScheduledItems', function() {
+      this.artifacts = new Artifacts([
+        new Backbone.Model({ ScheduleState: 'abc', Name: '1' }),
+        new Backbone.Model({ ScheduleState: 'abc', Name: '2' }),
+        new Backbone.Model({ ScheduleState: 'def', Name: '3' })
+      ]);
+      return Promise.resolve(this.artifacts);
+    });
   });
   describe('initial fetch', function() {
     it('should scope query to project when passed in', function() {
       this.boardStore = Object.create(BoardStore);
       this.boardStore.init({
+        iteration: this.iteration,
         boardField: this.boardField,
         boardColumns: this.boardColumns,
         project: this.project
       });
       this.boardStore.load();
       expect(this.fetchStub).to.have.been.calledOnce;
-      expect(this.fetchStub.firstCall.args[0].data.project).to.equal('/project/12345');
-      expect(this.fetchStub.firstCall.args[0].data.projectScopeUp).to.be.false;
-      expect(this.fetchStub.firstCall.args[0].data.projectScopeDown).to.be.true;
+      expect(this.fetchStub.firstCall.args[0].project).to.equal('/project/12345');
+      expect(this.fetchStub.firstCall.args[0].projectScopeUp).to.be.false;
+      expect(this.fetchStub.firstCall.args[0].projectScopeDown).to.be.true;
     });
     it('should query for all columns if none specified', function() {
       this.boardStore = Object.create(BoardStore);
       this.boardStore.init({
+        iteration: this.iteration,
         boardField: this.boardField,
         boardColumns: this.boardColumns,
         project: this.project
       });
       this.boardStore.load();
-      expect(this.fetchStub.firstCall.args[0].data.query).to.contain('(ScheduleState = "abc")');
-      expect(this.fetchStub.firstCall.args[0].data.query).to.contain('(ScheduleState = "def")');
+      expect(this.fetchStub.firstCall.args[0].query).to.contain('(ScheduleState = "abc")');
+      expect(this.fetchStub.firstCall.args[0].query).to.contain('(ScheduleState = "def")');
     });
     it('should query for all columns even if visibleColumn passed in', function() {
       this.boardStore = Object.create(BoardStore);
       this.boardStore.init({
+        iteration: this.iteration,
         boardField: this.boardField,
         boardColumns: this.boardColumns,
         project: this.project,
         visibleColumn: 'abc'
       });
       this.boardStore.load();
-      expect(this.fetchStub.firstCall.args[0].data.query).to.contain('(ScheduleState = "abc")');
-      expect(this.fetchStub.firstCall.args[0].data.query).to.contain('(ScheduleState = "def")');
+      expect(this.fetchStub.firstCall.args[0].query).to.contain('(ScheduleState = "abc")');
+      expect(this.fetchStub.firstCall.args[0].query).to.contain('(ScheduleState = "def")');
     });
     it('should query by user when passed in', function() {
       this.boardStore = Object.create(BoardStore);
       this.boardStore.init({
+        iteration: this.iteration,
         boardField: this.boardField,
         boardColumns: this.boardColumns,
         project: this.project,
         user: this.user
       });
       this.boardStore.load();
-      expect(this.fetchStub.firstCall.args[0].data.query).to.contain('(Owner = "/user/23456")');
+      expect(this.fetchStub.firstCall.args[0].query).to.contain('(Owner = "/user/23456")');
     });
     it('should query by iteration when passed in', function() {
       this.boardStore = Object.create(BoardStore);
       this.boardStore.init({
+        iteration: this.iteration,
         boardField: this.boardField,
         boardColumns: this.boardColumns,
         project: this.project,
-        iteration: new Backbone.Model({ _ref: '/iteration/987'})
       });
       this.boardStore.load();
-      expect(this.fetchStub.firstCall.args[0].data.query).to.contain('(Iteration = "/iteration/987")');
+      expect(this.fetchStub.firstCall.args[0].query).to.contain('(Iteration = "' + this.iteration.get('_ref') + '")');
     });
     it('should populate columns with results', function() {
       this.boardStore = Object.create(BoardStore);
       this.boardStore.init({
+        iteration: this.iteration,
         boardField: this.boardField,
         boardColumns: this.boardColumns,
         project: this.project
@@ -107,6 +123,7 @@ describe('stores/board', function() {
     it('should return false if constructed without a column', function() {
       this.boardStore = Object.create(BoardStore);
       this.boardStore.init({
+        iteration: this.iteration,
         boardField: this.boardField,
         boardColumns: this.boardColumns,
         project: this.project
@@ -117,6 +134,7 @@ describe('stores/board', function() {
     it('should return true if constructed with a column', function() {
       this.boardStore = Object.create(BoardStore);
       this.boardStore.init({
+        iteration: this.iteration,
         boardField: this.boardField,
         boardColumns: this.boardColumns,
         project: this.project,
@@ -127,6 +145,7 @@ describe('stores/board', function() {
     it('should return true if showOnlyColumn is called', function() {
       this.boardStore = Object.create(BoardStore);
       this.boardStore.init({
+        iteration: this.iteration,
         boardField: this.boardField,
         boardColumns: this.boardColumns,
         project: this.project
@@ -141,6 +160,7 @@ describe('stores/board', function() {
     it('should return all columns if constructed without a column', function() {
       this.boardStore = Object.create(BoardStore);
       this.boardStore.init({
+        iteration: this.iteration,
         boardField: this.boardField,
         boardColumns: this.boardColumns,
         project: this.project
@@ -154,6 +174,7 @@ describe('stores/board', function() {
     it('should return one column if constructed with a column', function() {
       this.boardStore = Object.create(BoardStore);
       this.boardStore.init({
+        iteration: this.iteration,
         boardField: this.boardField,
         boardColumns: this.boardColumns,
         project: this.project,
@@ -167,6 +188,7 @@ describe('stores/board', function() {
     it('should return one column if showOnlyColumn is called', function() {
       this.boardStore = Object.create(BoardStore);
       this.boardStore.init({
+        iteration: this.iteration,
         boardField: this.boardField,
         boardColumns: this.boardColumns,
         project: this.project
@@ -184,6 +206,7 @@ describe('stores/board', function() {
     it('should return all columns if constructed without a column', function() {
       this.boardStore = Object.create(BoardStore);
       this.boardStore.init({
+        iteration: this.iteration,
         boardField: this.boardField,
         boardColumns: this.boardColumns,
         project: this.project
@@ -197,6 +220,7 @@ describe('stores/board', function() {
     it('should return all columns if constructed with a column', function() {
       this.boardStore = Object.create(BoardStore);
       this.boardStore.init({
+        iteration: this.iteration,
         boardField: this.boardField,
         boardColumns: this.boardColumns,
         project: this.project,
@@ -210,6 +234,7 @@ describe('stores/board', function() {
     it('should return all columns if showOnlyColumn is called', function() {
       this.boardStore = Object.create(BoardStore);
       this.boardStore.init({
+        iteration: this.iteration,
         boardField: this.boardField,
         boardColumns: this.boardColumns,
         project: this.project

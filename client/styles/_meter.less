@@ -11,7 +11,7 @@
     }
 
     .meter {
-        float: left; 
+        position: relative; 
         border-top-left-radius: 2px;
         border-bottom-left-radius: 2px;
         border-top-right-radius: 0px;
@@ -38,12 +38,14 @@
         font-family: @proxima-nova-semi-bold;
         color: @grey8;
         font-size: .8em;
-        text-align: center;
-        height: 20px;
-        position: absolute;
+        text-align: left;
+        height: 1.5em;
+        position: relative;
         float: left;
-        width: 50px;
-        padding: 4px 0px;
+        width: 100%;
+        padding: 4px 0 4px 4px;
+        top: -2em;
+        .ellipsis
     }
 
 }

@@ -53,7 +53,6 @@
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/pagedown/1.0/Markdown.Converter.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/spin.js/1.3.3/spin.min.js"></script>
   <script type="text/javascript" src="client/dist/js/jquery.base64.min.js"></script>
-  <script type="text/javascript" src="client/dist/js/rallymetrics.js"></script>
 
   <script src="node_modules/mocha/mocha.js"></script>
   <script>
@@ -62,7 +61,7 @@
     mocha.globals(['jQuery']);
   </script>
 
-  <script type="text/javascript" src="client/dist/js/app.js"></script>
+  <script type="text/javascript" src="client/dist/js/app-all.js"></script>
   <script type="text/javascript" src="client/test/test_code.js"></script>
 
   <script type="text/javascript">

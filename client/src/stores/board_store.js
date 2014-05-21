@@ -22,9 +22,6 @@ _.extend(BoardStore, {
 
   load: function() {
     var me = this;
-    this.artifacts = new Artifacts();
-    this.artifacts.clientMetricsParent = this;
-
     return this._fetchCards().then(function() {
       app.aggregator.recordComponentReady({ component: me });
     });
@@ -53,7 +50,6 @@ _.extend(BoardStore, {
 
   setIteration: function(iteration) {
     this.iteration = iteration;
-    this.artifacts.reset();
     _.each(this.columns, function(col) { col.artifacts.reset(); });
     this.trigger('change');
     this._fetchCards();
@@ -69,10 +65,12 @@ _.extend(BoardStore, {
 
   _fetchCards: function() {
     var me = this;
-    return this.artifacts.fetch(this._getFetchData(this.boardColumns)).then(function() {
-      me.artifacts.each(function(artifact) {
+    return this.iteration.fetchScheduledItems(this._getFetchData(this.boardColumns)).then(function() {
+      me.iteration.artifacts.each(function(artifact) {
         var column = _.find(me.columns, _.isAttributeEqual('value', artifact.get(me.boardField)));
-        column.artifacts.add(artifact);
+        if (column) {
+          column.artifacts.add(artifact);
+        }
       }, this);
       _.invoke(me.columns, 'trigger', 'sync');
       me.trigger('change');
@@ -84,11 +82,10 @@ _.extend(BoardStore, {
       return '"' + value + '"';
     });
     data = {
-      fetch: this.boardField + ',FormattedID,DisplayColor,Blocked,Ready,Name,Owner,PlanEstimate,Tasks:summary[State;Estimate;ToDo;Owner;Blocked],TaskStatus,Defects:summary[State;Owner],DefectStatus,Discussion:summary',
+      shallowFetch: this.boardField + ',FormattedID,DisplayColor,Blocked,Ready,Name,Owner,PlanEstimate,ScheduleState,State,Tasks:summary[State;ToDo;Blocked],TaskStatus,Defects:summary[State],DefectStatus,Discussion:summary',
       query: '(' + colQuery + ' AND ((Requirement = null) OR (DirectChildrenCount = 0)))',
       types: 'hierarchicalrequirement,defect',
       order: "Rank ASC",
-      pagesize: 100,
       project: this.project.get('_ref'),
       projectScopeUp: false,
       projectScopeDown: true
@@ -101,7 +98,7 @@ _.extend(BoardStore, {
       data.query = '(' + data.query + ' AND (Iteration = "' + iterationRef + '"))';
     }
 
-    return { data: data };
+    return data;
   }
 });
 

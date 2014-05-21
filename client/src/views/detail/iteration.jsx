@@ -7,6 +7,7 @@ var PlanStatusMixin = require ('lib/plan_status_mixin');
 var IterationStore = require('stores/iteration_store');
 var ListView = require('views/listing/list');
 var TitledWellView = require('views/field/titled_well');
+var ProgressMeter = require('views/progress_meter');
 
 module.exports = ReactView.createBackboneClass({
   mixins: [PlanStatusMixin, DetailMixin],
@@ -61,12 +62,7 @@ module.exports = ReactView.createBackboneClass({
               <div className="well well-sm titled-well-sm"
                    tabIndex="0"
                    aria-label={ loadPercentage + "% loaded"}>
-                <div className="meter-container">
-                  <div className="bar">
-                    <div className={ "meter " + loadStatus} style={{ width: Math.min(100, loadPercentage) + "%" }}></div>
-                    <div className="percent">{ loadPercentage + "%" }</div>
-                  </div>
-                </div>
+                <ProgressMeter cls={ loadStatus } percentage={ loadPercentage } label={ loadPercentage + "%" }/>
               </div>
             </div>
           </div>

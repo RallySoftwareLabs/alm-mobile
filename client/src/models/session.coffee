@@ -245,7 +245,7 @@ module.exports = class Session extends Model
       @loadSchema(value),
       iterations.fetchAllPages(
         data:
-          fetch: 'Name,StartDate,EndDate'
+          fetch: 'Name,StartDate,EndDate,PlannedVelocity'
           order: 'StartDate DESC,EndDate DESC,ObjectID'
           query: "(Project = \"#{projectRef}\")"
       )
