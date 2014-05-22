@@ -18,11 +18,18 @@ _.extend(BoardStore, {
     this.user = opts.user;
     this.visibleColumn = opts.visibleColumn;
     this.columns = this._getColumnModels();
+    this.scheduleStates = [];
   },
 
   load: function() {
     var me = this;
-    return this._fetchCards().then(function() {
+    return Promise.all([
+      UserStory.getAllowedValues('ScheduleState'),
+      this._fetchCards()
+    ]).then(function(scheduleStates) {
+      me.scheduleStates = _.pluck(scheduleStates[0], 'StringValue');
+      _.invoke(me.columns, 'trigger', 'sync');
+      me.trigger('change');
       app.aggregator.recordComponentReady({ component: me });
     });
   },
@@ -43,6 +50,14 @@ _.extend(BoardStore, {
   },
 
   isZoomedIn: function() { return !!this.visibleColumn; },
+
+  getScheduleStates: function() {
+    return this.scheduleStates;
+  },
+
+  getArtifacts: function() {
+    return this.artifacts;
+  },
 
   getIteration: function() { return this.iteration; },
 
@@ -65,25 +80,42 @@ _.extend(BoardStore, {
 
   _fetchCards: function() {
     var me = this;
-    return this.iteration.fetchScheduledItems(this._getFetchData(this.boardColumns)).then(function() {
-      me.iteration.artifacts.each(function(artifact) {
+    var fetchPromise;
+    var fetchData = this._getFetchData(this.boardColumns);
+    if (this.iteration) {
+      fetchPromise = this.iteration.fetchScheduledItems(fetchData);
+    } else {
+      var artifacts = new Artifacts();
+      artifacts.clientMetricsParent = this;
+      fetchPromise = artifacts.fetchAllPages({ data: fetchData });
+    }
+    return fetchPromise.then(function(artifacts) {
+      me.artifacts = artifacts;
+      artifacts.each(function(artifact) {
         var column = _.find(me.columns, _.isAttributeEqual('value', artifact.get(me.boardField)));
         if (column) {
           column.artifacts.add(artifact);
         }
       }, this);
-      _.invoke(me.columns, 'trigger', 'sync');
-      me.trigger('change');
     });
   },
 
   _getFetchData: function(values) {
-    var colQuery = utils.createQueryFromCollection(values, this.boardField, 'OR', function(value) {
-      return '"' + value + '"';
-    });
+    var query, kanbanFieldsQuery;
+    var iterationRef = this.iteration && this.iteration.get('_ref');
+    if (iterationRef) {
+      query = '(Iteration = "' + iterationRef + '")';
+    } else {
+      kanbanFieldsQuery = utils.createQueryFromCollection(values, this.boardField, 'OR', function(value) {
+        return '"' + value + '"';
+      });
+      kanbanFieldsQuery = kanbanFieldsQuery.replace('(c_KanbanState = "Released")', '((c_KanbanState = "Released") AND (Release = null))');
+      query = '(' + kanbanFieldsQuery + ' AND ((Requirement = null) OR (DirectChildrenCount = 0)))';
+    }
     data = {
       shallowFetch: this.boardField + ',FormattedID,DisplayColor,Blocked,Ready,Name,Owner,PlanEstimate,ScheduleState,State,Tasks:summary[State;ToDo;Blocked],TaskStatus,Defects:summary[State],DefectStatus,Discussion:summary',
-      query: '(' + colQuery + ' AND ((Requirement = null) OR (DirectChildrenCount = 0)))',
+      query: query,
+      pagesize: 200,
       types: 'hierarchicalrequirement,defect',
       order: "Rank ASC",
       project: this.project.get('_ref'),
@@ -92,10 +124,6 @@ _.extend(BoardStore, {
     };
     if (this.user) {
       data.query = '(' + data.query + ' AND (Owner = "' + this.user.get('_ref') + '"))';
-    }
-    var iterationRef = this.iteration && this.iteration.get('_ref');
-    if (iterationRef) {
-      data.query = '(' + data.query + ' AND (Iteration = "' + iterationRef + '"))';
     }
 
     return data;

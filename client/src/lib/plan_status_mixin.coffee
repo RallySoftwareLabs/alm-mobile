@@ -36,17 +36,6 @@ module.exports = {
         , 0
       else 0
 
-    acceptedPoints: (artifacts) ->
-      if artifacts?
-        artifacts.reduce (result, artifact) ->
-          if artifact.get('ScheduleState') == 'Accepted'
-            result += artifact.get('PlanEstimate') || 0
-
-          result
-        , 0
-      else 0
-
-
     loadStatus: (iteration) ->
       percentage = @loadPercentage(iteration)
       return 'overloaded' if percentage > 100

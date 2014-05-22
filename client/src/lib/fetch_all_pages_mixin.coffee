@@ -21,4 +21,5 @@ module.exports = {
 
     Promise.all(remainingFetches).then =>
       @trigger('complete')
+      this
 }

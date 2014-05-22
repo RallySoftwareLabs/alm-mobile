@@ -37,7 +37,12 @@ module.exports = class Schema extends Collection
     @getAttribute(model, fieldName).Name
 
   getTypeDef: (model) ->
-    typeDef = @find (type) -> type.get('TypePath').toLowerCase() == (model:: || model).typePath.toLowerCase()
+    m = (model:: || model)
+    if m.typePath
+      typePath = m.typePath.toLowerCase()
+    else if _.isFunction(m.get)
+      typePath = m.get('_type').toLowerCase()
+    typeDef = @find (type) -> type.get('TypePath').toLowerCase() == typePath
 
   getAttributes: (model) ->
     @getTypeDef(model).get('Attributes')

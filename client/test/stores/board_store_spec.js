@@ -4,10 +4,16 @@ var Backbone = require('backbone');
 var app = require('application');
 var Artifacts = require('collections/artifacts');
 var Iteration = require('models/iteration');
+var UserStory = require('models/user_story');
 var BoardStore = require('stores/board_store');
 
 describe('stores/board', function() {
   beforeEach(function() {
+    var artifacts = [
+      new Backbone.Model({ ScheduleState: 'abc', Name: '1' }),
+      new Backbone.Model({ ScheduleState: 'abc', Name: '2' }),
+      new Backbone.Model({ ScheduleState: 'def', Name: '3' })
+    ];
     this.boardField = 'ScheduleState';
     this.project = new Backbone.Model({
       _ref: '/project/12345'
@@ -16,20 +22,22 @@ describe('stores/board', function() {
       _ref: '/user/23456'
     });
     this.boardColumns = ['abc', 'def'];
+    this.stub(UserStory, 'getAllowedValues').returns(Promise.resolve([
+      { StringValue: 'abc' },
+      { StringValue: 'def' },
+      { StringValue: 'ghi' }
+    ]));
     this.iteration = new Iteration({
       _ref: '/iteration/1',
       Project: {
         _ref: '/project/12345'
       }
     });
-    this.fetchStub = this.stub(this.iteration, 'fetchScheduledItems', function() {
-      this.artifacts = new Artifacts([
-        new Backbone.Model({ ScheduleState: 'abc', Name: '1' }),
-        new Backbone.Model({ ScheduleState: 'abc', Name: '2' }),
-        new Backbone.Model({ ScheduleState: 'def', Name: '3' })
-      ]);
+    this.iterationFetchStub = this.stub(this.iteration, 'fetchScheduledItems', function() {
+      this.artifacts = new Artifacts(artifacts);
       return Promise.resolve(this.artifacts);
     });
+    this.artifactsFetchStub = this.stubCollectionFetch(Artifacts, 'fetchAllPages', artifacts);
   });
   describe('initial fetch', function() {
     it('should scope query to project when passed in', function() {
@@ -41,35 +49,33 @@ describe('stores/board', function() {
         project: this.project
       });
       this.boardStore.load();
-      expect(this.fetchStub).to.have.been.calledOnce;
-      expect(this.fetchStub.firstCall.args[0].project).to.equal('/project/12345');
-      expect(this.fetchStub.firstCall.args[0].projectScopeUp).to.be.false;
-      expect(this.fetchStub.firstCall.args[0].projectScopeDown).to.be.true;
+      expect(this.iterationFetchStub).to.have.been.calledOnce;
+      expect(this.iterationFetchStub.firstCall.args[0].project).to.equal('/project/12345');
+      expect(this.iterationFetchStub.firstCall.args[0].projectScopeUp).to.be.false;
+      expect(this.iterationFetchStub.firstCall.args[0].projectScopeDown).to.be.true;
     });
     it('should query for all columns if none specified', function() {
       this.boardStore = Object.create(BoardStore);
       this.boardStore.init({
-        iteration: this.iteration,
         boardField: this.boardField,
         boardColumns: this.boardColumns,
         project: this.project
       });
       this.boardStore.load();
-      expect(this.fetchStub.firstCall.args[0].query).to.contain('(ScheduleState = "abc")');
-      expect(this.fetchStub.firstCall.args[0].query).to.contain('(ScheduleState = "def")');
+      expect(this.artifactsFetchStub.firstCall.args[0].data.query).to.contain('(ScheduleState = "abc")');
+      expect(this.artifactsFetchStub.firstCall.args[0].data.query).to.contain('(ScheduleState = "def")');
     });
     it('should query for all columns even if visibleColumn passed in', function() {
       this.boardStore = Object.create(BoardStore);
       this.boardStore.init({
-        iteration: this.iteration,
         boardField: this.boardField,
         boardColumns: this.boardColumns,
         project: this.project,
         visibleColumn: 'abc'
       });
       this.boardStore.load();
-      expect(this.fetchStub.firstCall.args[0].query).to.contain('(ScheduleState = "abc")');
-      expect(this.fetchStub.firstCall.args[0].query).to.contain('(ScheduleState = "def")');
+      expect(this.artifactsFetchStub.firstCall.args[0].data.query).to.contain('(ScheduleState = "abc")');
+      expect(this.artifactsFetchStub.firstCall.args[0].data.query).to.contain('(ScheduleState = "def")');
     });
     it('should query by user when passed in', function() {
       this.boardStore = Object.create(BoardStore);
@@ -81,9 +87,9 @@ describe('stores/board', function() {
         user: this.user
       });
       this.boardStore.load();
-      expect(this.fetchStub.firstCall.args[0].query).to.contain('(Owner = "/user/23456")');
+      expect(this.iterationFetchStub.firstCall.args[0].query).to.contain('(Owner = "/user/23456")');
     });
-    it('should query by iteration when passed in', function() {
+    it('should query only by iteration when passed in', function() {
       this.boardStore = Object.create(BoardStore);
       this.boardStore.init({
         iteration: this.iteration,
@@ -92,7 +98,8 @@ describe('stores/board', function() {
         project: this.project,
       });
       this.boardStore.load();
-      expect(this.fetchStub.firstCall.args[0].query).to.contain('(Iteration = "' + this.iteration.get('_ref') + '")');
+      expect(this.iterationFetchStub.firstCall.args[0].query).to.contain('(Iteration = "' + this.iteration.get('_ref') + '")');
+      expect(this.iterationFetchStub.firstCall.args[0].query).not.to.contain('(ScheduleState =');
     });
     it('should populate columns with results', function() {
       this.boardStore = Object.create(BoardStore);

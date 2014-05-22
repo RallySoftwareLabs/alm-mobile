@@ -44,7 +44,7 @@ module.exports = ReactView.createBackboneClass({
   },
   getStatsBannerMarkup: function() {
     var columns = this.state.store.getColumns();
-    if (columns.length && !this.state.store.isZoomedIn()) {
+    if (this.state.store.getIteration() && columns.length && !this.state.store.isZoomedIn()) {
       return <StatsBanner store={ this.state.store }/>;
     }
     return null;

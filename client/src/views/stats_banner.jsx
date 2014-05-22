@@ -11,7 +11,7 @@ module.exports = ReactView.createBackboneClass({
   render: function() {
     var iteration = this.props.store.getIteration();
     var planEstimateTotal = this.planEstimateTotal(iteration);
-    var acceptedPoints = this.acceptedPoints(iteration.artifacts);
+    var acceptedPoints = this._getAcceptedPoints(iteration.artifacts);
     return (
       <div className="row stats-banner">
         <div className="col-xs-3 gauge">
@@ -80,5 +80,21 @@ module.exports = ReactView.createBackboneClass({
       });
     }
     return taskCount;
+  },
+
+  _getAcceptedPoints: function(artifacts) {
+    var acceptedPoints = 0;
+    if (!artifacts) {
+      return acceptedPoints;
+    }
+    var scheduleStates = this.props.store.getScheduleStates();
+    var acceptedStates = _.rest(scheduleStates, _.indexOf(scheduleStates, 'Accepted'));
+    artifacts.each(function (artifact) {
+        var estimate = artifact.get('PlanEstimate') || 0;
+        if (_.contains(acceptedStates, artifact.get('ScheduleState'))) {
+            acceptedPoints += estimate;
+        }
+    });
+    return acceptedPoints;
   }
 });
