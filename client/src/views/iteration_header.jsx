@@ -41,7 +41,7 @@ module.exports = ReactView.createBackboneClass({
   },
 
   _getShowLeftMarkup: function(currentIndex) {
-    if (this.props.iterations && currentIndex < this.props.iterations.length) {
+    if (this.props.iterations && currentIndex < this.props.iterations.length - 1) {
       return (
         <span className="iteration-arrow">
           <i className="go-left icon-left"

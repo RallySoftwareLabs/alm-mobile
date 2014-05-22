@@ -64,10 +64,16 @@ _.extend(BoardStore, {
   getIterations: function() { return this.iterations; },
 
   setIteration: function(iteration) {
+    var me = this;
     this.iteration = iteration;
-    _.each(this.columns, function(col) { col.artifacts.reset(); });
+    _.each(this.columns, function(col) {
+      col.setSynced(false);
+      col.artifacts.reset();
+    });
     this.trigger('change');
-    this._fetchCards();
+    this._fetchCards().then(function() {
+      me.trigger('change');
+    });
   },
 
   _getColumnModels: function() {
@@ -94,9 +100,12 @@ _.extend(BoardStore, {
       artifacts.each(function(artifact) {
         var column = _.find(me.columns, _.isAttributeEqual('value', artifact.get(me.boardField)));
         if (column) {
-          column.artifacts.add(artifact);
+          column.artifacts.add(artifact, {silent: true});
         }
       }, this);
+      _.each(me.columns, function(col) {
+        col.setSynced(true);
+      });
     });
   },
 
