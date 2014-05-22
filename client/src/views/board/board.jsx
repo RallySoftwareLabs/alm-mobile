@@ -59,7 +59,7 @@ module.exports = ReactView.createBackboneClass({
             model: col,
             columns: columns,
             singleColumn: zoomedIn,
-            abbreviateHeader: true,
+            abbreviateHeader: !zoomedIn,
             showIteration: false,
             onCardClick: this._onCardClick,
             onHeaderClick: this._onColumnClick
