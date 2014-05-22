@@ -137,6 +137,7 @@ module.exports = {
 
         currentController?.dispose()
         currentController = new controllerClass()
+        currentController.clientMetricsType = "Controller"
         
         aggregator.beginLoad
           component: currentController
