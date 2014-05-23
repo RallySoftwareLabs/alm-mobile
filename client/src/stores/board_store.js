@@ -16,7 +16,6 @@ _.extend(BoardStore, {
     this.iteration = opts.iteration;
     this.iterations = opts.iterations;
     this.user = opts.user;
-    this.visibleColumn = opts.visibleColumn;
     this.columns = this._getColumnModels();
     this.scheduleStates = [];
   },
@@ -34,22 +33,9 @@ _.extend(BoardStore, {
     });
   },
 
-  getColumns: function() { return this.columns; },
-
-  getVisibleColumns: function() {
-    if (this.visibleColumn) {
-      return _.filter(this.columns, _.isAttributeEqual('value', this.visibleColumn));
-    } else {
-      return this.columns;
-    }
+  getColumns: function() {
+    return this.columns;
   },
-
-  showOnlyColumn: function(visibleColumn) {
-    this.visibleColumn = visibleColumn;
-    this.trigger('change');
-  },
-
-  isZoomedIn: function() { return !!this.visibleColumn; },
 
   getScheduleStates: function() {
     return this.scheduleStates;
@@ -59,9 +45,13 @@ _.extend(BoardStore, {
     return this.artifacts;
   },
 
-  getIteration: function() { return this.iteration; },
+  getIteration: function() {
+    return this.iteration;
+  },
 
-  getIterations: function() { return this.iterations; },
+  getIterations: function() {
+    return this.iterations;
+  },
 
   setIteration: function(iteration) {
     var me = this;

@@ -126,89 +126,6 @@ describe('stores/board', function() {
     });
   });
 
-  describe('#isZoomedIn', function() {
-    it('should return false if constructed without a column', function() {
-      this.boardStore = Object.create(BoardStore);
-      this.boardStore.init({
-        iteration: this.iteration,
-        boardField: this.boardField,
-        boardColumns: this.boardColumns,
-        project: this.project
-      });
-      this.boardStore.load();
-      expect(this.boardStore.isZoomedIn()).to.be.false;
-    });
-    it('should return true if constructed with a column', function() {
-      this.boardStore = Object.create(BoardStore);
-      this.boardStore.init({
-        iteration: this.iteration,
-        boardField: this.boardField,
-        boardColumns: this.boardColumns,
-        project: this.project,
-        visibleColumn: 'abc'
-      });
-      expect(this.boardStore.isZoomedIn()).to.be.true;
-    });
-    it('should return true if showOnlyColumn is called', function() {
-      this.boardStore = Object.create(BoardStore);
-      this.boardStore.init({
-        iteration: this.iteration,
-        boardField: this.boardField,
-        boardColumns: this.boardColumns,
-        project: this.project
-      });
-      this.boardStore.load();
-      this.boardStore.showOnlyColumn('abc');
-      expect(this.boardStore.isZoomedIn()).to.be.true;
-    });
-  });
-
-  describe('#getVisibleColumns', function() {
-    it('should return all columns if constructed without a column', function() {
-      this.boardStore = Object.create(BoardStore);
-      this.boardStore.init({
-        iteration: this.iteration,
-        boardField: this.boardField,
-        boardColumns: this.boardColumns,
-        project: this.project
-      });
-      this.boardStore.load();
-      expect(this.boardStore.getVisibleColumns()).to.have.length(2);
-      expect(
-        _.map(this.boardStore.getVisibleColumns(), _.getAttribute('value'))
-      ).to.eql(['abc', 'def']);
-    });
-    it('should return one column if constructed with a column', function() {
-      this.boardStore = Object.create(BoardStore);
-      this.boardStore.init({
-        iteration: this.iteration,
-        boardField: this.boardField,
-        boardColumns: this.boardColumns,
-        project: this.project,
-        visibleColumn: 'abc'
-      });
-      expect(this.boardStore.getVisibleColumns()).to.have.length(1);
-      expect(
-        _.map(this.boardStore.getVisibleColumns(), _.getAttribute('value'))
-      ).to.be.eql(['abc']);
-    });
-    it('should return one column if showOnlyColumn is called', function() {
-      this.boardStore = Object.create(BoardStore);
-      this.boardStore.init({
-        iteration: this.iteration,
-        boardField: this.boardField,
-        boardColumns: this.boardColumns,
-        project: this.project
-      });
-      this.boardStore.load();
-      this.boardStore.showOnlyColumn('abc');
-      expect(this.boardStore.getVisibleColumns()).to.have.length(1);
-      expect(
-        _.map(this.boardStore.getVisibleColumns(), _.getAttribute('value'))
-      ).to.be.eql(['abc']);
-    });
-  });
-
   describe('#getColumns', function() {
     it('should return all columns if constructed without a column', function() {
       this.boardStore = Object.create(BoardStore);
@@ -238,22 +155,6 @@ describe('stores/board', function() {
         _.map(this.boardStore.getColumns(), _.getAttribute('value'))
       ).to.be.eql(['abc', 'def']);
     });
-    it('should return all columns if showOnlyColumn is called', function() {
-      this.boardStore = Object.create(BoardStore);
-      this.boardStore.init({
-        iteration: this.iteration,
-        boardField: this.boardField,
-        boardColumns: this.boardColumns,
-        project: this.project
-      });
-      this.boardStore.load();
-      this.boardStore.showOnlyColumn('abc');
-      expect(this.boardStore.getColumns()).to.have.length(2);
-      expect(
-        _.map(this.boardStore.getColumns(), _.getAttribute('value'))
-      ).to.be.eql(['abc', 'def']);
-    });
   });
-
 
 });
