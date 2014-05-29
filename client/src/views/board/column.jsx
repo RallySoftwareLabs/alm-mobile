@@ -7,6 +7,10 @@ var app = require('application');
 var Card = require('views/board/card');
 
 module.exports = ReactView.createBackboneClass({
+  propTypes: {
+    onHeaderClick: React.PropTypes.func.isRequired,
+    onCardClick: React.PropTypes.func.isRequired
+  },
   render: function() {
     var model = this.props.model,
         singleColumn = this.props.singleColumn,

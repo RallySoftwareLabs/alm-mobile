@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 var React = require('react');
 var _ = require('underscore');
+var Fluxxor = require("fluxxor");
 var utils = require('lib/utils');
 var ReactView = require('views/base/react_view');
 var ColumnView = require('views/board/column');
@@ -8,26 +9,31 @@ var IterationHeader = require('views/iteration_header');
 var StatsBanner = require('views/stats_banner');
 
 module.exports = ReactView.createBackboneClass({
-  getInitialState: function() {
+  mixins: [Fluxxor.FluxMixin(React), Fluxxor.StoreWatchMixin("BoardStore")],
+
+  // Required by StoreWatchMixin
+  getStateFromFlux: function() {
+    var flux = this.getFlux();
     return {
+      boardState: flux.store("BoardStore").getState(),
       visibleColumn: this.props.visibleColumn
     };
   },
-  componentDidMount: function() {
-    this.listenTo(this.props.store, 'change', this.forceUpdate);
-  },
-  componentWillReceiveProps: function(newProps) {
-    this.stopListening(this.props.store, 'change', this.forceUpdate);
-    this.listenTo(newProps.store, 'change', this.forceUpdate);
-    this.setState({ visibleColumn: newProps.visibleColumn });
-  },
+  // componentDidMount: function() {
+  //   this.listenTo(this.state.boardState, 'change', this.forceUpdate);
+  // },
+  // componentWillReceiveProps: function(newProps) {
+  //   this.stopListening(this.state.boardState, 'change', this.forceUpdate);
+  //   this.listenTo(newProps.store, 'change', this.forceUpdate);
+  //   this.setState({ visibleColumn: newProps.visibleColumn });
+  // },
 
   render: function() {
     return (
       <div className="board">
         <IterationHeader visible={true}
-                         iteration={ this.props.store.getIteration() }
-                         iterations={ this.props.store.getIterations() }
+                         iteration={ this.state.boardState.iteration }
+                         iterations={ this.state.boardState.iterations }
                          onChange={ this._onIterationChange }
                          onSelect={ this._onIterationSelect } />
         { this.getStatsBannerMarkup() }
@@ -36,14 +42,14 @@ module.exports = ReactView.createBackboneClass({
     );
   },
   getStatsBannerMarkup: function() {
-    var columns = this.props.store.getColumns();
-    if (this.props.store.getIteration() && columns.length && !this._isZoomedIn()) {
-      return <StatsBanner store={ this.props.store }/>;
+    var columns = this.state.boardState.columns;
+    if (this.state.boardState.iteration && columns.length && !this._isZoomedIn()) {
+      return <StatsBanner boardState={ this.state.boardState }/>;
     }
     return null;
   },
   getColumns: function() {
-    var columns = this.props.store.getColumns();
+    var columns = this.state.boardState.columns;
     var visibleColumns = this._getVisibleColumns(columns);
     var zoomedIn = this._isZoomedIn();
     var colMarkup = _.map(visibleColumns, function(col) {
@@ -96,7 +102,7 @@ module.exports = ReactView.createBackboneClass({
   },
 
   _onIterationChange: function(view, iteration) {
-    this.props.store.setIteration(iteration);
+    this.getFlux().actions.setIteration(iteration);
   },
 
   _onIterationSelect: function(view, iteration) {

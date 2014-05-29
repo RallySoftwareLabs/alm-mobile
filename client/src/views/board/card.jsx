@@ -7,6 +7,9 @@ var CardTasks = require('views/board/card_tasks');
 var Owner = require('views/board/owner');
 
 module.exports = ReactView.createBackboneClass({
+  propTypes: {
+    onCardClick: React.PropTypes.func.isRequired
+  },
   render: function() {
     var m = this.props.model;
     var cardStyle = {};

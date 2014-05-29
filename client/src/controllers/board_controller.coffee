@@ -1,24 +1,26 @@
 _ = require 'underscore'
+Fluxxor = require 'fluxxor'
 app = require 'application'
 utils = require 'lib/utils'
 SiteController = require 'controllers/base/site_controller'
-Column = require 'models/column'
-UserStory = require 'models/user_story'
+BoardActions = require 'actions/board_actions'
 BoardStore = require 'stores/board_store'
 BoardView = require 'views/board/board'
-ColumnView = require 'views/board/column'
 
 module.exports = class BoardController extends SiteController
   index: (colValue) ->
     @whenProjectIsLoaded().then =>
-      @updateTitle app.session.getProjectName()
+      session = app.session
+      @updateTitle session.getProjectName()
 
-      boardStore = @_buildStore()
+      boardStore = @_buildStore(session)
+      
+      flux = new Fluxxor.Flux({ BoardStore: boardStore }, BoardActions)
       boardStore.load()
       @renderReactComponent(BoardView,
         region: 'main'
         visibleColumn: colValue
-        store: boardStore
+        flux: flux
       ).then (view) =>
         @listenTo(view, 'columnzoom', @_onColumnZoom)
         @listenTo(view, 'modelselected', @_onModelSelected)
@@ -29,14 +31,12 @@ module.exports = class BoardController extends SiteController
   _onModelSelected: (view, model) ->
     @redirectTo utils.getDetailHash(model)
 
-  _buildStore: ->
-    store = Object.create(BoardStore)
-    store.init({
-      boardField: app.session.get('boardField')
-      boardColumns: app.session.getBoardColumns()
-      project: app.session.get('project')
-      iteration: app.session.get('iteration')
-      iterations: app.session.get('iterations')
-      user: if app.session.isSelfMode() then app.session.get('user')
+  _buildStore: (session) ->
+    new BoardStore({
+      boardField: session.get('boardField')
+      boardColumns: session.getBoardColumns()
+      project: session.get('project')
+      iteration: session.get('iteration')
+      iterations: session.get('iterations')
+      user: if session.isSelfMode() then session.get('user')
     })
-    store

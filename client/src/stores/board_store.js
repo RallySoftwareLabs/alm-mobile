@@ -1,23 +1,37 @@
 var _ = require('underscore');
+var Fluxxor = require("fluxxor");
 var app = require('application');
 var utils = require('lib/utils');
 var Artifacts = require('collections/artifacts');
 var Column = require('models/column');
 var UserStory = require('models/user_story');
-var BaseStore = require('stores/base_store');
 
-var BoardStore = Object.create(BaseStore);
+var BoardStore = Fluxxor.createStore({
 
-_.extend(BoardStore, {
-  init: function(opts) {
-    this.boardField = opts.boardField;
-    this.boardColumns = opts.boardColumns;
-    this.project = opts.project;
-    this.iteration = opts.iteration;
-    this.iterations = opts.iterations;
-    this.user = opts.user;
+  initialize: function(options) {
+    this.boardField = options.boardField;
+    this.boardColumns = options.boardColumns;
+    this.project = options.project;
+    this.iteration = options.iteration;
+    this.iterations = options.iterations;
+    this.user = options.user;
     this.columns = this._getColumnModels();
     this.scheduleStates = [];
+
+    this.bindActions('setIteration', this.setIteration);
+  },
+
+  getState: function() {
+    return {
+      boardField: this.boardField,
+      boardColumns: this.boardColumns,
+      project: this.project,
+      iteration: this.iteration,
+      iterations: this.iterations,
+      user: this.user,
+      columns: this.columns,
+      scheduleStates: this.scheduleStates
+    };
   },
 
   load: function() {
@@ -28,7 +42,7 @@ _.extend(BoardStore, {
     ]).then(function(scheduleStates) {
       me.scheduleStates = _.pluck(scheduleStates[0], 'StringValue');
       _.invoke(me.columns, 'trigger', 'sync');
-      me.trigger('change');
+      me.emit('change');
       app.aggregator.recordComponentReady({ component: me });
     });
   },
@@ -60,9 +74,9 @@ _.extend(BoardStore, {
       col.setSynced(false);
       col.artifacts.reset();
     });
-    this.trigger('change');
+    this.emit('change');
     this._fetchCards().then(function() {
-      me.trigger('change');
+      me.emit('change');
     });
   },
 

@@ -9,7 +9,7 @@ var ProgressMeter = require('views/progress_meter');
 module.exports = ReactView.createBackboneClass({
   mixins: [PlanStatusMixin],
   render: function() {
-    var iteration = this.props.store.getIteration();
+    var iteration = this.props.boardState.iteration;
     var planEstimateTotal = this.planEstimateTotal(iteration);
     var acceptedPoints = this._getAcceptedPoints(iteration.artifacts);
     return (
@@ -87,7 +87,7 @@ module.exports = ReactView.createBackboneClass({
     if (!artifacts) {
       return acceptedPoints;
     }
-    var scheduleStates = this.props.store.getScheduleStates();
+    var scheduleStates = this.props.boardState.scheduleStates;
     var acceptedStates = _.rest(scheduleStates, _.indexOf(scheduleStates, 'Accepted'));
     artifacts.each(function (artifact) {
         var estimate = artifact.get('PlanEstimate') || 0;

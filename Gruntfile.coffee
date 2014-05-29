@@ -54,8 +54,9 @@ module.exports = (grunt) ->
   }]
 
   externalBrowserifyAliases = [
-    'node_modules/jquery/dist/jquery.js:jquery'
     'node_modules/backbone/backbone.js:backbone'
+    'node_modules/fluxxor/build/fluxxor.js:fluxxor'
+    'node_modules/jquery/dist/jquery.js:jquery'
     'node_modules/lodash/dist/lodash.js:underscore'
     'node_modules/react/react.js:react'
     'node_modules/moment/moment.js:moment'
@@ -75,8 +76,8 @@ module.exports = (grunt) ->
       dest: ''
     }).concat(externalBrowserifyAliases)
     external: [
-      'node_modules/jquery/dist/jquery.js'
       'node_modules/backbone/backbone.js'
+      'node_modules/jquery/dist/jquery.js'
       'node_modules/lodash/dist/lodash.js'
       'node_modules/react/react.js'
       'node_modules/moment/moment.js'
@@ -187,6 +188,8 @@ module.exports = (grunt) ->
         ]
 
     uglify:
+      options:
+        sourceMap: true
       js:
         files:
           'client/dist/js/app-all.min.js' : 'client/dist/js/app-all.js'
