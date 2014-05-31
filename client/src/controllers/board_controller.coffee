@@ -1,6 +1,7 @@
 _ = require 'underscore'
 Fluxxor = require 'fluxxor'
 app = require 'application'
+appConfig = require 'app_config'
 utils = require 'lib/utils'
 SiteController = require 'controllers/base/site_controller'
 BoardActions = require 'actions/board_actions'
@@ -25,8 +26,8 @@ module.exports = class BoardController extends SiteController
         @listenTo(view, 'columnzoom', @_onColumnZoom)
         @listenTo(view, 'modelselected', @_onModelSelected)
 
-  _onColumnZoom: (col) ->
-    @updateUrl "board/#{col.get('value')}"
+  _onColumnZoom: (column) ->
+    @updateUrl "board/#{column}"
 
   _onModelSelected: (view, model) ->
     @redirectTo utils.getDetailHash(model)

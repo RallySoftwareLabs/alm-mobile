@@ -1,4 +1,5 @@
 var _ = require('underscore');
+var Promise = require('es6-promise').Promise;
 var Fluxxor = require("fluxxor");
 var app = require('application');
 var utils = require('lib/utils');
@@ -15,7 +16,7 @@ var BoardStore = Fluxxor.createStore({
     this.iteration = options.iteration;
     this.iterations = options.iterations;
     this.user = options.user;
-    this.columns = this._getColumnModels();
+    this.artifacts = new Artifacts();
     this.scheduleStates = [];
 
     this.bindActions('setIteration', this.setIteration);
@@ -29,8 +30,9 @@ var BoardStore = Fluxxor.createStore({
       iteration: this.iteration,
       iterations: this.iterations,
       user: this.user,
-      columns: this.columns,
-      scheduleStates: this.scheduleStates
+      columns: this.boardColumns,
+      scheduleStates: this.scheduleStates,
+      artifacts: this.artifacts
     };
   },
 
@@ -41,51 +43,20 @@ var BoardStore = Fluxxor.createStore({
       this._fetchCards()
     ]).then(function(scheduleStates) {
       me.scheduleStates = _.pluck(scheduleStates[0], 'StringValue');
-      _.invoke(me.columns, 'trigger', 'sync');
       me.emit('change');
       app.aggregator.recordComponentReady({ component: me });
     });
   },
 
-  getColumns: function() {
-    return this.columns;
-  },
-
-  getScheduleStates: function() {
-    return this.scheduleStates;
-  },
-
-  getArtifacts: function() {
-    return this.artifacts;
-  },
-
-  getIteration: function() {
-    return this.iteration;
-  },
-
-  getIterations: function() {
-    return this.iterations;
-  },
-
   setIteration: function(iteration) {
     var me = this;
     this.iteration = iteration;
-    _.each(this.columns, function(col) {
-      col.setSynced(false);
-      col.artifacts.reset();
-    });
+    this.artifacts.setSynced(false);
+    this.artifacts.reset();
     this.emit('change');
     this._fetchCards().then(function() {
       me.emit('change');
     });
-  },
-
-  _getColumnModels: function() {
-    return _.map(this.boardColumns, function(value) {
-      var col = new Column({ boardField: this.boardField, value: value });
-      col.clientMetricsParent = this;
-      return col;
-    }, this);
   },
 
   _fetchCards: function() {
@@ -101,15 +72,6 @@ var BoardStore = Fluxxor.createStore({
     }
     return fetchPromise.then(function(artifacts) {
       me.artifacts = artifacts;
-      artifacts.each(function(artifact) {
-        var column = _.find(me.columns, _.isAttributeEqual('value', artifact.get(me.boardField)));
-        if (column) {
-          column.artifacts.add(artifact, {silent: true});
-        }
-      }, this);
-      _.each(me.columns, function(col) {
-        col.setSynced(true);
-      });
     });
   },
 

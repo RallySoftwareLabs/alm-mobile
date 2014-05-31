@@ -12,12 +12,11 @@ module.exports = ReactView.createBackboneClass({
     onCardClick: React.PropTypes.func.isRequired
   },
   render: function() {
-    var model = this.props.model,
+    var storiesAndDefects = this._getMatchingArtifacts(),
         singleColumn = this.props.singleColumn,
         goLeft = '',
-        goRight = '',
-        storiesAndDefects = model.artifacts.sortBy(_.getAttribute('DragAndDropRank'));
-    if (singleColumn && !this.isColumnAtIndex(0)) {
+        goRight = '';
+    if (singleColumn && !this._isColumnAtIndex(0)) {
       goLeft = <i className="go-left icon-chevron-left"
                   onClick={this._goLeft}
                   onKeyDown={this.handleEnterAsClick(this._goLeft)}
@@ -25,7 +24,7 @@ module.exports = ReactView.createBackboneClass({
                   aria-label="Go to previous column"
                   tabIndex="0"/>;
     }
-    if (singleColumn && !this.isColumnAtIndex(this.props.columns.length - 1)) {
+    if (singleColumn && !this._isColumnAtIndex(this.props.columns.length - 1)) {
       goRight = <i className="go-right icon-chevron-right"
                    onClick={this._goRight}
                    onKeyDown={this.handleEnterAsClick(this._goRight)}
@@ -37,11 +36,12 @@ module.exports = ReactView.createBackboneClass({
       <div className="board">
         <div className={ "column" + (singleColumn ? ' single-column' : ' multi-column') }>
             <div className="header"
+              ref="header"
               onClick={this._onHeaderClick}
               onKeyDown={ this.handleEnterAsClick(this._onHeaderClick) }
               tabIndex="0"
-              aria-label={ "Board column: " + model.get('value') +
-                           (model.isSynced() ? ". has " + storiesAndDefects.length + " items" : ". loading") }>
+              aria-label={ "Board column: " + this.props.value +
+                           (this.props.artifacts.isSynced() ? ". has " + storiesAndDefects.length + " items" : ". loading") }>
                 {goLeft}
                 {this._getColumnHeaderStr(storiesAndDefects)}
                 {goRight}
@@ -54,20 +54,28 @@ module.exports = ReactView.createBackboneClass({
       </div>
     );
   },
+
   _getCardsMarkup: function(storiesAndDefects) {
     return _.map(storiesAndDefects, function(model, idx) {
       return <Card key={utils.toRelativeRef(model.get('_ref'))} model={model} onCardClick={this._onCardClick}/>;
     }, this);
   },
-  isColumnAtIndex: function(index) {
+
+  _getMatchingArtifacts: function() {
+    var matchingArtifacts = this.props.artifacts.filter(_.isAttributeEqual(this.props.boardField, this.props.value));
+    return _.sortBy(matchingArtifacts, _.getAttribute('DragAndDropRank'));
+  },
+
+  _isColumnAtIndex: function(index) {
     return this._getIndexInColumns() === index;
   },
+
   _getIndexInColumns: function() {
-    return _.findIndex(this.props.columns, _.isAttributeEqual('value', this.props.model.get('value')));
+    return _.findIndex(this.props.columns, function(column) { return column === this.props.value}, this);
   },
+
   _getColumnHeaderStr: function(storiesAndDefects) {
-    var model = this.props.model,
-        fieldValue = model.get('value'),
+    var fieldValue = this.props.value,
         str;
 
     if (this.props.abbreviateHeader) {
@@ -77,31 +85,36 @@ module.exports = ReactView.createBackboneClass({
     } else {
       str = fieldValue;
     }
-    return str + (model.isSynced() ? " (" + storiesAndDefects.length + ")" : " ...");
+    return str + (this.props.artifacts.isSynced() ? " (" + storiesAndDefects.length + ")" : " ...");
   },
+
   _onHeaderClick: function(e) {
     app.aggregator.recordAction({component: this, description: 'clicked column'});
-    this.props.onHeaderClick(this, this.props.model);
+    this.props.onHeaderClick(this, this.props.value);
     e.preventDefault();
   },
+
   _onCardClick: function(view, model) {
     this.props.onCardClick(view, model);
   },
+
   _goLeft: function(e) {
     app.aggregator.recordAction({component: this, description: 'clicked left on column'});
     this.props.onHeaderClick(this, this.props.columns[this._getIndexInColumns() - 1]);
     e.preventDefault();
     e.stopPropagation();
   },
+
   _goRight: function(e) {
     app.aggregator.recordAction({component: this, description: 'clicked right on column'});
     this.props.onHeaderClick(this, this.props.columns[this._getIndexInColumns() + 1]);
     e.preventDefault();
     e.stopPropagation();
-  },  
+  },
+
   _onAddClick: function(e) {
     app.aggregator.recordAction({component: this, description: 'clicked add card'});
-    this.routeTo('board/' + this.props.model.get('value') + '/userstory/new');
+    this.routeTo('board/' + this.props.value + '/userstory/new');
     e.preventDefault();
   }
 });

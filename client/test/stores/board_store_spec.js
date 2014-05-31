@@ -41,119 +41,94 @@ describe('stores/board', function() {
   });
   describe('initial fetch', function() {
     it('should scope query to project when passed in', function() {
-      this.boardStore = Object.create(BoardStore);
-      this.boardStore.init({
+      var me = this;
+      this.boardStore = new BoardStore({
         iteration: this.iteration,
         boardField: this.boardField,
         boardColumns: this.boardColumns,
         project: this.project
       });
-      this.boardStore.load();
-      expect(this.iterationFetchStub).to.have.been.calledOnce;
-      expect(this.iterationFetchStub.firstCall.args[0].project).to.equal('/project/12345');
-      expect(this.iterationFetchStub.firstCall.args[0].projectScopeUp).to.be.false;
-      expect(this.iterationFetchStub.firstCall.args[0].projectScopeDown).to.be.true;
+      return this.boardStore.load().then(function() {
+        expect(me.iterationFetchStub).to.have.been.calledOnce;
+        expect(me.iterationFetchStub.firstCall.args[0].project).to.equal('/project/12345');
+        expect(me.iterationFetchStub.firstCall.args[0].projectScopeUp).to.be.false;
+        expect(me.iterationFetchStub.firstCall.args[0].projectScopeDown).to.be.true;
+      });
     });
     it('should query for all columns if none specified', function() {
-      this.boardStore = Object.create(BoardStore);
-      this.boardStore.init({
+      var me = this;
+      this.boardStore = new BoardStore({
         boardField: this.boardField,
         boardColumns: this.boardColumns,
         project: this.project
       });
-      this.boardStore.load();
-      expect(this.artifactsFetchStub.firstCall.args[0].data.query).to.contain('(ScheduleState = "abc")');
-      expect(this.artifactsFetchStub.firstCall.args[0].data.query).to.contain('(ScheduleState = "def")');
+      return this.boardStore.load().then(function() {
+        expect(me.artifactsFetchStub.firstCall.args[0].data.query).to.contain('(ScheduleState = "abc")');
+        expect(me.artifactsFetchStub.firstCall.args[0].data.query).to.contain('(ScheduleState = "def")');
+      });
     });
     it('should query for all columns even if visibleColumn passed in', function() {
-      this.boardStore = Object.create(BoardStore);
-      this.boardStore.init({
+      var me = this;
+      this.boardStore = new BoardStore({
         boardField: this.boardField,
         boardColumns: this.boardColumns,
         project: this.project,
         visibleColumn: 'abc'
       });
-      this.boardStore.load();
-      expect(this.artifactsFetchStub.firstCall.args[0].data.query).to.contain('(ScheduleState = "abc")');
-      expect(this.artifactsFetchStub.firstCall.args[0].data.query).to.contain('(ScheduleState = "def")');
+      return this.boardStore.load().then(function() {
+        expect(me.artifactsFetchStub.firstCall.args[0].data.query).to.contain('(ScheduleState = "abc")');
+        expect(me.artifactsFetchStub.firstCall.args[0].data.query).to.contain('(ScheduleState = "def")');
+      });
     });
     it('should query by user when passed in', function() {
-      this.boardStore = Object.create(BoardStore);
-      this.boardStore.init({
+      var me = this;
+      this.boardStore = new BoardStore({
         iteration: this.iteration,
         boardField: this.boardField,
         boardColumns: this.boardColumns,
         project: this.project,
         user: this.user
       });
-      this.boardStore.load();
-      expect(this.iterationFetchStub.firstCall.args[0].query).to.contain('(Owner = "/user/23456")');
+      return this.boardStore.load().then(function() {
+        expect(me.iterationFetchStub.firstCall.args[0].query).to.contain('(Owner = "/user/23456")');
+      });
     });
     it('should query only by iteration when passed in', function() {
-      this.boardStore = Object.create(BoardStore);
-      this.boardStore.init({
+      var me = this;
+      this.boardStore = new BoardStore({
         iteration: this.iteration,
         boardField: this.boardField,
         boardColumns: this.boardColumns,
         project: this.project,
       });
-      this.boardStore.load();
-      expect(this.iterationFetchStub.firstCall.args[0].query).to.contain('(Iteration = "' + this.iteration.get('_ref') + '")');
-      expect(this.iterationFetchStub.firstCall.args[0].query).not.to.contain('(ScheduleState =');
-    });
-    it('should populate columns with results', function() {
-      this.boardStore = Object.create(BoardStore);
-      this.boardStore.init({
-        iteration: this.iteration,
-        boardField: this.boardField,
-        boardColumns: this.boardColumns,
-        project: this.project
+      return this.boardStore.load().then(function() {
+        expect(me.iterationFetchStub.firstCall.args[0].query).to.contain('(Iteration = "' + me.iteration.get('_ref') + '")');
+        expect(me.iterationFetchStub.firstCall.args[0].query).not.to.contain('(ScheduleState =');
       });
-      return this.boardStore.load().then(_.bind(function() {
-        var columns = this.boardStore.getColumns();
-        var abcColumn = _.find(columns, _.isAttributeEqual('value', 'abc'));
-        expect(abcColumn.artifacts).to.have.length(2);
-        expect(
-          abcColumn.artifacts.map(_.getAttribute('Name'))
-        ).to.eql(['1', '2']);
-        
-        var defColumn = _.find(columns, _.isAttributeEqual('value', 'def'));
-        expect(defColumn.artifacts).to.have.length(1);
-        expect(
-          defColumn.artifacts.map(_.getAttribute('Name'))
-        ).to.eql(['3']);
-      }, this));
     });
   });
 
-  describe('#getColumns', function() {
+  describe('#getState', function() {
     it('should return all columns if constructed without a column', function() {
-      this.boardStore = Object.create(BoardStore);
-      this.boardStore.init({
+      this.boardStore = new BoardStore({
         iteration: this.iteration,
         boardField: this.boardField,
         boardColumns: this.boardColumns,
         project: this.project
       });
-      this.boardStore.load();
-      expect(this.boardStore.getColumns()).to.have.length(2);
-      expect(
-        _.map(this.boardStore.getColumns(), _.getAttribute('value'))
-      ).to.eql(['abc', 'def']);
+      expect(this.boardStore.getState().columns).to.have.length(2);
+      expect(this.boardStore.getState().columns).to.be.eql(['abc', 'def']);
     });
     it('should return all columns if constructed with a column', function() {
-      this.boardStore = Object.create(BoardStore);
-      this.boardStore.init({
+      this.boardStore = new BoardStore({
         iteration: this.iteration,
         boardField: this.boardField,
         boardColumns: this.boardColumns,
         project: this.project,
         visibleColumn: 'abc'
       });
-      expect(this.boardStore.getColumns()).to.have.length(2);
-      expect(
-        _.map(this.boardStore.getColumns(), _.getAttribute('value'))
-      ).to.be.eql(['abc', 'def']);
+      expect(this.boardStore.getState().columns).to.have.length(2);
+      expect(this.boardStore.getState().columns).to.be.eql(['abc', 'def']);
     });
   });
 

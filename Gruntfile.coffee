@@ -25,6 +25,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'default', ['clean','less','indexHtml', 'copy:js', 'browserify:app', 'replace:js', 'copy:assets', 'concat', 'uglify', 'cssmin']
 
   grunt.registerTask 'test', ['test:conf', 'express:inline', 'mocha']
+  grunt.registerTask 'test:fast', ['replace:testPage', 'express:inline', 'mocha']
   grunt.registerTask 'test:conf', ['default', 'browserify:test', 'replace:test', 'replace:testPage']
   grunt.registerTask 'test:server', "Starts a test server at localhost:#{serverPort}, specify a different port with --port=<port>", ['express:server', 'express-keepalive']
 

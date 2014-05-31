@@ -49,21 +49,23 @@ module.exports = ReactView.createBackboneClass({
     return null;
   },
   getColumns: function() {
+    var artifacts = this.state.boardState.artifacts;
     var columns = this.state.boardState.columns;
     var visibleColumns = this._getVisibleColumns(columns);
     var zoomedIn = this._isZoomedIn();
     var colMarkup = _.map(visibleColumns, function(col) {
-      var colValue = col.get('value');
       var colView = ColumnView({
-            model: col,
+            artifacts: artifacts,
             columns: columns,
+            boardField: this.state.boardState.boardField,
+            value: col,
             singleColumn: zoomedIn,
             abbreviateHeader: !zoomedIn,
             showIteration: false,
             onCardClick: this._onCardClick,
             onHeaderClick: this._onColumnClick
           });
-      return <div className={"column-cell"} id={"col-" + utils.toCssClass(colValue)} key={ colValue }>{colView}</div>;
+      return <div className={"column-cell"} id={"col-" + utils.toCssClass(col)} key={ col }>{colView}</div>;
     }, this);
     if (!columns.length) {
       colMarkup = (
@@ -80,7 +82,7 @@ module.exports = ReactView.createBackboneClass({
 
   _getVisibleColumns: function(columns) {
     if (this.state.visibleColumn) {
-      return _.filter(columns, _.isAttributeEqual('value', this.state.visibleColumn));
+      return [this.state.visibleColumn];
     } else {
       return columns;
     }
@@ -92,7 +94,7 @@ module.exports = ReactView.createBackboneClass({
 
   _onColumnClick: function(view, column) {
     var me = this;
-    me.setState({ visibleColumn: column.get('value') }, function() {
+    me.setState({ visibleColumn: column }, function() {
       me.trigger('columnzoom', column);
     });
   },
