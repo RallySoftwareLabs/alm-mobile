@@ -2,10 +2,14 @@ var _ = require('underscore');
 var Promise = require('es6-promise').Promise;
 var Fluxxor = require("fluxxor");
 var app = require('application');
+var RealtimeUpdater = require('lib/realtime_updater');
 var utils = require('lib/utils');
 var Artifacts = require('collections/artifacts');
+var Artifact = require('models/artifact');
 var Column = require('models/column');
 var UserStory = require('models/user_story');
+
+var STORE_TYPES = ['hierarchicalrequirement', 'defect'];
 
 var BoardStore = Fluxxor.createStore({
 
@@ -19,6 +23,9 @@ var BoardStore = Fluxxor.createStore({
     this.artifacts = new Artifacts();
     this.scheduleStates = [];
 
+    if (options.listenForRealtimeUpdates) {
+      RealtimeUpdater.listenForRealtimeUpdates({project: this.project }, this._onRealtimeMessage, this);
+    }
     this.bindActions('setIteration', this.setIteration);
   },
 
@@ -62,7 +69,7 @@ var BoardStore = Fluxxor.createStore({
   _fetchCards: function() {
     var me = this;
     var fetchPromise;
-    var fetchData = this._getFetchData(this.boardColumns);
+    var fetchData = this._getFetchData();
     if (this.iteration) {
       fetchPromise = this.iteration.fetchScheduledItems(fetchData);
     } else {
@@ -75,13 +82,13 @@ var BoardStore = Fluxxor.createStore({
     });
   },
 
-  _getFetchData: function(values) {
+  _getFetchData: function(additionalQuery) {
     var query, kanbanFieldsQuery;
     var iterationRef = this.iteration && this.iteration.get('_ref');
     if (iterationRef) {
       query = '(Iteration = "' + iterationRef + '")';
     } else {
-      kanbanFieldsQuery = utils.createQueryFromCollection(values, this.boardField, 'OR', function(value) {
+      kanbanFieldsQuery = utils.createQueryFromCollection(this.boardColumns, this.boardField, 'OR', function(value) {
         return '"' + value + '"';
       });
       kanbanFieldsQuery = kanbanFieldsQuery.replace('(c_KanbanState = "Released")', '((c_KanbanState = "Released") AND (Release = null))');
@@ -91,7 +98,7 @@ var BoardStore = Fluxxor.createStore({
       shallowFetch: this.boardField + ',FormattedID,DisplayColor,Blocked,Ready,Name,Owner,PlanEstimate,ScheduleState,State,Tasks:summary[State;ToDo;Blocked],TaskStatus,Defects:summary[State],DefectStatus,Discussion:summary',
       query: query,
       pagesize: 200,
-      types: 'hierarchicalrequirement,defect',
+      types: STORE_TYPES.join(','),
       order: "Rank ASC",
       project: this.project.get('_ref'),
       projectScopeUp: false,
@@ -100,8 +107,81 @@ var BoardStore = Fluxxor.createStore({
     if (this.user) {
       data.query = '(' + data.query + ' AND (Owner = "' + this.user.get('_ref') + '"))';
     }
+    if (additionalQuery) {
+      data.query = '(' + data.query + ' AND ' + additionalQuery + ')';
+    }
 
     return data;
+  },
+
+  _onRealtimeMessage: function(msgData) {
+    var me = this;
+    var model = this._findModel(msgData);
+    var modelType = utils.getWsapiType(msgData.modelType);
+
+
+    if (msgData.action === 'Recycled') {
+      if (model) {
+        this._removeModelOnPage(model);
+      }
+      return;
+    }
+    
+    if (!_.contains(STORE_TYPES, modelType)) {
+      return;
+    }
+
+    if (msgData.action === 'Created' || !model) {
+      model = this._createModelFromRealtimeMessage(msgData);
+      this.artifacts.add(model);
+    }
+    this._updateModelOnPage(model, msgData).then(function() {
+      me.emit('change');
+    });
+  },
+
+  _findModel: function(msgData) {
+    var uuid = msgData.id;
+
+    if (!this.artifacts) {
+      return null;
+    }
+    
+    return this.artifacts.find(_.isAttributeEqual('_refObjectUUID', uuid));
+  },
+
+  _createModelFromRealtimeMessage: function(msgData) {
+    var modelType = utils.getWsapiType(msgData.modelType);
+    var artifact = new Artifact({ _refObjectUUID: msgData.id });
+    artifact.typePath = modelType;
+    return artifact;
+  },
+    
+  _updateModelOnPage: function(model, msgData, isCreate) {
+    var me = this;
+    var modelType = utils.getWsapiType(msgData.modelType);
+    var artifacts = new Artifacts();
+    artifacts.urlRoot = model.urlRoot.replace('artifact', modelType);
+    artifacts.fetch({
+      data: this._getFetchData()
+    });
+    return artifacts.fetch({
+      data: this._getFetchData('(ObjectID = ' + msgData.state.ObjectID + ')')
+    }).then(function() {
+      var artifact = null;
+      if (artifacts.length === 1) {
+        artifact = artifacts.at(0);
+      }
+      me.artifacts.remove(model);
+      if (artifact) {
+        me.artifacts.add(artifact);
+      }
+    });
+  },
+
+  _removeModelOnPage: function(model) {
+    this.artfiacts.remove(model);
+    me.emit('change');
   }
 });
 

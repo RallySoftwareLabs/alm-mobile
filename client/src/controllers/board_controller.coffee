@@ -14,7 +14,7 @@ module.exports = class BoardController extends SiteController
       session = app.session
       @updateTitle session.getProjectName()
 
-      boardStore = @_buildStore(session)
+      boardStore = @_buildStore(session, appConfig.isProd())
       
       flux = new Fluxxor.Flux({ BoardStore: boardStore }, BoardActions)
       boardStore.load()
@@ -32,7 +32,7 @@ module.exports = class BoardController extends SiteController
   _onModelSelected: (view, model) ->
     @redirectTo utils.getDetailHash(model)
 
-  _buildStore: (session) ->
+  _buildStore: (session, listenForRealtimeUpdates) ->
     new BoardStore({
       boardField: session.get('boardField')
       boardColumns: session.getBoardColumns()
@@ -40,4 +40,5 @@ module.exports = class BoardController extends SiteController
       iteration: session.get('iteration')
       iterations: session.get('iterations')
       user: if session.isSelfMode() then session.get('user')
+      listenForRealtimeUpdates: listenForRealtimeUpdates
     })
