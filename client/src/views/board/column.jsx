@@ -1,9 +1,9 @@
 /** @jsx React.DOM */
 var React = require('react');
 var _ = require('underscore');
+var app = require('application');
 var utils = require('lib/utils');
 var ReactView = require('views/base/react_view');
-var app = require('application');
 var Card = require('views/board/card');
 
 module.exports = ReactView.createBackboneClass({
@@ -47,7 +47,6 @@ module.exports = ReactView.createBackboneClass({
                 {goRight}
             </div>
             <div className="body">
-              <button className="btn btn-primary add-button" onClick={this._onAddClick} aria-label="Add new story to this column" tabIndex="0">+ Add</button>
               {this._getCardsMarkup(storiesAndDefects)}
             </div>
         </div>
@@ -110,11 +109,5 @@ module.exports = ReactView.createBackboneClass({
     this.props.onHeaderClick(this, this.props.columns[this._getIndexInColumns() + 1]);
     e.preventDefault();
     e.stopPropagation();
-  },
-
-  _onAddClick: function(e) {
-    app.aggregator.recordAction({component: this, description: 'clicked add card'});
-    this.routeTo('board/' + this.props.value + '/userstory/new');
-    e.preventDefault();
   }
 });

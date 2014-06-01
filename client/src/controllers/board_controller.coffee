@@ -25,12 +25,16 @@ module.exports = class BoardController extends SiteController
       ).then (view) =>
         @listenTo(view, 'columnzoom', @_onColumnZoom)
         @listenTo(view, 'modelselected', @_onModelSelected)
+        @listenTo(view, 'addnew', @_onAddNew)
 
   _onColumnZoom: (column) ->
     @updateUrl "board/#{column}"
 
   _onModelSelected: (view, model) ->
     @redirectTo utils.getDetailHash(model)
+
+  _onAddNew: (view, column) ->
+    @redirectTo('board/' + column + '/userstory/new')
 
   _buildStore: (session, listenForRealtimeUpdates) ->
     new BoardStore({

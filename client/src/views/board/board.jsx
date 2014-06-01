@@ -2,6 +2,7 @@
 var React = require('react');
 var _ = require('underscore');
 var Fluxxor = require("fluxxor");
+var app = require('application');
 var utils = require('lib/utils');
 var ReactView = require('views/base/react_view');
 var ColumnView = require('views/board/column');
@@ -37,6 +38,7 @@ module.exports = ReactView.createBackboneClass({
                          onChange={ this._onIterationChange }
                          onSelect={ this._onIterationSelect } />
         { this.getStatsBannerMarkup() }
+        <button className="btn btn-primary add-button" onClick={this._onAddClick} aria-label="Add new story to this column" tabIndex="0">+ Add</button>
         <div className="column-container">{this.getColumns()}</div>
       </div>
     );
@@ -51,7 +53,7 @@ module.exports = ReactView.createBackboneClass({
   getColumns: function() {
     var artifacts = this.state.boardState.artifacts;
     var columns = this.state.boardState.columns;
-    var visibleColumns = this._getVisibleColumns(columns);
+    var visibleColumns = this._getVisibleColumns();
     var zoomedIn = this._isZoomedIn();
     var colMarkup = _.map(visibleColumns, function(col) {
       var colView = ColumnView({
@@ -80,7 +82,8 @@ module.exports = ReactView.createBackboneClass({
     return colMarkup;
   },
 
-  _getVisibleColumns: function(columns) {
+  _getVisibleColumns: function() {
+    var columns = this.state.boardState.columns;
     if (this.state.visibleColumn) {
       return [this.state.visibleColumn];
     } else {
@@ -101,6 +104,12 @@ module.exports = ReactView.createBackboneClass({
 
   _onCardClick: function(view, model) {
     this.trigger('modelselected', view, model);
+  },
+
+  _onAddClick: function(e) {
+    app.aggregator.recordAction({component: this, description: 'clicked add card'});
+    this.trigger('addnew', this, _.first(this._getVisibleColumns()));
+    e.preventDefault();
   },
 
   _onIterationChange: function(view, iteration) {
