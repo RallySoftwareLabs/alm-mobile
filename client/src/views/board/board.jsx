@@ -62,7 +62,6 @@ module.exports = ReactView.createBackboneClass({
             boardField: this.state.boardState.boardField,
             value: col,
             singleColumn: zoomedIn,
-            abbreviateHeader: !zoomedIn,
             showIteration: false,
             onCardClick: this._onCardClick,
             onHeaderClick: this._onColumnClick

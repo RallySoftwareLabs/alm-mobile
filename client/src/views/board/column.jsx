@@ -43,7 +43,7 @@ module.exports = ReactView.createBackboneClass({
               aria-label={ "Board column: " + this.props.value +
                            (this.props.artifacts.isSynced() ? ". has " + storiesAndDefects.length + " items" : ". loading") }>
                 {goLeft}
-                {this._getColumnHeaderStr(storiesAndDefects)}
+                {this.props.value}
                 {goRight}
             </div>
             <div className="body">
@@ -71,20 +71,6 @@ module.exports = ReactView.createBackboneClass({
 
   _getIndexInColumns: function() {
     return _.findIndex(this.props.columns, function(column) { return column === this.props.value}, this);
-  },
-
-  _getColumnHeaderStr: function(storiesAndDefects) {
-    var fieldValue = this.props.value,
-        str;
-
-    if (this.props.abbreviateHeader) {
-      str = _.map(fieldValue.replace(/-/g, ' ').split(' '), function(word) {
-        return word[0];
-      }).join('');
-    } else {
-      str = fieldValue;
-    }
-    return str + (this.props.artifacts.isSynced() ? " (" + storiesAndDefects.length + ")" : " ...");
   },
 
   _onHeaderClick: function(e) {
