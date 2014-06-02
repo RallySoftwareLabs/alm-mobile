@@ -122,7 +122,8 @@ var BoardStore = Fluxxor.createStore({
 
     if (msgData.action === 'Recycled') {
       if (model) {
-        this._removeModelOnPage(model);
+        this.artifacts.remove(model);
+        me.emit('change');
       }
       return;
     }
@@ -162,9 +163,6 @@ var BoardStore = Fluxxor.createStore({
     var modelType = utils.getWsapiType(msgData.modelType);
     var artifacts = new Artifacts();
     artifacts.urlRoot = model.urlRoot.replace('artifact', modelType);
-    artifacts.fetch({
-      data: this._getFetchData()
-    });
     return artifacts.fetch({
       data: this._getFetchData('(ObjectID = ' + msgData.state.ObjectID + ')')
     }).then(function() {
@@ -177,11 +175,6 @@ var BoardStore = Fluxxor.createStore({
         me.artifacts.add(artifact);
       }
     });
-  },
-
-  _removeModelOnPage: function(model) {
-    this.artfiacts.remove(model);
-    me.emit('change');
   }
 });
 
