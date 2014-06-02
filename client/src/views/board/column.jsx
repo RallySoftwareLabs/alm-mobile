@@ -14,8 +14,8 @@ module.exports = ReactView.createBackboneClass({
   render: function() {
     var storiesAndDefects = this._getMatchingArtifacts(),
         singleColumn = this.props.singleColumn,
-        goLeft = '',
-        goRight = '';
+        goLeft,
+        goRight;
     if (singleColumn && !this._isColumnAtIndex(0)) {
       goLeft = <i className="go-left icon-chevron-left"
                   onClick={this._goLeft}
