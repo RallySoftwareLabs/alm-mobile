@@ -20,10 +20,11 @@ module.exports = class Controller
         if !projectRef || _.contains(sessionProject.get('_ref'), projectRef)
           resolve()
         else
-          project = Projects::projects.find _.isAttributeEqual '_ref', projectRef
           @_renderLoadingIndicatorUntilProjectIsReady(options.showLoadingIndicator).then ->
             resolve()
-          app.session.set 'project', project
+          Projects.fetchAll().then (projects) =>
+            project = projects.find _.isAttributeEqual '_ref', projectRef
+            app.session.set 'project', project
       else
         @_renderLoadingIndicatorUntilProjectIsReady(options.showLoadingIndicator).then ->
           resolve()

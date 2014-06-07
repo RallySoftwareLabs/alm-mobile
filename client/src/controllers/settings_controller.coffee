@@ -10,8 +10,11 @@ BoardSettingsView = require 'views/settings/board_settings'
 module.exports = class SettingsController extends SiteController
 
   show: (params) ->
-    @whenProjectIsLoaded().then =>
-      @renderReactComponent(SettingsView, region: 'main', model: app.session, projects: Projects::projects).then (view) =>
+    Promise.all([
+      Projects.fetchAll(),
+      @whenProjectIsLoaded()
+    ]).then ([projects]) =>
+      @renderReactComponent(SettingsView, region: 'main', model: app.session, projects: projects).then (view) =>
         @subscribeEvent 'changeMode', @onChangeMode
         @subscribeEvent 'changeBoardField', @onChangeBoardField
         @subscribeEvent 'changeProject', @onChangeProject

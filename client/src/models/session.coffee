@@ -68,14 +68,22 @@ module.exports = class Session extends Model
     return unless user?
     @aggregator.beginLoad component: this, description: 'session init'
 
-    Projects.fetchAll().then (p) =>
-      projects = Projects::projects
-      @_setModeFromPreference()
-      if projectRef
-        specifiedProject = projects.find _.isAttributeEqual('_ref', projectRef)
-        @set('project', specifiedProject) if specifiedProject
-      else
-        @_setDefaultProject projects
+    projectRef ?= @_getDefaultProjectRef()
+
+    if projectRef
+      projects = new Projects()
+      projectPromise = projects.fetch(data:
+        shallowFetch: 'Name,Parent,Workspace,SchemaVersion'
+        query: "(ObjectID = #{utils.getOidFromRef(projectRef)})"
+      ).then ->
+        projects.first()
+    else
+      projectPromise = Projects.fetchAll().then (projects) =>
+        projects.first()
+
+    @_setModeFromPreference()
+    projectPromise.then (specifiedProject) =>
+      @set('project', specifiedProject)
 
   getProjectName: ->
     try
@@ -189,16 +197,15 @@ module.exports = class Session extends Model
       when 'ScheduleState' then _(UserStory.getAllowedValues(boardField)).pluck('StringValue').compact().value()
       else []
 
-  _setDefaultProject: (projects) ->
-    defaultProject = @get('prefs').findPreference(Preference::defaultProject)
-    if defaultProject
-      savedProject = projects.find _.isAttributeEqual('_ref', defaultProject.get('Value'))
-      @set('project', savedProject) if savedProject
+  _getDefaultProjectRef: ->
+    defaultProjectPref = @get('prefs').findPreference(Preference::defaultProject)
+    if defaultProjectPref
+      return defaultProjectPref.get('Value')
+    
+    @get('user').get('UserProfile').DefaultProject._ref
 
     if !@get 'project'
       defaultProject = @get('user').get('UserProfile').DefaultProject._ref
-      proj = projects.find _.isAttributeEqual('_ref', defaultProject)
-      @set 'project', proj || projects.first()
 
   _setModeFromPreference: ->
     mode = 'team'
@@ -206,7 +213,7 @@ module.exports = class Session extends Model
     if savedMode
       mode = savedMode.get 'Value'
 
-    @set 'mode', mode
+    @set(mode: mode, trigger: false)
 
   _setBoardFieldFromPreference: ->
     boardField = 'ScheduleState'

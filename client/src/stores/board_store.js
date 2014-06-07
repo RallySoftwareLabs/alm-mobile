@@ -12,6 +12,7 @@ var UserStory = require('models/user_story');
 var STORE_TYPES = ['hierarchicalrequirement', 'defect'];
 
 var BoardStore = Fluxxor.createStore({
+  clientMetricsType: 'BoardStore',
 
   initialize: function(options) {
     this.boardField = options.boardField;
