@@ -1,21 +1,29 @@
 /** @jsx React.DOM */
 var _ = require('underscore');
 var React = require('react');
-var ReactView = require('views/base/react_view');
+var Fluxxor = require("fluxxor");
 var app = require('application');
+var ReactView = require('views/base/react_view');
 var UserStory = require('models/user_story');
 
 module.exports = ReactView.createBackboneClass({
+  mixins: [Fluxxor.FluxMixin(React), Fluxxor.StoreWatchMixin("SettingsStore")],
 
+  // Required by StoreWatchMixin
+  getStateFromFlux: function() {
+    return {
+      settingsState: this.getFlux().store("SettingsStore").getState()
+    };
+  },
   render: function() {
     return (
       <div className="board-settings">
         <h4 className="text-center">Choose columns to display</h4>
         <dl className="dl-horizontal">
             <dt>Field:</dt>
-            <dd>{ this.props.fieldName }</dd>
+            <dd>{ UserStory.getFieldDisplayName(this.state.settingsState.boardField) }</dd>
             <dt>Project:</dt>
-            <dd>{ this.props.model.getProjectName() }</dd>
+            <dd>{ this.state.settingsState.project.get('_refObjectName') }</dd>
         </dl>
         <div className="row board-columns">
             <div className="col-xs-12 listing">
@@ -48,15 +56,15 @@ module.exports = ReactView.createBackboneClass({
   onColumnClickFn: function(col) {
     return _.bind(function(event) {
       app.aggregator.recordAction({component: this, description: "toggled column"});
-      this.publishEvent('columnClick', col.StringValue);
+      this.getFlux().actions.toggleBoardColumn(col.StringValue);
     }, this);
   },
 
   _getColumns: function() {
-    var boardField = this.props.model.get('boardField');
-    var shownColumns = this.props.model.getBoardColumns();
+    var boardField = this.state.settingsState.boardField;
+    var shownColumns = this.state.settingsState.boardColumns;
 
-    return _.map(this.props.allowedValues, function(col) {
+    return _.map(this.state.settingsState.allColumns, function(col) {
       return {
         StringValue: col.StringValue,
         showing: _.contains(shownColumns, col.StringValue)

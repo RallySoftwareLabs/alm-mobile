@@ -11,10 +11,12 @@ BoardView = require 'views/board/board'
 module.exports = class BoardController extends SiteController
   index: (colValue) ->
     @whenProjectIsLoaded().then =>
+      app.session.getBoardColumns()
+    .then (boardColumns) =>
       session = app.session
       @updateTitle session.getProjectName()
 
-      boardStore = @_buildStore(session, appConfig.isProd())
+      boardStore = @_buildStore(session, boardColumns, appConfig.isProd())
       
       flux = new Fluxxor.Flux({ BoardStore: boardStore }, BoardActions)
       boardStore.load()
@@ -36,10 +38,10 @@ module.exports = class BoardController extends SiteController
   _onAddNew: (view, column) ->
     @redirectTo('board/' + column + '/userstory/new')
 
-  _buildStore: (session, listenForRealtimeUpdates) ->
+  _buildStore: (session, boardColumns, listenForRealtimeUpdates) ->
     new BoardStore({
-      boardField: session.get('boardField')
-      boardColumns: session.getBoardColumns()
+      boardField: session.getBoardField()
+      boardColumns: boardColumns
       project: session.get('project')
       iteration: session.get('iteration')
       iterations: session.get('iterations')

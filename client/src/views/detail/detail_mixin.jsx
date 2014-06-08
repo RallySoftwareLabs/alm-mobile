@@ -59,6 +59,6 @@ module.exports = {
   },
 
   getBoardField: function() {
-    return app.session.get('boardField');
+    return app.session.getBoardField();
   }
 };

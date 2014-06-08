@@ -30,7 +30,7 @@ module.exports = class DefectDetailController extends SiteController
   defectForColumn: (column) ->
     @whenProjectIsLoaded().then =>
       props = {}
-      props[app.session.get('boardField')] = column
+      props[app.session.getBoardField()] = column
       iterationRef = app.session.get('iteration')?.get('_ref')
       if iterationRef
         props.Iteration = iterationRef

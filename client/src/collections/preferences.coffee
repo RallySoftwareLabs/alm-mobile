@@ -76,7 +76,7 @@ module.exports = class Preferences extends Collection
     Promise.resolve(
       unless _.isEmpty(changedAttrs)
         newPref.clientMetricsParent = this
-        newPref.save changedAttrs, patch: true, success: (model) => @add newPref unless existingPref
+        newPref.save changedAttrs, wait: false, patch: true, success: (model) => @add newPref unless existingPref
     )
 
   updateWallPreference: (user, value) ->

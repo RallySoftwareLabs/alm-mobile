@@ -20,12 +20,7 @@ module.exports = ReactView.createBackboneClass({
       visibleColumn: this.props.visibleColumn
     };
   },
-  // componentDidMount: function() {
-  //   this.listenTo(this.state.boardState, 'change', this.forceUpdate);
-  // },
   componentWillReceiveProps: function(newProps) {
-    // this.stopListening(this.state.boardState, 'change', this.forceUpdate);
-    // this.listenTo(newProps.store, 'change', this.forceUpdate);
     this.setState({ visibleColumn: newProps.visibleColumn });
   },
 

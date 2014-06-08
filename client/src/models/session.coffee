@@ -19,9 +19,10 @@ module.exports = class Session extends Model
     super
     @set
       securityToken: window.sessionStorage.getItem 'token'
+      boardColumns: {}
+
     @listenTo this, 'change:user', @_onUserChange
     @listenTo this, 'change:mode', @_onModeChange
-    @listenTo this, 'change:boardField', @_onBoardFieldChange
     @listenTo this, 'change:project', @_onProjectChange
     @listenTo this, 'change:iteration', @_onIterationChange
 
@@ -143,29 +144,33 @@ module.exports = class Session extends Model
         @set 'user', u
       cb(err, u)
 
-  initColumnsFor: (boardField) ->
-    pref = "#{Preference::defaultBoardColumnsPrefix}.#{boardField}"
-    savedColumns = @get('prefs').findProjectPreference(@get('project').get('_ref'), pref)
-    if savedColumns
-      columns = savedColumns.get 'Value'
+  getBoardField: ->
+    boardField = 'ScheduleState'
+    savedBoardField = @get('prefs').findProjectPreference @get('project').get('_ref'), Preference::defaultBoardField
+    if savedBoardField
+      boardField = savedBoardField.get 'Value'
 
-    visibleColumns = if columns then columns.split ',' else @_getDefaultBoardColumns(boardField)
-    Promise.resolve(visibleColumns).then (cols) =>
-      @setBoardColumns boardField, cols
-    visibleColumns
+    boardField
 
-  getBoardColumns: (boardField = @get('boardField')) ->
-    pref = "#{Preference::defaultBoardColumnsPrefix}.#{boardField}"
-    projectOid = utils.getOidFromRef @get('project').get('_ref')
-    columns = @get "#{pref}.#{projectOid}"
+  setBoardField: (boardField) ->
+    @aggregator.beginLoad component: this, description: 'saving board field'
+    projectRef = @get('project').get('_ref')
+    @get('prefs').updateProjectPreference(
+      @get('user').get('_ref'),
+      projectRef,
+      Preference::defaultBoardField,
+      boardField
+    ).then =>
+      @aggregator.endLoad component: this
+      this.trigger('change')
 
-    unless columns
-      columns = @initColumnsFor boardField
+  # Returns a promise
+  getBoardColumns: (boardField = @getBoardField()) ->
+    columns = @_getSavedBoardColumns(boardField) || @_getDefaultBoardColumns(boardField)
+    Promise.resolve(columns)
 
-    columns
-
-  toggleBoardColumn: (column, boardField = @get('boardField')) ->
-    shownColumns = @getBoardColumns boardField
+  toggleBoardColumn: (column, boardField = @getBoardField()) ->
+    shownColumns = @_getSavedBoardColumns(boardField) || []
 
     newColumns = if _.contains(shownColumns, column)
       _.without(shownColumns, column)
@@ -177,24 +182,37 @@ module.exports = class Session extends Model
 
     Promise.resolve(newColumns).then (cols) =>
       @setBoardColumns boardField, cols
+      cols
 
   setBoardColumns: (boardField, columns) ->
     @aggregator.beginLoad component: this, description: 'saving board columns'
     pref = "#{Preference::defaultBoardColumnsPrefix}.#{boardField}"
     projectRef = @get('project').get('_ref')
-    projectOid = utils.getOidFromRef projectRef
 
-    @set "#{pref}.#{projectOid}", columns
     @get('prefs').updateProjectPreference(
       @get('user').get('_ref'),
       projectRef,
       pref,
       columns.join(',')
-    ).then => @aggregator.endLoad component: this
+    ).then =>
+      @aggregator.endLoad component: this
+
+  _getSavedBoardColumns: (boardField) ->
+    pref = "#{Preference::defaultBoardColumnsPrefix}.#{boardField}"
+    columnPref = @get('prefs').findProjectPreference(
+      @get('project').get('_ref'),
+      pref
+    )
+    if columnPref
+      columns = columnPref.get('Value').split(',')
+
+    columns
 
   _getDefaultBoardColumns: (boardField) ->
     switch boardField
-      when 'ScheduleState' then _(UserStory.getAllowedValues(boardField)).pluck('StringValue').compact().value()
+      when 'ScheduleState'
+        UserStory.getAllowedValues(boardField).then (allowedValues) ->
+          _(allowedValues).pluck('StringValue').compact().value()
       else []
 
   _getDefaultProjectRef: ->
@@ -215,14 +233,6 @@ module.exports = class Session extends Model
 
     @set(mode: mode, trigger: false)
 
-  _setBoardFieldFromPreference: ->
-    boardField = 'ScheduleState'
-    savedBoardField = @get('prefs').findProjectPreference @get('project').get('_ref'), Preference::defaultBoardField
-    if savedBoardField
-      boardField = savedBoardField.get 'Value'
-
-    @set 'boardField', boardField
-
   loadSchema: (project) ->
     schema = new Schema()
     schema.clientMetricsParent = this
@@ -232,15 +242,10 @@ module.exports = class Session extends Model
   _onModeChange: (model, value, options) ->
     @get('prefs').updatePreference @get('user'), Preference::defaultMode, value
 
-  _onBoardFieldChange: (model, value, options) ->
-    @get('prefs').updateProjectPreference @get('user').get('_ref'), @get('project').get('_ref'), Preference::defaultBoardField, value
-
   _onProjectChange: (model, value, options) ->
     @aggregator.beginLoad component: this, description: 'on project change'
     projectRef = value.get('_ref')
     prefs = @get('prefs')
-
-    @_setBoardFieldFromPreference()
 
     prefs.updatePreference @get('user'), Preference::defaultProject, projectRef
 
@@ -257,7 +262,6 @@ module.exports = class Session extends Model
           query: "(Project = \"#{projectRef}\")"
       )
     ]).then (s, i) =>
-      @initColumnsFor @get('boardField')
       @_setSessionIteration()
       @aggregator.endLoad component: this
       @publishEvent "projectready", @getProjectName()

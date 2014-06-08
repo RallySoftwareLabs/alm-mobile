@@ -40,7 +40,7 @@ module.exports = class UserStoryDetailController extends SiteController
   storyForColumn: (column) ->
     @whenProjectIsLoaded().then =>
       props = {}
-      props[app.session.get('boardField')] = column
+      props[app.session.getBoardField()] = column
       iterationRef = app.session.get('iteration')?.get('_ref')
       if iterationRef
         props.Iteration = iterationRef
@@ -66,5 +66,5 @@ module.exports = class UserStoryDetailController extends SiteController
       'Release'
       'ScheduleState'
       'Tasks'
-      app.session.get('boardField')
+      app.session.getBoardField()
     ])
