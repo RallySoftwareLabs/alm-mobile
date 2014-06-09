@@ -15,6 +15,7 @@ module.exports = ReactView.createBackboneClass({
   },
   render: function() {
     var currentPage = this.getCurrentPage();
+    var appModes = this._getAppModes(currentPage);
     return (
       <div>
         <div className="navbar navbar-inverse" role="navigation">
@@ -27,20 +28,7 @@ module.exports = ReactView.createBackboneClass({
           </div>
         </div>
         <div className="row app-modes">
-          <div className={ this._getAppModeCls('board', currentPage) } onClick={ this._navigateToFn('/board') }>
-            <div>
-              <span className="picto icon-board"/>
-              <span className="mode-text">Board</span>
-            </div>
-            <div className="active-border"/>
-          </div>
-          <div className={ this._getAppModeCls('setup', currentPage)} onClick={ this._navigateToFn('/settings') }>
-            <div>
-              <span className="picto icon-setup"/>
-              <span className="mode-text">Setup</span>
-            </div>
-            <div className="active-border"/>
-          </div>
+          { appModes }
         </div>
       </div>
     );
@@ -68,14 +56,30 @@ module.exports = ReactView.createBackboneClass({
     );
   },
 
-  _getAppModeCls: function(mode, currentPage) {
-    var isActive = false;
-    if (((mode === 'setup') && (currentPage.match(/^\/settings(\/board)?$/))) ||
-      ((mode === 'board') && (currentPage.match(/^\/board/)))) {
-      isActive = true;
-    }
-
-    return "col-xs-6 app-mode " + mode + (isActive ? ' active' : '');
+  _getAppModes: function(currentPage) {
+    var appModes = [{
+      url: '/board',
+      icon: 'board',
+      text: 'Board',
+      pattern: /^\/board/
+    }, {
+      url: '/settings',
+      icon: 'setup',
+      text: 'Setup',
+      pattern: /^\/settings(\/board)?$/
+    }];
+    return _.map(appModes, function(appMode) {
+      var isActive = currentPage.match(appMode.pattern);
+      return (
+        <div key={ appMode.text } className={ "col-xs-6 app-mode " + (isActive ? ' active' : '') } onClick={ this._navigateToFn(appMode.url) }>
+          <div>
+            <span className={ "picto icon-" + appMode.icon }/>
+            <span className="mode-text">{ appMode.text }</span>
+          </div>
+          <div className="active-border"/>
+        </div>
+      );
+    }, this);
   },
   
   _onTitleUpdate: function(title) {
