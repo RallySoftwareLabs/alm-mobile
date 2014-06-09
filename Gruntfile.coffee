@@ -185,7 +185,8 @@ module.exports = (grunt) ->
           'client/dist/js/jquery.base64.min.js': 'vendor/scripts/jquery.base64.min.js'
       assets:
         files: [
-          {expand: true, dest: 'client/dist/', cwd: 'client/assets/', src: '**', filter: 'isFile'}
+          {expand: true, dest: 'client/dist/', cwd: 'client/assets/', src: '**', filter: 'isFile'},
+          {expand: true, dest: 'client/dist/', cwd: 'client/assets/img', src: 'favicon.ico', filter: 'isFile'}
         ]
 
     uglify:

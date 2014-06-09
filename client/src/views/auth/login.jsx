@@ -10,7 +10,7 @@ module.exports = ReactView.createBackboneClass({
       <div id="login">
         <div className="login-header">
           <a className="labs-link" title="Rally Innovation Labs" href="//labs.rallydev.com">
-            <img src="img/logo-labs.gif" alt="Rally Innovation Labs"/>
+            <img src="img/logo-labs.gif" width="308" height="52" alt="Rally Innovation Labs"/>
           </a>
         </div>
         <form className="login-form" role="form" onSubmit={this.signIn}>
