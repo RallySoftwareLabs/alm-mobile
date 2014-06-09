@@ -1,6 +1,6 @@
 This is a fork of https://github.com/RallySoftwareLabs/alm-mobile with some new views that we hope to sell someday. 
 
-This site is currently running at https://wall.rallydev.com.
+This site is currently running at https://m.rallydev.com.
 
 ## How can I contribute?
 
@@ -43,7 +43,7 @@ You will need to create a config.json file to configure the ALM url. You should 
 
 - **almWebServiceBaseUrl**: You should change this value if you want to point to a different Rally ALM Server URL
 - **appName**: You should change this value so that it is a unique name that represents your application and who your are.
-- **mode**: Which mode do you want to run the site in? Acceptable values are "board" and "wall"
+- **mode**: Which mode do you want to run the site in? The only currently acceptable value is "board"
 
 ## Customizing Bootstrap Stylesheets
 
@@ -71,52 +71,6 @@ Your bucket should be configured for Website Hosting. Here's a link to AWS Docum
 
 # Testing
 
-## Android Emulator
+## Mocha
 
-Full documentation can be found at the [Android Developer](http://developer.android.com/index.html) site.
-
-Download and unzip the [Android SDK](http://developer.android.com/sdk/index.html) in order to set up your Android Virtual Device (AVD)
-
-From the unzipped SDK directory get the config ID
-
-    sdk/tools/android list target
-
-Create an AVD with the target id from an image
-
-    android create avd -n <avd_name> -t <config id>
-
-Run the AVD with the emulator tool with graphics acceleration for increased responsiveness
-
-    emulator -avd my_avd -gpu on
-
-Download the [WebDriver for Android](http://code.google.com/p/selenium/downloads/list)
-
-Get the serial ID for your emulator
-
-    platform-tools/adb devices
-
-Install the Android WebDriver to your emulator
-
-    platform-tools/adb -s <serialId> -e install -r android-server.apk
-
-Start the Android WebDriver on your emulator
-
-    platform-tools/adb -s <serialId> shell am start -a android.intent.action.MAIN -n org.openqa.selenium.android.app/.MainActivity
-
-Set up port forwarding for TCP connections from your hostmachine to your emulator
-
-    platform-tools/adb -s <serialId> forward tcp:8080 tcp:8080
-
-## Launching alm-mobile in the Windows Phone 8 Emulator
-
-Start up [Visual Studio Express 2012 for Windows Phone](http://www.microsoft.com/visualstudio/eng/downloads), and create a new Visual C# Windows Phone App project. Name it anything you want and save it anywhere you want. Once the project has loaded, press F5 or the debug button to start the emulator. It will launch the skeleton app, just press the Windows button on the phone to return to the OS then launch Internet Explorer. You will need to load the site using your IP address instead of localhost, as the emulator has its own IP address.  
-  
-To use your computer's keyboard inside the emulator:
-
-* **On a standard Windows keyboard:** `page up` see [this page](http://msdn.microsoft.com/en-us/library/windowsphone/develop/ff754352\(v=vs.105\).aspx) for details
-* **On a fullsize Mac keyboard:** `fn-page down` works for me, although the magic combo seems to vary a lot for people across the web. `fn-escape` has been reported to work as well.
-
-## Conventions
-
-* All CoffeeScript should be indented with 2 spaces (soft tabs).
-* All JavaScript files should be indented with 4 spaces (soft tabs).
+The JavaScript tests are written in mocha. A typical developer experience for building tests is to run: ```grunt test:server``` in one terminal, ```grunt && grunt watch``` in another and to open any browser to http://localhost:8900/
