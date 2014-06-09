@@ -19,8 +19,8 @@ module.exports = ReactView.createBackboneClass({
                   "Current iteration: " + iteration.get('Name') +
                   ". From " + moment(iteration.get('StartDate')).format('LL') + " to " + moment(iteration.get('EndDate')).format('LL')
                 }>
-            { this._getShowLeftMarkup(currentIndex) }
             <span>Iteration:</span>
+            { this._getShowLeftMarkup(currentIndex) }
             <div className="iteration-data"
                  tabIndex="0"
                  role="link"
@@ -44,7 +44,7 @@ module.exports = ReactView.createBackboneClass({
     if (this.props.iterations && currentIndex < this.props.iterations.length - 1) {
       return (
         <span className="iteration-arrow">
-          <i className="go-left icon-left"
+          <i className="go-left icon-chevron-left"
              onClick={this._onChangeFn(this.props.iterations.at(currentIndex + 1))}
              onKeyDown={this.handleEnterAsClick(this._onChangeFn(this.props.iterations.at(currentIndex + 1)))}
              role="link"
@@ -60,7 +60,7 @@ module.exports = ReactView.createBackboneClass({
     if (this.props.iterations && currentIndex > 0) {
       return (
         <span className="iteration-arrow">
-          <i className="go-right icon-right"
+          <i className="go-right icon-chevron-right"
              onClick={this._onChangeFn(this.props.iterations.at(currentIndex - 1))}
              onKeyDown={this.handleEnterAsClick(this._onChangeFn(this.props.iterations.at(currentIndex - 1)))}
              role="link"
