@@ -1,4 +1,4 @@
-promise = require('es6-promise').Promise
+Promise = require('es6-promise').Promise
 appConfig = require 'app_config'
 utils = require 'lib/utils'
 Collection = require 'collections/collection'
