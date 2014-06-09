@@ -168,7 +168,7 @@ module.exports = (grunt) ->
 
     concat:
       css:
-        src: ['client/gen/styles/*.css', 'client/assets/css/pageslider-2013-06-06.css']
+        src: ['client/gen/styles/*.css']
         dest: 'client/gen/css/app.css'
       js:
         src: [

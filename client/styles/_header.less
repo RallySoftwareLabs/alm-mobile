@@ -1,43 +1,44 @@
 #header {
   .row {
+    margin-left: 0;
     margin-right: 0;
     padding-top: 0;
   }
 
-  .title {
-    text-align: center;
-    color: @nearWhite;
-    font-family: @proxima-nova-semi-bold;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding-left: 0;
-    padding-right: 0;
-  }
-
   .navbar {
-    min-height: 2em;
-    margin-bottom: 15px;
+    font-size: 1.3em;
+    min-height: 2.5em;
+    margin-bottom: 0;
 
-    .left-button, .right-button {
-      margin-top: 5px;
-      margin-bottom: 5px;
-      font-size: 1.3em;
-      line-height: 1em;
+    .left-button, .right-button, .title {
+      margin-top: .5em;
+      padding-left: 0;
+      padding-right: 0;
+      line-height: 1.5em;
     }
     
     .left-button {
-      padding-left: 10px;
-      padding-right: 0;
+      float: left;
+    }
+
+    .title {
+      color: @nearWhite;
+      font-family: @proxima-nova-semi-bold;
+      float: left;
     }
     .right-button {
       margin-left: 0;
-      padding-left: 0;
       padding-right: 10px;
       text-align: right;
+      float: right;
 
       .search {
         margin-right: 10px;
       }
+    }
+
+    .invisible {
+      color: @black;
     }
 
     a {
@@ -47,8 +48,52 @@
       text-shadow: none;
       text-decoration: none;
 
-      &.left {
-        margin-left: 15px;
+    }
+  }
+
+  .app-modes {
+    background-color: @white;
+    margin-bottom: 10px;
+
+    .app-mode {
+      font-size: 1.6em;
+      text-align: center;
+      border-right: 1px solid @grey6;
+      cursor: pointer;
+      padding: 0;
+
+      & > div:first-child {
+        padding: 0.1em 0;
+
+        & > span {
+          vertical-align: middle;
+        }
+      }
+
+      &.active .active-border {
+        background-color: @cyan;
+      }
+
+      .picto {
+        font-size: 1.2em;
+      }
+
+      &:last-child {
+        border-right: 0;
+      }
+
+      .mode-text {
+        padding-left: 3px;
+      }
+
+      .active-border {
+        background-color: @white;
+        height: 0.4em;
+        border-right: 1px solid @grey6;
+
+        &:last-child {
+          border-right: 0;
+        }
       }
     }
   }
