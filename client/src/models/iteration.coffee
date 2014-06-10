@@ -10,7 +10,7 @@ module.exports = class Iteration extends Model
   fetchScheduledItems: (fetchConfig = {}) ->
     @artifacts = new Artifacts()
     @artifacts.clientMetricsParent = this
-    @artifacts.fetchAllPages
+    @artifacts.fetchAllPages(
       data:
         _.assign(
           shallowFetch: 'FormattedID,Name,PlanEstimate,Blocked,PortfolioItem[FormattedID;Name]'
@@ -21,3 +21,7 @@ module.exports = class Iteration extends Model
           projectScopeDown: false
         , fetchConfig
         )
+    ).then =>
+      @artifacts.each (artifact) =>
+        artifact.set('Iteration', @attributes, silent: true)
+      @artifacts
