@@ -89,8 +89,8 @@ module.exports = ReactView.createBackboneClass({
 
   _getNonEmptyAllowedValues: function() {
     var av = this.getAllowedValues();
-    if (app.session.getBoardField() == this.props.field) {
-      var boardColumns = app.session.getBoardColumns();
+    if (app.session.getBoardField() === this.props.field) {
+      var boardColumns = this.props.boardColumns;
       if (_.contains(boardColumns, this.getFieldValue())) {
         av = _.filter(av, function(value) {
           return _.contains(boardColumns, value.label);

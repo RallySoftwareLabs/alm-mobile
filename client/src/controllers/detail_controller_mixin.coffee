@@ -15,9 +15,12 @@ module.exports = {
       data:
         shallowFetch: fieldNames.join ','
     ).then =>
-      @_getAllowedValuesForFields(model).then (allowedValues) =>
+      Promise.all([
+        @_getAllowedValuesForFields(model),
+        app.session.getBoardColumns()
+      ]).then ([allowedValues, boardColumns]) =>
         @_setTitle model
-        @renderReactComponent View, model: model, region: 'main', fieldNames: fieldNames, allowedValues: allowedValues
+        @renderReactComponent View, model: model, region: 'main', fieldNames: fieldNames, allowedValues: allowedValues, boardColumns: boardColumns
         @markFinished()
 
     @subscribeEvent 'saveField', @saveField
@@ -25,8 +28,11 @@ module.exports = {
   showCreateView: (Model, View, defaultValues = {}) ->
     model = new Model _.defaults(defaultValues, Project: app.session.get('project').get('_ref'))
     model.clientMetricsParent = this
-    @_getAllowedValuesForFields(model).then (allowedValues) =>
-      @renderReactComponent View, model: model, region: 'main', allowedValues: allowedValues
+    Promise.all([
+      @_getAllowedValuesForFields(model),
+      app.session.getBoardColumns()
+    ]).then ([allowedValues, boardColumns]) =>
+      @renderReactComponent View, model: model, region: 'main', allowedValues: allowedValues, boardColumns: boardColumns
       @subscribeEvent 'saveField', @saveField
       @subscribeEvent 'save', @saveNew
       @subscribeEvent 'cancel', @cancelNew
