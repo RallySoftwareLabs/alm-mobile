@@ -13,7 +13,7 @@ module.exports = ReactView.createBackboneClass({
     var planEstimateTotal = this.planEstimateTotal(iteration);
     var acceptedPoints = this._getAcceptedPoints(iteration.artifacts);
     return (
-      <div className="row stats-banner">
+      <div className="stats-banner">
         <div className="col-xs-3 gauge">
           <h4>Planned Velocity</h4>
           <ProgressMeter percentage={ this.loadPercentage(iteration) }
