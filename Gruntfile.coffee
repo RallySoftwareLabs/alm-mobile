@@ -22,7 +22,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-text-replace'
   grunt.loadNpmTasks 'grunt-s3'
 
-  grunt.registerTask 'default', ['clean','less','indexHtml', 'copy:js', 'browserify:app', 'replace:js', 'copy:assets', 'concat', 'uglify', 'cssmin']
+  grunt.registerTask 'default', ['clean','less','indexHtml', 'copy:js', 'browserify:app', 'replace:js', 'copy:assets', 'concat']
 
   grunt.registerTask 'test', ['test:conf', 'express:inline', 'mocha']
   grunt.registerTask 'test:fast', ['replace:testPage', 'express:inline', 'mocha']
@@ -104,7 +104,7 @@ module.exports = (grunt) ->
     watch:
       clientSrc:
         files: ['client/src/**/*.js', 'client/src/**/*.coffee', 'client/src/views/**/*.jsx']
-        tasks: ['browserify:app', 'replace:js', 'copy:js', 'concat', 'uglify']
+        tasks: ['browserify:app', 'replace:js', 'copy:js', 'concat']
 
       clientTest:
         files: testFiles.concat(['client/test/helpers/**/*.js'])
@@ -112,7 +112,7 @@ module.exports = (grunt) ->
 
       clientStyles:
         files: 'client/styles/**/*.less'
-        tasks: ['less:client', 'concat:css', 'cssmin']
+        tasks: ['less:client']
 
       clientIndexHtml:
         files: ['client/src/*.hbs']
@@ -120,7 +120,7 @@ module.exports = (grunt) ->
 
       clientConfig:
         files: ['config.json']
-        tasks: ['replace:js', 'concat', 'uglify']
+        tasks: ['replace:js', 'concat']
 
     replace:
       js:
@@ -164,20 +164,16 @@ module.exports = (grunt) ->
         options:
           compile: true
         files:
-          "client/gen/styles/app.css": ["client/styles/main.less"]
+          "client/dist/css/app.css": ["client/styles/main.less"]
 
     concat:
-      css:
-        src: ['client/gen/styles/*.css']
-        dest: 'client/gen/css/app.css'
       js:
         src: [
           'vendor/scripts/reconnecting-websocket.js'
           'node_modules/html-md/dist/md.min.js'
           'node_modules/rallymetrics/builds/rallymetrics.js'
-          'client/dist/js/app.js'
         ]
-        dest: 'client/dist/js/app-all.js'
+        dest: 'client/dist/js/app-deps.js'
 
     copy:
       js:
@@ -199,7 +195,7 @@ module.exports = (grunt) ->
     cssmin:
       css:
         files:
-          'client/dist/css/app.min.css' : 'client/gen/css/app.css'
+          'client/dist/css/app.min.css' : 'client/dist/css/app.css'
     express:
       options:
         bases: [

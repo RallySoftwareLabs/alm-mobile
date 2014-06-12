@@ -1,99 +1,109 @@
 .login-body {
-    padding-top: 0;
-    padding-bottom: 0;
-    background-color: @black;
-    margin-top: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  background-color: @black;
+  margin-top: 0;
 
-    #login {
-        .row {
-            margin: 0;
-        }
-
-        .login-header {
-            background-color: @black;
-            text-align: center;
-            padding: 16px 0;
-
-            .labs-link {
-                text-align: center;
-            }
-        }
-
-        .login-form {
-            background-color: @black;
-            color: @white;
-            margin-left: 15px;
-            margin-right: auto;
-            margin-bottom: 0;
-            padding-top: 10px;
-            height: 320px;
-
-            h2 {
-                margin-top: 0;
-                margin-bottom: 0;
-                font-size: 2.5em;
-                font-family: @proxima-nova-light;
-            }
-
-            .control-label {
-                padding-left: 0;
-                color: @white;
-            }
-
-            .form-group {
-                margin-left: 0;
-                margin-right: 0;
-                margin-bottom: 10px;
-
-                div {
-                    padding-right: 30px;
-                }
-            }
-
-            &.copyright {
-                margin-top: 40px;
-                margin-bottom: 0;
-                line-height: 16px;
-            }
-
-            .alert {
-                display: none;
-                margin-right: 15px;
-            }
-
-            .forgot-password {
-                font-size: 18px;
-                margin-top: 10px;
-            }
-            .forgot-password a, .forgot-password a:hover {
-                color: @cyan;
-            }
-        }
+  #login {
+    .row {
+      margin: 0;
     }
+
+    .login-header {
+      background-color: @black;
+      text-align: center;
+      padding: 16px 0;
+
+      .labs-link {
+        text-align: center;
+      }
+    }
+
+    .login-form {
+      background-color: @black;
+      color: @white;
+      margin-left: 15px;
+      margin-right: auto;
+      margin-bottom: 0;
+      padding-top: 10px;
+      height: 320px;
+
+      h2 {
+        margin-top: 0;
+        margin-bottom: 0;
+        font-size: 2.5em;
+        font-family: @proxima-nova-light;
+      }
+
+      .control-label {
+        padding-left: 0;
+        color: @white;
+      }
+
+      .form-control {
+        width: @screen-xs - 45;
+      }
+
+      @media (max-width: @screen-xs) {
+        .form-control {
+          width: 100%
+        }
+      }
+
+      .form-group {
+        margin-left: 0;
+        margin-right: 0;
+        margin-bottom: 10px;
+
+        div {
+          padding-right: 30px;
+        }
+      }
+
+      &.copyright {
+        margin-top: 40px;
+        margin-bottom: 0;
+        line-height: 16px;
+      }
+
+      .alert {
+        display: none;
+        margin-right: 15px;
+      }
+
+      .forgot-password {
+        font-size: 18px;
+        margin-top: 10px;
+      }
+      .forgot-password a, .forgot-password a:hover {
+        color: @cyan;
+      }
+    }
+  }
 }
 
 #labs-notice {
-    margin-top: 20px;
+  margin-top: 20px;
 
-    .labs-icon {
-        background-color: @black;
-        margin: -20px -20px 10px -20px;
-        padding: 10px;
-        border-top-left-radius: @border-radius-base;
-        border-top-right-radius: @border-radius-base;
+  .labs-icon {
+    background-color: @black;
+    margin: -20px -20px 10px -20px;
+    padding: 10px;
+    border-top-left-radius: @border-radius-base;
+    border-top-right-radius: @border-radius-base;
+  }
+
+  .jumbotron {
+    font-size: 1.1em;
+    padding: 20px 20px 10px 20px;
+
+    h1 {
+      margin-top: 0;
     }
 
-    .jumbotron {
-        font-size: 1.1em;
-        padding: 20px 20px 10px 20px;
-
-        h1 {
-            margin-top: 0;
-        }
-
-        p {
-            font-size: 16px;
-        }
-
+    p {
+      font-size: 16px;
     }
+
+  }
 }
