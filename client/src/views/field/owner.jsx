@@ -7,6 +7,9 @@ var FieldMixin = require('views/field/field_mixin');
 
 module.exports = ReactView.createBackboneClass({
   mixins: [FieldMixin],
+  propTypes: {
+    allowedValues: React.PropTypes.array.isRequired
+  },
   getDefaultProps: function() {
     return {
       field: 'Owner'
@@ -15,14 +18,14 @@ module.exports = ReactView.createBackboneClass({
   render: function() {
     var owner = this.props.item.get('Owner');
     return (
-      <div className="display">
+      <div className={ this.isEditMode() ? 'edit' : 'display' }>
         <div className="owner-field"
              tabIndex="0"
              ref="owner"
              onClick={ this._onClick }
              onKeyDown={ this.handleEnterAsClick(this._onClick) }
              aria-label={ "Owner. " + (owner ? "Owned by " + this.getFieldValue()._refObjectName : "Not currently owned") + ". Click to set yourself as the owner." }>
-          { this._getProfileImageMarkup() }{ this._getNameMarkup() }
+          {this._getOwnerMarkup()}
         </div>
       </div>
     );
@@ -33,7 +36,23 @@ module.exports = ReactView.createBackboneClass({
   },
 
   _onClick: function() {
-    this.saveModel({Owner: app.session.get('user').toJSON()});
+    if (this.isEditMode()) {
+      return;
+    }
+    this.startEdit();
+  },
+
+  _getOwnerMarkup: function() {
+    if (this.isEditMode()) {
+      return this.getAllowedValuesSelectMarkup();
+    } else {
+      return (
+        <div>
+          { this._getProfileImageMarkup() }
+          { this._getNameMarkup() }
+        </div>
+      );
+    }
   },
 
   _getProfileImageMarkup: function() {
@@ -49,6 +68,6 @@ module.exports = ReactView.createBackboneClass({
     if (this.props.item.get('Owner')) {
         return <div className="name ellipsis" title={ fieldValue._refObjectName } aria-hidden="true">{ fieldValue._refObjectName }</div>;
     }
-    return <div className="name" aria-hidden="true">Claim</div>;
+    return <div className="name" aria-hidden="true">Choose owner</div>;
   }
 });

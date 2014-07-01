@@ -42,7 +42,7 @@ module.exports = ReactView.createBackboneClass({
         </div>
 
          <div className="col-xs-3 OwnerView">
-          <Owner item={ model } editMode={ newArtifact }/>
+          <Owner item={ model } allowedValues={ this.props.allowedValues.Owner } editMode={ newArtifact }/>
         </div>
 
         <div className="col-xs-6 col-md-3 PlannedStartDateView">

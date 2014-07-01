@@ -108,7 +108,7 @@ module.exports = {
     
     React.DOM.select(
       {
-        className: "editor " + @props.field
+        className: "editor " + field
         defaultValue: defaultValue
         onBlur: @endEdit
         onKeyDown: @onKeyDown

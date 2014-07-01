@@ -61,7 +61,8 @@
     mocha.globals(['jQuery']);
   </script>
 
-  <script type="text/javascript" src="client/dist/js/app-all.js"></script>
+  <script type="text/javascript" src="client/dist/js/app-deps.js"></script>
+  <script type="text/javascript" src="client/dist/js/app.js"></script>
   <script type="text/javascript" src="client/test/test_code.js"></script>
 
   <script type="text/javascript">

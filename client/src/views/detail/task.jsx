@@ -32,7 +32,7 @@ module.exports = ReactView.createBackboneClass({
             <StringWithArrows item={ model } allowedValues={ this.props.allowedValues.State } editMode={ newArtifact } field="State" label="State"/>
           </div>
           <div className="col-xs-4 OwnerView">
-            <Owner item={ model } editMode={ newArtifact }/>
+            <Owner item={ model } allowedValues={ this.props.allowedValues.Owner } editMode={ newArtifact }/>
           </div>
         </div>
         <div className="row">
