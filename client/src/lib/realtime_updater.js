@@ -1,12 +1,18 @@
 var ReconnectingWebSocket = require('reconnecting-websocket');
+var Messageable = require('lib/messageable');
 var Projects = require('collections/projects');
+
+var websocket;
 
 module.exports = {
 
-  listenForRealtimeUpdates: function(options, callback, scope) {
+  listenForRealtimeUpdates: function(options) {
+    var me = this;
     var project = options.project;
 
-    var websocket = new ReconnectingWebSocket('wss://realtime.rally1.rallydev.com/_websocket');
+    this.stopListeningForRealtimeUpdates();
+    websocket = new ReconnectingWebSocket('wss://realtime.rally1.rallydev.com/_websocket');
+    
     websocket.onopen = function() {
       Projects.getIdsWithinScopeDown(project).then(function(projectsToSubscribeTo) {
         _.each(projectsToSubscribeTo, function(projectUuid) {
@@ -20,15 +26,21 @@ module.exports = {
     };
 
     websocket.onmessage = function(msg) {
-      var me = this;
       var msgData = JSON.parse(msg.data).data;
       if (!msgData) {
         return;
       }
-      callback.call(scope, me._translateMessage(msgData));
+      Messageable.publishEvent('realtimeMessage', me._translateMessage(msgData));
     };
 
     return websocket;
+  },
+
+  stopListeningForRealtimeUpdates: function() {
+    if (websocket) {
+      websocket.close();
+      websocket = null;
+    }
   },
 
   _translateMessage: function(msg) {

@@ -10,6 +10,7 @@ var IterationHeader = require('views/iteration_header');
 var StatsBanner = require('views/stats_banner');
 
 module.exports = ReactView.createBackboneClass({
+  displayName: 'views/board/board',
   mixins: [Fluxxor.FluxMixin(React), Fluxxor.StoreWatchMixin("BoardStore")],
 
   // Required by StoreWatchMixin
@@ -108,6 +109,7 @@ module.exports = ReactView.createBackboneClass({
 
   _onIterationChange: function(view, iteration) {
     this.getFlux().actions.setIteration(iteration);
+    this.trigger('iterationchange', view, iteration);
   },
 
   _onIterationSelect: function(view, iteration) {

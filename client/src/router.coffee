@@ -2,6 +2,7 @@ _ = require 'underscore'
 Backbone = require 'backbone'
 Messageable = require 'lib/messageable'
 MetricsHandler = require 'lib/metrics_handler'
+RealtimeUpdater = require 'lib/realtime_updater'
 appConfig = require 'app_config'
 
 controllerSuffix = '_controller'
@@ -112,6 +113,7 @@ module.exports = {
       clientMetricsType: 'PageNavigationMetrics'
 
       onRoute: (path, options = {}) ->
+        RealtimeUpdater.stopListeningForRealtimeUpdates();
         @navigate path, _.defaults(options, trigger: true)
         @publishEvent 'urlchanged'
 
@@ -137,7 +139,6 @@ module.exports = {
 
         currentController?.dispose()
         currentController = new controllerClass()
-        currentController.clientMetricsType = "Controller"
         
         aggregator.beginLoad
           component: currentController

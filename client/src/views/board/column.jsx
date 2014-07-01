@@ -7,6 +7,7 @@ var ReactView = require('views/base/react_view');
 var Card = require('views/board/card');
 
 module.exports = ReactView.createBackboneClass({
+  displayName: 'views/board/column',
   propTypes: {
     onHeaderClick: React.PropTypes.func.isRequired,
     onCardClick: React.PropTypes.func.isRequired

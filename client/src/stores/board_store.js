@@ -2,7 +2,7 @@ var _ = require('underscore');
 var Promise = require('es6-promise').Promise;
 var Fluxxor = require("fluxxor");
 var app = require('application');
-var RealtimeUpdater = require('lib/realtime_updater');
+var Messageable = require('lib/messageable');
 var utils = require('lib/utils');
 var Artifacts = require('collections/artifacts');
 var Artifact = require('models/artifact');
@@ -24,9 +24,7 @@ var BoardStore = Fluxxor.createStore({
     this.artifacts = new Artifacts();
     this.scheduleStates = [];
 
-    if (options.listenForRealtimeUpdates) {
-      RealtimeUpdater.listenForRealtimeUpdates({project: this.project }, this._onRealtimeMessage, this);
-    }
+    Messageable.subscribeEvent('realtimeMessage', this._onRealtimeMessage, this);
     this.bindActions('setIteration', this.setIteration);
   },
 
