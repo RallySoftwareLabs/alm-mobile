@@ -5,15 +5,16 @@ module.exports = {
       if (this.getComponentType(cmp)) {
         current.push(cmp);
       }
-      current.concat(this.getComponentHierarchy(cmp.clientMetricsParent));
+      current = current.concat(this.getComponentHierarchy(cmp.clientMetricsParent));
     }
+    return current;
   },
 
   getComponentType: function(cmp) {
-    return cmp.typePath ||
-      (cmp.model && cmp.model.typePath) ||
-      cmp.clientMetricsType ||
-      (cmp.constructor && cmp.constructor.name);
+    return (cmp.constructor && (cmp.constructor.displayName || cmp.constructor.name)) ||
+           cmp.typePath ||
+           (cmp.model && cmp.model.typePath) ||
+           cmp.clientMetricsType;
   },
 
   getAppName: function(cmp) {
