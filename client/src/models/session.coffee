@@ -203,8 +203,9 @@ module.exports = class Session extends Model
       @get('project').get('_ref'),
       pref
     )
-    if columnPref
-      columns = columnPref.get('Value').split(',')
+    value = columnPref?.get('Value')
+    if value
+      columns = value.split(',')
 
     columns
 
