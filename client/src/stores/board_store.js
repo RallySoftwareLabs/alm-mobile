@@ -43,6 +43,7 @@ var BoardStore = Fluxxor.createStore({
   },
 
   load: function() {
+    app.aggregator.beginLoad({ component: this, description: 'load' });
     var me = this;
     return Promise.all([
       UserStory.getAllowedValues('ScheduleState'),
@@ -50,6 +51,7 @@ var BoardStore = Fluxxor.createStore({
     ]).then(function(scheduleStates) {
       me.scheduleStates = _.pluck(scheduleStates[0], 'StringValue');
       me.emit('change');
+      app.aggregator.endLoad({ component: me });
       app.aggregator.recordComponentReady({ component: me });
     });
   },

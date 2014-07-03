@@ -5,12 +5,15 @@ var Projects = require('collections/projects');
 var websocket;
 
 module.exports = {
+  clientMetricsType: 'RealtimeUpdater',
 
   listenForRealtimeUpdates: function(options) {
     var me = this;
     var project = options.project;
+    var app = require('application');
 
-    this.stopListeningForRealtimeUpdates();
+    app.aggregator.beginLoad({ component: me, description: 'subscribing to realtime updates' });
+    me.stopListeningForRealtimeUpdates();
     websocket = new ReconnectingWebSocket('wss://realtime.rally1.rallydev.com/_websocket');
     
     websocket.onopen = function() {
@@ -22,6 +25,7 @@ module.exports = {
             "body": { "topic": projectUuid }
           }));
         });
+        app.aggregator.endLoad({ component: me });
       });
     };
 
@@ -30,6 +34,7 @@ module.exports = {
       if (!msgData) {
         return;
       }
+      app.aggregator.recordAction({ component: this, description: 'realtime update '});
       Messageable.publishEvent('realtimeMessage', me._translateMessage(msgData));
     };
 
