@@ -44,7 +44,7 @@ Backbone.sync = (method, model, options = {}) ->
   params.url += '/create' if method is 'create'
 
   # Ensure that we have the appropriate request data.
-  if (!options.data? && model && (method == 'create' || method == 'update' || method == 'patch'))
+  if (!options.data? && model && (method == 'create' || method == 'update' || method == 'delete' || method == 'patch'))
     params.contentType = 'application/json'
     params.data = JSON.stringify({model: (options.attrs or model.toJSON(options))}) #Rally Override!
 
