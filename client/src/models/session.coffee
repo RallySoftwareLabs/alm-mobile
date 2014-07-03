@@ -69,15 +69,24 @@ module.exports = class Session extends Model
     return unless user?
     @aggregator.beginLoad component: this, description: 'session init'
 
-    projectRef ?= @_getDefaultProjectRef()
+    if !projectRef
+      gettingDefaultProject = true
+      projectRef = @_getDefaultProjectRef()
 
     if projectRef
       projects = new Projects()
       projectPromise = projects.fetch(data:
         shallowFetch: 'Name,Parent,Workspace,SchemaVersion'
         query: "(ObjectID = #{utils.getOidFromRef(projectRef)})"
-      ).then ->
-        projects.first()
+      ).then =>
+        if projects.length
+          projects.first()
+        else
+          defaultProjectPref = @_getDefaultProjectFromPreference()
+          if defaultProjectPref
+            defaultProjectPref.destroy().then =>
+              return @initSessionForUser()
+
     else
       projectPromise = Projects.fetchAll().then (projects) =>
         projects.first()
@@ -217,14 +226,15 @@ module.exports = class Session extends Model
       else []
 
   _getDefaultProjectRef: ->
-    defaultProjectPref = @get('prefs').findPreference(Preference::defaultProject)
+    defaultProjectPref = @_getDefaultProjectFromPreference()
     if defaultProjectPref
       return defaultProjectPref.get('Value')
     
-    @get('user').get('UserProfile').DefaultProject._ref
-
     if !@get 'project'
       defaultProject = @get('user').get('UserProfile').DefaultProject._ref
+
+  _getDefaultProjectFromPreference: ->
+    @get('prefs').findPreference(Preference::defaultProject)
 
   _setModeFromPreference: ->
     mode = 'team'
