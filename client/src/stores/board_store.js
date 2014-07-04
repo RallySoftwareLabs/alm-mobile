@@ -22,7 +22,7 @@ var BoardStore = Fluxxor.createStore({
     this.iterations = options.iterations;
     this.user = options.user;
     this.artifacts = new Artifacts();
-    this.scheduleStates = [];
+    this.scheduleStates = ['Defined', 'In-Progress', 'Completed', 'Accepted'];
 
     Messageable.subscribeEvent('realtimeMessage', this._onRealtimeMessage, this);
     this.bindActions('setIteration', this.setIteration);
@@ -46,10 +46,10 @@ var BoardStore = Fluxxor.createStore({
     app.aggregator.beginLoad({ component: this, description: 'load' });
     var me = this;
     return Promise.all([
-      UserStory.getAllowedValues('ScheduleState'),
+      // UserStory.getAllowedValues('ScheduleState'),
       this._fetchCards()
     ]).then(function(scheduleStates) {
-      me.scheduleStates = _.pluck(scheduleStates[0], 'StringValue');
+      // me.scheduleStates = _.pluck(scheduleStates[0], 'StringValue');
       me.emit('change');
       app.aggregator.endLoad({ component: me });
       app.aggregator.recordComponentReady({ component: me });
@@ -128,7 +128,7 @@ var BoardStore = Fluxxor.createStore({
       }
       return;
     }
-    
+
     if (!_.contains(STORE_TYPES, modelType)) {
       return;
     }
@@ -148,7 +148,7 @@ var BoardStore = Fluxxor.createStore({
     if (!this.artifacts) {
       return null;
     }
-    
+
     return this.artifacts.find(_.isAttributeEqual('_refObjectUUID', uuid));
   },
 
@@ -158,7 +158,7 @@ var BoardStore = Fluxxor.createStore({
     artifact.typePath = modelType;
     return artifact;
   },
-    
+
   _updateModelOnPage: function(model, msgData, isCreate) {
     var me = this;
     var modelType = utils.getWsapiType(msgData.modelType);

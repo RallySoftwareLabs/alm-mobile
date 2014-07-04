@@ -11,7 +11,7 @@ module.exports = {
   },
 
   getComponentType: function(cmp) {
-    return (cmp.constructor && (cmp.constructor.displayName || cmp.constructor.name)) ||
+    return (cmp.constructor && cmp.constructor.displayName) ||
            cmp.typePath ||
            (cmp.model && cmp.model.typePath) ||
            cmp.clientMetricsType;

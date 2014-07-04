@@ -43,7 +43,7 @@ module.exports = (grunt) ->
       grunt.file.expandMapping(alias.src, alias.dest, {cwd: alias.cwd, filter: 'isFile'}).forEach (file) ->
         expose = file.dest.substr(0, file.dest.lastIndexOf('.'))
         aliasArray.push('./' + file.src[0] + ':' + expose)
-    
+
     aliasArray
 
   variableReplacements = [{
@@ -127,6 +127,10 @@ module.exports = (grunt) ->
         replacements: variableReplacements
         src: ['client/gen/js/src/app.js']
         dest: 'client/dist/js/app.js'
+      board:
+        replacements: variableReplacements
+        src: ['client/gen/js/src/board.js']
+        dest: 'client/dist/js/board.js'
       test:
         replacements: variableReplacements
         src: ['client/test/test_code.js']
@@ -148,11 +152,19 @@ module.exports = (grunt) ->
         src: ['client/src/initialize.coffee', 'client/src/controllers/**/*.js', 'client/src/controllers/**/*.coffee'],
         dest: 'client/gen/js/src/app.js'
 
+      board:
+        options: _.extend(sharedBrowserifyConfig,
+          bundleOptions:
+            standalone: 'MobileBoard'
+        )
+        src: ['client/src/modules/board.js']
+        dest: 'client/gen/js/src/board.js'
+
       test:
         options: testBrowserifyConfig
         src: testFiles.concat(['client/test/helpers/**/*.js']),
         dest: 'client/test/test_code.js'
-      
+
     'compile-handlebars':
       allStatic:
         template: 'client/src/index.hbs'

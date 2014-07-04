@@ -46,7 +46,7 @@ module.exports = class Schema extends Collection
 
   getAttributes: (model) ->
     @getTypeDef(model).get('Attributes')
-    
+
   getAttribute: (model, fieldName) ->
     attribute = _.find(@getAttributes(model), ElementName: fieldName)
 
@@ -69,4 +69,3 @@ module.exports = class Schema extends Collection
           )
       else
         resolve []
-    

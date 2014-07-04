@@ -18,7 +18,7 @@ module.exports = class BoardController extends SiteController
       @updateTitle session.getProjectName()
 
       boardStore = @_buildStore(session, boardColumns, )
-      
+
       flux = new Fluxxor.Flux({ BoardStore: boardStore }, BoardActions)
       boardStore.load()
       @renderReactComponent(BoardView,

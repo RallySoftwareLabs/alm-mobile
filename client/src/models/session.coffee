@@ -143,7 +143,7 @@ module.exports = class Session extends Model
         xhr.setRequestHeader("X-Requested-By", "Rally")
         xhr.setRequestHeader("X-RallyIntegrationName", appConfig.appName)
     ).always => @aggregator.endLoad component: this
-        
+
   _fetchUserInfo: (cb) ->
     user = new User()
     user.clientMetricsParent = this
@@ -229,7 +229,7 @@ module.exports = class Session extends Model
     defaultProjectPref = @_getDefaultProjectFromPreference()
     if defaultProjectPref
       return defaultProjectPref.get('Value')
-    
+
     if !@get 'project'
       defaultProject = @get('user').get('UserProfile').DefaultProject._ref
 
