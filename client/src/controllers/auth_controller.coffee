@@ -1,8 +1,9 @@
+React = require 'react'
 app = require 'application'
 Controller = require 'controllers/base/controller'
 Preference = require 'models/preference'
-LabsNoticeView = require 'views/auth/labs_notice'
-LoginView = require 'views/auth/login'
+LabsNoticeView = React.createFactory(require 'views/auth/labs_notice')
+LoginView = React.createFactory(require 'views/auth/login')
 
 module.exports = class AuthController extends Controller
 

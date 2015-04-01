@@ -1,4 +1,4 @@
 Backbone = require 'backbone'
-_ = require 'underscore'
+_ = require 'lodash'
 
 module.exports = _.extend({}, Backbone.Events)

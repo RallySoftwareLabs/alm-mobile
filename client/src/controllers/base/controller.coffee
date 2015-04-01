@@ -1,3 +1,4 @@
+React = require 'react'
 Promise = require('es6-promise').Promise
 app = require 'application'
 appConfig = require 'app_config'
@@ -21,7 +22,9 @@ module.exports = class Controller
           resolve()
         else
           @_renderLoadingIndicatorUntilProjectIsReady(options.showLoadingIndicator).then ->
+            debugger;
             resolve()
+          debugger;
           Projects.fetchAll().then (projects) =>
             project = projects.find _.isAttributeEqual '_ref', projectRef
             app.session.set 'project', project
@@ -54,7 +57,7 @@ module.exports = class Controller
   renderReactComponent: (componentClass, props = {}, id) ->
     component = componentClass(_.omit(props, 'region'))
 
-    React.renderComponent component, (if id then document.getElementById(id) else document.body)
+    React.render component, (if id then document.getElementById(id) else document.body)
 
   dispose: ->
     @stopListening()

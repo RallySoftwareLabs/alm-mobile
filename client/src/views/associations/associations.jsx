@@ -5,7 +5,7 @@ var utils = require('lib/utils');
 var ReactView = require('views/base/react_view');
 var ListView = require('views/listing/list');
 
-module.exports = ReactView.createBackboneClass({
+var associations = ReactView.createBackboneClass({
   render: function() {
     var association = this.props.association;
     return (
@@ -36,3 +36,5 @@ module.exports = ReactView.createBackboneClass({
     this.routeTo(Backbone.history.fragment + '/new');
   }
 });
+
+module.exports = associations;

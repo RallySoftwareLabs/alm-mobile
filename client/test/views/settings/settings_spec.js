@@ -9,6 +9,7 @@ var Session = require('models/session');
 var SettingsView = require('views/settings/settings');
 var Iterations = require('collections/iterations');
 var Projects = require('collections/projects');
+var _ = require('lodash');
 
 describe('views/settings/settings', function() {
   beforeEach(function() {

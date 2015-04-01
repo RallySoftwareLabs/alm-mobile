@@ -3,7 +3,7 @@ var React = require('react');
 var ReactView = require('views/base/react_view');
 var app = require('application');
 
-module.exports = ReactView.createBackboneClass({
+var labs_notice = ReactView.createBackboneClass({
   render: function() {
     return (
       <div id="labs-notice" className="container">
@@ -41,3 +41,5 @@ module.exports = ReactView.createBackboneClass({
     e.preventDefault();
   }
 });
+
+module.exports = labs_notice;

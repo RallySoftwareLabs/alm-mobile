@@ -1,3 +1,4 @@
+.idea/
 config.json
 grunt-aws.json
 client/gen

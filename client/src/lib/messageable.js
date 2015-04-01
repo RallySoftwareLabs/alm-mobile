@@ -1,5 +1,6 @@
 var Backbone = require('backbone');
 var bus = require('message_bus');
+var _ = require('lodash');
 
 var Messageable = {
   publishEvent: function() {

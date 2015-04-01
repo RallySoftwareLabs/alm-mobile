@@ -7,6 +7,7 @@ var Artifacts = require('collections/artifacts');
 var Column = require('models/column');
 var BoardView = require('views/board/board');
 var ColumnView = require('views/board/column');
+var _ = require('lodash');
 
 describe('views/board/board', function() {
 

@@ -1,4 +1,5 @@
 var Backbone = require('backbone');
+var _ = require('lodash');
 
 var BaseStore = {};
   

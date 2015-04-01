@@ -25,7 +25,7 @@ module.exports = ReactView.createBackboneClass({
   },
 
   _getContent: function() {
-    return this.props.main.view(this.props.main.props);
+    return React.createElement(this.props.main.view, this.props.main.props);
   },
 
   _getBottomNavBar: function() {

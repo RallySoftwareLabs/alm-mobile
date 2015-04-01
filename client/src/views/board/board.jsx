@@ -52,7 +52,7 @@ module.exports = ReactView.createBackboneClass({
     var visibleColumns = this._getVisibleColumns();
     var zoomedIn = this._isZoomedIn();
     var colMarkup = _.map(visibleColumns, function(col) {
-      var colView = ColumnView({
+      var colViewProps = {
             artifacts: artifacts,
             columns: columns,
             boardField: this.state.boardState.boardField,
@@ -61,8 +61,12 @@ module.exports = ReactView.createBackboneClass({
             showIteration: false,
             onCardClick: this._onCardClick,
             onHeaderClick: this._onColumnClick
-          });
-      return <div className={"column-cell"} id={"col-" + utils.toCssClass(col)} key={ col }>{colView}</div>;
+          };
+      return (
+        <div className={"column-cell"} id={"col-" + utils.toCssClass(col)} key={ col }>
+          <ColumnView { ...colViewProps }></ColumnView>
+        </div>
+      );
     }, this);
     if (!columns.length) {
       colMarkup = (

@@ -7,7 +7,7 @@ module.exports = class RegionController extends Controller
     containerViewInstance = null
     promise = new Promise((resolve, reject) =>
       target = (if id then document.getElementById(id) else document.body)
-      containerViewInstance = React.renderComponent @view(props), target, ->
+      containerViewInstance = React.render React.createElement(@view, props), target, ->
         resolve()
     )
 

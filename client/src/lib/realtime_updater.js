@@ -1,6 +1,7 @@
 var ReconnectingWebSocket = require('reconnecting-websocket');
 var Messageable = require('lib/messageable');
 var Projects = require('collections/projects');
+var app = require('application');
 
 var websocket;
 
@@ -10,7 +11,7 @@ module.exports = {
   listenForRealtimeUpdates: function(options) {
     var me = this;
     var project = options.project;
-    var app = require('application');
+
 
     app.aggregator.beginLoad({ component: me, description: 'subscribing to realtime updates' });
     me.stopListeningForRealtimeUpdates();

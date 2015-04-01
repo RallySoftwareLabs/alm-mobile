@@ -3,7 +3,7 @@
   "name": "alm-mobile",
   "description": "Rally ALM Mobile Application",
   "version": "0.0.1",
-  "homepage": "http://rally1.rallydev.com/m",
+  "homepage": "http://m.rallydev.com/",
   "repository": {
     "type": "git",
     "url": "https://github.com/RallySoftware/alm-mobile"
@@ -26,7 +26,7 @@
     "jquery": "~2.1.0",
     "backbone": "~1.1.2",
     "envify": "~1.2.1",
-    "react": "~0.10.0",
+    "react": "~0.13.0",
     "moment": "2.6.0",
     "pagedown": "~1.1.0",
     "bower": "~1.3.1",
@@ -34,46 +34,36 @@
     "fluxxor": "~1.1.3"
   },
   "devDependencies": {
+    "browserify": "~3.33.0",
+    "browserify-shim": "3.4.1",
+    "chai": "~1.9.0",
+    "coffee-loader": "^0.7.2",
+    "coffee-script": "^1.9.1",
+    "coffeeify": "~0.6.0",
+    "grunt-browserify": "2.0.8",
     "grunt-compile-handlebars": "0.8.0",
     "grunt-contrib-clean": "0.5.0",
     "grunt-contrib-concat": "0.4.0",
     "grunt-contrib-copy": "0.5.0",
+    "grunt-contrib-cssmin": "~0.9.0",
     "grunt-contrib-less": "0.11.0",
-    "grunt-contrib-watch": "0.6.1",
     "grunt-contrib-uglify": "0.4.0",
+    "grunt-contrib-watch": "0.6.1",
     "grunt-express": "~1.2.1",
     "grunt-lib-contrib": "0.6.1",
-    "grunt-text-replace": "~0.3.6",
-    "grunt-s3": "~0.2.0-alpha.3",
-    "chai": "~1.9.0",
-    "mocha": "1.18.2",
     "grunt-mocha": "~0.4.10",
-    "jquery": "~2.1.0",
-    "requirejs": "~2.1.11",
-    "sinon-chai": "~2.5.0",
-    "sinon": "1.9.1",
-    "browserify": "~3.33.0",
-    "grunt-browserify": "2.0.8",
-    "coffeeify": "~0.6.0",
+    "grunt-s3": "~0.2.0-alpha.3",
+    "grunt-text-replace": "~0.3.6",
+    "grunt-webpack": "^1.0.8",
+    "jsx-loader": "^0.12.2",
+    "mocha": "1.18.2",
+    "path": "^0.11.14",
     "reactify": "0.13.1",
-    "browserify-shim": "3.4.1",
-    "grunt-contrib-cssmin": "~0.9.0"
-  },
-  "browserify": {
-    "transform": [
-      "browserify-shim"
-    ]
-  },
-  "browserify-shim": {
-    "jquery": "global:jQuery",
-    "backbone": "global:Backbone",
-    "underscore": "global:_",
-    "react": "global:React",
-    "moment": "global:moment",
-    "pagedown": "global:Markdown",
-    "rallymetrics": "global:RallyMetrics",
-    "html-md": "global:md",
-    "spin": "global:Spinner",
-    "reconnecting-websocket": "global:ReconnectingWebSocket"
+    "requirejs": "~2.1.11",
+    "sinon": "1.9.1",
+    "sinon-chai": "~2.5.0",
+    "source-map-loader": "^0.1.3",
+    "webpack": "^1.7.3",
+    "webpack-dev-server": "^1.8.0"
   }
 }
