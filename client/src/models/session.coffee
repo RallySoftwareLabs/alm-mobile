@@ -13,6 +13,17 @@ Iterations = require 'collections/iterations'
 Preferences = require 'collections/preferences'
 Projects = require 'collections/projects'
 Users = require 'collections/users'
+_ = require 'lodash'
+
+originalThen = Promise::then;
+Promise::then = (onFulfillment, onRejection) ->
+  wrappedOnRejection = (reason, promise) ->
+    console.log('promise failed: ' + reason)
+    console.log(this._detail.stack)
+    onRejection? onRejection.call(this, reason)
+
+  originalThen.call(this, onFulfillment, _.bind(wrappedOnRejection, this));
+
 
 module.exports = class Session extends Model
   initialize: (@clientMetricsParent, @aggregator) ->
@@ -245,6 +256,7 @@ module.exports = class Session extends Model
     @set(mode: mode, trigger: false)
 
   loadSchema: (project) ->
+    debugger;
     schema = new Schema()
     schema.clientMetricsParent = this
     @set('schema', schema)

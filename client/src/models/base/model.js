@@ -8,7 +8,7 @@ var SchemaMixin = require('models/base/schema_mixin');
  * Base class for all models.
  */
 var Model = Backbone.Model.extend({
-    idAttribute: '_refObjectUUID',
+    idAttribute: 'ObjectID',
 
     initialize: function() {
         Backbone.Model.prototype.initialize.apply(this, arguments);
